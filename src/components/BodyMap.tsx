@@ -295,7 +295,7 @@ export default function BodyMap() {
         { label: "Lavender", href: "/herbs/lavender" },
         { label: "Valerian", href: "/herbs/valerian" },
         { label: "Passionflower", href: "/herbs/passionflower" },
-        { label: "St. John's Wort", href: "/herbs/st-johns-wort" },
+        { label: "St. John&apos;s Wort", href: "/herbs/st-johns-wort" },
         { label: "Ginseng", href: "/herbs/ginseng" },
         { label: "Holy Basil", href: "/herbs/holy-basil" },
       ]

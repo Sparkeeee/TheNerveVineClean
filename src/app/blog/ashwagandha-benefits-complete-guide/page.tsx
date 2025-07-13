@@ -47,7 +47,7 @@ export default function AshwagandhaGuide() {
           <div className="prose prose-lg max-w-none">
             <p className="text-gray-700 mb-6">
               Ashwagandha (<em>Withania somnifera</em>) is an ancient medicinal herb that has been used in Ayurvedic medicine for over 3,000 years. 
-              Known as the "Indian ginseng," this adaptogenic herb grows in India, the Middle East, and parts of Africa.
+              Known as the &quot;Indian ginseng,&quot; this adaptogenic herb grows in India, the Middle East, and parts of Africa.
             </p>
             <p className="text-gray-700 mb-6">
               The name &quot;ashwagandha&quot; comes from Sanskrit words meaning &quot;smell of horse,&quot; referring to both its distinctive odor and the traditional belief that it provides the strength and vitality of a horse.
@@ -196,7 +196,7 @@ export default function AshwagandhaGuide() {
           <div className="bg-blue-50 rounded-xl p-6">
             <h3 className="text-xl font-semibold text-blue-800 mb-4">Recommended Products</h3>
             <p className="text-blue-700 mb-4">
-              We've curated a selection of high-quality ashwagandha supplements based on our quality filtering system. 
+              We&apos;ve curated a selection of high-quality ashwagandha supplements based on our quality filtering system. 
               Each product meets our strict criteria for purity, potency, and effectiveness.
             </p>
             <Link 
@@ -236,12 +236,12 @@ export default function AshwagandhaGuide() {
               <h3 className="text-lg font-semibold text-gray-900 mb-3">Is ashwagandha safe for long-term use?</h3>
               <p className="text-gray-700">
                 Research suggests ashwagandha is safe for long-term use when taken at recommended dosages. 
-                However, it's wise to take periodic breaks (1-2 weeks off every 2-3 months) to assess continued need.
+                However, it&apos;s wise to take periodic breaks (1-2 weeks off every 2-3 months) to assess continued need.
               </p>
             </div>
             
             <div className="border rounded-xl p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">What's the best time to take ashwagandha?</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-3">What&apos;s the best time to take ashwagandha?</h3>
               <p className="text-gray-700">
                 For stress and energy: Take in the morning and/or afternoon. For sleep: Take 30-60 minutes before bed. 
                 Always take with food to improve absorption and reduce stomach upset.
