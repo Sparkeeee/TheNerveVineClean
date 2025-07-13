@@ -4,8 +4,16 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 
 export default function BodyMap() {
-  const [hovered, setHovered] = useState<string | null>(null);
-  const [isTouchDevice, setIsTouchDevice] = useState(false);
+  // const isTouchDevice = typeof window !== 'undefined' && 'ontouchstart' in window;
+  const [selectedArea, setSelectedArea] = useState<string | null>(null);
+  const [hoveredArea, setHoveredArea] = useState<string | null>(null);
+  
+  // Body dimensions and positioning
+  const bodyWidth = 200;
+  const bodyHeight = 400;
+  const headRadius = 30;
+  // const headCenterX = bodyWidth / 2;
+  // const headCenterY = headRadius + 10;
   const [screenWidth, setScreenWidth] = useState(1024);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
@@ -18,7 +26,7 @@ export default function BodyMap() {
       const currentWidth = window.innerWidth;
       
       // Show links continuously if it's a touch device OR small screen
-      setIsTouchDevice(hasTouch || currentWidth < 768);
+      // setIsTouchDevice(hasTouch || currentWidth < 768); // This line was removed
       setScreenWidth(currentWidth);
     };
     
@@ -232,7 +240,7 @@ export default function BodyMap() {
 
   // Show links if hovering head, neck, heart, liver, adrenals, or digestive (desktop) OR if on touch device (mobile)
   const isMobile = screenWidth < 768;
-  const shouldShowLinks = (hovered === "head" || hovered === "neck" || hovered === "heart" || hovered === "liver" || hovered === "adrenals" || hovered === "digestive") && !isMobile;
+  const shouldShowLinks = (hoveredArea === "head" || hoveredArea === "neck" || hoveredArea === "heart" || hoveredArea === "liver" || hoveredArea === "adrenals" || hoveredArea === "digestive") && !isMobile;
 
   // Organized navigation structure for affiliate marketing
   const navigationCategories = {
@@ -415,10 +423,10 @@ export default function BodyMap() {
             r="80"
             fill="transparent"
             stroke="none"
-            onMouseEnter={() => setHovered("head")}
-            onMouseLeave={() => setHovered(null)}
-            onTouchStart={() => setHovered("head")}
-            onTouchEnd={() => setHovered(null)}
+            onMouseEnter={() => setHoveredArea("head")}
+            onMouseLeave={() => setHoveredArea(null)}
+            onTouchStart={() => setHoveredArea("head")}
+            onTouchEnd={() => setHoveredArea(null)}
             style={{ cursor: "pointer" }}
           />
           
@@ -427,10 +435,10 @@ export default function BodyMap() {
             d="M 200 30 Q 510 10 820 30 Q 820 300 510 320 Q 200 300 200 30"
             fill="transparent"
             stroke="none"
-        onMouseEnter={() => setHovered("head")}
-        onMouseLeave={() => setHovered(null)}
-            onTouchStart={() => setHovered("head")}
-            onTouchEnd={() => setHovered(null)}
+        onMouseEnter={() => setHoveredArea("head")}
+        onMouseLeave={() => setHoveredArea(null)}
+            onTouchStart={() => setHoveredArea("head")}
+            onTouchEnd={() => setHoveredArea(null)}
         style={{ cursor: "pointer" }}
           />
           
@@ -441,10 +449,10 @@ export default function BodyMap() {
             r="80"
             fill="transparent"
             stroke="none"
-            onMouseEnter={() => setHovered("neck")}
-            onMouseLeave={() => setHovered(null)}
-            onTouchStart={() => setHovered("neck")}
-            onTouchEnd={() => setHovered(null)}
+            onMouseEnter={() => setHoveredArea("neck")}
+            onMouseLeave={() => setHoveredArea(null)}
+            onTouchStart={() => setHoveredArea("neck")}
+            onTouchEnd={() => setHoveredArea(null)}
             style={{ cursor: "pointer" }}
           />
           
@@ -453,10 +461,10 @@ export default function BodyMap() {
             d="M 300 250 Q 510 230 720 250 Q 720 350 510 370 Q 300 350 300 250"
             fill="transparent"
             stroke="none"
-            onMouseEnter={() => setHovered("neck")}
-            onMouseLeave={() => setHovered(null)}
-            onTouchStart={() => setHovered("neck")}
-            onTouchEnd={() => setHovered(null)}
+            onMouseEnter={() => setHoveredArea("neck")}
+            onMouseLeave={() => setHoveredArea(null)}
+            onTouchStart={() => setHoveredArea("neck")}
+            onTouchEnd={() => setHoveredArea(null)}
             style={{ cursor: "pointer" }}
           />
 
@@ -467,10 +475,10 @@ export default function BodyMap() {
             r="60"
             fill="transparent"
             stroke="none"
-            onMouseEnter={() => setHovered("heart")}
-            onMouseLeave={() => setHovered(null)}
-            onTouchStart={() => setHovered("heart")}
-            onTouchEnd={() => setHovered(null)}
+            onMouseEnter={() => setHoveredArea("heart")}
+            onMouseLeave={() => setHoveredArea(null)}
+            onTouchStart={() => setHoveredArea("heart")}
+            onTouchEnd={() => setHoveredArea(null)}
             style={{ cursor: "pointer" }}
           />
           
@@ -479,10 +487,10 @@ export default function BodyMap() {
             d="M 400 350 Q 580 330 760 350 Q 760 550 580 570 Q 400 550 400 350"
             fill="transparent"
             stroke="none"
-            onMouseEnter={() => setHovered("heart")}
-            onMouseLeave={() => setHovered(null)}
-            onTouchStart={() => setHovered("heart")}
-            onTouchEnd={() => setHovered(null)}
+            onMouseEnter={() => setHoveredArea("heart")}
+            onMouseLeave={() => setHoveredArea(null)}
+            onTouchStart={() => setHoveredArea("heart")}
+            onTouchEnd={() => setHoveredArea(null)}
             style={{ cursor: "pointer" }}
           />
 
@@ -493,10 +501,10 @@ export default function BodyMap() {
             r="70"
             fill="transparent"
             stroke="none"
-            onMouseEnter={() => setHovered("liver")}
-            onMouseLeave={() => setHovered(null)}
-            onTouchStart={() => setHovered("liver")}
-            onTouchEnd={() => setHovered(null)}
+            onMouseEnter={() => setHoveredArea("liver")}
+            onMouseLeave={() => setHoveredArea(null)}
+            onTouchStart={() => setHoveredArea("liver")}
+            onTouchEnd={() => setHoveredArea(null)}
             style={{ cursor: "pointer" }}
           />
           
@@ -505,10 +513,10 @@ export default function BodyMap() {
             d="M 150 450 Q 350 430 550 450 Q 550 630 350 650 Q 150 630 150 450"
             fill="transparent"
             stroke="none"
-            onMouseEnter={() => setHovered("liver")}
-            onMouseLeave={() => setHovered(null)}
-            onTouchStart={() => setHovered("liver")}
-            onTouchEnd={() => setHovered(null)}
+            onMouseEnter={() => setHoveredArea("liver")}
+            onMouseLeave={() => setHoveredArea(null)}
+            onTouchStart={() => setHoveredArea("liver")}
+            onTouchEnd={() => setHoveredArea(null)}
             style={{ cursor: "pointer" }}
           />
 
@@ -522,10 +530,10 @@ export default function BodyMap() {
             height="50"
             fill="transparent"
             stroke="none"
-            onMouseEnter={() => setHovered("adrenals")}
-            onMouseLeave={() => setHovered(null)}
-            onTouchStart={() => setHovered("adrenals")}
-            onTouchEnd={() => setHovered(null)}
+            onMouseEnter={() => setHoveredArea("adrenals")}
+            onMouseLeave={() => setHoveredArea(null)}
+            onTouchStart={() => setHoveredArea("adrenals")}
+            onTouchEnd={() => setHoveredArea(null)}
             style={{ cursor: "pointer" }}
           />
           
@@ -534,10 +542,10 @@ export default function BodyMap() {
             d="M 550 550 Q 700 530 1000 550 Q 1000 600 700 620 Q 550 600 550 550"
             fill="transparent"
             stroke="none"
-            onMouseEnter={() => setHovered("adrenals")}
-            onMouseLeave={() => setHovered(null)}
-            onTouchStart={() => setHovered("adrenals")}
-            onTouchEnd={() => setHovered(null)}
+            onMouseEnter={() => setHoveredArea("adrenals")}
+            onMouseLeave={() => setHoveredArea(null)}
+            onTouchStart={() => setHoveredArea("adrenals")}
+            onTouchEnd={() => setHoveredArea(null)}
             style={{ cursor: "pointer" }}
           />
 
@@ -549,10 +557,10 @@ export default function BodyMap() {
             height="120"
             fill="transparent"
             stroke="none"
-            onMouseEnter={() => setHovered("digestive")}
-            onMouseLeave={() => setHovered(null)}
-            onTouchStart={() => setHovered("digestive")}
-            onTouchEnd={() => setHovered(null)}
+            onMouseEnter={() => setHoveredArea("digestive")}
+            onMouseLeave={() => setHoveredArea(null)}
+            onTouchStart={() => setHoveredArea("digestive")}
+            onTouchEnd={() => setHoveredArea(null)}
             style={{ cursor: "pointer" }}
           />
 
@@ -566,10 +574,10 @@ export default function BodyMap() {
             r="50"
             fill="transparent"
             stroke="none"
-            onMouseEnter={() => setHovered("legs")}
-            onMouseLeave={() => setHovered(null)}
-            onTouchStart={() => setHovered("legs")}
-            onTouchEnd={() => setHovered(null)}
+            onMouseEnter={() => setHoveredArea("legs")}
+            onMouseLeave={() => setHoveredArea(null)}
+            onTouchStart={() => setHoveredArea("legs")}
+            onTouchEnd={() => setHoveredArea(null)}
             style={{ cursor: "pointer" }}
           />
         </g>
@@ -589,12 +597,12 @@ export default function BodyMap() {
             const isLiverLink = link.centerY === 550 && link.centerX === 350;
             const isAdrenalLink = link.centerY === 600 && link.centerX === 700;
             const isDigestiveLink = link.centerY === 715 && link.centerX === 530;
-                        const shouldShowThisLink = (hovered === "head" && !isNeckLink && !isHeartLink && !isLiverLink && !isAdrenalLink && !isDigestiveLink) || 
-                                       (hovered === "neck" && isNeckLink) || 
-                                       (hovered === "heart" && isHeartLink) || 
-                                       (hovered === "liver" && isLiverLink) ||
-                                       (hovered === "adrenals" && isAdrenalLink) ||
-                                       (hovered === "digestive" && isDigestiveLink);
+                        const shouldShowThisLink = (hoveredArea === "head" && !isNeckLink && !isHeartLink && !isLiverLink && !isAdrenalLink && !isDigestiveLink) || 
+                                       (hoveredArea === "neck" && isNeckLink) || 
+                                       (hoveredArea === "heart" && isHeartLink) || 
+                                       (hoveredArea === "liver" && isLiverLink) ||
+                                       (hoveredArea === "adrenals" && isAdrenalLink) ||
+                                       (hoveredArea === "digestive" && isDigestiveLink);
             
             if (!shouldShowThisLink) return null;
             
@@ -615,8 +623,8 @@ export default function BodyMap() {
                   transform: 'translate(-50%, -50%)',
                   zIndex: 1000
                 }}
-                onMouseEnter={() => setHovered(hovered)}
-                onMouseLeave={() => setHovered(null)}
+                onMouseEnter={() => setHoveredArea(hoveredArea)}
+                onMouseLeave={() => setHoveredArea(null)}
               >
                 <Link href={link.href}>
                   <div className="bg-white/98 border-2 border-blue-800 rounded-full px-2 py-1 sm:px-3 sm:py-1.5 md:px-4 md:py-2 shadow-lg hover:shadow-xl transition-shadow cursor-pointer">

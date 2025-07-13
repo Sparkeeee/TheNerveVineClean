@@ -41,7 +41,7 @@ class AmazonAssociatesAPI {
     this.apiKey = apiKey;
   }
   
-  async searchProducts(query: string, filters?: Record<string, unknown>): Promise<Product[]> {
+  async searchProducts(_query: string, _filters?: Record<string, unknown>): Promise<Product[]> {
     // Mock implementation - replace with actual Amazon Associates API
     return [
       {
@@ -70,7 +70,7 @@ class IHerbAPI {
     this.apiKey = apiKey;
   }
   
-  async searchProducts(query: string, filters?: Record<string, unknown>): Promise<Product[]> {
+  async searchProducts(_query: string, _filters?: Record<string, unknown>): Promise<Product[]> {
     // Mock implementation - replace with actual iHerb API
     return [
       {
@@ -92,7 +92,7 @@ class IHerbAPI {
   }
 }
 
-import { ProductQualityAnalyzer, type QualitySpecification } from './product-quality-specs';
+import { ProductQualityAnalyzer } from './product-quality-specs';
 
 // Product categorization and matching
 export class ProductAutomation {

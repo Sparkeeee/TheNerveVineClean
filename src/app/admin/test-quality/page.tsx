@@ -25,7 +25,32 @@ export default function TestQualityPage() {
   const handleTestQuality = async () => {
     if (!selectedHerb || !selectedProductType) return;
     
-    const specs = getQualitySpecifications(selectedHerb, selectedProductType as 'tincture' | 'capsule' | 'tea' | 'essential-oil' | 'powder' | 'tablet');
+    setLoading(true);
+    try {
+      const specs = getQualitySpecifications(selectedHerb, selectedProductType as 'tincture' | 'capsule' | 'tea' | 'essential-oil' | 'powder' | 'tablet');
+      
+      // Mock test results for now
+      const mockResults = [
+        {
+          product: {
+            title: 'Test Product',
+            price: 25.99,
+            rating: 4.5,
+            reviewCount: 150,
+            url: 'https://example.com'
+          },
+          score: 85,
+          passed: true,
+          reasons: ['All required terms present', 'Price within acceptable range']
+        }
+      ];
+      
+      setTestResults(mockResults);
+    } catch (error) {
+      console.error('Error testing quality:', error);
+    } finally {
+      setLoading(false);
+    }
   };
   
   return (
