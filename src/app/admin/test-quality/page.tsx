@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ProductQualityAnalyzer } from '@/lib/product-quality-specs';
+import { ProductQualityAnalyzer, qualitySpecs } from '@/lib/product-quality-specs';
 
 export default function TestQualityPage() {
   const [selectedHerb, setSelectedHerb] = useState<string>('');
@@ -116,52 +116,50 @@ export default function TestQualityPage() {
           
           {testResults.length > 0 && (
             <div className="border rounded p-4">
-              <h3 className="font-semibold mb-3">Quality Specifications</h3>
-              {testResults.map((spec, index) => (
-                <div key={index} className="mb-4 p-3 bg-gray-50 rounded">
-                  <div className="grid grid-cols-2 gap-4 text-sm">
-                    <div>
-                      <strong>Required Terms:</strong>
-                      <div className="flex flex-wrap gap-1 mt-1">
-                        {spec.requiredTerms.map((term: string) => (
-                          <span key={term} className="bg-red-100 text-red-800 px-2 py-1 rounded text-xs">
-                            {term}
-                          </span>
-                        ))}
-                      </div>
+              <h3 className="font-semibold mb-3">Quality Specifications Used</h3>
+              <div className="mb-4 p-3 bg-gray-50 rounded">
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <strong>Required Terms:</strong>
+                    <div className="flex flex-wrap gap-1 mt-1">
+                      {qualitySpecs.find(spec => spec.herbSlug === selectedHerb && spec.productType === selectedProductType)?.requiredTerms.map((term: string) => (
+                        <span key={term} className="bg-red-100 text-red-800 px-2 py-1 rounded text-xs">
+                          {term}
+                        </span>
+                      )) || []}
                     </div>
-                    
-                    <div>
-                      <strong>Preferred Terms:</strong>
-                      <div className="flex flex-wrap gap-1 mt-1">
-                        {spec.preferredTerms.map((term: string) => (
-                          <span key={term} className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">
-                            {term}
-                          </span>
-                        ))}
-                      </div>
+                  </div>
+                  
+                  <div>
+                    <strong>Preferred Terms:</strong>
+                    <div className="flex flex-wrap gap-1 mt-1">
+                      {qualitySpecs.find(spec => spec.herbSlug === selectedHerb && spec.productType === selectedProductType)?.preferredTerms.map((term: string) => (
+                        <span key={term} className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">
+                          {term}
+                        </span>
+                      )) || []}
                     </div>
-                    
-                    <div>
-                      <strong>Avoid Terms:</strong>
-                      <div className="flex flex-wrap gap-1 mt-1">
-                        {spec.avoidTerms.map((term: string) => (
-                          <span key={term} className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs">
-                            {term}
-                          </span>
-                        ))}
-                      </div>
+                  </div>
+                  
+                  <div>
+                    <strong>Avoid Terms:</strong>
+                    <div className="flex flex-wrap gap-1 mt-1">
+                      {qualitySpecs.find(spec => spec.herbSlug === selectedHerb && spec.productType === selectedProductType)?.avoidTerms.map((term: string) => (
+                        <span key={term} className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs">
+                          {term}
+                        </span>
+                      )) || []}
                     </div>
-                    
-                    <div>
-                      <strong>Price Range:</strong>
-                      <div className="mt-1">
-                        ${spec.priceRange.min} - ${spec.priceRange.max} {spec.priceRange.currency}
-                      </div>
+                  </div>
+                  
+                  <div>
+                    <strong>Price Range:</strong>
+                    <div className="mt-1">
+                      ${qualitySpecs.find(spec => spec.herbSlug === selectedHerb && spec.productType === selectedProductType)?.priceRange.min || 0} - ${qualitySpecs.find(spec => spec.herbSlug === selectedHerb && spec.productType === selectedProductType)?.priceRange.max || 0} {qualitySpecs.find(spec => spec.herbSlug === selectedHerb && spec.productType === selectedProductType)?.priceRange.currency || 'USD'}
                     </div>
                   </div>
                 </div>
-              ))}
+              </div>
             </div>
           )}
           
@@ -187,60 +185,30 @@ export default function TestQualityPage() {
                     
                     <div className="grid grid-cols-3 gap-4 text-sm">
                       <div>
-                        <strong className="text-green-700">✓ Matched Required:</strong>
+                        <strong className="text-green-700">✓ Quality Score: {product.score}/100</strong>
+                        <div className="mt-1 text-sm text-gray-600">
+                          {product.passed ? 'Passed quality filter' : 'Failed quality filter'}
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <strong className="text-blue-700">Reasons:</strong>
                         <div className="flex flex-wrap gap-1 mt-1">
-                          {product.qualityScore.matches.required.map((term: string) => (
-                            <span key={term} className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">
-                              {term}
+                          {product.reasons.map((reason: string, idx: number) => (
+                            <span key={idx} className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">
+                              {reason}
                             </span>
                           ))}
                         </div>
                       </div>
                       
                       <div>
-                        <strong className="text-blue-700">+ Preferred:</strong>
-                        <div className="flex flex-wrap gap-1 mt-1">
-                          {product.qualityScore.matches.preferred.map((term: string) => (
-                            <span key={term} className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">
-                              {term}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                      
-                      <div>
-                        <strong className="text-red-700">⚠ Avoided:</strong>
-                        <div className="flex flex-wrap gap-1 mt-1">
-                          {product.qualityScore.matches.avoided.map((term: string) => (
-                            <span key={term} className="bg-red-100 text-red-800 px-2 py-1 rounded text-xs">
-                              {term}
-                            </span>
-                          ))}
+                        <strong className="text-gray-700">Product Details:</strong>
+                        <div className="mt-1 text-sm text-gray-600">
+                          Rating: {product.product.rating}/5 ({product.product.reviewCount} reviews)
                         </div>
                       </div>
                     </div>
-                    
-                    {product.qualityScore.reasons.length > 0 && (
-                      <div className="mt-3">
-                        <strong className="text-green-700">Reasons for high score:</strong>
-                        <ul className="list-disc list-inside text-sm text-green-700 mt-1">
-                          {product.qualityScore.reasons.map((reason: string, idx: number) => (
-                            <li key={idx}>{reason}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                    
-                    {product.qualityScore.warnings.length > 0 && (
-                      <div className="mt-3">
-                        <strong className="text-red-700">Warnings:</strong>
-                        <ul className="list-disc list-inside text-sm text-red-700 mt-1">
-                          {product.qualityScore.warnings.map((warning: string, idx: number) => (
-                            <li key={idx}>{warning}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
                   </div>
                 ))}
               </div>
