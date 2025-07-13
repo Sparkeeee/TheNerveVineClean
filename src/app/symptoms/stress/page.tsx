@@ -36,7 +36,7 @@ export default function StressPage() {
               </h2>
               <div className="prose prose-gray max-w-none">
                 <p className="text-gray-700 mb-4">
-                  Stress is your body's natural response to challenges and demands. While some stress 
+                  Stress is your body&apos;s natural response to challenges and demands. While some stress 
                   can be beneficial and motivating, chronic or excessive stress can have negative 
                   effects on your physical and mental health.
                 </p>

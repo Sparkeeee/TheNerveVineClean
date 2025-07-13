@@ -37,7 +37,7 @@ export default function BurnoutPage() {
               <div className="prose prose-gray max-w-none">
                 <p className="text-gray-700 mb-4">
                   Burnout is a state of physical, emotional, and mental exhaustion caused by prolonged 
-                  stress, overwork, or overwhelming responsibilities. It's characterized by feelings of 
+                  stress, overwork, or overwhelming responsibilities. It&apos;s characterized by feelings of 
                   energy depletion, increased mental distance from work, and reduced professional efficacy.
                 </p>
                 <p className="text-gray-700 mb-4">

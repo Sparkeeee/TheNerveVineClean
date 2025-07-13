@@ -12,7 +12,7 @@ export default function LiverDetoxPage() {
             Liver Detox Support
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Supporting your liver's natural detoxification processes for optimal health
+            Supporting your liver&apos;s natural detoxification processes for optimal health
           </p>
         </div>
 
@@ -36,7 +36,7 @@ export default function LiverDetoxPage() {
               </h2>
               <div className="prose prose-gray max-w-none">
                 <p className="text-gray-700 mb-4">
-                  Your liver is your body's primary detoxification organ, responsible for filtering 
+                  Your liver is your body&apos;s primary detoxification organ, responsible for filtering 
                   toxins, processing nutrients, and maintaining metabolic balance. A healthy liver is 
                   essential for energy production, hormone regulation, and overall wellness.
                 </p>
