@@ -56,7 +56,7 @@ const searchData: SearchItem[] = [
   },
   {
     id: 'st-johns-wort',
-    title: "St. John's Wort",
+    title: "St. John&apos;s Wort",
     description: 'Traditional herb for mood support and emotional balance',
     type: 'herb',
     slug: '/herbs/st-johns-wort',
@@ -87,7 +87,7 @@ const searchData: SearchItem[] = [
     description: 'Adaptogenic herb for stress resistance and energy',
     type: 'herb',
     slug: '/herbs/siberian-ginseng',
-    tags: ['adaptogen', 'stress', 'energy', 'immune', 'resistance', 'eleutherococcus senticosus', 'eleuthero', 'devil\'s shrub'],
+    tags: ['adaptogen', 'stress', 'energy', 'immune', 'resistance', 'eleutherococcus senticosus', 'eleuthero', 'devil&apos;s shrub'],
     benefits: ['Increases stress resistance', 'Boosts energy and stamina', 'Supports immune system function']
   },
   {
@@ -119,7 +119,7 @@ const searchData: SearchItem[] = [
   },
   {
     id: 'lions-mane',
-    title: "Lion's Mane",
+    title: "Lion&apos;s Mane",
     description: 'Medicinal mushroom for brain health and cognitive function',
     type: 'herb',
     slug: '/herbs/lions-mane',
@@ -132,7 +132,7 @@ const searchData: SearchItem[] = [
     description: 'Traditional herb for mood enhancement and aphrodisiac properties',
     type: 'herb',
     slug: '/herbs/damiana',
-    tags: ['mood', 'aphrodisiac', 'energy', 'libido', 'traditional', 'turnera diffusa', 'old woman\'s broom'],
+    tags: ['mood', 'aphrodisiac', 'energy', 'libido', 'traditional', 'turnera diffusa', 'old woman&apos;s broom'],
     benefits: ['Supports mood and emotional well-being', 'May enhance libido and energy', 'Traditional aphrodisiac herb']
   },
   {
@@ -168,7 +168,7 @@ const searchData: SearchItem[] = [
     description: 'Adaptogenic herb for stress resistance and energy',
     type: 'herb',
     slug: '/herbs/siberian-ginseng',
-    tags: ['adaptogen', 'stress', 'energy', 'immune', 'resistance', 'eleutherococcus senticosus', 'eleuthero', 'devil\'s shrub'],
+    tags: ['adaptogen', 'stress', 'energy', 'immune', 'resistance', 'eleutherococcus senticosus', 'eleuthero', 'devil&apos;s shrub'],
     benefits: ['Increases stress resistance', 'Boosts energy and stamina', 'Supports immune system function']
   },
   {

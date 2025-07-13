@@ -202,9 +202,9 @@ const herbs = {
     ]
   },
   'st-johns-wort': {
-    title: "St. John's Wort",
+    title: "St. John&apos;s Wort",
     subtitle: 'The Mood Lifter',
-    description: "St. John's Wort (Hypericum perforatum) is a flowering plant traditionally used for its mood-boosting properties. It's one of the most researched herbs for mild to moderate depression and emotional balance.",
+    description: "St. John&apos;s Wort (Hypericum perforatum) is a flowering plant traditionally used for its mood-boosting properties. It&apos;s one of the most researched herbs for mild to moderate depression and emotional balance.",
     benefits: [
       'Supports emotional well-being',
       'May help with mild to moderate depression',
@@ -225,7 +225,7 @@ const herbs = {
     safety: 'May interact with many medications (antidepressants, birth control, etc.). Consult your doctor before use. Avoid during pregnancy.',
     topProducts: [
       {
-        name: "Nature's Way St. John's Wort",
+        name: "Nature&apos;s Way St. John&apos;s Wort",
         description: 'Standardized extract for mood support',
         price: '$16.99',
         affiliateLink: 'https://amzn.to/natures-way-st-johns-wort',
@@ -233,7 +233,7 @@ const herbs = {
         features: ['100 capsules', '0.3% Hypericin', 'Vegetarian', 'Popular brand']
       },
       {
-        name: 'Solaray St. John’s Wort Extract',
+        name: 'Solaray St. John&apos;s Wort Extract',
         description: 'High-potency herbal supplement',
         price: '$19.99',
         affiliateLink: 'https://amzn.to/solaray-st-johns-wort',
@@ -241,7 +241,7 @@ const herbs = {
         features: ['60 capsules', 'Guaranteed potency', 'Vegan', 'Trusted brand']
       },
       {
-        name: 'Herb Pharm St. John’s Wort Tincture',
+        name: 'Herb Pharm St. John&apos;s Wort Tincture',
         description: 'Liquid extract for flexible dosing',
         price: '$15.99',
         affiliateLink: 'https://amzn.to/herb-pharm-st-johns-wort',
@@ -302,7 +302,7 @@ const herbs = {
   'rhodiola': {
     title: 'Rhodiola Rosea',
     subtitle: 'The Golden Root',
-    description: 'Rhodiola rosea is a powerful adaptogenic herb that grows in cold, mountainous regions. It\'s particularly effective for mental and physical fatigue, stress, and cognitive enhancement.',
+    description: 'Rhodiola rosea is a powerful adaptogenic herb that grows in cold, mountainous regions. It&apos;s particularly effective for mental and physical fatigue, stress, and cognitive enhancement.',
     benefits: [
       'Improves mental and physical performance',
       'Reduces fatigue and exhaustion',
@@ -351,7 +351,7 @@ const herbs = {
   'holy-basil': {
     title: 'Holy Basil (Tulsi)',
     subtitle: 'The Sacred Herb',
-    description: 'Holy Basil, also known as Tulsi, is considered sacred in Ayurvedic medicine. It\'s an excellent adaptogen that helps the body adapt to stress while promoting mental clarity and spiritual well-being.',
+    description: 'Holy Basil, also known as Tulsi, is considered sacred in Ayurvedic medicine. It&apos;s an excellent adaptogen that helps the body adapt to stress while promoting mental clarity and spiritual well-being.',
     benefits: [
       'Reduces stress and anxiety',
       'Promotes mental clarity',
@@ -400,7 +400,7 @@ const herbs = {
   'licorice-root': {
     title: 'Licorice Root',
     subtitle: 'The Sweet Healer',
-    description: 'Licorice root is a traditional herb known for its sweet taste and powerful healing properties. It\'s particularly effective for adrenal support, digestive health, and respiratory conditions.',
+    description: 'Licorice root is a traditional herb known for its sweet taste and powerful healing properties. It&apos;s particularly effective for adrenal support, digestive health, and respiratory conditions.',
     benefits: [
       'Supports adrenal gland function',
       'Soothes digestive issues',
@@ -498,7 +498,7 @@ const herbs = {
   'passionflower': {
     title: 'Passionflower',
     subtitle: 'The Calming Vine',
-    description: 'Passionflower is a beautiful flowering vine that has been used for centuries to promote calm and relaxation. It\'s particularly effective for anxiety, insomnia, and nervous tension.',
+    description: 'Passionflower is a beautiful flowering vine that has been used for centuries to promote calm and relaxation. It&apos;s particularly effective for anxiety, insomnia, and nervous tension.',
     benefits: [
       'Reduces anxiety and nervous tension',
       'Promotes restful sleep',
@@ -547,7 +547,7 @@ const herbs = {
   'skullcap': {
     title: 'Skullcap',
     subtitle: 'The Nerve Tonic',
-    description: 'Skullcap is a traditional nervine herb that has been used for centuries to support nervous system health and promote calm. It\'s particularly effective for anxiety, stress, and nervous tension.',
+    description: 'Skullcap is a traditional nervine herb that has been used for centuries to support nervous system health and promote calm. It&apos;s particularly effective for anxiety, stress, and nervous tension.',
     benefits: [
       'Calms nervous tension',
       'Reduces anxiety and stress',
@@ -596,7 +596,7 @@ const herbs = {
   'motherwort': {
     title: 'Motherwort',
     subtitle: 'The Heart Herb',
-    description: 'Motherwort is a traditional herb known for its ability to calm the heart and nervous system. It\'s particularly effective for anxiety, heart palpitations, and stress-related conditions.',
+    description: 'Motherwort is a traditional herb known for its ability to calm the heart and nervous system. It&apos;s particularly effective for anxiety, heart palpitations, and stress-related conditions.',
     benefits: [
       'Calms heart palpitations',
       'Reduces anxiety and stress',
@@ -645,7 +645,7 @@ const herbs = {
   'oatstraw': {
     title: 'Oatstraw',
     subtitle: 'The Nerve Nourisher',
-    description: 'Oatstraw is the green, milky tops of the oat plant harvested before the grain forms. It\'s a gentle, nourishing herb that supports nervous system health and promotes calm.',
+    description: 'Oatstraw is the green, milky tops of the oat plant harvested before the grain forms. It&apos;s a gentle, nourishing herb that supports nervous system health and promotes calm.',
     benefits: [
       'Nourishes the nervous system',
       'Reduces stress and anxiety',
@@ -743,7 +743,7 @@ const herbs = {
   'siberian-ginseng': {
     title: 'Siberian Ginseng',
     subtitle: 'The Adaptogenic Root',
-    description: 'Siberian Ginseng (Eleutherococcus senticosus) is a powerful adaptogenic herb that helps the body adapt to stress and maintain energy levels. Unlike true ginseng, it\'s more gentle and suitable for long-term use.',
+    description: 'Siberian Ginseng (Eleutherococcus senticosus) is a powerful adaptogenic herb that helps the body adapt to stress and maintain energy levels. Unlike true ginseng, it&apos;s more gentle and suitable for long-term use.',
     benefits: [
       'Increases stress resistance',
       'Boosts energy and stamina',
@@ -937,9 +937,9 @@ const herbs = {
     ]
   },
   'lions-mane': {
-    title: "Lion's Mane",
+    title: "Lion&apos;s Mane",
     subtitle: 'The Smart Mushroom',
-    description: "Lion's Mane (Hericium erinaceus) is a unique medicinal mushroom that has gained recognition as one of the most effective natural supplements for brain health and cognitive function.",
+    description: "Lion&apos;s Mane (Hericium erinaceus) is a unique medicinal mushroom that has gained recognition as one of the most effective natural supplements for brain health and cognitive function.",
     benefits: [
       'Enhances memory and learning',
       'Improves focus and concentration',
