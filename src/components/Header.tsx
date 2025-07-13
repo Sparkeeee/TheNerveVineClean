@@ -2,12 +2,14 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
+import SearchComponent from './SearchComponent'
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const navigation = [
     { name: 'Home', href: '/' },
+    { name: 'Search', href: '/search' },
     { name: 'Herbs', href: '/herbs' },
     { name: 'Supplements', href: '/supplements' },
     { name: 'Symptoms', href: '/symptoms' },
@@ -40,6 +42,13 @@ export default function Header() {
             ))}
           </nav>
 
+          {/* Desktop Search */}
+          <div className="hidden lg:flex items-center space-x-4">
+            <div className="w-80">
+              <SearchComponent />
+            </div>
+          </div>
+
           {/* Mobile menu button */}
           <div className="md:hidden">
             <button
@@ -65,6 +74,11 @@ export default function Header() {
         {isMenuOpen && (
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-gray-200">
+              {/* Mobile Search */}
+              <div className="px-3 py-2">
+                <SearchComponent />
+              </div>
+              
               {navigation.map((item) => (
                 <Link
                   key={item.name}
