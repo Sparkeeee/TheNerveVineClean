@@ -201,6 +201,48 @@ export default function StressPage() {
                 </Link>
               </div>
             </div>
+
+            <div className="bg-green-50 rounded-lg p-6">
+              <h3 className="font-semibold text-gray-800 mb-3">Supporting Herbs</h3>
+              <div className="space-y-2">
+                <Link 
+                  href="/herbs/ashwagandha" 
+                  className="block text-green-600 hover:text-green-800 transition-colors"
+                >
+                  → Ashwagandha (Adaptogen)
+                </Link>
+                <Link 
+                  href="/herbs/reishi" 
+                  className="block text-green-600 hover:text-green-800 transition-colors"
+                >
+                  → Reishi (Immune Support)
+                </Link>
+                <Link 
+                  href="/herbs/holy-basil" 
+                  className="block text-green-600 hover:text-green-800 transition-colors"
+                >
+                  → Holy Basil (Mental Clarity)
+                </Link>
+                <Link 
+                  href="/herbs/siberian-ginseng" 
+                  className="block text-green-600 hover:text-green-800 transition-colors"
+                >
+                  → Siberian Ginseng (Stress Resistance)
+                </Link>
+                <Link 
+                  href="/herbs/lemon-balm" 
+                  className="block text-green-600 hover:text-green-800 transition-colors"
+                >
+                  → Lemon Balm (Calming)
+                </Link>
+                <Link 
+                  href="/herbs/skullcap" 
+                  className="block text-green-600 hover:text-green-800 transition-colors"
+                >
+                  → Skullcap (Nervine)
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
 

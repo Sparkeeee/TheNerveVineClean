@@ -2,18 +2,38 @@ import Link from "next/link";
 
 export default function HerbsPage() {
   const herbs = [
-    { name: "Lemon Balm", href: "/herbs/lemon-balm", description: "Calming and stress relief" },
-    { name: "Chamomile", href: "/herbs/chamomile", description: "Gentle relaxation and sleep" },
-    { name: "Lavender", href: "/herbs/lavender", description: "Aromatherapy and calm" },
-    { name: "Valerian", href: "/herbs/valerian", description: "Natural sleep support" },
-    { name: "Passionflower", href: "/herbs/passionflower", description: "Anxiety and insomnia relief" },
-    { name: "St. John's Wort", href: "/herbs/st-johns-wort", description: "Mood support and depression" },
-    { name: "Ginseng", href: "/herbs/ginseng", description: "Energy and vitality" },
-    { name: "Holy Basil", href: "/herbs/holy-basil", description: "Adaptogenic stress support" },
-    { name: "Ashwagandha", href: "/herbs/ashwagandha", description: "Adaptogen for stress and energy" },
-    { name: "Rhodiola", href: "/herbs/rhodiola", description: "Mental performance and fatigue" },
-    { name: "Ginkgo Biloba", href: "/herbs/ginkgo", description: "Cognitive function and memory" },
+    // Adaptogens & Stress Support
+    { name: "Ashwagandha", href: "/herbs/ashwagandha", description: "Adaptogen for stress and energy", category: "Adaptogens" },
+    { name: "Holy Basil", href: "/herbs/holy-basil", description: "Adaptogenic stress support", category: "Adaptogens" },
+
+    { name: "Korean Ginseng", href: "/herbs/korean-ginseng", description: "Traditional adaptogenic herb", category: "Adaptogens" },
+    { name: "Siberian Ginseng", href: "/herbs/siberian-ginseng", description: "Stress resistance and energy", category: "Adaptogens" },
+    { name: "Astragalus", href: "/herbs/astragalus", description: "Immune support and vitality", category: "Adaptogens" },
+    { name: "Reishi", href: "/herbs/reishi", description: "Immune support and longevity", category: "Adaptogens" },
+    
+    // Nervines & Calming Herbs
+    { name: "Lemon Balm", href: "/herbs/lemon-balm", description: "Calming and stress relief", category: "Nervines" },
+    { name: "Chamomile", href: "/herbs/chamomile", description: "Gentle relaxation and sleep", category: "Nervines" },
+    { name: "Lavender", href: "/herbs/lavender", description: "Aromatherapy and calm", category: "Nervines" },
+    { name: "Valerian", href: "/herbs/valerian", description: "Natural sleep support", category: "Nervines" },
+    { name: "Skullcap", href: "/herbs/skullcap", description: "Nervine for anxiety and stress", category: "Nervines" },
+    { name: "Oatstraw", href: "/herbs/oatstraw", description: "Nourishing nervine herb", category: "Nervines" },
+    
+    // Mood & Energy Support
+    { name: "St. John's Wort", href: "/herbs/st-johns-wort", description: "Mood support and depression", category: "Mood Support" },
+    { name: "Damiana", href: "/herbs/damiana", description: "Mood enhancement and energy", category: "Mood Support" },
+    { name: "Rhodiola", href: "/herbs/rhodiola", description: "Mental performance and fatigue", category: "Mood Support" },
+    
+    // Cognitive & Brain Health
+    { name: "Ginkgo Biloba", href: "/herbs/ginkgo", description: "Cognitive function and memory", category: "Brain Health" },
+    { name: "Lion's Mane", href: "/herbs/lions-mane", description: "Brain health and cognitive function", category: "Brain Health" },
+    
+    // Nutritive & Support Herbs
+    { name: "Borage", href: "/herbs/borage", description: "Hormonal balance and skin health", category: "Nutritive" },
+    { name: "Nettle Seed", href: "/herbs/nettle-seed", description: "Energy and adrenal support", category: "Nutritive" },
   ];
+
+  const categories = [...new Set(herbs.map(herb => herb.category))];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-blue-50 to-blue-100">
@@ -25,18 +45,27 @@ export default function HerbsPage() {
           and overall wellness. Each herb has unique properties to support your health journey.
         </p>
         
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {herbs.map((herb, index) => (
-            <Link 
-              key={index} 
-              href={herb.href}
-              className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-blue-100 hover:shadow-xl transition-all duration-200 hover:scale-105"
-            >
-              <h3 className="text-xl font-semibold text-blue-800 mb-2">{herb.name}</h3>
-              <p className="text-gray-600 text-sm">{herb.description}</p>
-            </Link>
-          ))}
-        </div>
+        {categories.map(category => (
+          <div key={category} className="mb-12">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-6 border-b border-gray-200 pb-2">
+              {category}
+            </h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {herbs
+                .filter(herb => herb.category === category)
+                .map((herb, index) => (
+                  <Link 
+                    key={index} 
+                    href={herb.href}
+                    className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-blue-100 hover:shadow-xl transition-all duration-200 hover:scale-105"
+                  >
+                    <h3 className="text-xl font-semibold text-blue-800 mb-2">{herb.name}</h3>
+                    <p className="text-gray-600 text-sm">{herb.description}</p>
+                  </Link>
+                ))}
+            </div>
+          </div>
+        ))}
         
         <div className="mt-12 text-center">
           <Link 

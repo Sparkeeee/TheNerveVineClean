@@ -24,7 +24,7 @@ const searchData: SearchItem[] = [
     description: 'Calming herb used to ease stress and digestive issues',
     type: 'herb',
     slug: '/herbs/lemon-balm',
-    tags: ['anxiety', 'stress', 'digestive', 'calming', 'nervine', 'sleep'],
+    tags: ['anxiety', 'stress', 'digestive', 'calming', 'nervine', 'sleep', 'melissa officinalis', 'balm', 'melissa'],
     benefits: ['Reduces anxiety and stress', 'Promotes restful sleep', 'Supports digestive health']
   },
   {
@@ -33,7 +33,7 @@ const searchData: SearchItem[] = [
     description: 'Gentle herb known for its calming properties',
     type: 'herb',
     slug: '/herbs/chamomile',
-    tags: ['sleep', 'anxiety', 'digestive', 'calming', 'gentle'],
+    tags: ['sleep', 'anxiety', 'digestive', 'calming', 'gentle', 'matricaria chamomilla', 'german chamomile'],
     benefits: ['Promotes deep, restful sleep', 'Soothes digestive discomfort', 'Reduces anxiety and stress']
   },
   {
@@ -42,7 +42,7 @@ const searchData: SearchItem[] = [
     description: 'Versatile herb known for relaxation and sleep',
     type: 'herb',
     slug: '/herbs/lavender',
-    tags: ['sleep', 'relaxation', 'anxiety', 'aromatherapy', 'calming'],
+    tags: ['sleep', 'relaxation', 'anxiety', 'aromatherapy', 'calming', 'lavandula angustifolia', 'english lavender'],
     benefits: ['Promotes deep relaxation and sleep', 'Reduces anxiety and stress', 'Soothes skin irritation']
   },
   {
@@ -51,7 +51,7 @@ const searchData: SearchItem[] = [
     description: 'Natural sleep aid and sedative herb',
     type: 'herb',
     slug: '/herbs/valerian',
-    tags: ['sleep', 'insomnia', 'sedative', 'calming', 'rest'],
+    tags: ['sleep', 'insomnia', 'sedative', 'calming', 'rest', 'valeriana officinalis', 'garden valerian'],
     benefits: ['Promotes deep, restful sleep', 'Reduces time to fall asleep', 'Improves sleep quality']
   },
   {
@@ -60,7 +60,7 @@ const searchData: SearchItem[] = [
     description: 'Traditional herb for mood support and emotional balance',
     type: 'herb',
     slug: '/herbs/st-johns-wort',
-    tags: ['depression', 'mood', 'emotional', 'nervous system', 'balance'],
+    tags: ['depression', 'mood', 'emotional', 'nervous system', 'balance', 'hypericum perforatum', 'goatweed', 'klamath weed'],
     benefits: ['Supports emotional well-being', 'May help with mild to moderate depression', 'Promotes positive mood']
   },
   {
@@ -69,17 +69,35 @@ const searchData: SearchItem[] = [
     description: 'Powerful adaptogenic herb for stress and energy',
     type: 'herb',
     slug: '/herbs/ashwagandha',
-    tags: ['stress', 'adaptogen', 'energy', 'anxiety', 'immune'],
+    tags: ['stress', 'adaptogen', 'energy', 'anxiety', 'immune', 'withania somnifera', 'indian ginseng', 'winter cherry'],
     benefits: ['Reduces stress and anxiety', 'Supports energy and stamina', 'Promotes restful sleep']
   },
   {
-    id: 'ginseng',
-    title: 'Ginseng',
+    id: 'korean-ginseng',
+    title: 'Korean Ginseng',
     description: 'Traditional herb for energy and vitality',
     type: 'herb',
-    slug: '/herbs/ginseng',
-    tags: ['energy', 'vitality', 'adaptogen', 'immune', 'focus'],
+    slug: '/herbs/korean-ginseng',
+    tags: ['energy', 'vitality', 'adaptogen', 'immune', 'focus', 'panax ginseng', 'asian ginseng', 'korean ginseng'],
     benefits: ['Boosts energy and vitality', 'Supports immune function', 'Improves mental focus']
+  },
+  {
+    id: 'siberian-ginseng',
+    title: 'Siberian Ginseng',
+    description: 'Adaptogenic herb for stress resistance and energy',
+    type: 'herb',
+    slug: '/herbs/siberian-ginseng',
+    tags: ['adaptogen', 'stress', 'energy', 'immune', 'resistance', 'eleutherococcus senticosus', 'eleuthero', 'devil\'s shrub'],
+    benefits: ['Increases stress resistance', 'Boosts energy and stamina', 'Supports immune system function']
+  },
+  {
+    id: 'astragalus',
+    title: 'Astragalus',
+    description: 'Traditional herb for immune support and vitality',
+    type: 'herb',
+    slug: '/herbs/astragalus',
+    tags: ['immune', 'vitality', 'traditional', 'energy', 'health', 'astragalus membranaceus', 'huang qi', 'milk vetch'],
+    benefits: ['Supports immune system function', 'Promotes vitality and energy', 'Traditional immune-supporting herb']
   },
   {
     id: 'holy-basil',
@@ -87,8 +105,98 @@ const searchData: SearchItem[] = [
     description: 'Sacred herb for stress adaptation and mental clarity',
     type: 'herb',
     slug: '/herbs/holy-basil',
-    tags: ['stress', 'clarity', 'adaptogen', 'immune', 'spiritual'],
+    tags: ['stress', 'clarity', 'adaptogen', 'immune', 'spiritual', 'ocimum sanctum', 'tulsi', 'sacred basil'],
     benefits: ['Reduces stress and anxiety', 'Promotes mental clarity', 'Supports immune function']
+  },
+  {
+    id: 'reishi',
+    title: 'Reishi',
+    description: 'Medicinal mushroom known as the "mushroom of immortality"',
+    type: 'herb',
+    slug: '/herbs/reishi',
+    tags: ['immune', 'adaptogen', 'longevity', 'stress', 'mushroom', 'ganoderma lucidum', 'lingzhi', 'mushroom of immortality'],
+    benefits: ['Supports immune system function', 'Reduces stress and fatigue', 'Promotes longevity and vitality']
+  },
+  {
+    id: 'lions-mane',
+    title: "Lion's Mane",
+    description: 'Medicinal mushroom for brain health and cognitive function',
+    type: 'herb',
+    slug: '/herbs/lions-mane',
+    tags: ['brain', 'cognitive', 'memory', 'focus', 'mushroom', 'nervous system', 'hericium erinaceus', 'bearded tooth', 'pom pom mushroom'],
+    benefits: ['Supports brain health and cognitive function', 'May improve memory and focus', 'Supports nervous system health']
+  },
+  {
+    id: 'damiana',
+    title: 'Damiana',
+    description: 'Traditional herb for mood enhancement and aphrodisiac properties',
+    type: 'herb',
+    slug: '/herbs/damiana',
+    tags: ['mood', 'aphrodisiac', 'energy', 'libido', 'traditional', 'turnera diffusa', 'old woman\'s broom'],
+    benefits: ['Supports mood and emotional well-being', 'May enhance libido and energy', 'Traditional aphrodisiac herb']
+  },
+  {
+    id: 'oatstraw',
+    title: 'Oatstraw',
+    description: 'Nervine herb known for its calming and nutritive properties',
+    type: 'herb',
+    slug: '/herbs/oatstraw',
+    tags: ['nervine', 'calming', 'nutritive', 'stress', 'nervous system', 'avena sativa', 'wild oats', 'oat tops'],
+    benefits: ['Calms the nervous system', 'Provides nutritive support', 'Reduces stress and anxiety']
+  },
+  {
+    id: 'skullcap',
+    title: 'Skullcap',
+    description: 'Nervine herb for anxiety, stress, and nervous system support',
+    type: 'herb',
+    slug: '/herbs/skullcap',
+    tags: ['nervine', 'anxiety', 'stress', 'nervous system', 'calming', 'scutellaria lateriflora', 'american skullcap', 'mad dog skullcap'],
+    benefits: ['Reduces anxiety and nervous tension', 'Supports nervous system health', 'Promotes calm and relaxation']
+  },
+  {
+    id: 'korean-ginseng',
+    title: 'Korean Ginseng (Panax)',
+    description: 'Traditional adaptogenic herb for energy and vitality',
+    type: 'herb',
+    slug: '/herbs/korean-ginseng',
+    tags: ['adaptogen', 'energy', 'vitality', 'immune', 'traditional', 'panax ginseng', 'asian ginseng', 'true ginseng'],
+    benefits: ['Boosts energy and stamina', 'Supports immune function', 'Improves mental and physical performance']
+  },
+  {
+    id: 'siberian-ginseng',
+    title: 'Siberian Ginseng (Eleuthero)',
+    description: 'Adaptogenic herb for stress resistance and energy',
+    type: 'herb',
+    slug: '/herbs/siberian-ginseng',
+    tags: ['adaptogen', 'stress', 'energy', 'immune', 'resistance', 'eleutherococcus senticosus', 'eleuthero', 'devil\'s shrub'],
+    benefits: ['Increases stress resistance', 'Boosts energy and stamina', 'Supports immune system function']
+  },
+  {
+    id: 'astragalus',
+    title: 'Astragalus',
+    description: 'Traditional herb for immune support and vitality',
+    type: 'herb',
+    slug: '/herbs/astragalus',
+    tags: ['immune', 'vitality', 'traditional', 'energy', 'health', 'astragalus membranaceus', 'huang qi', 'milk vetch'],
+    benefits: ['Supports immune system function', 'Promotes vitality and energy', 'Traditional immune-supporting herb']
+  },
+  {
+    id: 'borage',
+    title: 'Borage',
+    description: 'Herb rich in gamma-linolenic acid for hormonal balance',
+    type: 'herb',
+    slug: '/herbs/borage',
+    tags: ['hormonal', 'balance', 'skin', 'inflammation', 'omega-6', 'borago officinalis', 'starflower', 'bee bread'],
+    benefits: ['Supports hormonal balance', 'Promotes healthy skin', 'Reduces inflammation']
+  },
+  {
+    id: 'nettle-seed',
+    title: 'Nettle Seed',
+    description: 'Nutritive herb for energy and adrenal support',
+    type: 'herb',
+    slug: '/herbs/nettle-seed',
+    tags: ['nutritive', 'energy', 'adrenal', 'vitality', 'support', 'urtica dioica', 'stinging nettle', 'common nettle'],
+    benefits: ['Provides nutritive support', 'Supports adrenal function', 'Boosts energy and vitality']
   },
 
   // Supplements
@@ -343,7 +451,6 @@ export default function SearchComponent() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedType, setSelectedType] = useState<'all' | 'herb' | 'supplement' | 'symptom'>('all');
   const searchRef = useRef<HTMLDivElement>(null);
 
   // Close search when clicking outside
@@ -374,9 +481,7 @@ export default function SearchComponent() {
         (item.benefits && item.benefits.some(benefit => benefit.toLowerCase().includes(searchTerm))) ||
         (item.symptoms && item.symptoms.some(symptom => symptom.toLowerCase().includes(searchTerm)));
 
-      const matchesType = selectedType === 'all' || item.type === selectedType;
-
-      return matchesQuery && matchesType;
+      return matchesQuery;
     });
 
     // Sort by relevance (exact title matches first, then description, then tags)
@@ -391,7 +496,7 @@ export default function SearchComponent() {
     });
 
     setResults(filteredResults.slice(0, 8)); // Limit to 8 results
-  }, [query, selectedType]);
+  }, [query]);
 
   const getTypeIcon = (type: string) => {
     switch (type) {
@@ -424,57 +529,13 @@ export default function SearchComponent() {
             setIsOpen(true);
           }}
           onFocus={() => setIsOpen(true)}
-          className="w-full px-4 py-2 pl-10 pr-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full px-3 py-2 pl-10 pr-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm text-gray-900 placeholder-gray-600"
         />
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
         </div>
-      </div>
-
-      {/* Filter Buttons */}
-      <div className="flex gap-2 mt-2">
-        <button
-          onClick={() => setSelectedType('all')}
-          className={`px-3 py-1 text-xs rounded-full transition-colors ${
-            selectedType === 'all' 
-              ? 'bg-blue-600 text-white' 
-              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-          }`}
-        >
-          All
-        </button>
-        <button
-          onClick={() => setSelectedType('herb')}
-          className={`px-3 py-1 text-xs rounded-full transition-colors ${
-            selectedType === 'herb' 
-              ? 'bg-green-600 text-white' 
-              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-          }`}
-        >
-          🌿 Herbs
-        </button>
-        <button
-          onClick={() => setSelectedType('supplement')}
-          className={`px-3 py-1 text-xs rounded-full transition-colors ${
-            selectedType === 'supplement' 
-              ? 'bg-blue-600 text-white' 
-              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-          }`}
-        >
-          💊 Supplements
-        </button>
-        <button
-          onClick={() => setSelectedType('symptom')}
-          className={`px-3 py-1 text-xs rounded-full transition-colors ${
-            selectedType === 'symptom' 
-              ? 'bg-red-600 text-white' 
-              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-          }`}
-        >
-          🩺 Symptoms
-        </button>
       </div>
 
       {/* Search Results */}

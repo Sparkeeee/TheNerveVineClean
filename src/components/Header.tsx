@@ -9,11 +9,10 @@ export default function Header() {
 
   const navigation = [
     { name: 'Home', href: '/' },
-    { name: 'Search', href: '/search' },
+    { name: 'Assisted Search', href: '/search' },
     { name: 'Herbs', href: '/herbs' },
     { name: 'Supplements', href: '/supplements' },
     { name: 'Symptoms', href: '/symptoms' },
-    { name: 'Systems', href: '/systems' },
     { name: 'Blog', href: '/blog' },
     { name: 'About', href: '/about' },
   ]
@@ -21,6 +20,7 @@ export default function Header() {
   return (
     <header className="bg-white shadow-sm border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Top Row - Logo and Navigation */}
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
@@ -42,13 +42,6 @@ export default function Header() {
             ))}
           </nav>
 
-          {/* Desktop Search */}
-          <div className="hidden lg:flex items-center space-x-4">
-            <div className="w-80">
-              <SearchComponent />
-            </div>
-          </div>
-
           {/* Mobile menu button */}
           <div className="md:hidden">
             <button
@@ -67,6 +60,13 @@ export default function Header() {
                 </svg>
               )}
             </button>
+          </div>
+        </div>
+
+        {/* Second Row - Search Bar (Desktop Only) */}
+        <div className="hidden lg:block pb-4">
+          <div className="max-w-2xl mx-auto">
+            <SearchComponent />
           </div>
         </div>
 

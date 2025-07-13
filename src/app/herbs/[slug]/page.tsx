@@ -446,10 +446,10 @@ const herbs = {
       }
     ]
   },
-  'ginseng': {
-    title: 'Ginseng',
+  'korean-ginseng': {
+    title: 'Korean Ginseng',
     subtitle: 'The King of Herbs',
-    description: 'Ginseng is one of the most revered herbs in traditional medicine, known for its ability to enhance energy, mental clarity, and overall vitality. It\'s particularly effective for stress and fatigue.',
+    description: 'Korean Ginseng (Panax ginseng) is one of the most revered herbs in traditional medicine, known for its ability to enhance energy, mental clarity, and overall vitality. It\'s particularly effective for stress and fatigue.',
     benefits: [
       'Enhances energy and stamina',
       'Improves mental clarity',
@@ -737,6 +737,300 @@ const herbs = {
         affiliateLink: 'https://amzn.to/jarrow-ginkgo',
         rating: '4.8/5',
         features: ['120 capsules', '120mg per serving', 'Clinically studied', 'Quality brand']
+      }
+    ]
+  },
+  'siberian-ginseng': {
+    title: 'Siberian Ginseng',
+    subtitle: 'The Adaptogenic Root',
+    description: 'Siberian Ginseng (Eleutherococcus senticosus) is a powerful adaptogenic herb that helps the body adapt to stress and maintain energy levels. Unlike true ginseng, it\'s more gentle and suitable for long-term use.',
+    benefits: [
+      'Increases stress resistance',
+      'Boosts energy and stamina',
+      'Supports immune function',
+      'Improves mental performance',
+      'Reduces fatigue',
+      'Supports overall vitality'
+    ],
+    traditionalUses: [
+      'Stress and burnout',
+      'Low energy and fatigue',
+      'Immune system support',
+      'Mental performance',
+      'Physical endurance',
+      'General vitality'
+    ],
+    preparation: 'Capsules: 200-400mg daily. Tincture: 30-60 drops 1-2 times daily. Take in the morning.',
+    safety: 'Generally safe. May cause mild stimulation. Avoid in the evening. Consult your doctor if taking blood pressure medications.',
+    topProducts: [
+      {
+        name: 'Nature\'s Way Siberian Ginseng',
+        description: 'Traditional Siberian ginseng supplement',
+        price: '$19.99',
+        affiliateLink: 'https://amzn.to/natures-way-siberian-ginseng',
+        rating: '4.6/5',
+        features: ['60 capsules', '400mg per serving', 'Vegetarian', 'Popular brand']
+      },
+      {
+        name: 'NOW Foods Siberian Ginseng',
+        description: 'High-potency Siberian ginseng extract',
+        price: '$16.99',
+        affiliateLink: 'https://amzn.to/now-siberian-ginseng',
+        rating: '4.5/5',
+        features: ['90 capsules', '400mg per serving', 'Vegetarian', 'Affordable']
+      },
+      {
+        name: 'Gaia Herbs Siberian Ginseng',
+        description: 'Organic Siberian ginseng root',
+        price: '$23.99',
+        affiliateLink: 'https://amzn.to/gaia-siberian-ginseng',
+        rating: '4.7/5',
+        features: ['60 capsules', 'Certified organic', '400mg per serving', 'Vegan']
+      }
+    ]
+  },
+  'astragalus': {
+    title: 'Astragalus',
+    subtitle: 'The Immune Guardian',
+    description: 'Astragalus (Astragalus membranaceus) is a traditional Chinese herb known for its powerful immune-supporting properties. It\'s particularly effective for boosting immunity, energy, and overall vitality.',
+    benefits: [
+      'Supports immune system function',
+      'Boosts energy and vitality',
+      'Promotes healthy aging',
+      'Supports cardiovascular health',
+      'May help with fatigue',
+      'Supports overall well-being'
+    ],
+    traditionalUses: [
+      'Immune system support',
+      'Low energy and fatigue',
+      'Cardiovascular health',
+      'Healthy aging',
+      'Recovery from illness',
+      'General vitality'
+    ],
+    preparation: 'Capsules: 200-400mg daily. Tea: 1-2 tsp dried root per cup, steep 10-15 minutes. Tincture: 30-60 drops 2-3 times daily.',
+    safety: 'Generally safe. May interact with immune suppressants. Avoid during acute illness. Consult your doctor if taking medications.',
+    topProducts: [
+      {
+        name: 'Nature\'s Way Astragalus',
+        description: 'Traditional astragalus supplement',
+        price: '$18.99',
+        affiliateLink: 'https://amzn.to/natures-way-astragalus',
+        rating: '4.6/5',
+        features: ['60 capsules', '400mg per serving', 'Vegetarian', 'Popular brand']
+      },
+      {
+        name: 'NOW Foods Astragalus',
+        description: 'High-potency astragalus extract',
+        price: '$15.99',
+        affiliateLink: 'https://amzn.to/now-astragalus',
+        rating: '4.5/5',
+        features: ['90 capsules', '400mg per serving', 'Vegetarian', 'Affordable']
+      },
+      {
+        name: 'Gaia Herbs Astragalus',
+        description: 'Organic astragalus root',
+        price: '$21.99',
+        affiliateLink: 'https://amzn.to/gaia-astragalus',
+        rating: '4.7/5',
+        features: ['60 capsules', 'Certified organic', '400mg per serving', 'Vegan']
+      }
+    ]
+  },
+  'reishi': {
+    title: 'Reishi',
+    subtitle: 'The Mushroom of Immortality',
+    description: 'Reishi (Ganoderma lucidum) is a revered medicinal mushroom in traditional Chinese medicine, known for supporting longevity, immune function, and stress resilience.',
+    benefits: [
+      'Supports immune system function',
+      'Promotes longevity and vitality',
+      'Reduces stress and fatigue',
+      'Supports cardiovascular health',
+      'Enhances overall energy',
+      'Antioxidant protection'
+    ],
+    traditionalUses: [
+      'Immune system strengthening',
+      'Stress and fatigue relief',
+      'Longevity and healthy aging',
+      'Cardiovascular support',
+      'Sleep quality improvement',
+      'Overall vitality enhancement'
+    ],
+    preparation: 'Capsules: 500-1000mg daily. Powder: 1-2 tsp daily. Tea: 1-2 cups daily.',
+    safety: 'Generally safe. May interact with blood thinners. Avoid during pregnancy. Consult your doctor if taking medications.',
+    topProducts: [
+      {
+        name: 'Host Defense Reishi',
+        description: 'Premium reishi mushroom supplement',
+        price: '$34.99',
+        affiliateLink: 'https://amzn.to/host-defense-reishi',
+        rating: '4.8/5',
+        features: ['60 capsules', 'Organic', 'Whole mushroom', 'Quality brand']
+      },
+      {
+        name: 'NOW Foods Reishi',
+        description: 'High-potency reishi extract',
+        price: '$28.99',
+        affiliateLink: 'https://amzn.to/now-reishi',
+        rating: '4.6/5',
+        features: ['90 capsules', '500mg per serving', 'Vegetarian', 'Affordable']
+      },
+      {
+        name: 'Nature\'s Way Reishi',
+        description: 'Traditional reishi supplement',
+        price: '$22.99',
+        affiliateLink: 'https://amzn.to/natures-way-reishi',
+        rating: '4.5/5',
+        features: ['60 capsules', '400mg per serving', 'Vegetarian', 'Popular brand']
+      }
+    ]
+  },
+  'damiana': {
+    title: 'Damiana',
+    subtitle: 'The Mood Enhancer',
+    description: 'Damiana (Turnera diffusa) is a traditional herb native to Central and South America, known for its mood-enhancing and aphrodisiac properties.',
+    benefits: [
+      'Enhances mood and emotional well-being',
+      'Supports natural energy and vitality',
+      'Promotes healthy libido',
+      'Reduces stress and anxiety',
+      'Supports digestive health',
+      'Promotes relaxation and calm'
+    ],
+    traditionalUses: [
+      'Mood enhancement',
+      'Energy and vitality',
+      'Libido support',
+      'Stress relief',
+      'Digestive health',
+      'Emotional balance'
+    ],
+    preparation: 'Tea: 1-2 tsp dried herb per cup, steep 10 minutes. Tincture: 30-60 drops 2-3 times daily.',
+    safety: 'Generally safe. May interact with diabetes medications. Avoid during pregnancy. Consult your doctor if taking medications.',
+    topProducts: [
+      {
+        name: 'Herb Pharm Damiana',
+        description: 'High-quality damiana tincture',
+        price: '$27.99',
+        affiliateLink: 'https://amzn.to/herb-pharm-damiana',
+        rating: '4.6/5',
+        features: ['1 oz bottle', 'Alcohol-free', 'Concentrated', 'Easy dosing']
+      },
+      {
+        name: 'Nature\'s Way Damiana',
+        description: 'Traditional damiana supplement',
+        price: '$19.99',
+        affiliateLink: 'https://amzn.to/natures-way-damiana',
+        rating: '4.5/5',
+        features: ['100 capsules', '400mg per serving', 'Vegetarian', 'Affordable']
+      },
+      {
+        name: 'Traditional Medicinals Damiana Tea',
+        description: 'Mood-enhancing damiana tea',
+        price: '$6.99',
+        affiliateLink: 'https://amzn.to/traditional-damiana',
+        rating: '4.4/5',
+        features: ['16 tea bags', 'Caffeine-free', 'Easy to use', 'Gentle formula']
+      }
+    ]
+  },
+  'lions-mane': {
+    title: "Lion's Mane",
+    subtitle: 'The Smart Mushroom',
+    description: "Lion's Mane (Hericium erinaceus) is a unique medicinal mushroom that has gained recognition as one of the most effective natural supplements for brain health and cognitive function.",
+    benefits: [
+      'Enhances memory and learning',
+      'Improves focus and concentration',
+      'Supports brain health',
+      'Promotes nerve growth',
+      'Reduces brain fog',
+      'Supports nervous system repair'
+    ],
+    traditionalUses: [
+      'Cognitive enhancement',
+      'Memory improvement',
+      'Focus and concentration',
+      'Nervous system support',
+      'Brain fog relief',
+      'Neuroprotective support'
+    ],
+    preparation: 'Capsules: 500-1000mg daily. Powder: 1-2 tsp daily. Take consistently for best results.',
+    safety: 'Generally safe. May interact with blood thinners. Avoid during pregnancy. Consult your doctor if taking medications.',
+    topProducts: [
+      {
+        name: 'Host Defense Lion\'s Mane',
+        description: 'Premium lion\'s mane mushroom',
+        price: '$39.99',
+        affiliateLink: 'https://amzn.to/host-defense-lions-mane',
+        rating: '4.8/5',
+        features: ['60 capsules', 'Organic', 'Whole mushroom', 'Quality brand']
+      },
+      {
+        name: 'NOW Foods Lion\'s Mane',
+        description: 'High-potency lion\'s mane extract',
+        price: '$32.99',
+        affiliateLink: 'https://amzn.to/now-lions-mane',
+        rating: '4.7/5',
+        features: ['90 capsules', '500mg per serving', 'Vegetarian', 'Affordable']
+      },
+      {
+        name: 'Nature\'s Way Lion\'s Mane',
+        description: 'Traditional lion\'s mane supplement',
+        price: '$26.99',
+        affiliateLink: 'https://amzn.to/natures-way-lions-mane',
+        rating: '4.6/5',
+        features: ['60 capsules', '400mg per serving', 'Vegetarian', 'Popular brand']
+      }
+    ]
+  },
+  'nettle-seed': {
+    title: 'Nettle Seed',
+    subtitle: 'The Nutritive Tonic',
+    description: 'Nettle Seed (Urtica dioica) is a nutritive herb valued for its ability to support energy, adrenal function, and overall vitality.',
+    benefits: [
+      'Provides nutritive support',
+      'Supports adrenal function',
+      'Boosts energy and vitality',
+      'Supports kidney health',
+      'Promotes healthy skin',
+      'Rich in minerals'
+    ],
+    traditionalUses: [
+      'Adrenal support',
+      'Fatigue and low energy',
+      'Kidney health',
+      'Skin conditions',
+      'General vitality',
+      'Nutritional tonic'
+    ],
+    preparation: 'Capsules: 200-400mg daily. Tincture: 30-60 drops 2-3 times daily. Sprinkle seeds on food.',
+    safety: 'Very safe. Gentle enough for long-term use. No known contraindications.',
+    topProducts: [
+      {
+        name: 'Herb Pharm Nettle Seed',
+        description: 'High-quality nettle seed tincture',
+        price: '$21.99',
+        affiliateLink: 'https://amzn.to/herb-pharm-nettle-seed',
+        rating: '4.7/5',
+        features: ['1 oz bottle', 'Alcohol-free', 'Concentrated', 'Easy dosing']
+      },
+      {
+        name: 'Frontier Co-op Nettle Seed',
+        description: 'Bulk organic nettle seed',
+        price: '$14.99',
+        affiliateLink: 'https://amzn.to/frontier-nettle-seed',
+        rating: '4.6/5',
+        features: ['16 oz bag', 'Organic', 'Bulk', 'Nutritive tonic']
+      },
+      {
+        name: 'Nature\'s Answer Nettle Seed',
+        description: 'Nettle seed capsules',
+        price: '$18.99',
+        affiliateLink: 'https://amzn.to/natures-answer-nettle-seed',
+        rating: '4.5/5',
+        features: ['90 capsules', '400mg per serving', 'Vegetarian', 'Affordable']
       }
     ]
   }
