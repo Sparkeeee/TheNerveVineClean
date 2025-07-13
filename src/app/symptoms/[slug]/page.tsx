@@ -91,7 +91,7 @@ const symptoms = {
       },
       {
         type: 'herb',
-        name: 'St. John\'s Wort',
+        name: 'St. John&apos;s Wort',
         description: 'Traditional herb for mild to moderate depression',
         affiliateLink: 'https://amzn.to/example-st-johns-wort',
         price: '$20-30'
