@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { getQualitySpecifications } from '@/lib/product-quality-specs';
 
 export default function TestQualityPage() {
   const [selectedHerb, setSelectedHerb] = useState<string>('');
