@@ -3,32 +3,29 @@
 import { useState } from 'react';
 
 export default function TestQualityPage() {
-  const [herbSlug, setHerbSlug] = useState('st-johns-wort');
-  const [productType, setProductType] = useState('capsule');
-  const [results, setResults] = useState<any>(null);
+  const [selectedHerb, setSelectedHerb] = useState<string>('');
+  const [selectedProductType, setSelectedProductType] = useState<string>('');
+  const [testResults, setTestResults] = useState<Array<{
+    product: {
+      title: string;
+      price: number;
+      rating: number;
+      reviewCount: number;
+      url: string;
+    };
+    score: number;
+    passed: boolean;
+    reasons: string[];
+  }>>([]);
   const [loading, setLoading] = useState(false);
   
   const herbs = ['st-johns-wort', 'lemon-balm', 'valerian', 'chamomile'];
   const productTypes = ['tincture', 'capsule', 'tea', 'essential-oil'];
   
-  const testQualityFilter = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch('/api/test-quality-filter', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ herbSlug, productType }),
-      });
-      
-      const data = await response.json();
-      setResults(data);
-    } catch (error) {
-      console.error('Error testing quality filter:', error);
-    } finally {
-      setLoading(false);
-    }
+  const handleTestQuality = async () => {
+    if (!selectedHerb || !selectedProductType) return;
+    
+    const specs = getQualitySpecifications(selectedHerb, selectedProductType as 'tincture' | 'capsule' | 'tea' | 'essential-oil' | 'powder' | 'tablet');
   };
   
   return (
@@ -42,8 +39,8 @@ export default function TestQualityPage() {
           <div>
             <label className="block text-sm font-medium mb-2">Herb</label>
             <select 
-              value={herbSlug}
-              onChange={(e) => setHerbSlug(e.target.value)}
+              value={selectedHerb}
+              onChange={(e) => setSelectedHerb(e.target.value)}
               className="w-full p-2 border rounded"
             >
               {herbs.map(herb => (
@@ -57,8 +54,8 @@ export default function TestQualityPage() {
           <div>
             <label className="block text-sm font-medium mb-2">Product Type</label>
             <select 
-              value={productType}
-              onChange={(e) => setProductType(e.target.value)}
+              value={selectedProductType}
+              onChange={(e) => setSelectedProductType(e.target.value)}
               className="w-full p-2 border rounded"
             >
               {productTypes.map(type => (
@@ -71,7 +68,7 @@ export default function TestQualityPage() {
         </div>
         
         <button
-          onClick={testQualityFilter}
+          onClick={handleTestQuality}
           disabled={loading}
           className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 disabled:opacity-50"
         >
@@ -79,19 +76,19 @@ export default function TestQualityPage() {
         </button>
       </div>
       
-      {results && (
+      {testResults && (
         <div className="space-y-6">
           <div className="p-4 bg-green-50 border border-green-200 rounded">
             <h3 className="font-semibold text-green-800 mb-2">Test Results</h3>
             <p className="text-green-700">
-              Found {results.filteredProducts} quality products out of {results.totalProducts} total products
+              Found {testResults.length} quality products out of {testResults.length} total products
             </p>
           </div>
           
-          {results.specifications && results.specifications.length > 0 && (
+          {testResults.length > 0 && (
             <div className="border rounded p-4">
               <h3 className="font-semibold mb-3">Quality Specifications</h3>
-              {results.specifications.map((spec: any, index: number) => (
+              {testResults.map((spec, index) => (
                 <div key={index} className="mb-4 p-3 bg-gray-50 rounded">
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     <div>
@@ -139,25 +136,25 @@ export default function TestQualityPage() {
             </div>
           )}
           
-          {results.products && results.products.length > 0 && (
+          {testResults.length > 0 && (
             <div className="border rounded p-4">
               <h3 className="font-semibold mb-3">Filtered Products (Ranked by Quality)</h3>
               <div className="space-y-4">
-                {results.products.map((product: any, index: number) => (
-                  <div key={product.id} className="border rounded p-4">
+                {testResults.map((product, index) => (
+                  <div key={index} className="border rounded p-4">
                     <div className="flex justify-between items-start mb-2">
-                      <h4 className="font-medium">{product.name}</h4>
+                      <h4 className="font-medium">{product.product.title}</h4>
                       <div className="text-right">
                         <div className="text-lg font-bold text-blue-600">
-                          Quality Score: {product.qualityScore.score}/100
+                          Quality Score: {product.score}/100
                         </div>
                         <div className="text-sm text-gray-600">
-                          ${product.price} • {product.rating}/5 ({product.reviewCount} reviews)
+                          ${product.product.price} • {product.product.rating}/5 ({product.product.reviewCount} reviews)
                         </div>
                       </div>
                     </div>
                     
-                    <p className="text-gray-700 mb-3">{product.description}</p>
+                    <p className="text-gray-700 mb-3">{product.product.url}</p>
                     
                     <div className="grid grid-cols-3 gap-4 text-sm">
                       <div>

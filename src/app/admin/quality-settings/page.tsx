@@ -44,7 +44,7 @@ export default function QualitySettingsPage() {
     const newSpec: QualitySpecification = {
       herbSlug: selectedHerb,
       herbName: selectedHerb.replace('-', ' '),
-      productType: selectedProductType as any,
+      productType: selectedProductType as 'tincture' | 'capsule' | 'tea' | 'essential-oil' | 'powder' | 'tablet',
       requiredTerms: [],
       preferredTerms: [],
       avoidTerms: [],

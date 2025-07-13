@@ -41,7 +41,7 @@ export interface ProductQualityScore {
   matches: {
     required: string[];
     preferred: string[];
-    avoided: string[];
+    avoid: string[];
   };
 }
 
@@ -182,8 +182,8 @@ export const qualitySpecs: QualitySpecification[] = [
 export class ProductQualityAnalyzer {
   
   // Analyze a product against quality specifications
-  analyzeProduct(product: any, specs: QualitySpecification): ProductQualityScore {
-    const score = { score: 0, reasons: [], warnings: [], matches: { required: [], preferred: [], avoided: [] } };
+  analyzeProduct(product: Record<string, unknown>, specs: QualitySpecification): ProductQualityScore {
+    const score: ProductQualityScore = { score: 0, reasons: [], warnings: [], matches: { required: [], preferred: [], avoid: [] } };
     
     // Check required terms
     const requiredMatches = this.checkRequiredTerms(product, specs);
@@ -208,7 +208,7 @@ export class ProductQualityAnalyzer {
     
     // Check avoided terms
     const avoidedMatches = this.checkAvoidedTerms(product, specs);
-    score.matches.avoided = avoidedMatches;
+    score.matches.avoid = avoidedMatches;
     
     if (avoidedMatches.length > 0) {
       score.score -= avoidedMatches.length * 15;
@@ -269,28 +269,28 @@ export class ProductQualityAnalyzer {
     return score;
   }
   
-  private checkRequiredTerms(product: any, specs: QualitySpecification): string[] {
+  private checkRequiredTerms(product: Record<string, unknown>, specs: QualitySpecification): string[] {
     const productText = `${product.name} ${product.description} ${product.brand || ''}`.toLowerCase();
     return specs.requiredTerms.filter(term => 
       productText.includes(term.toLowerCase())
     );
   }
   
-  private checkPreferredTerms(product: any, specs: QualitySpecification): string[] {
+  private checkPreferredTerms(product: Record<string, unknown>, specs: QualitySpecification): string[] {
     const productText = `${product.name} ${product.description} ${product.brand || ''}`.toLowerCase();
     return specs.preferredTerms.filter(term => 
       productText.includes(term.toLowerCase())
     );
   }
   
-  private checkAvoidedTerms(product: any, specs: QualitySpecification): string[] {
+  private checkAvoidedTerms(product: Record<string, unknown>, specs: QualitySpecification): string[] {
     const productText = `${product.name} ${product.description} ${product.brand || ''}`.toLowerCase();
     return specs.avoidTerms.filter(term => 
       productText.includes(term.toLowerCase())
     );
   }
   
-  private checkStandardization(product: any, standardization: any): number {
+  private checkStandardization(product: Record<string, unknown>, standardization: Record<string, unknown>): number {
     const productText = `${product.name} ${product.description}`.toLowerCase();
     const compound = standardization.compound.toLowerCase();
     
@@ -316,7 +316,7 @@ export class ProductQualityAnalyzer {
     return 0;
   }
   
-  private checkAlcoholSpecs(product: any, alcoholSpecs: any): number {
+  private checkAlcoholSpecs(product: Record<string, unknown>, alcoholSpecs: Record<string, unknown>): number {
     const productText = `${product.name} ${product.description}`.toLowerCase();
     let score = 0;
     
@@ -351,7 +351,7 @@ export class ProductQualityAnalyzer {
   }
   
   // Filter and rank products based on quality specifications
-  filterProductsByQuality(products: any[], herbSlug: string, productType: string): any[] {
+  filterProductsByQuality(products: Record<string, unknown>[], herbSlug: string, productType: string): Record<string, unknown>[] {
     const specs = this.getSpecsForHerb(herbSlug, productType);
     const analyzer = new ProductQualityAnalyzer();
     
@@ -360,7 +360,7 @@ export class ProductQualityAnalyzer {
         const bestScore = specs.reduce((best, spec) => {
           const score = analyzer.analyzeProduct(product, spec);
           return score.score > best.score ? score : best;
-        }, { score: 0, reasons: [], warnings: [], matches: { required: [], preferred: [], avoided: [] } });
+        }, { score: 0, reasons: [], warnings: [], matches: { required: [], preferred: [], avoid: [] } });
         
         return {
           ...product,

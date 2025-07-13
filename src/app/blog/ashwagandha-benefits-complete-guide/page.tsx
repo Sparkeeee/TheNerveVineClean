@@ -50,7 +50,7 @@ export default function AshwagandhaGuide() {
               Known as the "Indian ginseng," this adaptogenic herb grows in India, the Middle East, and parts of Africa.
             </p>
             <p className="text-gray-700 mb-6">
-              The name "ashwagandha" comes from Sanskrit words meaning "smell of horse," referring to both its distinctive odor and the traditional belief that it provides the strength and vitality of a horse.
+              The name &quot;ashwagandha&quot; comes from Sanskrit words meaning &quot;smell of horse,&quot; referring to both its distinctive odor and the traditional belief that it provides the strength and vitality of a horse.
             </p>
             <div className="bg-blue-50 border-l-4 border-blue-400 p-4 mb-6">
               <p className="text-blue-800">

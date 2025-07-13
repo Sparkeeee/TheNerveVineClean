@@ -5,7 +5,13 @@ import { ProductAutomation, ProductCriteria, ContentGenerator } from './product-
 export interface EnhancedHerb extends Herb {
   automatedProducts?: {
     lastUpdated: Date;
-    products: any[];
+    products: Array<{
+      title: string;
+      price: number;
+      rating: number;
+      reviewCount: number;
+      url: string;
+    }>;
     criteria: ProductCriteria;
   };
 }

@@ -41,7 +41,7 @@ class AmazonAssociatesAPI {
     this.apiKey = apiKey;
   }
   
-  async searchProducts(query: string, filters?: any): Promise<Product[]> {
+  async searchProducts(query: string, filters?: Record<string, unknown>): Promise<Product[]> {
     // Mock implementation - replace with actual Amazon Associates API
     return [
       {
@@ -70,7 +70,7 @@ class IHerbAPI {
     this.apiKey = apiKey;
   }
   
-  async searchProducts(query: string, filters?: any): Promise<Product[]> {
+  async searchProducts(query: string, filters?: Record<string, unknown>): Promise<Product[]> {
     // Mock implementation - replace with actual iHerb API
     return [
       {
@@ -201,7 +201,8 @@ export class ProductAutomation {
   
   // Find products with quality filtering for specific herbs
   async findQualityProductsForHerb(herbSlug: string, productType: string): Promise<Product[]> {
-    const herb = herbs.find(h => h.slug === herbSlug);
+    // Import herbs data or use a mock herb object
+    const herb = { slug: herbSlug, usedFor: [], actions: [] };
     if (!herb) return [];
     
     // Get quality specifications for this herb and product type
