@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { getQualitySpecifications } from '@/lib/product-quality-specs';
+import { ProductQualityAnalyzer } from '@/lib/product-quality-specs';
 
 export default function TestQualityPage() {
   const [selectedHerb, setSelectedHerb] = useState<string>('');
@@ -28,7 +28,8 @@ export default function TestQualityPage() {
     
     setLoading(true);
     try {
-      const specs = getQualitySpecifications(selectedHerb, selectedProductType as 'tincture' | 'capsule' | 'tea' | 'essential-oil' | 'powder' | 'tablet');
+      const analyzer = new ProductQualityAnalyzer();
+      const specs = analyzer.getSpecsForHerb(selectedHerb, selectedProductType as 'tincture' | 'capsule' | 'tea' | 'essential-oil' | 'powder' | 'tablet');
       
       // Mock test results for now
       const mockResults = [
