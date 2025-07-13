@@ -20,13 +20,13 @@ export default function HerbsPage() {
     { name: "Oatstraw", href: "/herbs/oatstraw", description: "Nourishing nervine herb", category: "Nervines" },
     
     // Mood & Energy Support
-    { name: "St. John&apos;s Wort", href: "/herbs/st-johns-wort", description: "Mood support and depression", category: "Mood Support" },
+    { name: "St. John's Wort", href: "/herbs/st-johns-wort", description: "Mood support and depression", category: "Mood Support" },
     { name: "Damiana", href: "/herbs/damiana", description: "Mood enhancement and energy", category: "Mood Support" },
     { name: "Rhodiola", href: "/herbs/rhodiola", description: "Mental performance and fatigue", category: "Mood Support" },
     
     // Cognitive & Brain Health
     { name: "Ginkgo Biloba", href: "/herbs/ginkgo", description: "Cognitive function and memory", category: "Brain Health" },
-    { name: "Lion&apos;s Mane", href: "/herbs/lions-mane", description: "Brain health and cognitive function", category: "Brain Health" },
+    { name: "Lion's Mane", href: "/herbs/lions-mane", description: "Brain health and cognitive function", category: "Brain Health" },
     
     // Nutritive & Support Herbs
     { name: "Borage", href: "/herbs/borage", description: "Hormonal balance and skin health", category: "Nutritive" },
