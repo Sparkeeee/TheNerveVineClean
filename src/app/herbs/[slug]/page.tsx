@@ -298,6 +298,447 @@ const herbs = {
         features: ['60 caplets', 'Certified organic', 'Gluten-free', 'Clinically studied']
       }
     ]
+  },
+  'rhodiola': {
+    title: 'Rhodiola Rosea',
+    subtitle: 'The Golden Root',
+    description: 'Rhodiola rosea is a powerful adaptogenic herb that grows in cold, mountainous regions. It\'s particularly effective for mental and physical fatigue, stress, and cognitive enhancement.',
+    benefits: [
+      'Improves mental and physical performance',
+      'Reduces fatigue and exhaustion',
+      'Enhances cognitive function',
+      'Supports stress adaptation',
+      'May improve mood and motivation',
+      'Supports immune function'
+    ],
+    traditionalUses: [
+      'Mental and physical fatigue',
+      'Stress and burnout',
+      'Cognitive enhancement',
+      'Depression and low mood',
+      'Altitude sickness',
+      'Immune system support'
+    ],
+    preparation: 'Capsules: 200-400mg daily. Tincture: 30-60 drops 1-2 times daily. Take in the morning.',
+    safety: 'Generally safe. May cause mild stimulation. Avoid in the evening. Consult your doctor if taking antidepressants.',
+    topProducts: [
+      {
+        name: 'NOW Foods Rhodiola Rosea',
+        description: 'Standardized rhodiola extract',
+        price: '$19.99',
+        affiliateLink: 'https://amzn.to/now-rhodiola',
+        rating: '4.6/5',
+        features: ['60 capsules', '500mg per serving', 'Vegetarian', 'Popular brand']
+      },
+      {
+        name: 'Gaia Herbs Rhodiola Rosea',
+        description: 'Organic rhodiola root capsules',
+        price: '$26.99',
+        affiliateLink: 'https://amzn.to/gaia-rhodiola',
+        rating: '4.7/5',
+        features: ['60 capsules', 'Certified organic', '400mg per serving', 'Vegan']
+      },
+      {
+        name: 'Nature\'s Way Rhodiola Rosea',
+        description: 'High-potency rhodiola supplement',
+        price: '$22.99',
+        affiliateLink: 'https://amzn.to/natures-way-rhodiola',
+        rating: '4.5/5',
+        features: ['60 capsules', '500mg per serving', 'Vegetarian', 'Quality brand']
+      }
+    ]
+  },
+  'holy-basil': {
+    title: 'Holy Basil (Tulsi)',
+    subtitle: 'The Sacred Herb',
+    description: 'Holy Basil, also known as Tulsi, is considered sacred in Ayurvedic medicine. It\'s an excellent adaptogen that helps the body adapt to stress while promoting mental clarity and spiritual well-being.',
+    benefits: [
+      'Reduces stress and anxiety',
+      'Promotes mental clarity',
+      'Supports immune function',
+      'Balances blood sugar levels',
+      'Anti-inflammatory properties',
+      'Supports respiratory health'
+    ],
+    traditionalUses: [
+      'Stress and anxiety relief',
+      'Mental clarity and focus',
+      'Respiratory support',
+      'Blood sugar balance',
+      'Immune system support',
+      'Spiritual well-being'
+    ],
+    preparation: 'Tea: 1-2 tsp dried leaves per cup, steep 5-10 minutes. Capsules: 400-800mg daily. Tincture: 30-60 drops 2-3 times daily.',
+    safety: 'Generally safe. May lower blood sugar. Monitor if diabetic. Avoid during pregnancy.',
+    topProducts: [
+      {
+        name: 'Organic India Tulsi Tea',
+        description: 'Traditional tulsi tea blend',
+        price: '$8.99',
+        affiliateLink: 'https://amzn.to/organic-india-tulsi',
+        rating: '4.7/5',
+        features: ['25 tea bags', 'Certified organic', 'Traditional blend', 'Caffeine-free']
+      },
+      {
+        name: 'Gaia Herbs Holy Basil',
+        description: 'Organic holy basil capsules',
+        price: '$24.99',
+        affiliateLink: 'https://amzn.to/gaia-holy-basil',
+        rating: '4.6/5',
+        features: ['60 capsules', 'Certified organic', '400mg per serving', 'Vegan']
+      },
+      {
+        name: 'Banyan Botanicals Tulsi',
+        description: 'Traditional Ayurvedic tulsi',
+        price: '$18.99',
+        affiliateLink: 'https://amzn.to/banyan-tulsi',
+        rating: '4.8/5',
+        features: ['90 capsules', 'Traditional formula', 'Vegan', 'Ayurvedic']
+      }
+    ]
+  },
+  'licorice-root': {
+    title: 'Licorice Root',
+    subtitle: 'The Sweet Healer',
+    description: 'Licorice root is a traditional herb known for its sweet taste and powerful healing properties. It\'s particularly effective for adrenal support, digestive health, and respiratory conditions.',
+    benefits: [
+      'Supports adrenal gland function',
+      'Soothes digestive issues',
+      'Supports respiratory health',
+      'Anti-inflammatory properties',
+      'May help with hormonal balance',
+      'Supports liver health'
+    ],
+    traditionalUses: [
+      'Adrenal fatigue and exhaustion',
+      'Digestive ulcers and inflammation',
+      'Respiratory conditions',
+      'Hormonal imbalances',
+      'Liver support',
+      'Skin conditions'
+    ],
+    preparation: 'Tea: 1 tsp dried root per cup, steep 10-15 minutes. Tincture: 30-60 drops 2-3 times daily. Capsules: 200-400mg daily.',
+    safety: 'May raise blood pressure. Avoid if hypertensive. Limit use to 4-6 weeks. Consult your doctor if taking medications.',
+    topProducts: [
+      {
+        name: 'Traditional Medicinals Licorice Root Tea',
+        description: 'Pure licorice root tea',
+        price: '$6.99',
+        affiliateLink: 'https://amzn.to/traditional-licorice',
+        rating: '4.5/5',
+        features: ['16 tea bags', 'Pure licorice', 'Caffeine-free', 'Easy to use']
+      },
+      {
+        name: 'Nature\'s Way Licorice Root',
+        description: 'Licorice root capsules',
+        price: '$14.99',
+        affiliateLink: 'https://amzn.to/natures-way-licorice',
+        rating: '4.6/5',
+        features: ['100 capsules', '400mg per serving', 'Vegetarian', 'Affordable']
+      },
+      {
+        name: 'Herb Pharm Licorice Root',
+        description: 'Liquid licorice extract',
+        price: '$19.99',
+        affiliateLink: 'https://amzn.to/herb-pharm-licorice',
+        rating: '4.7/5',
+        features: ['1 oz bottle', 'Alcohol-free', 'Concentrated', 'Easy dosing']
+      }
+    ]
+  },
+  'ginseng': {
+    title: 'Ginseng',
+    subtitle: 'The King of Herbs',
+    description: 'Ginseng is one of the most revered herbs in traditional medicine, known for its ability to enhance energy, mental clarity, and overall vitality. It\'s particularly effective for stress and fatigue.',
+    benefits: [
+      'Enhances energy and stamina',
+      'Improves mental clarity',
+      'Supports stress adaptation',
+      'Boosts immune function',
+      'May improve cognitive function',
+      'Supports overall vitality'
+    ],
+    traditionalUses: [
+      'Fatigue and low energy',
+      'Mental and physical stress',
+      'Cognitive enhancement',
+      'Immune system support',
+      'Sexual vitality',
+      'Recovery from illness'
+    ],
+    preparation: 'Capsules: 200-400mg daily. Tea: 1 tsp dried root per cup, steep 10-15 minutes. Tincture: 30-60 drops 1-2 times daily.',
+    safety: 'May cause stimulation. Avoid in the evening. May interact with blood thinners. Consult your doctor if taking medications.',
+    topProducts: [
+      {
+        name: 'Nature\'s Way Korean Ginseng',
+        description: 'High-potency Korean ginseng',
+        price: '$24.99',
+        affiliateLink: 'https://amzn.to/natures-way-ginseng',
+        rating: '4.7/5',
+        features: ['60 capsules', '500mg per serving', 'Vegetarian', 'Quality brand']
+      },
+      {
+        name: 'NOW Foods American Ginseng',
+        description: 'American ginseng root capsules',
+        price: '$19.99',
+        affiliateLink: 'https://amzn.to/now-ginseng',
+        rating: '4.6/5',
+        features: ['90 capsules', '400mg per serving', 'Vegetarian', 'Popular brand']
+      },
+      {
+        name: 'Traditional Medicinals Ginseng Tea',
+        description: 'Ginseng and green tea blend',
+        price: '$7.99',
+        affiliateLink: 'https://amzn.to/traditional-ginseng',
+        rating: '4.5/5',
+        features: ['16 tea bags', 'Green tea blend', 'Natural energy', 'Caffeinated']
+      }
+    ]
+  },
+  'passionflower': {
+    title: 'Passionflower',
+    subtitle: 'The Calming Vine',
+    description: 'Passionflower is a beautiful flowering vine that has been used for centuries to promote calm and relaxation. It\'s particularly effective for anxiety, insomnia, and nervous tension.',
+    benefits: [
+      'Reduces anxiety and nervous tension',
+      'Promotes restful sleep',
+      'Soothes digestive spasms',
+      'May help with pain relief',
+      'Supports nervous system health',
+      'Gentle and non-habit forming'
+    ],
+    traditionalUses: [
+      'Anxiety and nervous tension',
+      'Insomnia and sleep disorders',
+      'Digestive spasms',
+      'Mild pain relief',
+      'Restlessness and agitation',
+      'Menstrual cramps'
+    ],
+    preparation: 'Tea: 1-2 tsp dried herb per cup, steep 10-15 minutes. Tincture: 30-60 drops 2-3 times daily. Capsules: 200-400mg daily.',
+    safety: 'Generally safe. May cause drowsiness. Avoid with sedatives. Safe for short-term use.',
+    topProducts: [
+      {
+        name: 'Traditional Medicinals Passionflower Tea',
+        description: 'Calming passionflower tea',
+        price: '$5.99',
+        affiliateLink: 'https://amzn.to/traditional-passionflower',
+        rating: '4.6/5',
+        features: ['16 tea bags', 'Caffeine-free', 'Calming blend', 'Easy to use']
+      },
+      {
+        name: 'Nature\'s Way Passionflower',
+        description: 'Passionflower extract capsules',
+        price: '$12.99',
+        affiliateLink: 'https://amzn.to/natures-way-passionflower',
+        rating: '4.5/5',
+        features: ['100 capsules', '400mg per serving', 'Vegetarian', 'Affordable']
+      },
+      {
+        name: 'Herb Pharm Passionflower',
+        description: 'Liquid passionflower extract',
+        price: '$16.99',
+        affiliateLink: 'https://amzn.to/herb-pharm-passionflower',
+        rating: '4.7/5',
+        features: ['1 oz bottle', 'Alcohol-free', 'Concentrated', 'Easy dosing']
+      }
+    ]
+  },
+  'skullcap': {
+    title: 'Skullcap',
+    subtitle: 'The Nerve Tonic',
+    description: 'Skullcap is a traditional nervine herb that has been used for centuries to support nervous system health and promote calm. It\'s particularly effective for anxiety, stress, and nervous tension.',
+    benefits: [
+      'Calms nervous tension',
+      'Reduces anxiety and stress',
+      'Supports nervous system health',
+      'May help with muscle spasms',
+      'Promotes relaxation',
+      'Supports sleep quality'
+    ],
+    traditionalUses: [
+      'Anxiety and nervous tension',
+      'Stress and overstimulation',
+      'Nervous system support',
+      'Muscle tension and spasms',
+      'Sleep disturbances',
+      'Mild pain relief'
+    ],
+    preparation: 'Tea: 1-2 tsp dried herb per cup, steep 10-15 minutes. Tincture: 30-60 drops 2-3 times daily. Capsules: 200-400mg daily.',
+    safety: 'Generally safe. May cause drowsiness. Avoid with sedatives. Safe for short-term use.',
+    topProducts: [
+      {
+        name: 'Herb Pharm Skullcap',
+        description: 'Liquid skullcap extract',
+        price: '$18.99',
+        affiliateLink: 'https://amzn.to/herb-pharm-skullcap',
+        rating: '4.7/5',
+        features: ['1 oz bottle', 'Alcohol-free', 'Concentrated', 'Easy dosing']
+      },
+      {
+        name: 'Nature\'s Way Skullcap',
+        description: 'Skullcap herb capsules',
+        price: '$14.99',
+        affiliateLink: 'https://amzn.to/natures-way-skullcap',
+        rating: '4.6/5',
+        features: ['100 capsules', '400mg per serving', 'Vegetarian', 'Affordable']
+      },
+      {
+        name: 'Traditional Medicinals Skullcap Tea',
+        description: 'Calming skullcap tea blend',
+        price: '$6.99',
+        affiliateLink: 'https://amzn.to/traditional-skullcap',
+        rating: '4.5/5',
+        features: ['16 tea bags', 'Caffeine-free', 'Calming blend', 'Easy to use']
+      }
+    ]
+  },
+  'motherwort': {
+    title: 'Motherwort',
+    subtitle: 'The Heart Herb',
+    description: 'Motherwort is a traditional herb known for its ability to calm the heart and nervous system. It\'s particularly effective for anxiety, heart palpitations, and stress-related conditions.',
+    benefits: [
+      'Calms heart palpitations',
+      'Reduces anxiety and stress',
+      'Supports nervous system health',
+      'May help with menstrual issues',
+      'Promotes relaxation',
+      'Supports cardiovascular health'
+    ],
+    traditionalUses: [
+      'Heart palpitations and anxiety',
+      'Nervous tension and stress',
+      'Menstrual discomfort',
+      'Nervous system support',
+      'Mild cardiovascular support',
+      'Sleep disturbances'
+    ],
+    preparation: 'Tea: 1-2 tsp dried herb per cup, steep 10-15 minutes. Tincture: 30-60 drops 2-3 times daily. Capsules: 200-400mg daily.',
+    safety: 'Generally safe. May cause mild uterine stimulation. Avoid during pregnancy. Consult your doctor if taking heart medications.',
+    topProducts: [
+      {
+        name: 'Herb Pharm Motherwort',
+        description: 'Liquid motherwort extract',
+        price: '$17.99',
+        affiliateLink: 'https://amzn.to/herb-pharm-motherwort',
+        rating: '4.6/5',
+        features: ['1 oz bottle', 'Alcohol-free', 'Concentrated', 'Easy dosing']
+      },
+      {
+        name: 'Nature\'s Way Motherwort',
+        description: 'Motherwort herb capsules',
+        price: '$13.99',
+        affiliateLink: 'https://amzn.to/natures-way-motherwort',
+        rating: '4.5/5',
+        features: ['100 capsules', '400mg per serving', 'Vegetarian', 'Affordable']
+      },
+      {
+        name: 'Traditional Medicinals Motherwort Tea',
+        description: 'Calming motherwort tea',
+        price: '$5.99',
+        affiliateLink: 'https://amzn.to/traditional-motherwort',
+        rating: '4.4/5',
+        features: ['16 tea bags', 'Caffeine-free', 'Heart support', 'Easy to use']
+      }
+    ]
+  },
+  'oatstraw': {
+    title: 'Oatstraw',
+    subtitle: 'The Nerve Nourisher',
+    description: 'Oatstraw is the green, milky tops of the oat plant harvested before the grain forms. It\'s a gentle, nourishing herb that supports nervous system health and promotes calm.',
+    benefits: [
+      'Nourishes the nervous system',
+      'Reduces stress and anxiety',
+      'Supports healthy sleep',
+      'May help with skin conditions',
+      'Gentle and safe for long-term use',
+      'Supports overall vitality'
+    ],
+    traditionalUses: [
+      'Nervous system nourishment',
+      'Stress and anxiety relief',
+      'Sleep support',
+      'Skin conditions (topical)',
+      'Convalescence and recovery',
+      'General nervous system support'
+    ],
+    preparation: 'Tea: 1-2 tsp dried herb per cup, steep 10-15 minutes. Tincture: 30-60 drops 2-3 times daily. Capsules: 200-400mg daily.',
+    safety: 'Very safe. Gentle enough for children and elderly. Safe for long-term use. No known contraindications.',
+    topProducts: [
+      {
+        name: 'Herb Pharm Oatstraw',
+        description: 'Liquid oatstraw extract',
+        price: '$16.99',
+        affiliateLink: 'https://amzn.to/herb-pharm-oatstraw',
+        rating: '4.7/5',
+        features: ['1 oz bottle', 'Alcohol-free', 'Concentrated', 'Easy dosing']
+      },
+      {
+        name: 'Traditional Medicinals Oatstraw Tea',
+        description: 'Nourishing oatstraw tea',
+        price: '$5.99',
+        affiliateLink: 'https://amzn.to/traditional-oatstraw',
+        rating: '4.6/5',
+        features: ['16 tea bags', 'Caffeine-free', 'Nervous system support', 'Easy to use']
+      },
+      {
+        name: 'Nature\'s Way Oatstraw',
+        description: 'Oatstraw herb capsules',
+        price: '$12.99',
+        affiliateLink: 'https://amzn.to/natures-way-oatstraw',
+        rating: '4.5/5',
+        features: ['100 capsules', '400mg per serving', 'Vegetarian', 'Affordable']
+      }
+    ]
+  },
+  'ginkgo': {
+    title: 'Ginkgo Biloba',
+    subtitle: 'The Memory Tree',
+    description: 'Ginkgo biloba is one of the oldest living tree species, known for its distinctive fan-shaped leaves and powerful cognitive-enhancing properties. It\'s particularly effective for memory, concentration, and circulation.',
+    benefits: [
+      'Improves memory and cognitive function',
+      'Enhances concentration and focus',
+      'Supports healthy blood circulation',
+      'May help with age-related cognitive decline',
+      'Supports nervous system health',
+      'Antioxidant protection'
+    ],
+    traditionalUses: [
+      'Memory and cognitive enhancement',
+      'Concentration and focus',
+      'Age-related cognitive decline',
+      'Poor circulation',
+      'Tinnitus and vertigo',
+      'Nervous system support'
+    ],
+    preparation: 'Capsules: 120-240mg daily. Extract: 60-120mg daily. Take with meals for better absorption.',
+    safety: 'Generally safe. May increase bleeding risk. Avoid with blood thinners. Consult your doctor if taking medications.',
+    topProducts: [
+      {
+        name: 'Nature\'s Way Ginkgo Biloba',
+        description: 'Standardized ginkgo extract',
+        price: '$18.99',
+        affiliateLink: 'https://amzn.to/natures-way-ginkgo',
+        rating: '4.7/5',
+        features: ['60 capsules', '120mg per serving', 'Vegetarian', 'Popular brand']
+      },
+      {
+        name: 'NOW Foods Ginkgo Biloba',
+        description: 'High-potency ginkgo supplement',
+        price: '$16.99',
+        affiliateLink: 'https://amzn.to/now-ginkgo',
+        rating: '4.6/5',
+        features: ['100 capsules', '120mg per serving', 'Vegetarian', 'Affordable']
+      },
+      {
+        name: 'Jarrow Formulas Ginkgo Biloba',
+        description: 'Clinically studied ginkgo extract',
+        price: '$22.99',
+        affiliateLink: 'https://amzn.to/jarrow-ginkgo',
+        rating: '4.8/5',
+        features: ['120 capsules', '120mg per serving', 'Clinically studied', 'Quality brand']
+      }
+    ]
   }
 };
 

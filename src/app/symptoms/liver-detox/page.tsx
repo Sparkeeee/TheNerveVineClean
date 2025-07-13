@@ -2,17 +2,17 @@
 
 import Link from "next/link";
 
-export default function StressPage() {
+export default function LiverDetoxPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white">
       <div className="max-w-4xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-800 mb-4">
-            Stress Management
+            Liver Detox Support
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Understanding and managing stress for better health and well-being
+            Supporting your liver's natural detoxification processes for optimal health
           </p>
         </div>
 
@@ -32,47 +32,47 @@ export default function StressPage() {
           <div className="md:col-span-2 space-y-8">
             <div className="bg-white rounded-lg shadow-md p-6">
               <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-                Understanding Stress
+                Understanding Liver Health
               </h2>
               <div className="prose prose-gray max-w-none">
                 <p className="text-gray-700 mb-4">
-                  Stress is your body's natural response to challenges and demands. While some stress 
-                  can be beneficial and motivating, chronic or excessive stress can have negative 
-                  effects on your physical and mental health.
+                  Your liver is your body's primary detoxification organ, responsible for filtering 
+                  toxins, processing nutrients, and maintaining metabolic balance. A healthy liver is 
+                  essential for energy production, hormone regulation, and overall wellness.
                 </p>
                 <p className="text-gray-700 mb-4">
-                  When stress becomes chronic, it can lead to a cascade of health issues including 
-                  adrenal dysfunction, immune system suppression, digestive problems, and mental 
-                  health challenges. Learning to manage stress effectively is crucial for overall wellness.
+                  Modern lifestyle factors like poor diet, stress, environmental toxins, and medications 
+                  can burden the liver and impair its natural detoxification processes. Supporting liver 
+                  health can improve energy, digestion, skin health, and overall vitality.
                 </p>
               </div>
             </div>
 
             <div className="bg-white rounded-lg shadow-md p-6">
               <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-                Signs of Chronic Stress
+                Signs of Liver Stress
               </h2>
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
                   <h3 className="font-semibold text-gray-800 mb-2">Physical Symptoms</h3>
                   <ul className="text-gray-700 space-y-1">
                     <li>• Fatigue and low energy</li>
-                    <li>• Headaches and muscle tension</li>
-                    <li>• Sleep disturbances</li>
-                    <li>• Digestive issues</li>
-                    <li>• Weakened immune system</li>
-                    <li>• Rapid heartbeat</li>
+                    <li>• Digestive issues and bloating</li>
+                    <li>• Skin problems (acne, rashes)</li>
+                    <li>• Weight gain around midsection</li>
+                    <li>• Dark circles under eyes</li>
+                    <li>• Body odor and bad breath</li>
                   </ul>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-800 mb-2">Mental Symptoms</h3>
+                  <h3 className="font-semibold text-gray-800 mb-2">Other Symptoms</h3>
                   <ul className="text-gray-700 space-y-1">
-                    <li>• Anxiety and worry</li>
-                    <li>• Irritability and mood swings</li>
-                    <li>• Difficulty concentrating</li>
-                    <li>• Memory problems</li>
-                    <li>• Feeling overwhelmed</li>
-                    <li>• Depression</li>
+                    <li>• Brain fog and poor concentration</li>
+                    <li>• Mood swings and irritability</li>
+                    <li>• Hormonal imbalances</li>
+                    <li>• Food sensitivities</li>
+                    <li>• Poor sleep quality</li>
+                    <li>• Headaches and migraines</li>
                   </ul>
                 </div>
               </div>
@@ -80,29 +80,29 @@ export default function StressPage() {
 
             <div className="bg-white rounded-lg shadow-md p-6">
               <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-                Natural Stress Management
+                Natural Liver Support
               </h2>
               <div className="space-y-4">
                 <div>
-                  <h3 className="font-semibold text-gray-800 mb-2">Lifestyle Strategies</h3>
+                  <h3 className="font-semibold text-gray-800 mb-2">Dietary Support</h3>
                   <ul className="text-gray-700 space-y-1">
-                    <li>• Practice regular exercise and movement</li>
-                    <li>• Prioritize quality sleep (7-9 hours)</li>
-                    <li>• Learn relaxation techniques (meditation, deep breathing)</li>
-                    <li>• Maintain a balanced diet</li>
-                    <li>• Set healthy boundaries</li>
-                    <li>• Spend time in nature</li>
+                    <li>• Eat plenty of leafy greens and cruciferous vegetables</li>
+                    <li>• Include liver-supporting foods (beets, garlic, onions)</li>
+                    <li>• Stay well hydrated with clean water</li>
+                    <li>• Limit processed foods and added sugars</li>
+                    <li>• Include healthy fats and proteins</li>
+                    <li>• Consider intermittent fasting</li>
                   </ul>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-800 mb-2">Mindfulness Practices</h3>
+                  <h3 className="font-semibold text-gray-800 mb-2">Lifestyle Support</h3>
                   <ul className="text-gray-700 space-y-1">
-                    <li>• Daily meditation or mindfulness</li>
-                    <li>• Journaling and self-reflection</li>
-                    <li>• Progressive muscle relaxation</li>
-                    <li>• Yoga or tai chi</li>
-                    <li>• Spending time with loved ones</li>
-                    <li>• Engaging in hobbies and interests</li>
+                    <li>• Exercise regularly to support circulation</li>
+                    <li>• Manage stress levels</li>
+                    <li>• Get adequate sleep</li>
+                    <li>• Avoid excessive alcohol consumption</li>
+                    <li>• Reduce exposure to environmental toxins</li>
+                    <li>• Consider liver-supporting supplements</li>
                   </ul>
                 </div>
               </div>
@@ -113,16 +113,16 @@ export default function StressPage() {
           <div className="space-y-6">
             <div className="bg-white rounded-lg shadow-md p-6">
               <h2 className="text-xl font-semibold text-gray-800 mb-4">
-                Stress Support Supplements
+                Liver Support Supplements
               </h2>
               <div className="space-y-4">
                 <div className="border border-gray-200 rounded-lg p-4">
-                  <h3 className="font-semibold text-gray-800 mb-2">Adaptogenic Herbs</h3>
+                  <h3 className="font-semibold text-gray-800 mb-2">Milk Thistle</h3>
                   <p className="text-gray-600 text-sm mb-3">
-                    Natural herbs that help your body adapt to stress
+                    Traditional herb for liver protection and regeneration
                   </p>
                   <a 
-                    href="https://amzn.to/3stress-adaptogens" 
+                    href="https://amzn.to/3liver-milkthistle" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors text-sm"
@@ -132,12 +132,12 @@ export default function StressPage() {
                 </div>
 
                 <div className="border border-gray-200 rounded-lg p-4">
-                  <h3 className="font-semibold text-gray-800 mb-2">Magnesium</h3>
+                  <h3 className="font-semibold text-gray-800 mb-2">N-Acetyl Cysteine</h3>
                   <p className="text-gray-600 text-sm mb-3">
-                    Essential mineral for relaxation and stress relief
+                    Precursor to glutathione for liver detoxification
                   </p>
                   <a 
-                    href="https://amzn.to/3stress-magnesium" 
+                    href="https://amzn.to/3liver-nac" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors text-sm"
@@ -147,12 +147,12 @@ export default function StressPage() {
                 </div>
 
                 <div className="border border-gray-200 rounded-lg p-4">
-                  <h3 className="font-semibold text-gray-800 mb-2">L-Theanine</h3>
+                  <h3 className="font-semibold text-gray-800 mb-2">Dandelion Root</h3>
                   <p className="text-gray-600 text-sm mb-3">
-                    Amino acid that promotes calmness and focus
+                    Natural diuretic and liver support herb
                   </p>
                   <a 
-                    href="https://amzn.to/3stress-theanine" 
+                    href="https://amzn.to/3liver-dandelion" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors text-sm"
@@ -164,10 +164,10 @@ export default function StressPage() {
                 <div className="border border-gray-200 rounded-lg p-4">
                   <h3 className="font-semibold text-gray-800 mb-2">B-Complex Vitamins</h3>
                   <p className="text-gray-600 text-sm mb-3">
-                    Essential B vitamins for energy and nervous system support
+                    Essential for liver enzyme function and detoxification
                   </p>
                   <a 
-                    href="https://amzn.to/3stress-bcomplex" 
+                    href="https://amzn.to/3liver-bcomplex" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors text-sm"
@@ -182,22 +182,22 @@ export default function StressPage() {
               <h3 className="font-semibold text-gray-800 mb-3">Related Conditions</h3>
               <div className="space-y-2">
                 <Link 
-                  href="/symptoms/adrenal-overload" 
+                  href="/symptoms/digestive-health" 
                   className="block text-blue-600 hover:text-blue-800 transition-colors"
                 >
-                  → Adrenal Overload
+                  → Digestive Health
                 </Link>
                 <Link 
-                  href="/symptoms/adrenal-exhaustion" 
+                  href="/symptoms/dysbiosis" 
                   className="block text-blue-600 hover:text-blue-800 transition-colors"
                 >
-                  → Adrenal Exhaustion
+                  → Dysbiosis
                 </Link>
                 <Link 
-                  href="/symptoms/burnout" 
+                  href="/symptoms/fatigue" 
                   className="block text-blue-600 hover:text-blue-800 transition-colors"
                 >
-                  → Burnout
+                  → Fatigue
                 </Link>
               </div>
             </div>

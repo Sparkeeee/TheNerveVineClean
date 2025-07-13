@@ -131,45 +131,87 @@ const supplements = {
       }
     ]
   },
-  'ashwagandha': {
-    title: 'Ashwagandha',
-    subtitle: 'The King of Ayurvedic Herbs',
-    description: 'Ashwagandha is an adaptogenic herb that has been used in Ayurvedic medicine for thousands of years. It helps your body adapt to stress and promotes overall well-being.',
+  'b-complex': {
+    title: 'B-Complex Vitamins',
+    subtitle: 'Energy and Nervous System Support',
+    description: 'B-complex vitamins are a group of eight water-soluble vitamins that play essential roles in energy production, nervous system function, and overall cellular health.',
     benefits: [
-      'Reduces stress and anxiety',
-      'Improves energy levels and focus',
-      'May enhance athletic performance',
-      'Supports healthy sleep',
-      'May boost testosterone levels',
-      'Supports immune function'
+      'Supports energy production and metabolism',
+      'Essential for nervous system function',
+      'Helps convert food into energy',
+      'Supports brain health and cognitive function',
+      'May reduce stress and anxiety',
+      'Important for red blood cell formation'
     ],
-    dosage: '300-600mg daily (with meals)',
-    bestTime: 'With meals',
-    sideEffects: 'Generally safe. May cause mild stomach upset in some people.',
+    dosage: 'Follow label instructions (typically 1 capsule daily)',
+    bestTime: 'Morning with breakfast',
+    sideEffects: 'Generally safe. May cause bright yellow urine (normal). High doses may cause nausea.',
     topProducts: [
       {
-        name: 'Organic India Ashwagandha',
-        description: 'Organic ashwagandha with traditional preparation',
-        price: '$24.99',
-        affiliateLink: 'https://amzn.to/organic-india-ashwagandha',
-        rating: '4.7/5',
-        features: ['Organic', 'Traditional preparation', '500mg per serving']
-      },
-      {
-        name: 'NOW Foods Ashwagandha',
-        description: 'Reliable ashwagandha extract',
-        price: '$18.99',
-        affiliateLink: 'https://amzn.to/now-ashwagandha',
-        rating: '4.5/5',
-        features: ['450mg per serving', 'Vegetarian capsules', 'Affordable']
-      },
-      {
-        name: 'Garden of Life Ashwagandha',
-        description: 'Whole food ashwagandha supplement',
-        price: '$29.99',
-        affiliateLink: 'https://amzn.to/garden-life-ashwagandha',
+        name: 'Nature Made Super B-Complex',
+        description: 'Complete B-vitamin complex with folic acid',
+        price: '$12.99',
+        affiliateLink: 'https://amzn.to/nature-made-b-complex',
         rating: '4.6/5',
-        features: ['Whole food blend', 'Organic', '600mg per serving']
+        features: ['All 8 B vitamins', 'Folic acid included', 'Easy to swallow']
+      },
+      {
+        name: 'NOW Foods B-50 Complex',
+        description: 'High-potency B-vitamin supplement',
+        price: '$15.99',
+        affiliateLink: 'https://amzn.to/now-b-complex',
+        rating: '4.5/5',
+        features: ['50mg of most B vitamins', 'Vegetarian', 'Affordable']
+      },
+      {
+        name: 'Garden of Life B-Complex',
+        description: 'Organic whole food B-vitamin blend',
+        price: '$24.99',
+        affiliateLink: 'https://amzn.to/garden-life-b-complex',
+        rating: '4.7/5',
+        features: ['Organic', 'Whole food blend', 'Easy absorption']
+      }
+    ]
+  },
+  'l-theanine': {
+    title: 'L-Theanine',
+    subtitle: 'The Calm Focus Amino Acid',
+    description: 'L-theanine is a unique amino acid found primarily in green tea that promotes relaxation without drowsiness. It\'s known for its ability to enhance focus while reducing stress.',
+    benefits: [
+      'Promotes calm focus and concentration',
+      'Reduces stress and anxiety',
+      'Improves sleep quality',
+      'May enhance cognitive performance',
+      'Supports relaxation without drowsiness',
+      'May help with blood pressure'
+    ],
+    dosage: '100-400mg daily',
+    bestTime: 'Morning or afternoon (not before bed)',
+    sideEffects: 'Very safe. May cause mild drowsiness in some people.',
+    topProducts: [
+      {
+        name: 'NOW Foods L-Theanine',
+        description: 'Pure L-theanine amino acid supplement',
+        price: '$18.99',
+        affiliateLink: 'https://amzn.to/now-l-theanine',
+        rating: '4.7/5',
+        features: ['200mg per capsule', 'Vegetarian', 'Pure amino acid']
+      },
+      {
+        name: 'Nature\'s Trove L-Theanine',
+        description: 'High-quality L-theanine with good absorption',
+        price: '$22.99',
+        affiliateLink: 'https://amzn.to/natures-trove-l-theanine',
+        rating: '4.6/5',
+        features: ['300mg per serving', 'Easy to swallow', 'Quality brand']
+      },
+      {
+        name: 'Doctor\'s Best L-Theanine',
+        description: 'Reliable L-theanine supplement',
+        price: '$16.99',
+        affiliateLink: 'https://amzn.to/doctors-best-l-theanine',
+        rating: '4.5/5',
+        features: ['200mg per capsule', 'Affordable', 'Reliable brand']
       }
     ]
   }

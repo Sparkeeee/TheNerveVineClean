@@ -2,17 +2,17 @@
 
 import Link from "next/link";
 
-export default function StressPage() {
+export default function ThyroidIssuesPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white">
       <div className="max-w-4xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-800 mb-4">
-            Stress Management
+            Thyroid Health Support
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Understanding and managing stress for better health and well-being
+            Understanding and supporting thyroid function for energy and metabolism
           </p>
         </div>
 
@@ -32,47 +32,47 @@ export default function StressPage() {
           <div className="md:col-span-2 space-y-8">
             <div className="bg-white rounded-lg shadow-md p-6">
               <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-                Understanding Stress
+                Understanding Thyroid Function
               </h2>
               <div className="prose prose-gray max-w-none">
                 <p className="text-gray-700 mb-4">
-                  Stress is your body's natural response to challenges and demands. While some stress 
-                  can be beneficial and motivating, chronic or excessive stress can have negative 
-                  effects on your physical and mental health.
+                  Your thyroid gland regulates metabolism, energy production, body temperature, and 
+                  many other vital functions. When thyroid function is compromised, it can affect 
+                  every system in your body, leading to a wide range of symptoms.
                 </p>
                 <p className="text-gray-700 mb-4">
-                  When stress becomes chronic, it can lead to a cascade of health issues including 
-                  adrenal dysfunction, immune system suppression, digestive problems, and mental 
-                  health challenges. Learning to manage stress effectively is crucial for overall wellness.
+                  Thyroid issues can be caused by nutrient deficiencies, stress, environmental 
+                  factors, autoimmune conditions, and other health imbalances. Supporting thyroid 
+                  health through diet, lifestyle, and targeted supplements can help restore balance.
                 </p>
               </div>
             </div>
 
             <div className="bg-white rounded-lg shadow-md p-6">
               <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-                Signs of Chronic Stress
+                Common Thyroid Symptoms
               </h2>
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
-                  <h3 className="font-semibold text-gray-800 mb-2">Physical Symptoms</h3>
+                  <h3 className="font-semibold text-gray-800 mb-2">Hypothyroidism (Underactive)</h3>
                   <ul className="text-gray-700 space-y-1">
                     <li>• Fatigue and low energy</li>
-                    <li>• Headaches and muscle tension</li>
-                    <li>• Sleep disturbances</li>
-                    <li>• Digestive issues</li>
-                    <li>• Weakened immune system</li>
-                    <li>• Rapid heartbeat</li>
+                    <li>• Weight gain and difficulty losing weight</li>
+                    <li>• Cold intolerance</li>
+                    <li>• Dry skin and hair</li>
+                    <li>• Constipation</li>
+                    <li>• Depression and brain fog</li>
                   </ul>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-800 mb-2">Mental Symptoms</h3>
+                  <h3 className="font-semibold text-gray-800 mb-2">Hyperthyroidism (Overactive)</h3>
                   <ul className="text-gray-700 space-y-1">
-                    <li>• Anxiety and worry</li>
-                    <li>• Irritability and mood swings</li>
-                    <li>• Difficulty concentrating</li>
-                    <li>• Memory problems</li>
-                    <li>• Feeling overwhelmed</li>
-                    <li>• Depression</li>
+                    <li>• Rapid heartbeat and palpitations</li>
+                    <li>• Weight loss despite increased appetite</li>
+                    <li>• Heat intolerance and sweating</li>
+                    <li>• Anxiety and irritability</li>
+                    <li>• Insomnia</li>
+                    <li>• Tremors and nervousness</li>
                   </ul>
                 </div>
               </div>
@@ -80,29 +80,29 @@ export default function StressPage() {
 
             <div className="bg-white rounded-lg shadow-md p-6">
               <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-                Natural Stress Management
+                Natural Thyroid Support
               </h2>
               <div className="space-y-4">
                 <div>
-                  <h3 className="font-semibold text-gray-800 mb-2">Lifestyle Strategies</h3>
+                  <h3 className="font-semibold text-gray-800 mb-2">Nutritional Support</h3>
                   <ul className="text-gray-700 space-y-1">
-                    <li>• Practice regular exercise and movement</li>
-                    <li>• Prioritize quality sleep (7-9 hours)</li>
-                    <li>• Learn relaxation techniques (meditation, deep breathing)</li>
-                    <li>• Maintain a balanced diet</li>
-                    <li>• Set healthy boundaries</li>
-                    <li>• Spend time in nature</li>
+                    <li>• Ensure adequate iodine intake (sea vegetables, fish)</li>
+                    <li>• Include selenium-rich foods (Brazil nuts, fish)</li>
+                    <li>• Eat zinc-rich foods (oysters, pumpkin seeds)</li>
+                    <li>• Include healthy fats and proteins</li>
+                    <li>• Avoid goitrogenic foods in excess</li>
+                    <li>• Consider thyroid-supporting supplements</li>
                   </ul>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-800 mb-2">Mindfulness Practices</h3>
+                  <h3 className="font-semibold text-gray-800 mb-2">Lifestyle Support</h3>
                   <ul className="text-gray-700 space-y-1">
-                    <li>• Daily meditation or mindfulness</li>
-                    <li>• Journaling and self-reflection</li>
-                    <li>• Progressive muscle relaxation</li>
-                    <li>• Yoga or tai chi</li>
-                    <li>• Spending time with loved ones</li>
-                    <li>• Engaging in hobbies and interests</li>
+                    <li>• Manage stress levels (stress affects thyroid)</li>
+                    <li>• Get adequate sleep and rest</li>
+                    <li>• Exercise regularly but avoid overtraining</li>
+                    <li>• Reduce exposure to environmental toxins</li>
+                    <li>• Support gut health (affects thyroid conversion)</li>
+                    <li>• Consider adrenal support (thyroid-adrenal connection)</li>
                   </ul>
                 </div>
               </div>
@@ -113,16 +113,16 @@ export default function StressPage() {
           <div className="space-y-6">
             <div className="bg-white rounded-lg shadow-md p-6">
               <h2 className="text-xl font-semibold text-gray-800 mb-4">
-                Stress Support Supplements
+                Thyroid Support Supplements
               </h2>
               <div className="space-y-4">
                 <div className="border border-gray-200 rounded-lg p-4">
-                  <h3 className="font-semibold text-gray-800 mb-2">Adaptogenic Herbs</h3>
+                  <h3 className="font-semibold text-gray-800 mb-2">Iodine</h3>
                   <p className="text-gray-600 text-sm mb-3">
-                    Natural herbs that help your body adapt to stress
+                    Essential mineral for thyroid hormone production
                   </p>
                   <a 
-                    href="https://amzn.to/3stress-adaptogens" 
+                    href="https://amzn.to/3thyroid-iodine" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors text-sm"
@@ -132,12 +132,12 @@ export default function StressPage() {
                 </div>
 
                 <div className="border border-gray-200 rounded-lg p-4">
-                  <h3 className="font-semibold text-gray-800 mb-2">Magnesium</h3>
+                  <h3 className="font-semibold text-gray-800 mb-2">Selenium</h3>
                   <p className="text-gray-600 text-sm mb-3">
-                    Essential mineral for relaxation and stress relief
+                    Critical for thyroid hormone conversion and function
                   </p>
                   <a 
-                    href="https://amzn.to/3stress-magnesium" 
+                    href="https://amzn.to/3thyroid-selenium" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors text-sm"
@@ -147,12 +147,12 @@ export default function StressPage() {
                 </div>
 
                 <div className="border border-gray-200 rounded-lg p-4">
-                  <h3 className="font-semibold text-gray-800 mb-2">L-Theanine</h3>
+                  <h3 className="font-semibold text-gray-800 mb-2">Zinc</h3>
                   <p className="text-gray-600 text-sm mb-3">
-                    Amino acid that promotes calmness and focus
+                    Essential for thyroid hormone synthesis and conversion
                   </p>
                   <a 
-                    href="https://amzn.to/3stress-theanine" 
+                    href="https://amzn.to/3thyroid-zinc" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors text-sm"
@@ -162,12 +162,12 @@ export default function StressPage() {
                 </div>
 
                 <div className="border border-gray-200 rounded-lg p-4">
-                  <h3 className="font-semibold text-gray-800 mb-2">B-Complex Vitamins</h3>
+                  <h3 className="font-semibold text-gray-800 mb-2">Ashwagandha</h3>
                   <p className="text-gray-600 text-sm mb-3">
-                    Essential B vitamins for energy and nervous system support
+                    Adaptogenic herb that may support thyroid function
                   </p>
                   <a 
-                    href="https://amzn.to/3stress-bcomplex" 
+                    href="https://amzn.to/3thyroid-ashwagandha" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors text-sm"
@@ -182,22 +182,22 @@ export default function StressPage() {
               <h3 className="font-semibold text-gray-800 mb-3">Related Conditions</h3>
               <div className="space-y-2">
                 <Link 
-                  href="/symptoms/adrenal-overload" 
-                  className="block text-blue-600 hover:text-blue-800 transition-colors"
-                >
-                  → Adrenal Overload
-                </Link>
-                <Link 
                   href="/symptoms/adrenal-exhaustion" 
                   className="block text-blue-600 hover:text-blue-800 transition-colors"
                 >
                   → Adrenal Exhaustion
                 </Link>
                 <Link 
-                  href="/symptoms/burnout" 
+                  href="/symptoms/fatigue" 
                   className="block text-blue-600 hover:text-blue-800 transition-colors"
                 >
-                  → Burnout
+                  → Fatigue
+                </Link>
+                <Link 
+                  href="/symptoms/depression" 
+                  className="block text-blue-600 hover:text-blue-800 transition-colors"
+                >
+                  → Depression
                 </Link>
               </div>
             </div>

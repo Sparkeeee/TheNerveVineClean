@@ -272,20 +272,17 @@ export default function BodyMap() {
         { label: "Mood Swings", href: "/symptoms/mood-swings" },
       ]
     },
-    supplements: {
-      title: "Supplements",
-      icon: "💊",
-      items: [
-        { label: "Omega-3", href: "/supplements/omega-3" },
-        { label: "Vitamin D", href: "/supplements/vitamin-d" },
-        { label: "Magnesium", href: "/supplements/magnesium" },
-        { label: "B-Complex", href: "/supplements/b-complex" },
-        { label: "Ashwagandha", href: "/supplements/ashwagandha" },
-        { label: "L-Theanine", href: "/supplements/l-theanine" },
-        { label: "Ginkgo Biloba", href: "/supplements/ginkgo-biloba" },
-        { label: "Rhodiola", href: "/supplements/rhodiola" },
-      ]
-    },
+          supplements: {
+        title: "Supplements",
+        icon: "💊",
+        items: [
+          { label: "Omega-3", href: "/supplements/omega-3" },
+          { label: "Vitamin D", href: "/supplements/vitamin-d" },
+          { label: "Magnesium", href: "/supplements/magnesium" },
+          { label: "B-Complex", href: "/supplements/b-complex" },
+          { label: "L-Theanine", href: "/supplements/l-theanine" },
+        ]
+      },
     herbs: {
       title: "Herbal Medicines",
       icon: "🌿",

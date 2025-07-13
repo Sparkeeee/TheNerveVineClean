@@ -2,17 +2,17 @@
 
 import Link from "next/link";
 
-export default function StressPage() {
+export default function BurnoutPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white">
       <div className="max-w-4xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-800 mb-4">
-            Stress Management
+            Burnout
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Understanding and managing stress for better health and well-being
+            Understanding and recovering from physical and emotional exhaustion
           </p>
         </div>
 
@@ -32,47 +32,47 @@ export default function StressPage() {
           <div className="md:col-span-2 space-y-8">
             <div className="bg-white rounded-lg shadow-md p-6">
               <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-                Understanding Stress
+                What is Burnout?
               </h2>
               <div className="prose prose-gray max-w-none">
                 <p className="text-gray-700 mb-4">
-                  Stress is your body's natural response to challenges and demands. While some stress 
-                  can be beneficial and motivating, chronic or excessive stress can have negative 
-                  effects on your physical and mental health.
+                  Burnout is a state of physical, emotional, and mental exhaustion caused by prolonged 
+                  stress, overwork, or overwhelming responsibilities. It's characterized by feelings of 
+                  energy depletion, increased mental distance from work, and reduced professional efficacy.
                 </p>
                 <p className="text-gray-700 mb-4">
-                  When stress becomes chronic, it can lead to a cascade of health issues including 
-                  adrenal dysfunction, immune system suppression, digestive problems, and mental 
-                  health challenges. Learning to manage stress effectively is crucial for overall wellness.
+                  Unlike regular stress, burnout is a chronic condition that develops over time and 
+                  affects your ability to function effectively in both personal and professional life. 
+                  It can impact your physical health, relationships, and overall quality of life.
                 </p>
               </div>
             </div>
 
             <div className="bg-white rounded-lg shadow-md p-6">
               <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-                Signs of Chronic Stress
+                Signs and Symptoms
               </h2>
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
                   <h3 className="font-semibold text-gray-800 mb-2">Physical Symptoms</h3>
                   <ul className="text-gray-700 space-y-1">
-                    <li>• Fatigue and low energy</li>
-                    <li>• Headaches and muscle tension</li>
+                    <li>• Chronic fatigue and exhaustion</li>
+                    <li>• Frequent headaches or muscle tension</li>
                     <li>• Sleep disturbances</li>
-                    <li>• Digestive issues</li>
                     <li>• Weakened immune system</li>
-                    <li>• Rapid heartbeat</li>
+                    <li>• Digestive issues</li>
+                    <li>• Changes in appetite</li>
                   </ul>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-800 mb-2">Mental Symptoms</h3>
+                  <h3 className="font-semibold text-gray-800 mb-2">Emotional Symptoms</h3>
                   <ul className="text-gray-700 space-y-1">
-                    <li>• Anxiety and worry</li>
+                    <li>• Feelings of cynicism and detachment</li>
                     <li>• Irritability and mood swings</li>
-                    <li>• Difficulty concentrating</li>
-                    <li>• Memory problems</li>
-                    <li>• Feeling overwhelmed</li>
-                    <li>• Depression</li>
+                    <li>• Anxiety and depression</li>
+                    <li>• Decreased motivation</li>
+                    <li>• Feelings of helplessness</li>
+                    <li>• Reduced sense of accomplishment</li>
                   </ul>
                 </div>
               </div>
@@ -80,29 +80,29 @@ export default function StressPage() {
 
             <div className="bg-white rounded-lg shadow-md p-6">
               <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-                Natural Stress Management
+                Recovery Strategies
               </h2>
               <div className="space-y-4">
                 <div>
-                  <h3 className="font-semibold text-gray-800 mb-2">Lifestyle Strategies</h3>
+                  <h3 className="font-semibold text-gray-800 mb-2">Immediate Steps</h3>
                   <ul className="text-gray-700 space-y-1">
-                    <li>• Practice regular exercise and movement</li>
-                    <li>• Prioritize quality sleep (7-9 hours)</li>
-                    <li>• Learn relaxation techniques (meditation, deep breathing)</li>
-                    <li>• Maintain a balanced diet</li>
-                    <li>• Set healthy boundaries</li>
-                    <li>• Spend time in nature</li>
+                    <li>• Take time off from work if possible</li>
+                    <li>• Set clear boundaries and limits</li>
+                    <li>• Practice self-care activities</li>
+                    <li>• Seek support from friends and family</li>
+                    <li>• Consider professional counseling</li>
+                    <li>• Prioritize rest and relaxation</li>
                   </ul>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-800 mb-2">Mindfulness Practices</h3>
+                  <h3 className="font-semibold text-gray-800 mb-2">Long-term Recovery</h3>
                   <ul className="text-gray-700 space-y-1">
-                    <li>• Daily meditation or mindfulness</li>
-                    <li>• Journaling and self-reflection</li>
-                    <li>• Progressive muscle relaxation</li>
-                    <li>• Yoga or tai chi</li>
-                    <li>• Spending time with loved ones</li>
-                    <li>• Engaging in hobbies and interests</li>
+                    <li>• Develop healthy work-life balance</li>
+                    <li>• Learn stress management techniques</li>
+                    <li>• Establish regular exercise routine</li>
+                    <li>• Improve sleep hygiene</li>
+                    <li>• Practice mindfulness and meditation</li>
+                    <li>• Consider career changes if necessary</li>
                   </ul>
                 </div>
               </div>
@@ -113,7 +113,7 @@ export default function StressPage() {
           <div className="space-y-6">
             <div className="bg-white rounded-lg shadow-md p-6">
               <h2 className="text-xl font-semibold text-gray-800 mb-4">
-                Stress Support Supplements
+                Recovery Supplements
               </h2>
               <div className="space-y-4">
                 <div className="border border-gray-200 rounded-lg p-4">
@@ -122,37 +122,7 @@ export default function StressPage() {
                     Natural herbs that help your body adapt to stress
                   </p>
                   <a 
-                    href="https://amzn.to/3stress-adaptogens" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors text-sm"
-                  >
-                    View on Amazon →
-                  </a>
-                </div>
-
-                <div className="border border-gray-200 rounded-lg p-4">
-                  <h3 className="font-semibold text-gray-800 mb-2">Magnesium</h3>
-                  <p className="text-gray-600 text-sm mb-3">
-                    Essential mineral for relaxation and stress relief
-                  </p>
-                  <a 
-                    href="https://amzn.to/3stress-magnesium" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors text-sm"
-                  >
-                    View on Amazon →
-                  </a>
-                </div>
-
-                <div className="border border-gray-200 rounded-lg p-4">
-                  <h3 className="font-semibold text-gray-800 mb-2">L-Theanine</h3>
-                  <p className="text-gray-600 text-sm mb-3">
-                    Amino acid that promotes calmness and focus
-                  </p>
-                  <a 
-                    href="https://amzn.to/3stress-theanine" 
+                    href="https://amzn.to/3burnout-adaptogens" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors text-sm"
@@ -164,10 +134,40 @@ export default function StressPage() {
                 <div className="border border-gray-200 rounded-lg p-4">
                   <h3 className="font-semibold text-gray-800 mb-2">B-Complex Vitamins</h3>
                   <p className="text-gray-600 text-sm mb-3">
-                    Essential B vitamins for energy and nervous system support
+                    Essential B vitamins for energy and stress support
                   </p>
                   <a 
-                    href="https://amzn.to/3stress-bcomplex" 
+                    href="https://amzn.to/3burnout-bcomplex" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors text-sm"
+                  >
+                    View on Amazon →
+                  </a>
+                </div>
+
+                <div className="border border-gray-200 rounded-lg p-4">
+                  <h3 className="font-semibold text-gray-800 mb-2">Magnesium</h3>
+                  <p className="text-gray-600 text-sm mb-3">
+                    Magnesium for relaxation and stress relief
+                  </p>
+                  <a 
+                    href="https://amzn.to/3burnout-magnesium" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors text-sm"
+                  >
+                    View on Amazon →
+                  </a>
+                </div>
+
+                <div className="border border-gray-200 rounded-lg p-4">
+                  <h3 className="font-semibold text-gray-800 mb-2">Omega-3 Fatty Acids</h3>
+                  <p className="text-gray-600 text-sm mb-3">
+                    Essential fatty acids for brain health and mood support
+                  </p>
+                  <a 
+                    href="https://amzn.to/3burnout-omega3" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors text-sm"
@@ -194,10 +194,10 @@ export default function StressPage() {
                   → Adrenal Exhaustion
                 </Link>
                 <Link 
-                  href="/symptoms/burnout" 
+                  href="/symptoms/stress" 
                   className="block text-blue-600 hover:text-blue-800 transition-colors"
                 >
-                  → Burnout
+                  → Stress Management
                 </Link>
               </div>
             </div>

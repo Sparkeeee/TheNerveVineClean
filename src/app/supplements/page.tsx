@@ -6,10 +6,7 @@ export default function SupplementsPage() {
     { name: "Vitamin D", href: "/supplements/vitamin-d", description: "Sunshine vitamin for mood and immunity" },
     { name: "Magnesium", href: "/supplements/magnesium", description: "Mineral for relaxation and sleep" },
     { name: "B-Complex", href: "/supplements/b-complex", description: "Energy and nervous system support" },
-    { name: "Ashwagandha", href: "/supplements/ashwagandha", description: "Adaptogenic stress support" },
     { name: "L-Theanine", href: "/supplements/l-theanine", description: "Amino acid for calm focus" },
-    { name: "Ginkgo Biloba", href: "/supplements/ginkgo-biloba", description: "Cognitive enhancement and memory" },
-    { name: "Rhodiola", href: "/supplements/rhodiola", description: "Mental performance and fatigue relief" },
   ];
 
   return (

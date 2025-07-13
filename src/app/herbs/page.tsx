@@ -12,7 +12,7 @@ export default function HerbsPage() {
     { name: "Holy Basil", href: "/herbs/holy-basil", description: "Adaptogenic stress support" },
     { name: "Ashwagandha", href: "/herbs/ashwagandha", description: "Adaptogen for stress and energy" },
     { name: "Rhodiola", href: "/herbs/rhodiola", description: "Mental performance and fatigue" },
-    { name: "Ginkgo Biloba", href: "/herbs/ginkgo-biloba", description: "Cognitive function and memory" },
+    { name: "Ginkgo Biloba", href: "/herbs/ginkgo", description: "Cognitive function and memory" },
   ];
 
   return (
