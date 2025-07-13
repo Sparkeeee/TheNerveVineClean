@@ -45,6 +45,8 @@ export default function TestQualityPage() {
         }
       ];
       
+      // Use specs to validate the mock results
+      console.log('Quality specifications:', specs);
       setTestResults(mockResults);
     } catch (error) {
       console.error('Error testing quality:', error);

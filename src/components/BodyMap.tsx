@@ -5,13 +5,13 @@ import { useState, useEffect } from "react";
 
 export default function BodyMap() {
   // const isTouchDevice = typeof window !== 'undefined' && 'ontouchstart' in window;
-  const [selectedArea, setSelectedArea] = useState<string | null>(null);
+  // const [selectedArea, setSelectedArea] = useState<string | null>(null);
   const [hoveredArea, setHoveredArea] = useState<string | null>(null);
   
   // Body dimensions and positioning
-  const bodyWidth = 200;
-  const bodyHeight = 400;
-  const headRadius = 30;
+  // const bodyWidth = 200;
+  // const bodyHeight = 400;
+  // const headRadius = 30;
   // const headCenterX = bodyWidth / 2;
   // const headCenterY = headRadius + 10;
   const [screenWidth, setScreenWidth] = useState(1024);
@@ -22,7 +22,7 @@ export default function BodyMap() {
   useEffect(() => {
     const checkDeviceAndSize = () => {
       // Check for touch capability, not just screen size
-      const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+      // const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
       const currentWidth = window.innerWidth;
       
       // Show links continuously if it's a touch device OR small screen
@@ -43,8 +43,8 @@ export default function BodyMap() {
     const isLargeScreen = screenWidth >= 1000;
     
     // Base center point (between eyes) for head links
-    const headCenterX = 510;
-    const headCenterY = 150;
+    // const headCenterX = 510;
+    // const headCenterY = 150;
     
     // Neck center point (around the middle of the neck in the SVG)
     const neckCenterX = 510;

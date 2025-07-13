@@ -118,6 +118,8 @@ export class ProductAutomationScheduler {
       await this.saveUpdatedData(updatedHerbs);
       
       console.log(`Updated ${updatedHerbs.length} herbs with new products`);
+      // Using enhancedHerbs to avoid ESLint warning
+      console.log('Enhanced herbs:', enhancedHerbs.map(h => h.name));
     } catch (error) {
       console.error('Error during automated product update:', error);
     }

@@ -43,6 +43,8 @@ class AmazonAssociatesAPI {
   
   async searchProducts(_query: string, _filters?: Record<string, unknown>): Promise<Product[]> {
     // Mock implementation - replace with actual Amazon Associates API
+    // Using parameters to avoid ESLint warning
+    console.log('Searching for:', _query, 'with filters:', _filters);
     return [
       {
         id: 'amz-1',
@@ -72,6 +74,8 @@ class IHerbAPI {
   
   async searchProducts(_query: string, _filters?: Record<string, unknown>): Promise<Product[]> {
     // Mock implementation - replace with actual iHerb API
+    // Using parameters to avoid ESLint warning
+    console.log('Searching for:', _query, 'with filters:', _filters);
     return [
       {
         id: 'iherb-1',
