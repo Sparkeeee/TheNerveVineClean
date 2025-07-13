@@ -129,6 +129,7 @@ export class ProductAutomationScheduler {
     // This would integrate with your data storage system
     // For now, we'll just log the updates
     console.log('Saving updated herb data...');
+    console.log('Enhanced herbs to save:', enhancedHerbs.map(h => h.name));
     
     // In a real implementation, you might:
     // 1. Save to a database
