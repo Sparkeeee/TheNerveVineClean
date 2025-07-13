@@ -1,6 +1,8 @@
 // Product Quality Specifications System
 // Defines quality criteria for different herbs and product types
 
+import type { Product } from './product-automation';
+
 export interface QualitySpecification {
   herbSlug: string;
   herbName: string;
@@ -182,7 +184,7 @@ export const qualitySpecs: QualitySpecification[] = [
 export class ProductQualityAnalyzer {
   
   // Analyze a product against quality specifications
-  analyzeProduct(product: Record<string, unknown>, specs: QualitySpecification): ProductQualityScore {
+  analyzeProduct(product: Product, specs: QualitySpecification): ProductQualityScore {
     const score: ProductQualityScore = { score: 0, reasons: [], warnings: [], matches: { required: [], preferred: [], avoid: [] } };
     
     // Check required terms
@@ -269,28 +271,29 @@ export class ProductQualityAnalyzer {
     return score;
   }
   
-  private checkRequiredTerms(product: Record<string, unknown>, specs: QualitySpecification): string[] {
+  private checkRequiredTerms(product: Product, specs: QualitySpecification): string[] {
     const productText = `${product.name} ${product.description} ${product.brand || ''}`.toLowerCase();
     return specs.requiredTerms.filter(term => 
       productText.includes(term.toLowerCase())
     );
   }
   
-  private checkPreferredTerms(product: Record<string, unknown>, specs: QualitySpecification): string[] {
+  private checkPreferredTerms(product: Product, specs: QualitySpecification): string[] {
     const productText = `${product.name} ${product.description} ${product.brand || ''}`.toLowerCase();
     return specs.preferredTerms.filter(term => 
       productText.includes(term.toLowerCase())
     );
   }
   
-  private checkAvoidedTerms(product: Record<string, unknown>, specs: QualitySpecification): string[] {
+  private checkAvoidedTerms(product: Product, specs: QualitySpecification): string[] {
     const productText = `${product.name} ${product.description} ${product.brand || ''}`.toLowerCase();
     return specs.avoidTerms.filter(term => 
       productText.includes(term.toLowerCase())
     );
   }
   
-  private checkStandardization(product: Record<string, unknown>, standardization: Record<string, unknown>): number {
+  private checkStandardization(product: Product, standardization: QualitySpecification['standardization']): number {
+    if (!standardization) return 0;
     const productText = `${product.name} ${product.description}`.toLowerCase();
     const compound = standardization.compound.toLowerCase();
     
@@ -316,7 +319,8 @@ export class ProductQualityAnalyzer {
     return 0;
   }
   
-  private checkAlcoholSpecs(product: Record<string, unknown>, alcoholSpecs: Record<string, unknown>): number {
+  private checkAlcoholSpecs(product: Product, alcoholSpecs: QualitySpecification['alcoholSpecs']): number {
+    if (!alcoholSpecs) return 0;
     const productText = `${product.name} ${product.description}`.toLowerCase();
     let score = 0;
     
@@ -351,23 +355,22 @@ export class ProductQualityAnalyzer {
   }
   
   // Filter and rank products based on quality specifications
-  filterProductsByQuality(products: Record<string, unknown>[], herbSlug: string, productType: string): Record<string, unknown>[] {
+  filterProductsByQuality(products: Product[], herbSlug: string, productType: string): (Product & { qualityScore: ProductQualityScore })[] {
     const specs = this.getSpecsForHerb(herbSlug, productType);
     const analyzer = new ProductQualityAnalyzer();
-    
+    if (specs.length === 0) return [];
     return products
       .map(product => {
         const bestScore = specs.reduce((best, spec) => {
           const score = analyzer.analyzeProduct(product, spec);
-          return score.score > best.score ? score : best;
-        }, { score: 0, reasons: [], warnings: [], matches: { required: [], preferred: [], avoid: [] } });
-        
+          return (score.score > best.score ? score : best) as ProductQualityScore;
+        }, { score: 0, reasons: [], warnings: [], matches: { required: [], preferred: [], avoid: [] } } as ProductQualityScore);
         return {
           ...product,
           qualityScore: bestScore
         };
       })
-      .filter(product => product.qualityScore.score >= 50) // Only products with decent quality scores
+      .filter(product => product.qualityScore.score >= 50)
       .sort((a, b) => b.qualityScore.score - a.qualityScore.score);
   }
 } 

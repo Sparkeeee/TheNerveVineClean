@@ -1,17 +1,12 @@
 import { herbs, type Herb } from '../data/herbs';
 import { ProductAutomation, ProductCriteria, ContentGenerator } from './product-automation';
+import type { Product } from './product-automation';
 
 // Enhanced herb data structure with automated product updates
 export interface EnhancedHerb extends Herb {
   automatedProducts?: {
     lastUpdated: Date;
-    products: Array<{
-      title: string;
-      price: number;
-      rating: number;
-      reviewCount: number;
-      url: string;
-    }>;
+    products: Product[];
     criteria: ProductCriteria;
   };
 }
@@ -46,7 +41,7 @@ export class AutomatedProductUpdater {
       ...herb,
       automatedProducts: {
         lastUpdated: new Date(),
-        products: products.slice(0, 5), // Top 5 products
+        products: products.slice(0, 5),
         criteria
       }
     };
@@ -79,7 +74,21 @@ export class AutomatedProductUpdater {
     return `
 ## Recommended Products for ${enhancedHerb.name}
 
-${products.map(product => ContentGenerator.generateProductRecommendation(product, enhancedHerb.name)).join('\n\n')}
+${products.map(product => ContentGenerator.generateProductRecommendation({
+  id: product.id || product.name.replace(/\s+/g, '-').toLowerCase(),
+  name: product.name,
+  description: product.description || '',
+  price: product.price,
+  currency: product.currency || 'USD',
+  affiliateUrl: product.affiliateUrl,
+  imageUrl: product.imageUrl || '',
+  rating: product.rating || 0,
+  reviewCount: product.reviewCount || 0,
+  availability: product.availability !== undefined ? product.availability : true,
+  categories: product.categories || [],
+  tags: product.tags || [],
+  brand: product.brand || ''
+}, enhancedHerb.name)).join('\n\n')}
 
 *Last updated: ${enhancedHerb.automatedProducts.lastUpdated.toLocaleDateString()}*
     `.trim();
