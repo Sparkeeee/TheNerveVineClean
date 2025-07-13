@@ -26,7 +26,7 @@ export default function BrainFogPage() {
                 <li className="flex items-center">
                   <span className="text-green-600 mr-2">✓</span>
                   <Link href="/herbs/lions-mane" className="text-blue-600 hover:text-blue-800">
-                    Lion's Mane (Brain Health)
+                    Lion&apos;s Mane (Brain Health)
                   </Link>
                 </li>
                 <li className="flex items-center">

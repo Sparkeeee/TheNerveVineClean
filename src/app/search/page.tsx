@@ -1,4 +1,5 @@
 import SearchComponent from '@/components/SearchComponent';
+import Link from "next/link";
 
 export default function SearchPage() {
   return (
@@ -24,19 +25,19 @@ export default function SearchPage() {
             <ul className="space-y-2 text-gray-700">
               <li className="flex items-start">
                 <span className="text-blue-500 mr-2">•</span>
-                <span>Search by symptom: "anxiety", "insomnia", "stress"</span>
+                <span>Search by symptom: &quot;anxiety&quot;, &quot;insomnia&quot;, &quot;stress&quot;</span>
               </li>
               <li className="flex items-start">
                 <span className="text-blue-500 mr-2">•</span>
-                <span>Search by herb name: "lemon balm", "chamomile", "ashwagandha"</span>
+                <span>Search by herb name: &quot;lemon balm&quot;, &quot;chamomile&quot;, &quot;ashwagandha&quot;</span>
               </li>
               <li className="flex items-start">
                 <span className="text-blue-500 mr-2">•</span>
-                <span>Search by supplement: "magnesium", "omega-3", "vitamin d"</span>
+                <span>Search by supplement: &quot;magnesium&quot;, &quot;omega-3&quot;, &quot;vitamin d&quot;</span>
               </li>
               <li className="flex items-start">
                 <span className="text-blue-500 mr-2">•</span>
-                <span>Search by benefit: "calming", "sleep", "energy", "focus"</span>
+                <span>Search by benefit: &quot;calming&quot;, &quot;sleep&quot;, &quot;energy&quot;, &quot;focus&quot;</span>
               </li>
             </ul>
           </div>
@@ -44,30 +45,30 @@ export default function SearchPage() {
           <div className="bg-white rounded-xl shadow-lg p-6">
             <h2 className="text-xl font-semibold text-blue-800 mb-4">🔍 Popular Searches</h2>
             <div className="grid grid-cols-2 gap-2">
-              <a href="/symptoms/anxiety" className="text-blue-600 hover:text-blue-800 text-sm p-2 rounded bg-blue-50 hover:bg-blue-100 transition-colors">
+              <Link href="/symptoms/anxiety" className="text-blue-600 hover:text-blue-800 text-sm p-2 rounded bg-blue-50 hover:bg-blue-100 transition-colors">
                 Anxiety
-              </a>
-              <a href="/symptoms/insomnia" className="text-blue-600 hover:text-blue-800 text-sm p-2 rounded bg-blue-50 hover:bg-blue-100 transition-colors">
+              </Link>
+              <Link href="/symptoms/insomnia" className="text-blue-600 hover:text-blue-800 text-sm p-2 rounded bg-blue-50 hover:bg-blue-100 transition-colors">
                 Insomnia
-              </a>
-              <a href="/herbs/lemon-balm" className="text-green-600 hover:text-green-800 text-sm p-2 rounded bg-green-50 hover:bg-green-100 transition-colors">
+              </Link>
+              <Link href="/herbs/lemon-balm" className="text-green-600 hover:text-green-800 text-sm p-2 rounded bg-green-50 hover:bg-green-100 transition-colors">
                 Lemon Balm
-              </a>
-              <a href="/supplements/magnesium" className="text-purple-600 hover:text-purple-800 text-sm p-2 rounded bg-purple-50 hover:bg-purple-100 transition-colors">
+              </Link>
+              <Link href="/supplements/magnesium" className="text-purple-600 hover:text-purple-800 text-sm p-2 rounded bg-purple-50 hover:bg-purple-100 transition-colors">
                 Magnesium
-              </a>
-              <a href="/symptoms/stress" className="text-red-600 hover:text-red-800 text-sm p-2 rounded bg-red-50 hover:bg-red-100 transition-colors">
+              </Link>
+              <Link href="/symptoms/stress" className="text-red-600 hover:text-red-800 text-sm p-2 rounded bg-red-50 hover:bg-red-100 transition-colors">
                 Stress
-              </a>
-              <a href="/herbs/ashwagandha" className="text-green-600 hover:text-green-800 text-sm p-2 rounded bg-green-50 hover:bg-green-100 transition-colors">
+              </Link>
+              <Link href="/herbs/ashwagandha" className="text-green-600 hover:text-green-800 text-sm p-2 rounded bg-green-50 hover:bg-green-100 transition-colors">
                 Ashwagandha
-              </a>
-              <a href="/supplements/omega-3" className="text-purple-600 hover:text-purple-800 text-sm p-2 rounded bg-purple-50 hover:bg-purple-100 transition-colors">
+              </Link>
+              <Link href="/supplements/omega-3" className="text-purple-600 hover:text-purple-800 text-sm p-2 rounded bg-purple-50 hover:bg-purple-100 transition-colors">
                 Omega-3
-              </a>
-              <a href="/symptoms/depression" className="text-red-600 hover:text-red-800 text-sm p-2 rounded bg-red-50 hover:bg-red-100 transition-colors">
+              </Link>
+              <Link href="/symptoms/depression" className="text-red-600 hover:text-red-800 text-sm p-2 rounded bg-red-50 hover:bg-red-100 transition-colors">
                 Depression
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -80,27 +81,27 @@ export default function SearchPage() {
               <div className="text-4xl mb-4">🌿</div>
               <h3 className="text-xl font-semibold text-green-800 mb-2">Herbs</h3>
               <p className="text-gray-600 mb-4">Traditional herbal medicines for natural healing</p>
-              <a href="/herbs" className="inline-block bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+              <Link href="/herbs" className="inline-block bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
                 Browse Herbs
-              </a>
+              </Link>
             </div>
             
             <div className="bg-white rounded-xl shadow-lg p-6 text-center">
               <div className="text-4xl mb-4">💊</div>
               <h3 className="text-xl font-semibold text-blue-800 mb-2">Supplements</h3>
               <p className="text-gray-600 mb-4">Essential vitamins, minerals, and nutrients</p>
-              <a href="/supplements" className="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+              <Link href="/supplements" className="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
                 Browse Supplements
-              </a>
+              </Link>
             </div>
             
             <div className="bg-white rounded-xl shadow-lg p-6 text-center">
               <div className="text-4xl mb-4">🩺</div>
               <h3 className="text-xl font-semibold text-red-800 mb-2">Symptoms</h3>
               <p className="text-gray-600 mb-4">Find solutions for specific health concerns</p>
-              <a href="/symptoms" className="inline-block bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors">
+              <Link href="/symptoms" className="inline-block bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors">
                 Browse Symptoms
-              </a>
+              </Link>
             </div>
           </div>
         </div>

@@ -473,7 +473,7 @@ export default function SearchComponent() {
     }
 
     const searchTerm = query.toLowerCase();
-    let filteredResults = searchData.filter(item => {
+    const filteredResults = searchData.filter(item => {
       const matchesQuery = 
         item.title.toLowerCase().includes(searchTerm) ||
         item.description.toLowerCase().includes(searchTerm) ||
@@ -594,7 +594,7 @@ export default function SearchComponent() {
       {isOpen && query.trim() !== "" && results.length === 0 && (
         <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-50 p-4">
           <p className="text-sm text-gray-500 text-center">
-            No results found for "{query}"
+            No results found for &quot;{query}&quot;
           </p>
           <p className="text-xs text-gray-400 text-center mt-1">
             Try searching for herbs, supplements, or symptoms
