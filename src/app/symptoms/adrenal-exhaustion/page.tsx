@@ -43,7 +43,7 @@ export default function AdrenalExhaustionPage() {
                 </p>
                 <p className="text-gray-700 mb-4">
                   After prolonged periods of stress, the adrenal glands may become unable to meet the 
-                  body's demands for cortisol, resulting in a state of exhaustion that affects your 
+                  body&apos;s demands for cortisol, resulting in a state of exhaustion that affects your 
                   energy, mood, and overall well-being.
                 </p>
               </div>
@@ -57,7 +57,7 @@ export default function AdrenalExhaustionPage() {
                 <div>
                   <h3 className="font-semibold text-gray-800 mb-2">Primary Symptoms</h3>
                   <ul className="text-gray-700 space-y-1">
-                    <li>• Extreme fatigue that doesn't improve with sleep</li>
+                    <li>• Extreme fatigue that doesn&apos;t improve with sleep</li>
                     <li>• Difficulty getting out of bed in the morning</li>
                     <li>• Cravings for salty or sweet foods</li>
                     <li>• Low blood pressure</li>

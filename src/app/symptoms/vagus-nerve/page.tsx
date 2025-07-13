@@ -12,7 +12,7 @@ export default function VagusNervePage() {
             Vagus Nerve Support
           </h1>
           <p className="text-xl text-blue-700 max-w-3xl mx-auto">
-            Understanding and supporting your body's most important nerve for overall health and well-being
+                            Understanding and supporting your body&apos;s most important nerve for overall health and well-being
           </p>
         </div>
 
@@ -25,10 +25,10 @@ export default function VagusNervePage() {
                 What is the Vagus Nerve?
               </h2>
               <p className="text-gray-700 mb-4">
-                The vagus nerve is the longest cranial nerve in your body, running from your brainstem through your neck and into your chest and abdomen. It's often called the "wandering nerve" because of its extensive reach throughout your body.
+                The vagus nerve is the longest cranial nerve in your body, running from your brainstem through your neck and into your chest and abdomen. It&apos;s often called the &quot;wandering nerve&quot; because of its extensive reach throughout your body.
               </p>
               <p className="text-gray-700 mb-4">
-                This nerve is crucial for your parasympathetic nervous system - the "rest and digest" system that helps your body relax, recover, and maintain homeostasis. It controls many vital functions including heart rate, digestion, breathing, and immune response.
+                This nerve is crucial for your parasympathetic nervous system - the &quot;rest and digest&quot; system that helps your body relax, recover, and maintain homeostasis. It controls many vital functions including heart rate, digestion, breathing, and immune response.
               </p>
             </div>
 

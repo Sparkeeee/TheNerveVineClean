@@ -36,7 +36,7 @@ export default function CircadianSupportPage() {
               </h2>
               <div className="prose prose-gray max-w-none">
                 <p className="text-gray-700 mb-4">
-                  Your circadian rhythm is your body's natural 24-hour internal clock that regulates 
+                  Your circadian rhythm is your body&apos;s natural 24-hour internal clock that regulates 
                   sleep-wake cycles, hormone production, body temperature, and other physiological 
                   processes. When this rhythm is disrupted, it can affect your health, energy, and 
                   overall well-being.

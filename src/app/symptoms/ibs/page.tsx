@@ -25,10 +25,10 @@ export default function IBSPage() {
                 What is IBS?
               </h2>
               <p className="text-gray-700 mb-4">
-                Irritable Bowel Syndrome (IBS) is a common functional gastrointestinal disorder that affects the large intestine. It's characterized by a group of symptoms that occur together, including abdominal pain and changes in bowel habits.
+                Irritable Bowel Syndrome (IBS) is a common functional gastrointestinal disorder that affects the large intestine. It&apos;s characterized by a group of symptoms that occur together, including abdominal pain and changes in bowel habits.
               </p>
               <p className="text-gray-700 mb-4">
-                IBS is considered a "functional" disorder because it affects how the gut works, rather than causing structural damage. It's often related to gut-brain axis dysfunction and can be triggered by stress, diet, and other factors.
+                IBS is considered a &quot;functional&quot; disorder because it affects how the gut works, rather than causing structural damage. It&apos;s often related to gut-brain axis dysfunction and can be triggered by stress, diet, and other factors.
               </p>
             </div>
 
