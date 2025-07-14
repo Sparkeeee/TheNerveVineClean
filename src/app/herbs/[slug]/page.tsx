@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import Image from 'next/image';
 import { herbs } from '../../../data/herbs';
 
 interface HerbPageProps {
@@ -88,10 +89,12 @@ export default async function HerbPage({ params }: HerbPageProps) {
               <div className="space-y-4">
                 {herb.affiliates.map((product, index) => (
                   <div key={index} className="border border-purple-200 rounded-lg p-4 flex flex-col gap-4">
-                    <img
+                    <Image
                       src={product.image || '/images/closed-medical-brown-glass-bottle-yellow-vitamins.png'}
                       alt={product.name}
-                      className="w-20 h-20 object-contain rounded mb-2"
+                      width={80}
+                      height={80}
+                      className="object-contain rounded mb-2"
                     />
                     <div className="flex-1">
                       <h3 className="font-semibold text-purple-900 mb-2">{product.name}</h3>

@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface SymptomPageProps {
   params: Promise<{ slug: string }>;
@@ -927,7 +928,7 @@ export default async function SymptomPage({ params }: SymptomPageProps) {
                 </p>
                 <p className="text-gray-700 mb-4">
                   Natural approaches to {symptom.title.toLowerCase()} often involve addressing root causes, 
-                  supporting the body's natural healing processes, and using evidence-based herbs and 
+                  supporting the body&apos;s natural healing processes, and using evidence-based herbs and 
                   supplements that have been traditionally and clinically studied.
                 </p>
               </div>
@@ -968,9 +969,9 @@ export default async function SymptomPage({ params }: SymptomPageProps) {
                   <h3 className="font-semibold text-gray-800 mb-2">Herbal Support</h3>
                   <ul className="text-gray-700 space-y-1">
                     {symptom.naturalSolutions && symptom.naturalSolutions
-                      .filter((solution: any) => solution.type === 'herb')
+                      .filter((solution: { type: string }) => solution.type === 'herb')
                       .slice(0, 3)
-                      .map((solution: any, index: number) => (
+                      .map((solution: { name: string; description: string }, index: number) => (
                         <li key={index}>• {solution.name} - {solution.description}</li>
                       ))}
                   </ul>
@@ -979,9 +980,9 @@ export default async function SymptomPage({ params }: SymptomPageProps) {
                   <h3 className="font-semibold text-gray-800 mb-2">Supplemental Support</h3>
                   <ul className="text-gray-700 space-y-1">
                     {symptom.naturalSolutions && symptom.naturalSolutions
-                      .filter((solution: any) => solution.type === 'supplement')
+                      .filter((solution: { type: string }) => solution.type === 'supplement')
                       .slice(0, 3)
-                      .map((solution: any, index: number) => (
+                      .map((solution: { name: string; description: string }, index: number) => (
                         <li key={index}>• {solution.name} - {solution.description}</li>
                       ))}
                   </ul>
@@ -999,10 +1000,12 @@ export default async function SymptomPage({ params }: SymptomPageProps) {
               <div className="space-y-4">
                 {products.map((product, index) => (
                   <div key={index} className="border border-gray-200 rounded-lg p-4 flex flex-col gap-4">
-                    <img 
+                    <Image 
                       src={product.image || '/images/closed-medical-brown-glass-bottle-yellow-vitamins.png'} 
                       alt={product.name} 
-                      className="w-20 h-20 object-contain rounded mb-2" 
+                      width={80}
+                      height={80}
+                      className="object-contain rounded mb-2" 
                     />
                     <div className="flex-1">
                       <h3 className="font-semibold text-gray-800 mb-1">{product.name}</h3>
