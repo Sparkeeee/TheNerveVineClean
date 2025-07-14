@@ -4,7 +4,21 @@ interface SymptomPageProps {
   params: Promise<{ slug: string }>;
 }
 
-const symptoms = {
+type Symptom = {
+  title: string;
+  description: string;
+  paragraphs?: string[];
+  variants?: any;
+  bestHerb?: any;
+  bestStandardized?: any;
+  topSupplements?: any;
+  disclaimer?: string;
+  symptoms?: string[];
+  causes?: string[];
+  naturalSolutions?: any[];
+};
+
+const symptoms: { [key: string]: Symptom } = {
   'insomnia': {
     title: 'Insomnia',
     description: 'Difficulty falling asleep, staying asleep, or waking too early. Chronic insomnia can impact mood, cognition, and overall health.',
@@ -675,7 +689,7 @@ const symptoms = {
 
 export default async function SymptomPage({ params }: SymptomPageProps) {
   const { slug } = await params;
-  const symptom = symptoms[slug as keyof typeof symptoms];
+  const symptom = symptoms[slug as keyof typeof symptoms] as Symptom;
 
   if (!symptom) {
     notFound();
