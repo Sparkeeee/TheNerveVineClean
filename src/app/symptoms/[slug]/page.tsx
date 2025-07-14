@@ -728,35 +728,7 @@ export default async function SymptomPage({ params }: SymptomPageProps) {
               </ul>
             </div>
 
-            {/* Precautions */}
-            {symptom.precautions && (
-              <div className="bg-orange-50 border border-orange-200 rounded-lg p-6">
-                <h2 className="text-xl font-semibold text-orange-800 mb-4">⚠️ Precautions</h2>
-                <ul className="space-y-2">
-                  {symptom.precautions.map((precaution, index) => (
-                    <li key={index} className="flex items-start">
-                      <span className="text-orange-500 mr-2">•</span>
-                      <span className="text-orange-700">{precaution}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
 
-            {/* Contraindications */}
-            {symptom.contraindications && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-6">
-                <h2 className="text-xl font-semibold text-red-800 mb-4">🚫 Contraindications</h2>
-                <ul className="space-y-2">
-                  {symptom.contraindications.map((contraindication, index) => (
-                    <li key={index} className="flex items-start">
-                      <span className="text-red-500 mr-2">•</span>
-                      <span className="text-red-700">{contraindication}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
           </div>
 
           {/* Natural Solutions */}
