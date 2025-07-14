@@ -752,14 +752,6 @@ export default async function SymptomPage({ params }: SymptomPageProps) {
                     >
                       View Product →
                     </a>
-                    {solution.herbLink && (
-                      <a
-                        href={solution.herbLink}
-                        className="inline-block bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
-                      >
-                        Learn More →
-                      </a>
-                    )}
                   </div>
                 </div>
               ))}
