@@ -30,7 +30,7 @@ export default function Header() {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex space-x-8">
+          <nav className="hidden custom900:flex space-x-8">
             {navigation.map((item) => (
               <Link
                 key={item.name}
@@ -43,7 +43,7 @@ export default function Header() {
           </nav>
 
           {/* Mobile menu button */}
-          <div className="md:hidden">
+          <div className="custom900:hidden">
             <button
               type="button"
               className="text-gray-700 hover:text-primary-600 p-2"
@@ -64,7 +64,7 @@ export default function Header() {
         </div>
 
         {/* Second Row - Search Bar (Desktop Only) */}
-        <div className="hidden lg:block pb-4">
+        <div className="hidden custom900:block pb-4">
           <div className="max-w-2xl mx-auto">
             <SearchComponent />
           </div>
@@ -72,7 +72,7 @@ export default function Header() {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="md:hidden">
+          <div className="custom900:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-gray-200">
               {/* Mobile Search */}
               <div className="px-3 py-2">

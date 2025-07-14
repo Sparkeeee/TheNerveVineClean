@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import Link from 'next/link';
 
 interface SymptomPageProps {
   params: Promise<{ slug: string }>;
@@ -73,7 +74,49 @@ const symptoms = {
         price: '$15-25',
         clinicalEvidence: 'Traditional use with modern safety studies for sleep and anxiety'
       }
-    ]
+    ],
+    variants: ['Sleep Onset Insomnia', 'Sleep Maintenance Insomnia', 'Early Morning Awakening'],
+    herb: {
+      name: 'Valerian Root',
+      description: 'Traditional sleep herb with modern clinical studies showing effectiveness.',
+      affiliateUrl: 'https://amzn.to/valerian-sleep',
+    },
+    extract: {
+      name: 'Melatonin (0.5-5mg)',
+      description: 'Most researched sleep supplement. Regulates circadian rhythm naturally.',
+      affiliateUrl: 'https://amzn.to/melatonin-sleep',
+    },
+    supplements: [
+      {
+        name: 'Magnesium Glycinate',
+        description: 'Essential mineral for muscle relaxation and GABA support.',
+        affiliateUrl: 'https://amzn.to/magnesium-sleep',
+      },
+      {
+        name: '5-HTP',
+        description: 'Precursor to serotonin and melatonin. Supports natural sleep hormone production.',
+        affiliateUrl: 'https://amzn.to/5htp-sleep',
+      },
+    ],
+    cautions: [
+      'Consult your doctor before starting new supplements, especially if you take medication.',
+      'Valerian may cause drowsiness or vivid dreams in some people.',
+      'Melatonin is best for circadian rhythm issues, not general insomnia.',
+    ],
+    related: [
+      { slug: 'anxiety', name: 'Anxiety' },
+      { slug: 'fatigue', name: 'Fatigue' },
+    ],
+    faq: [
+      {
+        q: 'Can I take melatonin and valerian together?',
+        a: 'Yes, but start with low doses and monitor your response. Both are generally safe but may cause drowsiness.',
+      },
+      {
+        q: 'How long until I notice results?',
+        a: 'Herbal and supplement effects may take 1–2 weeks of consistent use.',
+      },
+    ],
   },
   'depression': {
     title: 'Depression',
@@ -143,7 +186,14 @@ const symptoms = {
         price: '$20-30',
         clinicalEvidence: '900mg daily extract shows effectiveness comparable to prescription antidepressants'
       }
-    ]
+    ],
+    variants: [],
+    herb: null,
+    extract: null,
+    supplements: null,
+    cautions: null,
+    related: null,
+    faq: null,
   },
   'anxiety': {
     title: 'Anxiety',
@@ -213,7 +263,14 @@ const symptoms = {
         price: '$15-25',
         clinicalEvidence: 'Traditional use for anxiety with modern safety studies'
       }
-    ]
+    ],
+    variants: [],
+    herb: null,
+    extract: null,
+    supplements: null,
+    cautions: null,
+    related: null,
+    faq: null,
   },
   'memory-loss': {
     title: 'Memory Loss',
@@ -289,7 +346,14 @@ const symptoms = {
         affiliateLink: 'https://amzn.to/example-acetyl-carnitine',
         price: '$25-40'
       }
-    ]
+    ],
+    variants: [],
+    herb: null,
+    extract: null,
+    supplements: null,
+    cautions: null,
+    related: null,
+    faq: null,
   },
   'muscle-tension': {
     title: 'Muscle Tension / Tension Headaches',
@@ -323,7 +387,14 @@ const symptoms = {
         affiliateLink: 'https://amzn.to/example-cramp-bark',
         price: '$14-22'
       }
-    ]
+    ],
+    variants: [],
+    herb: null,
+    extract: null,
+    supplements: null,
+    cautions: null,
+    related: null,
+    faq: null,
   },
   'neck-tension': {
     title: 'Neck Tension',
@@ -355,7 +426,14 @@ const symptoms = {
         affiliateLink: 'https://amzn.to/example-cramp-bark',
         price: '$14-22'
       }
-    ]
+    ],
+    variants: [],
+    herb: null,
+    extract: null,
+    supplements: null,
+    cautions: null,
+    related: null,
+    faq: null,
   },
   'blood-pressure': {
     title: 'Blood Pressure Balance',
@@ -381,7 +459,14 @@ const symptoms = {
         price: '$15-25',
         herbLink: '/herbs/hawthorn'
       }
-    ]
+    ],
+    variants: [],
+    herb: null,
+    extract: null,
+    supplements: null,
+    cautions: null,
+    related: null,
+    faq: null,
   },
   'heart-support': {
     title: 'Heart Muscle Support',
@@ -412,7 +497,14 @@ const symptoms = {
         affiliateLink: 'https://amzn.to/example-hawthorn-heart',
         price: '$15-25'
       }
-    ]
+    ],
+    variants: [],
+    herb: null,
+    extract: null,
+    supplements: null,
+    cautions: null,
+    related: null,
+    faq: null,
   },
   'liver-detox': {
     title: 'Liver Function Support / Toxicity',
@@ -437,7 +529,14 @@ const symptoms = {
         affiliateLink: 'https://amzn.to/example-milk-thistle',
         price: '$15-25'
       }
-    ]
+    ],
+    variants: [],
+    herb: null,
+    extract: null,
+    supplements: null,
+    cautions: null,
+    related: null,
+    faq: null,
   },
   'digestive-health': {
     title: 'Hormonal Imbalances / Digestive Health',
@@ -462,7 +561,14 @@ const symptoms = {
         affiliateLink: 'https://amzn.to/example-vitex',
         price: '$12-20'
       }
-    ]
+    ],
+    variants: [],
+    herb: null,
+    extract: null,
+    supplements: null,
+    cautions: null,
+    related: null,
+    faq: null,
   },
   'adrenal-overload': {
     title: 'Adrenal Overload',
@@ -486,7 +592,14 @@ const symptoms = {
         affiliateLink: 'https://amzn.to/example-rhodiola',
         price: '$18-28'
       }
-    ]
+    ],
+    variants: [],
+    herb: null,
+    extract: null,
+    supplements: null,
+    cautions: null,
+    related: null,
+    faq: null,
   },
   'adrenal-exhaustion': {
     title: 'Adrenal Exhaustion',
@@ -511,7 +624,14 @@ const symptoms = {
         affiliateLink: 'https://amzn.to/example-licorice',
         price: '$12-20'
       }
-    ]
+    ],
+    variants: [],
+    herb: null,
+    extract: null,
+    supplements: null,
+    cautions: null,
+    related: null,
+    faq: null,
   },
   'circadian-support': {
     title: 'Circadian Support',
@@ -536,7 +656,14 @@ const symptoms = {
         affiliateLink: 'https://amzn.to/example-melatonin',
         price: '$10-18'
       }
-    ]
+    ],
+    variants: [],
+    herb: null,
+    extract: null,
+    supplements: null,
+    cautions: null,
+    related: null,
+    faq: null,
   },
   'vagus-nerve': {
     title: 'Vagus Nerve Support',
@@ -560,7 +687,14 @@ const symptoms = {
         affiliateLink: 'https://amzn.to/example-gotu-kola',
         price: '$14-22'
       }
-    ]
+    ],
+    variants: [],
+    herb: null,
+    extract: null,
+    supplements: null,
+    cautions: null,
+    related: null,
+    faq: null,
   },
   'dysbiosis': {
     title: 'Dysbiosis',
@@ -585,7 +719,14 @@ const symptoms = {
         affiliateLink: 'https://amzn.to/example-probiotics',
         price: '$18-30'
       }
-    ]
+    ],
+    variants: [],
+    herb: null,
+    extract: null,
+    supplements: null,
+    cautions: null,
+    related: null,
+    faq: null,
   },
   'leaky-gut': {
     title: 'Leaky Gut / Leaky Brain',
@@ -610,7 +751,14 @@ const symptoms = {
         affiliateLink: 'https://amzn.to/example-glutamine',
         price: '$15-25'
       }
-    ]
+    ],
+    variants: [],
+    herb: null,
+    extract: null,
+    supplements: null,
+    cautions: null,
+    related: null,
+    faq: null,
   },
   'ibs': {
     title: 'IBS (Irritable Bowel Syndrome)',
@@ -636,7 +784,14 @@ const symptoms = {
         affiliateLink: 'https://amzn.to/example-peppermint',
         price: '$10-18'
       }
-    ]
+    ],
+    variants: [],
+    herb: null,
+    extract: null,
+    supplements: null,
+    cautions: null,
+    related: null,
+    faq: null,
   },
   'migraine': {
     title: 'Migraine',
@@ -680,7 +835,14 @@ const symptoms = {
         affiliateLink: 'https://amzn.to/example-magnesium',
         price: '$10-18'
       }
-    ]
+    ],
+    variants: [],
+    herb: null,
+    extract: null,
+    supplements: null,
+    cautions: null,
+    related: null,
+    faq: null,
   }
 };
 
@@ -692,112 +854,216 @@ export default async function SymptomPage({ params }: SymptomPageProps) {
     notFound();
   }
 
+  // Example: Add placeholder products if not present (for plug-and-play API integration)
+  const products = symptom.products || [
+    {
+      name: "Best Magnesium Glycinate",
+      description: "Highly bioavailable magnesium for stress and sleep support.",
+      affiliateUrl: "https://amzn.to/placeholder-magnesium",
+      price: "$18.99",
+      qualityScore: 9.2,
+      affiliateRevenue: 0.08, // 8% commission
+      image: "/images/magnesium.jpg",
+      supplier: "Amazon"
+    },
+    {
+      name: "Premium Ashwagandha Extract",
+      description: "Clinically studied adaptogen for stress and anxiety.",
+      affiliateUrl: "https://amzn.to/placeholder-ashwagandha",
+      price: "$21.99",
+      qualityScore: 9.5,
+      affiliateRevenue: 0.10,
+      image: "/images/ashwagandha.jpg",
+      supplier: "Amazon"
+    },
+    {
+      name: "Top L-Theanine Capsules",
+      description: "Supports calm focus and relaxation without drowsiness.",
+      affiliateUrl: "https://amzn.to/placeholder-theanine",
+      price: "$16.99",
+      qualityScore: 9.0,
+      affiliateRevenue: 0.07,
+      image: "/images/theanine.jpg",
+      supplier: "Amazon"
+    }
+  ];
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white">
       <div className="max-w-4xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-blue-900 mb-4">{symptom.title}</h1>
-          <p className="text-xl text-blue-700 mb-6">{symptom.description}</p>
+          <h1 className="text-4xl font-bold text-gray-800 mb-4">
+            {symptom.title}
+          </h1>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            {symptom.description}
+          </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* Symptoms & Causes */}
-          <div className="space-y-6">
-            <div className="bg-white rounded-lg p-6 shadow-lg">
-              <h2 className="text-2xl font-semibold text-blue-800 mb-4">Common Symptoms</h2>
-              <ul className="space-y-2">
-                {symptom.symptoms.map((symptomItem, index) => (
-                  <li key={index} className="flex items-start">
-                    <span className="text-blue-500 mr-2">•</span>
-                    <span className="text-gray-700">{symptomItem}</span>
-                  </li>
-                ))}
-              </ul>
+        {/* Navigation */}
+        <div className="mb-8">
+          <Link 
+            href="/" 
+            className="text-blue-600 hover:text-blue-800 transition-colors"
+          >
+            ← Back to Body Map
+          </Link>
+        </div>
+
+        {/* Main Content */}
+        <div className="grid md:grid-cols-3 gap-8">
+          {/* Left Column - Education */}
+          <div className="md:col-span-2 space-y-8">
+            {/* Understanding Section */}
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+                Understanding {symptom.title}
+              </h2>
+              <div className="prose prose-gray max-w-none">
+                <p className="text-gray-700 mb-4">
+                  {symptom.description} Understanding the underlying causes and symptoms can help you 
+                  make informed decisions about natural support options.
+                </p>
+                <p className="text-gray-700 mb-4">
+                  Natural approaches to {symptom.title.toLowerCase()} often involve addressing root causes, 
+                  supporting the body's natural healing processes, and using evidence-based herbs and 
+                  supplements that have been traditionally and clinically studied.
+                </p>
+              </div>
             </div>
 
-            <div className="bg-white rounded-lg p-6 shadow-lg">
-              <h2 className="text-2xl font-semibold text-blue-800 mb-4">Possible Causes</h2>
-              <ul className="space-y-2">
-                {symptom.causes.map((cause, index) => (
-                  <li key={index} className="flex items-start">
-                    <span className="text-blue-500 mr-2">•</span>
-                    <span className="text-gray-700">{cause}</span>
-                  </li>
-                ))}
-              </ul>
+            {/* Symptoms Section */}
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+                Common Symptoms
+              </h2>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <h3 className="font-semibold text-gray-800 mb-2">Primary Symptoms</h3>
+                  <ul className="text-gray-700 space-y-1">
+                    {symptom.symptoms && symptom.symptoms.slice(0, 6).map((symptomItem: string, index: number) => (
+                      <li key={index}>• {symptomItem}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-800 mb-2">Common Causes</h3>
+                  <ul className="text-gray-700 space-y-1">
+                    {symptom.causes && symptom.causes.slice(0, 6).map((cause: string, index: number) => (
+                      <li key={index}>• {cause}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
             </div>
 
-
+            {/* Natural Solutions Section */}
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+                Natural Support Options
+              </h2>
+              <div className="space-y-4">
+                <div>
+                  <h3 className="font-semibold text-gray-800 mb-2">Herbal Support</h3>
+                  <ul className="text-gray-700 space-y-1">
+                    {symptom.naturalSolutions && symptom.naturalSolutions
+                      .filter((solution: any) => solution.type === 'herb')
+                      .slice(0, 3)
+                      .map((solution: any, index: number) => (
+                        <li key={index}>• {solution.name} - {solution.description}</li>
+                      ))}
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-800 mb-2">Supplemental Support</h3>
+                  <ul className="text-gray-700 space-y-1">
+                    {symptom.naturalSolutions && symptom.naturalSolutions
+                      .filter((solution: any) => solution.type === 'supplement')
+                      .slice(0, 3)
+                      .map((solution: any, index: number) => (
+                        <li key={index}>• {solution.name} - {solution.description}</li>
+                      ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* Natural Solutions */}
-          <div className="bg-white rounded-lg p-6 shadow-lg">
-            <h2 className="text-2xl font-semibold text-blue-800 mb-6">Natural Solutions</h2>
-            <div className="space-y-4">
-              {symptom.naturalSolutions.map((solution, index) => (
-                <div key={index} className="border border-blue-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-                  <div className="flex items-start justify-between mb-2">
-                    <h3 className="font-semibold text-blue-900">{solution.name}</h3>
-                    <span className="text-green-600 font-medium">{solution.price}</span>
+          {/* Right Column - Product Recommendations */}
+          <div className="space-y-6">
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <h2 className="text-xl font-semibold text-gray-800 mb-4">
+                Recommended Products
+              </h2>
+              <div className="space-y-4">
+                {products.map((product, index) => (
+                  <div key={index} className="border border-gray-200 rounded-lg p-4 flex flex-col gap-4">
+                    <img 
+                      src={product.image || '/images/closed-medical-brown-glass-bottle-yellow-vitamins.png'} 
+                      alt={product.name} 
+                      className="w-20 h-20 object-contain rounded mb-2" 
+                    />
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-gray-800 mb-1">{product.name}</h3>
+                      <p className="text-gray-600 text-sm mb-2">{product.description}</p>
+                      <div className="flex items-center gap-2 mb-2 flex-wrap">
+                        <span className="text-blue-700 font-bold">{product.price}</span>
+                        <span className="text-xs text-green-700 bg-green-100 rounded px-2 py-0.5">Quality: {product.qualityScore}</span>
+                        <span className="text-xs text-purple-700 bg-purple-100 rounded px-2 py-0.5">Affiliate: {Math.round(product.affiliateRevenue * 100)}%</span>
+                        {product.supplier && (
+                          <span className="text-xs text-gray-500 ml-2">{product.supplier}</span>
+                        )}
+                      </div>
+                      <a 
+                        href={product.affiliateUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors text-sm"
+                      >
+                        View on {product.supplier || 'Amazon'} →
+                      </a>
+                    </div>
                   </div>
-                  <p className="text-gray-600 text-sm mb-3">{solution.description}</p>
-                  
-                  <div className="flex gap-2">
-                    <a
-                      href={solution.affiliateLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
-                    >
-                      View Product →
-                    </a>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
+            </div>
+
+            {/* Related Conditions */}
+            <div className="bg-blue-50 rounded-lg p-6">
+              <h3 className="font-semibold text-gray-800 mb-3">Related Conditions</h3>
+              <div className="space-y-2">
+                <Link 
+                  href="/symptoms/anxiety" 
+                  className="block text-blue-600 hover:text-blue-800 transition-colors"
+                >
+                  → Anxiety
+                </Link>
+                <Link 
+                  href="/symptoms/depression" 
+                  className="block text-blue-600 hover:text-blue-800 transition-colors"
+                >
+                  → Depression
+                </Link>
+                <Link 
+                  href="/symptoms/fatigue" 
+                  className="block text-blue-600 hover:text-blue-800 transition-colors"
+                >
+                  → Fatigue
+                </Link>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Disclaimer */}
-        <div className="mt-8 space-y-6">
-          {/* Safety Information */}
-          <div className="bg-red-50 border border-red-200 rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-red-800 mb-4">⚠️ Important Safety Information</h3>
-            <div className="space-y-3 text-sm text-red-700">
-              <div className="flex items-start">
-                <span className="text-red-500 mr-2">•</span>
-                <span><strong>Medical Consultation Required:</strong> Always consult with a qualified healthcare professional before starting any herbal supplement, especially if you have underlying health conditions, are pregnant, nursing, or taking medications.</span>
-              </div>
-              <div className="flex items-start">
-                <span className="text-red-500 mr-2">•</span>
-                <span><strong>Drug Interactions:</strong> Herbs can interact with prescription medications, over-the-counter drugs, and other supplements. These interactions can be serious and potentially life-threatening.</span>
-              </div>
-              <div className="flex items-start">
-                <span className="text-red-500 mr-2">•</span>
-                <span><strong>Not Suitable for Everyone:</strong> Herbs may not be appropriate for people with certain medical conditions, allergies, or sensitivities. Individual responses can vary significantly.</span>
-              </div>
-              <div className="flex items-start">
-                <span className="text-red-500 mr-2">•</span>
-                <span><strong>Quality Matters:</strong> Choose reputable brands and ensure proper sourcing. Contaminated or adulterated herbs can cause serious health problems.</span>
-              </div>
-              <div className="flex items-start">
-                <span className="text-red-500 mr-2">•</span>
-                <span><strong>Start Slowly:</strong> Begin with one herb at a time to monitor for adverse reactions. Stop immediately if you experience any negative side effects.</span>
-              </div>
-            </div>
-          </div>
-
-          {/* General Disclaimer */}
-          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-            <p className="text-yellow-800 text-sm">
-              <strong>Disclaimer:</strong> This information is for educational purposes only and should not be considered medical advice. 
-              The content provided is not intended to diagnose, treat, cure, or prevent any disease. 
-              Herbal supplements are not regulated by the FDA and may not be suitable for everyone. 
-              Always consult with a healthcare professional before starting any new supplement regimen, 
-              especially if you have underlying health conditions, are taking medications, or are pregnant/nursing.
-            </p>
-          </div>
+        <div className="mt-8 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+          <p className="text-sm text-yellow-800">
+            <strong>Disclaimer:</strong> This information is for educational purposes only and should not 
+            replace professional medical advice. Always consult with a healthcare provider before starting 
+            any new supplement regimen, especially if you have underlying health conditions or are taking 
+            medications. The product links are affiliate links that support this educational content.
+          </p>
         </div>
       </div>
     </div>

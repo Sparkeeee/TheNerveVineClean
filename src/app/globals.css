@@ -24,3 +24,36 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+@media (min-width: 900px) {
+  .custom-symptom-layout {
+    flex-direction: row !important;
+  }
+  .custom-sidebar-width {
+    width: 20rem !important; /* 320px */
+  }
+  .custom-sidebar-mt {
+    margin-top: 0 !important;
+  }
+  .custom900\:block {
+    display: block !important;
+  }
+  .custom900\:flex {
+    display: flex !important;
+  }
+  .custom900\:hidden {
+    display: none !important;
+  }
+}
+
+@media (max-width: 899.98px) {
+  .custom900\:block {
+    display: none !important;
+  }
+  .custom900\:flex {
+    display: none !important;
+  }
+  .custom900\:hidden {
+    display: block !important;
+  }
+}

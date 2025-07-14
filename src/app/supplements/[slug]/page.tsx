@@ -4,7 +4,7 @@ interface SupplementPageProps {
   params: Promise<{ slug: string }>;
 }
 
-const supplements = {
+export const supplements = {
   'omega-3': {
     title: 'Omega-3 Fatty Acids',
     subtitle: 'Essential Brain Health Supplement',
@@ -212,6 +212,216 @@ const supplements = {
         affiliateLink: 'https://amzn.to/doctors-best-l-theanine',
         rating: '4.5/5',
         features: ['200mg per capsule', 'Affordable', 'Reliable brand']
+      }
+    ]
+  },
+  'melatonin': {
+    title: 'Melatonin',
+    subtitle: 'Sleep Cycle Regulator',
+    description: 'Melatonin is a hormone naturally produced by the pineal gland that helps regulate the sleep-wake cycle. Supplemental melatonin is commonly used for insomnia, jet lag, and circadian rhythm disorders.',
+    benefits: [
+      'Helps regulate sleep-wake cycles',
+      'May reduce time to fall asleep',
+      'Supports circadian rhythm alignment',
+      'Useful for jet lag and shift work',
+      'May improve sleep quality in some cases',
+      'Generally safe for short-term use'
+    ],
+    dosage: '0.5-3mg, 30-60 minutes before bedtime',
+    bestTime: '30-60 minutes before bedtime',
+    sideEffects: 'May cause morning grogginess, vivid dreams, or headache. Not for long-term use without medical supervision.',
+    topProducts: [
+      {
+        name: 'Natrol Melatonin',
+        description: 'Fast dissolve tablets for quick absorption',
+        price: '$9.99',
+        affiliateLink: 'https://amzn.to/natrol-melatonin',
+        rating: '4.7/5',
+        features: ['Fast dissolve', '1mg, 3mg, 5mg options', 'Strawberry flavor']
+      },
+      {
+        name: 'NOW Foods Melatonin',
+        description: 'Vegetarian capsules, 3mg per serving',
+        price: '$8.99',
+        affiliateLink: 'https://amzn.to/now-melatonin',
+        rating: '4.6/5',
+        features: ['Vegetarian', '3mg per capsule', 'Affordable']
+      },
+      {
+        name: 'Nature Made Melatonin',
+        description: 'Trusted brand, 3mg tablets',
+        price: '$10.99',
+        affiliateLink: 'https://amzn.to/nature-made-melatonin',
+        rating: '4.5/5',
+        features: ['3mg per tablet', 'USP verified', 'Easy to swallow']
+      }
+    ]
+  },
+  'glycine': {
+    title: 'Glycine',
+    subtitle: 'Amino Acid for Sleep & Metabolism',
+    description: 'Glycine is a non-essential amino acid that supports healthy sleep, cognitive function, and metabolic processes. It is often used to improve sleep quality and promote relaxation.',
+    benefits: [
+      'May improve sleep quality',
+      'Supports relaxation and calm',
+      'Helps lower core body temperature for sleep',
+      'Supports cognitive function',
+      'Involved in collagen synthesis',
+      'May support metabolic health'
+    ],
+    dosage: '3g (3000mg) 30-60 minutes before bedtime',
+    bestTime: '30-60 minutes before bedtime',
+    sideEffects: 'Generally very safe. High doses may cause mild digestive upset.',
+    topProducts: [
+      {
+        name: 'NOW Foods Glycine',
+        description: 'Pure glycine powder for flexible dosing',
+        price: '$13.99',
+        affiliateLink: 'https://amzn.to/now-glycine',
+        rating: '4.7/5',
+        features: ['Pure powder', '1000mg per scoop', 'Non-GMO']
+      },
+      {
+        name: 'BulkSupplements Glycine',
+        description: 'Lab-tested, high-purity glycine powder',
+        price: '$19.99',
+        affiliateLink: 'https://amzn.to/bulksupplements-glycine',
+        rating: '4.6/5',
+        features: ['Lab-tested', 'Flexible dosing', 'Bulk packaging']
+      },
+      {
+        name: 'Source Naturals Glycine',
+        description: 'Tablets for convenient dosing',
+        price: '$11.99',
+        affiliateLink: 'https://amzn.to/source-naturals-glycine',
+        rating: '4.5/5',
+        features: ['Tablets', '1000mg per serving', 'Easy to take']
+      }
+    ]
+  },
+  'tryptophan': {
+    title: 'L-Tryptophan',
+    subtitle: 'Amino Acid for Mood & Sleep',
+    description: 'L-Tryptophan is an essential amino acid and precursor to serotonin and melatonin. It supports healthy mood, relaxation, and sleep quality.',
+    benefits: [
+      'Supports serotonin and melatonin production',
+      'May improve mood and emotional well-being',
+      'Promotes healthy sleep patterns',
+      'May help with mild anxiety',
+      'Supports relaxation',
+      'Essential amino acid (must be obtained from diet)'
+    ],
+    dosage: '500-2000mg, 30-60 minutes before bedtime',
+    bestTime: '30-60 minutes before bed or between meals',
+    sideEffects: 'Generally safe. High doses may cause drowsiness, nausea, or mild digestive upset.',
+    topProducts: [
+      {
+        name: 'NOW Foods L-Tryptophan',
+        description: 'Pure tryptophan capsules for mood and sleep',
+        price: '$18.99',
+        affiliateLink: 'https://amzn.to/now-tryptophan',
+        rating: '4.7/5',
+        features: ['1000mg per serving', 'Vegetarian', 'Non-GMO']
+      },
+      {
+        name: 'Doctor’s Best L-Tryptophan',
+        description: 'High-quality tryptophan supplement',
+        price: '$16.99',
+        affiliateLink: 'https://amzn.to/doctors-best-tryptophan',
+        rating: '4.6/5',
+        features: ['500mg per capsule', 'Tested for purity', 'Affordable']
+      },
+      {
+        name: 'Source Naturals L-Tryptophan',
+        description: 'Trusted brand for sleep support',
+        price: '$19.99',
+        affiliateLink: 'https://amzn.to/source-naturals-tryptophan',
+        rating: '4.5/5',
+        features: ['500mg per tablet', 'Vegetarian', 'Quality tested']
+      }
+    ]
+  },
+  'l-tyrosine': {
+    title: 'L-Tyrosine',
+    subtitle: 'Amino Acid for Focus & Stress',
+    description: 'L-Tyrosine is a non-essential amino acid that supports the production of dopamine, norepinephrine, and thyroid hormones. It is used to promote focus, alertness, and stress resilience.',
+    benefits: [
+      'Supports dopamine and norepinephrine synthesis',
+      'May improve focus and mental performance',
+      'Helps with stress adaptation',
+      'Supports thyroid hormone production',
+      'May reduce fatigue during stress',
+      'Non-essential amino acid (body can synthesize)'
+    ],
+    dosage: '500-2000mg, 30-60 minutes before mental or physical activity',
+    bestTime: 'Before breakfast or stressful events',
+    sideEffects: 'Generally safe. High doses may cause headache, nausea, or restlessness.',
+    topProducts: [
+      {
+        name: 'NOW Foods L-Tyrosine',
+        description: 'Pure tyrosine capsules for focus and stress',
+        price: '$13.99',
+        affiliateLink: 'https://amzn.to/now-tyrosine',
+        rating: '4.7/5',
+        features: ['500mg per capsule', 'Vegetarian', 'Non-GMO']
+      },
+      {
+        name: 'Doctor’s Best L-Tyrosine',
+        description: 'High-quality tyrosine supplement',
+        price: '$12.99',
+        affiliateLink: 'https://amzn.to/doctors-best-tyrosine',
+        rating: '4.6/5',
+        features: ['500mg per capsule', 'Tested for purity', 'Affordable']
+      },
+      {
+        name: 'Source Naturals L-Tyrosine',
+        description: 'Trusted brand for cognitive support',
+        price: '$14.99',
+        affiliateLink: 'https://amzn.to/source-naturals-tyrosine',
+        rating: '4.5/5',
+        features: ['500mg per tablet', 'Vegetarian', 'Quality tested']
+      }
+    ]
+  },
+  'coq10': {
+    title: 'CoQ10 (Ubiquinone)',
+    subtitle: 'Cellular Energy & Heart Health',
+    description: 'Coenzyme Q10 (CoQ10) is a vitamin-like compound essential for mitochondrial energy production. It supports heart health, cellular energy, and antioxidant protection.',
+    benefits: [
+      'Supports cellular energy production',
+      'Promotes heart and cardiovascular health',
+      'Acts as a powerful antioxidant',
+      'May improve exercise performance',
+      'Supports healthy aging',
+      'May help with statin-induced muscle symptoms'
+    ],
+    dosage: '100-300mg daily with food',
+    bestTime: 'With meals containing fat',
+    sideEffects: 'Very safe. Rarely may cause mild digestive upset or headache.',
+    topProducts: [
+      {
+        name: 'Qunol Ultra CoQ10',
+        description: 'Highly absorbable CoQ10 softgels',
+        price: '$27.99',
+        affiliateLink: 'https://amzn.to/qunol-coq10',
+        rating: '4.8/5',
+        features: ['100mg per softgel', 'Water and fat soluble', 'Highly bioavailable']
+      },
+      {
+        name: 'Doctor’s Best CoQ10',
+        description: 'Science-based CoQ10 for heart health',
+        price: '$21.99',
+        affiliateLink: 'https://amzn.to/doctors-best-coq10',
+        rating: '4.7/5',
+        features: ['100mg per capsule', 'With BioPerine', 'Non-GMO']
+      },
+      {
+        name: 'NOW Foods CoQ10',
+        description: 'Trusted brand, value size',
+        price: '$19.99',
+        affiliateLink: 'https://amzn.to/now-coq10',
+        rating: '4.6/5',
+        features: ['100mg per capsule', 'Vegetarian', 'Quality tested']
       }
     ]
   }
