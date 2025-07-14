@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   keywords: 'migraine relief, natural migraine treatment, feverfew, butterbur, migraine herbs, migraine supplements',
 };
 
+// Migraine relief page with comprehensive natural solutions
 export default function MigrainePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-100">
