@@ -691,7 +691,7 @@ export default async function SymptomPage({ params }: SymptomPageProps) {
         </div>
 
         {/* Symptom Info Paragraphs */}
-        {Array.isArray(symptom.paragraphs) && (
+        {symptom.paragraphs && Array.isArray(symptom.paragraphs) && (
           <div className="mb-8 space-y-4">
             {symptom.paragraphs.map((para, idx) => (
               <p key={idx} className="text-gray-700 text-base">{para}</p>
