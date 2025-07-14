@@ -185,6 +185,23 @@ export type Herb = {
       ],
     },
     {
+      name: "Damiana",
+      slug: "damiana",
+      actions: ["nervine", "aphrodisiac", "mood enhancer"],
+      usedFor: ["mood enhancement", "libido", "energy", "anxiety"],
+      mechanism: "Serotonergic, dopaminergic",
+      description:
+        "Damiana is a traditional herb known for its mood-enhancing and aphrodisiac properties. It supports emotional well-being and may enhance libido and energy.",
+      image: "/damiana.jpg",
+      affiliates: [
+        {
+          name: "Nature's Way Damiana",
+          url: "https://amzn.to/natures-way-damiana",
+          price: "$13.99",
+        },
+      ],
+    },
+    {
       name: "Skullcap",
       slug: "skullcap",
       actions: ["nervine", "sedative", "antispasmodic"],
@@ -266,6 +283,57 @@ export type Herb = {
           name: "Nature's Way Ginkgo Biloba",
           url: "https://amzn.to/natures-way-ginkgo",
           price: "$18.99",
+        },
+      ],
+    },
+    {
+      name: "Feverfew",
+      slug: "feverfew",
+      actions: ["anti-inflammatory", "antispasmodic", "nervine"],
+      usedFor: ["migraines", "headaches", "inflammation"],
+      mechanism: "Parthenolide, serotonin inhibition",
+      description:
+        "Feverfew is a traditional herb specifically used for migraine prevention and relief. It reduces inflammation and prevents blood vessel constriction in the brain.",
+      image: "/feverfew.jpg",
+      affiliates: [
+        {
+          name: "Nature's Way Feverfew",
+          url: "https://amzn.to/natures-way-feverfew",
+          price: "$12.99",
+        },
+      ],
+    },
+    {
+      name: "Butterbur",
+      slug: "butterbur",
+      actions: ["antispasmodic", "anti-inflammatory", "nervine"],
+      usedFor: ["migraines", "allergies", "respiratory support"],
+      mechanism: "Petasin, isopetasin, vasodilation",
+      description:
+        "Butterbur is a traditional herb that reduces migraine frequency and supports respiratory health through its anti-inflammatory properties.",
+      image: "/butterbur.jpg",
+      affiliates: [
+        {
+          name: "Nature's Way Butterbur",
+          url: "https://amzn.to/natures-way-butterbur",
+          price: "$24.99",
+        },
+      ],
+    },
+    {
+      name: "Maca",
+      slug: "maca",
+      actions: ["adaptogen", "vitality enhancer", "hormonal support"],
+      usedFor: ["energy", "stress adaptation", "hormonal balance", "vitality"],
+      mechanism: "Adaptogenic, hormonal modulation, nutrient dense",
+      description:
+        "Maca is a powerful adaptogenic root that supports natural energy, stress adaptation, and hormonal balance, traditionally used for vitality and well-being.",
+      image: "/maca.jpg",
+      affiliates: [
+        {
+          name: "Navitas Organics Maca Powder",
+          url: "https://amzn.to/navitas-maca",
+          price: "$19.99",
         },
       ],
     },

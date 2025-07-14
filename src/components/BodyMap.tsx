@@ -22,6 +22,19 @@ export default function BodyMap() {
     return () => window.removeEventListener('resize', checkDeviceAndSize);
   }, []);
 
+  // Persist modal state across navigation
+  useEffect(() => {
+    const savedModalState = sessionStorage.getItem('bodyMapModalOpen');
+    if (savedModalState === 'true') {
+      setIsModalOpen(true);
+    }
+  }, []);
+
+  // Save modal state to sessionStorage when it changes
+  useEffect(() => {
+    sessionStorage.setItem('bodyMapModalOpen', isModalOpen.toString());
+  }, [isModalOpen]);
+
   // Responsive link positioning - maintains symmetry across screen sizes
   const getLinkPositions = () => {
     const isSmallScreen = screenWidth < 768;
@@ -63,42 +76,49 @@ export default function BodyMap() {
         href: "/symptoms/insomnia", 
         angle: 180, 
         radius: baseRadius - 10,
-        mobileOffset: isSmallScreen ? { x: -2, y: 0 } : { x: 0, y: 0 }
+        mobileOffset: { x: 0, y: 0 }
       },
       { 
         label: "Depression", 
         href: "/symptoms/depression", 
         angle: 210, 
         radius: baseRadius - 5,
-        mobileOffset: isSmallScreen ? { x: -1, y: 0 } : { x: 0, y: 0 }
+        mobileOffset: { x: 0, y: 0 }
       },
       { 
         label: "Anxiety", 
         href: "/symptoms/anxiety", 
         angle: 330, 
         radius: baseRadius - 5,
-        mobileOffset: isSmallScreen ? { x: 1, y: 0 } : { x: 0, y: 0 }
+        mobileOffset: { x: 0, y: 0 }
       },
       { 
         label: "Brain Fog", 
         href: "/symptoms/brain-fog", 
         angle: 0, 
         radius: baseRadius,
-        mobileOffset: isSmallScreen ? { x: 2, y: 0 } : { x: 0, y: 0 }
+        mobileOffset: { x: 0, y: 0 }
+      },
+      { 
+        label: "Migraine", 
+        href: "/symptoms/migraine", 
+        angle: 270, 
+        radius: (baseRadius + 20) * 0.65,
+        mobileOffset: { x: 0, y: 0 }
       },
       { 
         label: "Tension Headaches", 
         href: "/symptoms/muscle-tension", 
         angle: 25, 
         radius: baseRadius + 40,
-        mobileOffset: isSmallScreen ? { x: 1, y: 1 } : { x: 0, y: 0 }
+        mobileOffset: { x: 0, y: 0 }
       },
       { 
         label: "Emotional Burnout", 
         href: "/symptoms/burnout", 
         angle: 155,
         radius: baseRadius + 40,
-        mobileOffset: isSmallScreen ? { x: -1, y: 1 } : { x: 0, y: 0 }
+        mobileOffset: { x: 0, y: 0 }
       },
       { 
         label: "Thyroid Issues", 
@@ -107,7 +127,7 @@ export default function BodyMap() {
         radius: neckRadius + 60,
         centerX: neckCenterX,
         centerY: neckCenterY,
-        mobileOffset: isSmallScreen ? { x: -1, y: 0 } : { x: 0, y: 0 }
+        mobileOffset: { x: 0, y: 0 }
       },
       { 
         label: "Neck Tension", 
@@ -116,7 +136,7 @@ export default function BodyMap() {
         radius: neckRadius + 60,
         centerX: neckCenterX,
         centerY: neckCenterY,
-        mobileOffset: isSmallScreen ? { x: 1, y: 0 } : { x: 0, y: 0 }
+        mobileOffset: { x: 0, y: 0 }
       },
       { 
         label: "Blood Pressure Balance", 
@@ -125,7 +145,7 @@ export default function BodyMap() {
         radius: 180,
         centerX: 580,
         centerY: 450,
-        mobileOffset: isSmallScreen ? { x: 1, y: 0 } : { x: 0, y: 0 }
+        mobileOffset: { x: 0, y: 0 }
       },
       { 
         label: "Heart Muscle Support", 
@@ -134,7 +154,7 @@ export default function BodyMap() {
         radius: 175,
         centerX: 580,
         centerY: 450,
-        mobileOffset: isSmallScreen ? { x: 1, y: -1 } : { x: 0, y: 0 }
+        mobileOffset: { x: 0, y: 0 }
       },
       { 
         label: "Liver Function Support / Toxicity", 
@@ -143,7 +163,7 @@ export default function BodyMap() {
         radius: 120,
         centerX: 350,
         centerY: 550,
-        mobileOffset: isSmallScreen ? { x: -1, y: 0 } : { x: 0, y: 0 }
+        mobileOffset: { x: 0, y: 0 }
       },
       { 
         label: "Hormonal Imbalances", 
@@ -152,34 +172,34 @@ export default function BodyMap() {
         radius: 120,
         centerX: 350,
         centerY: 550,
-        mobileOffset: isSmallScreen ? { x: -1, y: -1 } : { x: 0, y: 0 }
+        mobileOffset: { x: 0, y: 0 }
       },
       { 
         label: "Overload", 
         href: "/symptoms/adrenal-overload", 
         angle: 0,
         radius: 200,
-        centerX: 700,
+        centerX: 650,
         centerY: 600,
-        mobileOffset: isSmallScreen ? { x: 1, y: 0 } : { x: 0, y: 0 }
+        mobileOffset: { x: 0, y: 0 }
       },
       { 
         label: "Exhaustion", 
         href: "/symptoms/adrenal-exhaustion", 
         angle: 17.5,
         radius: 200,
-        centerX: 700,
+        centerX: 650,
         centerY: 600,
-        mobileOffset: isSmallScreen ? { x: 1, y: -1 } : { x: 0, y: 0 }
+        mobileOffset: { x: 0, y: 0 }
       },
       { 
         label: "Circadian Support", 
         href: "/symptoms/circadian-support", 
         angle: 342.5,
         radius: 200,
-        centerX: 700,
+        centerX: 650,
         centerY: 600,
-        mobileOffset: isSmallScreen ? { x: 1, y: 1 } : { x: 0, y: 0 }
+        mobileOffset: { x: 0, y: 0 }
       },
       { 
         label: "Vagus Nerve Support", 
@@ -188,7 +208,7 @@ export default function BodyMap() {
         radius: 170,
         centerX: 530,
         centerY: 715,
-        mobileOffset: isSmallScreen ? { x: -1, y: 0 } : { x: 0, y: 0 }
+        mobileOffset: { x: 0, y: 0 }
       },
       { 
         label: "Dysbiosis", 
@@ -197,7 +217,7 @@ export default function BodyMap() {
         radius: 170,
         centerX: 530,
         centerY: 715,
-        mobileOffset: isSmallScreen ? { x: -1, y: -1 } : { x: 0, y: 0 }
+        mobileOffset: { x: 0, y: 0 }
       },
       { 
         label: "Leaky Gut / Leaky Brain", 
@@ -206,7 +226,7 @@ export default function BodyMap() {
         radius: 170,
         centerX: 530,
         centerY: 715,
-        mobileOffset: isSmallScreen ? { x: 1, y: 0 } : { x: 0, y: 0 }
+        mobileOffset: { x: 0, y: 0 }
       },
       { 
         label: "IBS", 
@@ -215,7 +235,7 @@ export default function BodyMap() {
         radius: 170,
         centerX: 530,
         centerY: 715,
-        mobileOffset: isSmallScreen ? { x: 1, y: -1 } : { x: 0, y: 0 }
+        mobileOffset: { x: 0, y: 0 }
       },
     ];
   };
@@ -234,6 +254,7 @@ export default function BodyMap() {
         { label: "Depression", href: "/symptoms/depression" },
         { label: "Anxiety", href: "/symptoms/anxiety" },
         { label: "Brain Fog", href: "/symptoms/brain-fog" },
+        { label: "Migraine", href: "/symptoms/migraine" },
         { label: "Tension Headaches", href: "/symptoms/muscle-tension" },
         { label: "Emotional Burnout", href: "/symptoms/burnout" },
         { label: "Thyroid Issues", href: "/symptoms/thyroid-issues" },
@@ -296,6 +317,7 @@ export default function BodyMap() {
 
   const closeModal = () => {
     setIsModalOpen(false);
+    sessionStorage.removeItem('bodyMapModalOpen');
   };
 
   return (
@@ -708,7 +730,7 @@ export default function BodyMap() {
                       const isNeckLink = link.centerY === 300 && link.centerX === 510;
                       const isHeartLink = link.centerY === 450 && link.centerX === 580;
                       const isLiverLink = link.centerY === 550 && link.centerX === 350;
-                      const isAdrenalLink = link.centerY === 600 && link.centerX === 700;
+                      const isAdrenalLink = link.href.includes('adrenal') || link.href.includes('circadian');
                       const isDigestiveLink = link.centerY === 715 && link.centerX === 530;
                       const shouldShowThisLink = (hoveredArea === "head" && !isNeckLink && !isHeartLink && !isLiverLink && !isAdrenalLink && !isDigestiveLink) || 
                                              (hoveredArea === "neck" && isNeckLink) || 
@@ -719,8 +741,8 @@ export default function BodyMap() {
                       
                       if (!shouldShowThisLink) return null;
                       
-                      const x = centerX + Math.cos((link.angle * Math.PI) / 180) * link.radius + link.mobileOffset.x;
-                      const y = centerY + Math.sin((link.angle * Math.PI) / 180) * link.radius + link.mobileOffset.y;
+                      const x = centerX + Math.cos((link.angle * Math.PI) / 180) * link.radius - 20;
+                      const y = centerY + Math.sin((link.angle * Math.PI) / 180) * link.radius;
                       
                       // Convert SVG coordinates to percentage for absolute positioning
                       const xPercent = (x / 1024) * 100;

@@ -3,13 +3,12 @@ import Link from "next/link";
 export default function HerbsPage() {
   const herbs = [
     // Adaptogens & Stress Support
-    { name: "Ashwagandha", href: "/herbs/ashwagandha", description: "Adaptogen for stress and energy", category: "Adaptogens" },
-    { name: "Holy Basil", href: "/herbs/holy-basil", description: "Adaptogenic stress support", category: "Adaptogens" },
-
-    { name: "Korean Ginseng", href: "/herbs/korean-ginseng", description: "Traditional adaptogenic herb", category: "Adaptogens" },
-    { name: "Siberian Ginseng", href: "/herbs/siberian-ginseng", description: "Stress resistance and energy", category: "Adaptogens" },
-    { name: "Astragalus", href: "/herbs/astragalus", description: "Immune support and vitality", category: "Adaptogens" },
-    { name: "Reishi", href: "/herbs/reishi", description: "Immune support and longevity", category: "Adaptogens" },
+    { name: "Ashwagandha", href: "/herbs/ashwagandha", description: "Adaptogenic stress relief and energy support", category: "Adaptogens" },
+    { name: "Rhodiola", href: "/herbs/rhodiola", description: "Mental performance and stress adaptation", category: "Adaptogens" },
+    { name: "Korean Ginseng", href: "/herbs/korean-ginseng", description: "Traditional vitality and energy support", category: "Adaptogens" },
+    { name: "Siberian Ginseng", href: "/herbs/siberian-ginseng", description: "Adaptogenic energy and immune support", category: "Adaptogens" },
+    { name: "Astragalus", href: "/herbs/astragalus", description: "Immune support and stress adaptation", category: "Adaptogens" },
+    { name: "Maca", href: "/herbs/maca", description: "Vitality enhancer and stress adaptation", category: "Adaptogens" },
     
     // Nervines & Calming Herbs
     { name: "Lemon Balm", href: "/herbs/lemon-balm", description: "Calming and stress relief", category: "Nervines" },
@@ -27,10 +26,24 @@ export default function HerbsPage() {
     // Cognitive & Brain Health
     { name: "Ginkgo Biloba", href: "/herbs/ginkgo", description: "Cognitive function and memory", category: "Brain Health" },
     { name: "Lion's Mane", href: "/herbs/lions-mane", description: "Brain health and cognitive function", category: "Brain Health" },
+    { name: "Kava Kava", href: "/herbs/kava-kava", description: "Powerful anxiety relief and muscle relaxation", category: "Stress & Anxiety" },
+    { name: "Passionflower", href: "/herbs/passionflower", description: "GABA enhancement and sleep support", category: "Sleep & Relaxation" },
+    { name: "California Poppy", href: "/herbs/california-poppy", description: "Gentle sedative and sleep aid", category: "Sleep & Relaxation" },
+    { name: "Blue Vervain", href: "/herbs/blue-vervain", description: "Nervous system tonic and emotional balance", category: "Nervous System" },
+    { name: "Wood Betony", href: "/herbs/wood-betony", description: "Nervous headache relief and mental clarity", category: "Nervous System" },
+    { name: "Hops", href: "/herbs/hops", description: "Natural sedative and sleep promoter", category: "Sleep & Relaxation" },
+    { name: "Magnolia Bark", href: "/herbs/magnolia-bark", description: "Ancient Chinese anxiety relief", category: "Stress & Anxiety" },
+    { name: "Schisandra", href: "/herbs/schisandra", description: "Adaptogenic stress resilience", category: "Adaptogens" },
+    { name: "Gotu Kola", href: "/herbs/gotu-kola", description: "Brain tonic and memory enhancement", category: "Brain Health" },
+    { name: "Bacopa", href: "/herbs/bacopa", description: "Memory enhancement and cognitive support", category: "Brain Health" },
     
     // Nutritive & Support Herbs
     { name: "Borage", href: "/herbs/borage", description: "Hormonal balance and skin health", category: "Nutritive" },
     { name: "Nettle Seed", href: "/herbs/nettle-seed", description: "Energy and adrenal support", category: "Nutritive" },
+    
+    // Pain Relief & Headache Support
+    { name: "Feverfew", href: "/herbs/feverfew", description: "Traditional migraine prevention and relief", category: "Pain Relief" },
+    { name: "Butterbur", href: "/herbs/butterbur", description: "Natural migraine frequency reduction", category: "Pain Relief" },
   ];
 
   const categories = [...new Set(herbs.map(herb => herb.category))];

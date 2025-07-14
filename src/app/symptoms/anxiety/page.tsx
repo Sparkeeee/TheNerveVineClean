@@ -47,6 +47,60 @@ export default function AnxietyPage() {
                     Passionflower
                   </Link>
                 </li>
+                <li className="flex items-center">
+                  <span className="text-green-600 mr-2">✓</span>
+                  <Link href="/herbs/kava-kava" className="text-blue-600 hover:text-blue-800">
+                    Kava Kava
+                  </Link>
+                </li>
+                <li className="flex items-center">
+                  <span className="text-green-600 mr-2">✓</span>
+                  <Link href="/herbs/california-poppy" className="text-blue-600 hover:text-blue-800">
+                    California Poppy
+                  </Link>
+                </li>
+                <li className="flex items-center">
+                  <span className="text-green-600 mr-2">✓</span>
+                  <Link href="/herbs/blue-vervain" className="text-blue-600 hover:text-blue-800">
+                    Blue Vervain
+                  </Link>
+                </li>
+                <li className="flex items-center">
+                  <span className="text-green-600 mr-2">✓</span>
+                  <Link href="/herbs/wood-betony" className="text-blue-600 hover:text-blue-800">
+                    Wood Betony
+                  </Link>
+                </li>
+                <li className="flex items-center">
+                  <span className="text-green-600 mr-2">✓</span>
+                  <Link href="/herbs/hops" className="text-blue-600 hover:text-blue-800">
+                    Hops
+                  </Link>
+                </li>
+                <li className="flex items-center">
+                  <span className="text-green-600 mr-2">✓</span>
+                  <Link href="/herbs/magnolia-bark" className="text-blue-600 hover:text-blue-800">
+                    Magnolia Bark
+                  </Link>
+                </li>
+                <li className="flex items-center">
+                  <span className="text-green-600 mr-2">✓</span>
+                  <Link href="/herbs/schisandra" className="text-blue-600 hover:text-blue-800">
+                    Schisandra
+                  </Link>
+                </li>
+                <li className="flex items-center">
+                  <span className="text-green-600 mr-2">✓</span>
+                  <Link href="/herbs/gotu-kola" className="text-blue-600 hover:text-blue-800">
+                    Gotu Kola
+                  </Link>
+                </li>
+                <li className="flex items-center">
+                  <span className="text-green-600 mr-2">✓</span>
+                  <Link href="/herbs/bacopa" className="text-blue-600 hover:text-blue-800">
+                    Bacopa
+                  </Link>
+                </li>
               </ul>
             </div>
             

@@ -198,6 +198,134 @@ const searchData: SearchItem[] = [
     tags: ['nutritive', 'energy', 'adrenal', 'vitality', 'support', 'urtica dioica', 'stinging nettle', 'common nettle'],
     benefits: ['Provides nutritive support', 'Supports adrenal function', 'Boosts energy and vitality']
   },
+  {
+    id: 'bacopa',
+    title: "Bacopa",
+    description: "Traditional Ayurvedic herb for memory enhancement and cognitive support",
+    type: 'herb',
+    slug: '/herbs/bacopa',
+    tags: ['memory', 'cognitive', 'learning', 'anxiety', 'stress', 'brain health', 'bacopa monnieri', 'ayurvedic', 'traditional medicine', 'focus', 'concentration', 'adhd', 'brain tonic']
+  },
+  {
+    id: 'kava-kava',
+    title: "Kava Kava",
+    description: "Powerful anxiolytic herb from the Pacific Islands for anxiety and muscle relaxation",
+    type: 'herb',
+    slug: '/herbs/kava-kava',
+    tags: ['anxiety', 'stress', 'muscle relaxation', 'social anxiety', 'sleep', 'sedative', 'piper methysticum', 'pacific islands', 'ceremonial', 'pain relief', 'nervous tension', 'non-addictive']
+  },
+  {
+    id: 'passionflower',
+    title: "Passionflower",
+    description: "Beautiful flowering vine that enhances GABA activity for anxiety and sleep",
+    type: 'herb',
+    slug: '/herbs/passionflower',
+    tags: ['gaba', 'anxiety', 'sleep', 'insomnia', 'nervous tension', 'passiflora incarnata', 'adhd', 'muscle spasms', 'pain relief', 'gentle', 'non-addictive', 'relaxation']
+  },
+  {
+    id: 'california-poppy',
+    title: "California Poppy",
+    description: "Gentle, non-addictive sedative herb for sleep and anxiety relief",
+    type: 'herb',
+    slug: '/herbs/california-poppy',
+    tags: ['sedative', 'sleep', 'anxiety', 'stress', 'pain relief', 'eschscholzia californica', 'gentle', 'non-addictive', 'children', 'elderly', 'restlessness', 'agitation']
+  },
+  {
+    id: 'blue-vervain',
+    title: "Blue Vervain",
+    description: "Powerful nervous system tonic for anxiety, depression, and emotional balance",
+    type: 'herb',
+    slug: '/herbs/blue-vervain',
+    tags: ['nervous system', 'anxiety', 'depression', 'emotional balance', 'sleep', 'liver support', 'verbena hastata', 'nervous exhaustion', 'insomnia', 'nervous tension', 'restlessness']
+  },
+  {
+    id: 'wood-betony',
+    title: "Wood Betony",
+    description: "Traditional European herb for nervous headaches and mental clarity",
+    type: 'herb',
+    slug: '/herbs/wood-betony',
+    tags: ['headaches', 'migraines', 'anxiety', 'nervous tension', 'mental clarity', 'brain fog', 'stachys officinalis', 'european', 'traditional', 'sedative', 'stress', 'insomnia']
+  },
+  {
+    id: 'hops',
+    title: "Hops",
+    description: "Natural sedative and sleep promoter, also known for beer brewing",
+    type: 'herb',
+    slug: '/herbs/hops',
+    tags: ['sleep', 'sedative', 'anxiety', 'stress', 'hormonal balance', 'humulus lupulus', 'estrogenic', 'women', 'menopause', 'restlessness', 'agitation', 'pain relief']
+  },
+  {
+    id: 'magnolia-bark',
+    title: "Magnolia Bark",
+    description: "Ancient Chinese herb with powerful anxiolytic properties for anxiety and sleep",
+    type: 'herb',
+    slug: '/herbs/magnolia-bark',
+    tags: ['anxiety', 'sleep', 'stress', 'tension', 'magnolia officinalis', 'chinese medicine', 'traditional', 'anti-inflammatory', 'digestive', 'panic disorders', 'insomnia']
+  },
+  {
+    id: 'schisandra',
+    title: "Schisandra",
+    description: "Powerful adaptogenic herb for stress resilience and cognitive function",
+    type: 'herb',
+    slug: '/herbs/schisandra',
+    tags: ['adaptogen', 'stress', 'cognitive', 'liver', 'endurance', 'energy', 'schisandra chinensis', 'chinese medicine', 'mental clarity', 'focus', 'detoxification', 'resilience']
+  },
+  {
+    id: 'gotu-kola',
+    title: "Gotu Kola",
+    description: "Traditional Ayurvedic herb known as the herb of longevity for brain health",
+    type: 'herb',
+    slug: '/herbs/gotu-kola',
+    tags: ['memory', 'cognition', 'anxiety', 'stress', 'nervous system', 'centella asiatica', 'ayurvedic', 'longevity', 'wound healing', 'circulation', 'brain tonic', 'traditional']
+  },
+  {
+    id: 'nettle-seed',
+    title: 'Nettle Seed',
+    description: 'Nutritive herb for adrenal support and overall vitality',
+    type: 'herb',
+    slug: '/herbs/nettle-seed',
+    tags: ['nutritive', 'adrenal', 'energy', 'vitality', 'kidney', 'skin', 'minerals', 'urtica dioica', 'tonic', 'fatigue', 'nutritional', 'support']
+  },
+  {
+    id: 'borage',
+    title: 'Borage',
+    description: 'Traditional courage herb for adrenal function and emotional balance',
+    type: 'herb',
+    slug: '/herbs/borage',
+    tags: ['adrenal', 'emotional', 'balance', 'courage', 'gla', 'skin', 'hormonal', 'borago officinalis', 'european', 'traditional', 'fatigue', 'inflammation']
+  },
+  {
+    id: 'lions-mane',
+    title: "Lion's Mane",
+    description: "Medicinal mushroom for brain health and cognitive function",
+    type: 'herb',
+    slug: '/herbs/lions-mane',
+    tags: ['memory', 'cognitive', 'brain health', 'focus', 'concentration', 'hericium erinaceus', 'mushroom', 'nerve growth', 'brain fog', 'neuroprotective', 'learning']
+  },
+  {
+    id: 'feverfew',
+    title: 'Feverfew',
+    description: 'Traditional herb specifically used for migraine prevention and relief',
+    type: 'herb',
+    slug: '/herbs/feverfew',
+    tags: ['migraines', 'headaches', 'inflammation', 'anti-inflammatory', 'antispasmodic', 'nervine', 'tanacetum parthenium', 'parthenolide', 'traditional', 'pain relief', 'blood vessels']
+  },
+  {
+    id: 'butterbur',
+    title: 'Butterbur',
+    description: 'Traditional herb for migraine frequency reduction and respiratory support',
+    type: 'herb',
+    slug: '/herbs/butterbur',
+    tags: ['migraines', 'headaches', 'allergies', 'respiratory', 'anti-inflammatory', 'antispasmodic', 'nervine', 'petasites hybridus', 'petasin', 'vasodilation', 'traditional', 'pain relief', 'blood vessels']
+  },
+  {
+    id: 'maca',
+    title: 'Maca',
+    description: 'Adaptogenic root for vitality, stress adaptation, and hormonal balance',
+    type: 'herb',
+    slug: '/herbs/maca',
+    tags: ['vitality', 'energy', 'stress adaptation', 'hormonal balance', 'adaptogen', 'lepidium meyenii', 'peruvian ginseng', 'nutrient dense', 'traditional', 'aphrodisiac', 'libido', 'hormonal support', 'natural energy', 'well-being']
+  },
 
   // Supplements
   {
