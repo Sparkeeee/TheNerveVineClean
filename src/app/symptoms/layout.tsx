@@ -1,12 +1,14 @@
 import React from 'react';
 
+interface SymptomLayoutProps {
+  children: React.ReactNode;
+  sidebar?: React.ReactNode;
+}
+
 export default function SymptomLayout({ 
   children, 
   sidebar 
-}: { 
-  children: React.ReactNode; 
-  sidebar?: React.ReactNode; 
-}) {
+}: SymptomLayoutProps) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-teal-50 to-purple-50 py-6 sm:py-8">
       <div
