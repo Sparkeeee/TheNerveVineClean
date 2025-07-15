@@ -15,6 +15,7 @@ type Product = {
   supplier?: string;
   qualityScore?: number;
   affiliateRevenue?: number;
+  type?: string;
 };
 
 interface Symptom {
