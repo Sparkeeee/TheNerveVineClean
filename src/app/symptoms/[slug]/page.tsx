@@ -16,6 +16,7 @@ type Product = {
   qualityScore?: number;
   affiliateRevenue?: number;
   type?: string;
+  clinicalEvidence?: string;
 };
 
 interface Symptom {
