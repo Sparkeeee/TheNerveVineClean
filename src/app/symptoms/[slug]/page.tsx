@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import VariantSymptomPage from './VariantSymptomPage';
+import { Symptom, Product } from '../../../types/symptom';
 
 // Explicit types for product and symptom
 
@@ -38,6 +39,7 @@ interface Symptom {
   faq?: unknown;
   quickActions?: { name: string; href: string; color: string }[];
   relatedSymptoms?: { name: string; href: string; color: string }[];
+  emergencyNote?: string;
 }
 
 interface SymptomPageProps {
@@ -1245,7 +1247,7 @@ export default async function SymptomPage({ params }: SymptomPageProps) {
                   <h3 className="font-semibold text-gray-800 mb-2">Herbal Support</h3>
                   <ul className="text-gray-700 space-y-1">
                     {symptom.naturalSolutions && symptom.naturalSolutions
-                      .filter((solution: { type: string }) => solution.type === 'herb')
+                      .filter((solution: Product) => solution.type === 'herb')
                       .slice(0, 3)
                       .map((solution: { name: string; description: string }, index: number) => (
                         <li key={index}>• {solution.name} - {solution.description}</li>
@@ -1256,7 +1258,7 @@ export default async function SymptomPage({ params }: SymptomPageProps) {
                   <h3 className="font-semibold text-gray-800 mb-2">Supplemental Support</h3>
                   <ul className="text-gray-700 space-y-1">
                     {symptom.naturalSolutions && symptom.naturalSolutions
-                      .filter((solution: { type: string }) => solution.type === 'supplement')
+                      .filter((solution: Product) => solution.type === 'supplement')
                       .slice(0, 3)
                       .map((solution: { name: string; description: string }, index: number) => (
                         <li key={index}>• {solution.name} - {solution.description}</li>
@@ -1289,7 +1291,7 @@ export default async function SymptomPage({ params }: SymptomPageProps) {
                       <div className="flex items-center gap-2 mb-2 flex-wrap">
                         <span className="text-blue-700 font-bold">{product.price}</span>
                         <span className="text-xs text-green-700 bg-green-100 rounded px-2 py-0.5">Quality: {product.qualityScore}</span>
-                        <span className="text-xs text-purple-700 bg-purple-100 rounded px-2 py-0.5">Affiliate: {Math.round(product.affiliateRevenue * 100)}%</span>
+                        <span className="text-xs text-purple-700 bg-purple-100 rounded px-2 py-0.5">Affiliate: {Math.round((product.affiliateRevenue ?? 0) * 100)}%</span>
                         {product.supplier && (
                           <span className="text-xs text-gray-500 ml-2">{product.supplier}</span>
                         )}

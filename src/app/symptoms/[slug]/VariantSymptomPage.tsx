@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { Symptom, Product } from '../../../types/symptom';
 
 const relatedSymptomsMap: Record<string, Array<{ name: string; href: string; color: string }>> = {
   'Insomnia': [
@@ -21,31 +22,6 @@ const quickActionsDefault = [
   { name: 'Sleep Issues', href: '/symptoms/insomnia', color: 'blue' },
   { name: 'Muscle Tension', href: '/symptoms/muscle-tension', color: 'green' },
 ];
-
-interface Product {
-  name: string;
-  description: string;
-  affiliateLink?: string;
-  price?: string;
-  image?: string;
-}
-
-interface Variant {
-  paragraphs?: string[];
-  bestHerb?: Product;
-  bestStandardized?: Product;
-  topSupplements?: Product[];
-}
-
-interface Symptom {
-  title: string;
-  description: string;
-  variants: Record<string, Variant>;
-  paragraphs?: string[];
-  disclaimer?: string;
-  quickActions?: { name: string; href: string; color: string }[];
-  emergencyNote?: string;
-}
 
 export default function VariantSymptomPage({ symptom }: { symptom: Symptom }) {
   const variantNames = Object.keys(symptom.variants);
