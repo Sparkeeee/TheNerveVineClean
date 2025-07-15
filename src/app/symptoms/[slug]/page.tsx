@@ -21,18 +21,18 @@ interface Symptom {
   title: string;
   description: string;
   paragraphs?: string[];
-  variants?: Record<string, any>;
+  variants?: Record<string, unknown>;
   disclaimer?: string;
   symptoms?: string[];
   causes?: string[];
   naturalSolutions?: Product[];
   products?: Product[];
-  herb?: any;
-  extract?: any;
-  supplements?: any;
-  cautions?: any;
-  related?: any;
-  faq?: any;
+  herb?: unknown;
+  extract?: unknown;
+  supplements?: unknown;
+  cautions?: unknown;
+  related?: unknown;
+  faq?: unknown;
 }
 
 interface SymptomPageProps {
