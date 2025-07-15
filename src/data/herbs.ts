@@ -12,6 +12,7 @@ export type Herb = {
       price?: string;
     }[];
     subtitle?: string;
+    benefits?: string[];
   };
   
   export const herbs: Herb[] = [
