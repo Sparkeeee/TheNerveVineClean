@@ -22,12 +22,36 @@ const quickActionsDefault = [
   { name: 'Muscle Tension', href: '/symptoms/muscle-tension', color: 'green' },
 ];
 
-export default function VariantSymptomPage({ symptom }: { symptom: any }) {
+interface Product {
+  name: string;
+  description: string;
+  affiliateLink?: string;
+  price?: string;
+  image?: string;
+}
+
+interface Variant {
+  paragraphs?: string[];
+  bestHerb?: Product;
+  bestStandardized?: Product;
+  topSupplements?: Product[];
+}
+
+interface Symptom {
+  title: string;
+  description: string;
+  variants: Record<string, Variant>;
+  paragraphs?: string[];
+  disclaimer?: string;
+  quickActions?: { name: string; href: string; color: string }[];
+  emergencyNote?: string;
+}
+
+export default function VariantSymptomPage({ symptom }: { symptom: Symptom }) {
   const variantNames = Object.keys(symptom.variants);
   const [selectedVariant, setSelectedVariant] = useState(variantNames[0]);
   const variant = symptom.variants[selectedVariant];
   const isInsomnia = symptom.title.toLowerCase().includes('insomnia');
-  const isPoorFocus = symptom.title.toLowerCase().includes('poor focus');
   const related = relatedSymptomsMap[symptom.title] || [];
   const quickActions = symptom.quickActions || quickActionsDefault;
   const emergencyNote = symptom.emergencyNote;
@@ -132,7 +156,7 @@ export default function VariantSymptomPage({ symptom }: { symptom: any }) {
                 <ProductCard product={variant.bestStandardized} label="Best Standardized Extract" color="blue" />
               )}
               {/* Top Supplements */}
-              {Array.isArray(variant.topSupplements) && variant.topSupplements.map((prod: any, idx: number) => (
+              {Array.isArray(variant.topSupplements) && variant.topSupplements.map((prod: Product, idx: number) => (
                 <ProductCard key={idx} product={prod} label={idx === 0 ? "Top Non-Herbal Supplement" : undefined} color="blue" />
               ))}
             </div>
@@ -190,7 +214,7 @@ export default function VariantSymptomPage({ symptom }: { symptom: any }) {
   );
 }
 
-function ProductCard({ product, label, color }: { product: any; label?: string; color?: string }) {
+function ProductCard({ product, label, color }: { product: Product; label?: string; color?: string }) {
   return (
     <div className={`border border-gray-200 rounded-lg p-4 flex flex-col gap-2 ${color === 'green' ? 'bg-green-50' : color === 'blue' ? 'bg-blue-50' : ''}`}> 
       {label && <div className={`text-xs font-semibold ${color === 'green' ? 'text-green-700' : color === 'blue' ? 'text-blue-700' : 'text-blue-700'} mb-1`}>{label}</div>}
