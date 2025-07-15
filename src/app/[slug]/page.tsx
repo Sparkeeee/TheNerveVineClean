@@ -33,6 +33,7 @@ type Symptom = {
   symptoms?: string[];
   causes?: string[];
   naturalSolutions?: Product[];
+  products?: Product[];
 };
 
 const symptoms: { [key: string]: Symptom } = {
