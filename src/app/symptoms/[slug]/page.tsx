@@ -12,10 +12,6 @@ const symptoms: Record<string, Symptom> = {
   'insomnia': {
     title: 'Insomnia',
     description: 'Difficulty falling asleep, staying asleep, or waking up too early.',
-    paragraphs: [
-      "Insomnia is a common sleep disorder that can take several forms: trouble falling asleep, trouble staying asleep, or waking up too early and being unable to return to sleep. Each type may have different underlying causes and best solutions.",
-      "Natural approaches to insomnia focus on calming the nervous system, supporting circadian rhythms, and addressing root causes such as stress, nutrient deficiencies, or hormonal imbalances."
-    ],
     variants: {
       'Sleep Onset Insomnia': {
         paragraphs: [
@@ -125,73 +121,87 @@ const symptoms: Record<string, Symptom> = {
   'depression': {
     title: 'Depression',
     description: 'Persistent feelings of sadness and loss of interest',
-    symptoms: [
-      'Persistent sad or empty mood',
-      'Loss of interest in activities',
-      'Changes in appetite or weight',
-      'Sleep problems',
-      'Fatigue or loss of energy',
-      'Feelings of worthlessness'
-    ],
-    causes: [
-      'Biological factors',
-      'Environmental stressors',
-      'Life events',
-      'Medical conditions',
-      'Medications',
-      'Substance use'
-    ],
-    naturalSolutions: [
-      {
-        type: 'supplement',
-        name: 'Omega-3 EPA/DHA',
-        description: 'Essential anti-inflammatory fats. EPA specifically supports mood regulation.',
-        affiliateLink: 'https://amzn.to/omega3-depression',
-        price: '$25-40',
-        clinicalEvidence: '2-3g daily EPA/DHA shows significant benefits for depression in multiple studies'
-      },
-      {
-        type: 'supplement',
-        name: 'Vitamin D3',
-        description: 'Sunshine vitamin. Deficiency strongly linked to depression and seasonal affective disorder.',
-        affiliateLink: 'https://amzn.to/vitamin-d-depression',
-        price: '$15-25',
-        clinicalEvidence: '2000-5000 IU daily improves mood, especially in deficient individuals'
-      },
-      {
-        type: 'supplement',
-        name: 'B-Complex Vitamins',
-        description: 'Essential for neurotransmitter production. B12 and folate particularly important for mood.',
-        affiliateLink: 'https://amzn.to/b-complex-depression',
-        price: '$18-28',
-        clinicalEvidence: 'B12 and folate deficiency linked to depression. Supplementation improves symptoms'
-      },
-      {
-        type: 'supplement',
-        name: 'S-Adenosyl Methionine (SAMe)',
-        description: 'Natural compound that supports methylation and neurotransmitter production.',
-        affiliateLink: 'https://amzn.to/same-depression',
-        price: '$30-50',
-        clinicalEvidence: '400-1600mg daily shows antidepressant effects comparable to prescription medications'
-      },
-      {
-        type: 'supplement',
-        name: '5-HTP',
-        description: 'Precursor to serotonin. Supports natural mood regulation and sleep.',
-        affiliateLink: 'https://amzn.to/5htp-depression',
-        price: '$20-30',
-        clinicalEvidence: '100-300mg daily increases serotonin levels and improves depression scores'
-      },
-      {
-        type: 'herb',
-        name: 'St. John&apos;s Wort',
-        description: 'Traditional herb with extensive clinical research for mild to moderate depression.',
-        affiliateLink: 'https://amzn.to/st-johns-wort-depression',
-        price: '$20-30',
-        clinicalEvidence: '900mg daily extract shows effectiveness comparable to prescription antidepressants'
+    variants: {
+      'Default': {
+        paragraphs: [
+          "Depression is a complex mental health condition that affects how you feel, think, and behave. It's more than just feeling sad or having the blues for a few days. It's a medical illness that can be treated with medications, therapy, and lifestyle changes. Understanding the symptoms and causes of depression is crucial for effective treatment.",
+          "Common symptoms of depression include persistent sadness, loss of interest in activities, changes in appetite or weight, sleep problems, fatigue, and feelings of worthlessness. These symptoms can vary in intensity and duration, and they can be triggered by various factors, including biological, environmental, and lifestyle factors."
+        ],
+        symptoms: [
+          'Persistent sad or empty mood',
+          'Loss of interest in activities',
+          'Changes in appetite or weight',
+          'Sleep problems',
+          'Fatigue or loss of energy',
+          'Feelings of worthlessness'
+        ],
+        causes: [
+          'Biological factors',
+          'Environmental stressors',
+          'Life events',
+          'Medical conditions',
+          'Medications',
+          'Substance use'
+        ],
+        naturalSolutions: [
+          {
+            type: 'supplement',
+            name: 'Omega-3 EPA/DHA',
+            description: 'Essential anti-inflammatory fats. EPA specifically supports mood regulation.',
+            affiliateLink: 'https://amzn.to/omega3-depression',
+            price: '$25-40',
+            clinicalEvidence: '2-3g daily EPA/DHA shows significant benefits for depression in multiple studies'
+          },
+          {
+            type: 'supplement',
+            name: 'Vitamin D3',
+            description: 'Sunshine vitamin. Deficiency strongly linked to depression and seasonal affective disorder.',
+            affiliateLink: 'https://amzn.to/vitamin-d-depression',
+            price: '$15-25',
+            clinicalEvidence: '2000-5000 IU daily improves mood, especially in deficient individuals'
+          },
+          {
+            type: 'supplement',
+            name: 'B-Complex Vitamins',
+            description: 'Essential for neurotransmitter production. B12 and folate particularly important for mood.',
+            affiliateLink: 'https://amzn.to/b-complex-depression',
+            price: '$18-28',
+            clinicalEvidence: 'B12 and folate deficiency linked to depression. Supplementation improves symptoms'
+          },
+          {
+            type: 'supplement',
+            name: 'S-Adenosyl Methionine (SAMe)',
+            description: 'Natural compound that supports methylation and neurotransmitter production.',
+            affiliateLink: 'https://amzn.to/same-depression',
+            price: '$30-50',
+            clinicalEvidence: '400-1600mg daily shows antidepressant effects comparable to prescription medications'
+          },
+          {
+            type: 'supplement',
+            name: '5-HTP',
+            description: 'Precursor to serotonin. Supports natural mood regulation and sleep.',
+            affiliateLink: 'https://amzn.to/5htp-depression',
+            price: '$20-30',
+            clinicalEvidence: '100-300mg daily increases serotonin levels and improves depression scores'
+          },
+          {
+            type: 'herb',
+            name: 'St. John&apos;s Wort',
+            description: 'Traditional herb with extensive clinical research for mild to moderate depression.',
+            affiliateLink: 'https://amzn.to/st-johns-wort-depression',
+            price: '$20-30',
+            clinicalEvidence: '900mg daily extract shows effectiveness comparable to prescription antidepressants'
+          }
+        ],
+        variants: {},
+        herb: null,
+        extract: null,
+        supplements: null,
+        cautions: null,
+        related: null,
+        faq: null,
       }
-    ],
-    variants: {},
+    },
     herb: null,
     extract: null,
     supplements: null,
@@ -202,73 +212,52 @@ const symptoms: Record<string, Symptom> = {
   'anxiety': {
     title: 'Anxiety',
     description: 'Excessive worry and nervousness',
-    symptoms: [
-      'Excessive worrying',
-      'Restlessness or feeling on edge',
-      'Difficulty concentrating',
-      'Irritability',
-      'Muscle tension',
-      'Sleep problems'
-    ],
-    causes: [
-      'Genetic factors',
-      'Brain chemistry',
-      'Environmental stressors',
-      'Medical conditions',
-      'Substance use',
-      'Trauma'
-    ],
-    naturalSolutions: [
-      {
-        type: 'supplement',
-        name: 'L-Theanine',
-        description: 'Clinically proven to reduce anxiety and promote calm focus. Works with GABA receptors.',
-        affiliateLink: 'https://amzn.to/l-theanine-anxiety',
-        price: '$25-35',
-        clinicalEvidence: 'Multiple RCTs show 200-400mg daily reduces anxiety scores'
-      },
-      {
-        type: 'supplement',
-        name: 'Magnesium Glycinate',
-        description: 'Essential mineral for nervous system function. Deficiency linked to anxiety.',
-        affiliateLink: 'https://amzn.to/magnesium-glycinate',
-        price: '$18-28',
-        clinicalEvidence: 'Studies show 200-400mg daily improves anxiety and stress response'
-      },
-      {
-        type: 'supplement',
-        name: 'Ashwagandha',
-        description: 'Adaptogenic herb with multiple RCTs showing cortisol reduction and stress relief',
-        affiliateLink: 'https://amzn.to/ashwagandha-anxiety',
-        price: '$20-35',
-        clinicalEvidence: '600mg daily for 8 weeks significantly reduced anxiety scores'
-      },
-      {
-        type: 'supplement',
-        name: 'Omega-3 EPA/DHA',
-        description: 'Anti-inflammatory fats that support brain function and mood regulation',
-        affiliateLink: 'https://amzn.to/omega3-anxiety',
-        price: '$25-40',
-        clinicalEvidence: '2-3g daily EPA/DHA shows benefits for anxiety and depression'
-      },
-      {
-        type: 'supplement',
-        name: 'GABA',
-        description: 'Direct calming neurotransmitter supplement for acute anxiety relief',
-        affiliateLink: 'https://amzn.to/gaba-supplement',
-        price: '$20-30',
-        clinicalEvidence: '500-750mg daily for anxiety and sleep support'
-      },
-      {
-        type: 'herb',
-        name: 'Passionflower',
-        description: 'Traditional nervine herb that enhances GABA activity naturally',
-        affiliateLink: 'https://amzn.to/passionflower-anxiety',
-        price: '$15-25',
-        clinicalEvidence: 'Traditional use for anxiety with modern safety studies'
+    variants: {
+      'Default': {
+        paragraphs: [
+          "Anxiety is a normal response to stress, but when it becomes excessive or chronic, it can significantly impact your quality of life. It's characterized by feelings of worry, nervousness, and fear, often accompanied by physical symptoms like rapid heartbeat, sweating, and trembling. Anxiety disorders are treatable, and natural approaches can play a supportive role in managing symptoms.",
+          "Common symptoms of anxiety include excessive worrying, restlessness or feeling on edge, difficulty concentrating, irritability, muscle tension, and sleep problems. These symptoms can vary in intensity and duration, and they can be influenced by various factors, including genetics, brain chemistry, environmental stressors, and medical conditions."
+        ],
+        bestHerb: {
+          name: 'Passionflower',
+          description: 'Traditional nervine herb that enhances GABA activity naturally',
+          affiliateLink: 'https://amzn.to/passionflower-anxiety',
+          price: '$15-25'
+        },
+        bestStandardized: {
+          name: 'Ashwagandha',
+          description: 'Adaptogenic herb with multiple RCTs showing cortisol reduction and stress relief',
+          affiliateLink: 'https://amzn.to/ashwagandha-anxiety',
+          price: '$20-35'
+        },
+        topSupplements: [
+          {
+            name: 'L-Theanine',
+            description: 'Clinically proven to reduce anxiety and promote calm focus. Works with GABA receptors.',
+            affiliateLink: 'https://amzn.to/l-theanine-anxiety',
+            price: '$25-35'
+          },
+          {
+            name: 'Magnesium Glycinate',
+            description: 'Essential mineral for nervous system function. Deficiency linked to anxiety.',
+            affiliateLink: 'https://amzn.to/magnesium-glycinate',
+            price: '$18-28'
+          },
+          {
+            name: 'Omega-3 EPA/DHA',
+            description: 'Anti-inflammatory fats that support brain function and mood regulation',
+            affiliateLink: 'https://amzn.to/omega3-anxiety',
+            price: '$25-40'
+          },
+          {
+            name: 'GABA',
+            description: 'Direct calming neurotransmitter supplement for acute anxiety relief',
+            affiliateLink: 'https://amzn.to/gaba-supplement',
+            price: '$20-30'
+          }
+        ]
       }
-    ],
-    variants: {},
+    },
     herb: null,
     extract: null,
     supplements: null,
@@ -279,79 +268,58 @@ const symptoms: Record<string, Symptom> = {
   'memory-loss': {
     title: 'Memory Loss',
     description: 'Difficulty remembering information or events',
-    symptoms: [
-      'Forgetting recent events',
-      'Difficulty learning new information',
-      'Confusion about time or place',
-      'Trouble with familiar tasks',
-      'Poor judgment',
-      'Changes in mood or behavior'
-    ],
-    causes: [
-      'Aging',
-      'Stress and anxiety',
-      'Sleep deprivation',
-      'Nutritional deficiencies',
-      'Medical conditions',
-      'Medications'
-    ],
-    naturalSolutions: [
-      {
-        type: 'supplement',
-        name: 'Alpha-GPC',
-        description: 'Bioavailable choline source. Essential for acetylcholine production and memory.',
-        affiliateLink: 'https://amzn.to/alpha-gpc-memory',
-        price: '$25-40',
-        clinicalEvidence: '300-600mg daily improves memory, focus, and cognitive performance'
-      },
-      {
-        type: 'supplement',
-        name: 'Phosphatidylserine',
-        description: 'Brain cell membrane support. Essential for memory and cognitive function.',
-        affiliateLink: 'https://amzn.to/phosphatidylserine',
-        price: '$30-45',
-        clinicalEvidence: '100-300mg daily improves memory and cognitive performance in multiple studies'
-      },
-      {
-        type: 'supplement',
-        name: 'Omega-3 DHA',
-        description: 'Essential for brain structure and function. DHA specifically supports memory.',
-        affiliateLink: 'https://amzn.to/dha-memory',
-        price: '$28-45',
-        clinicalEvidence: '1-2g DHA daily supports memory and cognitive function, especially in aging'
-      },
-      {
-        type: 'supplement',
-        name: 'Bacopa Monnieri',
-        description: 'Traditional nootropic herb with extensive clinical research for memory enhancement.',
-        affiliateLink: 'https://amzn.to/bacopa-memory',
-        price: '$20-35',
-        clinicalEvidence: '300-600mg daily extract improves memory, learning, and information processing'
-      },
-      {
-        type: 'supplement',
-        name: 'Lion&apos;s Mane',
-        description: 'Medicinal mushroom that supports nerve growth factor and brain plasticity.',
-        affiliateLink: 'https://amzn.to/lions-mane-memory',
-        price: '$25-40',
-        clinicalEvidence: '1-3g daily supports cognitive function and may protect against age-related decline'
-      },
-      {
-        type: 'supplement',
-        name: 'B-Complex Vitamins',
-        description: 'Essential for brain function. B12 and folate particularly important for memory.',
-        affiliateLink: 'https://amzn.to/b-complex-memory',
-        price: '$20-30',
-        clinicalEvidence: 'B12 deficiency linked to memory problems. Supplementation improves cognitive function'
-      },
-      {
-        name: 'Acetyl-L-Carnitine',
-        description: 'Amino acid that supports brain energy and memory',
-        affiliateLink: 'https://amzn.to/example-acetyl-carnitine',
-        price: '$25-40'
+    variants: {
+      'Default': {
+        paragraphs: [
+          "Memory loss, or cognitive impairment, can affect your ability to learn, remember, and retain information. It's a common symptom of various conditions, including stress, sleep deprivation, nutritional deficiencies, and underlying health issues. Understanding the causes and symptoms of memory loss is important for addressing the underlying cause and finding effective natural solutions.",
+          "Common symptoms of memory loss include forgetting recent events, difficulty learning new information, confusion about time or place, trouble with familiar tasks, poor judgment, and changes in mood or behavior. These symptoms can range in severity and duration, and they can be influenced by various factors, including aging, stress, sleep issues, and nutrient deficiencies."
+        ],
+        bestHerb: {
+          name: 'Bacopa Monnieri',
+          description: 'Traditional nootropic herb with extensive clinical research for memory enhancement.',
+          affiliateLink: 'https://amzn.to/bacopa-memory',
+          price: '$20-35'
+        },
+        bestStandardized: {
+          name: 'Alpha-GPC',
+          description: 'Bioavailable choline source. Essential for acetylcholine production and memory.',
+          affiliateLink: 'https://amzn.to/alpha-gpc-memory',
+          price: '$25-40'
+        },
+        topSupplements: [
+          {
+            name: 'Phosphatidylserine',
+            description: 'Brain cell membrane support. Essential for memory and cognitive function.',
+            affiliateLink: 'https://amzn.to/phosphatidylserine',
+            price: '$30-45'
+          },
+          {
+            name: 'Omega-3 DHA',
+            description: 'Essential for brain structure and function. DHA specifically supports memory.',
+            affiliateLink: 'https://amzn.to/dha-memory',
+            price: '$28-45'
+          },
+          {
+            name: 'Lion\'s Mane',
+            description: 'Medicinal mushroom that supports nerve growth factor and brain plasticity.',
+            affiliateLink: 'https://amzn.to/lions-mane-memory',
+            price: '$25-40'
+          },
+          {
+            name: 'B-Complex Vitamins',
+            description: 'Essential for brain function. B12 and folate particularly important for memory.',
+            affiliateLink: 'https://amzn.to/b-complex-memory',
+            price: '$20-30'
+          },
+          {
+            name: 'Acetyl-L-Carnitine',
+            description: 'Amino acid that supports brain energy and memory',
+            affiliateLink: 'https://amzn.to/example-acetyl-carnitine',
+            price: '$25-40'
+          }
+        ]
       }
-    ],
-    variants: {},
+    },
     herb: null,
     extract: null,
     supplements: null,
@@ -362,37 +330,40 @@ const symptoms: Record<string, Symptom> = {
   'muscle-tension': {
     title: 'Muscle Tension / Tension Headaches',
     description: 'Muscle tightness, tension, or headaches related to stress or posture.',
-    symptoms: [
-      'Tight or sore muscles',
-      'Tension headaches',
-      'Neck or shoulder pain',
-      'Jaw clenching',
-      'Difficulty relaxing'
-    ],
-    causes: [
-      'Stress',
-      'Poor posture',
-      'Overuse or injury',
-      'Dehydration',
-      'Sleep issues'
-    ],
-    naturalSolutions: [
-      {
-        type: 'herb',
-        name: 'Skullcap',
-        description: 'Traditionally used for muscle tension and nervous headaches',
-        affiliateLink: 'https://amzn.to/example-skullcap',
-        price: '$15-25'
-      },
-      {
-        type: 'herb',
-        name: 'Cramp Bark (Viburnum opulus)',
-        description: 'Skeletal muscle relaxant and nerve relaxant. Traditionally used for pain, pinched nerves, muscle cramps, and menstrual cramps.',
-        affiliateLink: 'https://amzn.to/example-cramp-bark',
-        price: '$14-22'
+    variants: {
+      'Default': {
+        paragraphs: [
+          "Muscle tension and tension headaches are common complaints that can be caused by stress, poor posture, overuse, or dehydration. They can also be associated with neck or shoulder pain, jaw clenching, and difficulty relaxing. Understanding the causes and symptoms of muscle tension is important for finding effective natural solutions.",
+          "Common symptoms of muscle tension include tight or sore muscles, tension headaches, neck or shoulder pain, jaw clenching, and difficulty relaxing. These symptoms can vary in intensity and duration, and they can be influenced by various factors, including stress, poor posture, and sleep issues."
+        ],
+        bestHerb: {
+          name: 'Skullcap',
+          description: 'Traditionally used for muscle tension and nervous headaches',
+          affiliateLink: 'https://amzn.to/example-skullcap',
+          price: '$15-25'
+        },
+        bestStandardized: {
+          name: 'Cramp Bark (Viburnum opulus)',
+          description: 'Skeletal muscle relaxant and nerve relaxant. Traditionally used for pain, pinched nerves, muscle cramps, and menstrual cramps.',
+          affiliateLink: 'https://amzn.to/example-cramp-bark',
+          price: '$14-22'
+        },
+        topSupplements: [
+          {
+            name: 'Magnesium Glycinate',
+            description: 'Essential mineral for muscle relaxation and nerve function.',
+            affiliateLink: 'https://amzn.to/magnesium-glycinate',
+            price: '$18-28'
+          },
+          {
+            name: 'CBD Oil',
+            description: 'Supports muscle relaxation and reduces pain perception.',
+            affiliateLink: 'https://amzn.to/cbd-neck',
+            price: '$25-40'
+          }
+        ]
       }
-    ],
-    variants: {},
+    },
     herb: null,
     extract: null,
     supplements: null,
@@ -403,13 +374,8 @@ const symptoms: Record<string, Symptom> = {
   'neck-tension': {
     title: 'Neck Tension',
     description: 'Muscle tightness, pain, or stiffness in the neck and upper shoulders.',
-    quickActions: [
-      { name: 'Muscle Tension', href: '/symptoms/muscle-tension', color: 'green' },
-      { name: 'Migraine', href: '/symptoms/migraine', color: 'purple' },
-      { name: 'Stress', href: '/symptoms/stress', color: 'blue' },
-    ],
     variants: {
-      'Neck Tension': {
+      'Default': {
         paragraphs: [
           "Neck tension is a common complaint, often caused by stress, poor posture, prolonged computer use, or muscle strain. It can also be associated with headaches, jaw pain, or upper back discomfort.",
           "Natural approaches to neck tension focus on muscle relaxation, stress reduction, and supporting healthy circulation."
@@ -458,29 +424,43 @@ const symptoms: Record<string, Symptom> = {
   'blood-pressure': {
     title: 'Blood Pressure Balance',
     description: 'Support for healthy blood pressure levels.',
-    symptoms: [
-      'High or low blood pressure',
-      'Dizziness',
-      'Headaches',
-      'Fatigue'
-    ],
-    causes: [
-      'Diet',
-      'Stress',
-      'Genetics',
-      'Medical conditions'
-    ],
-    naturalSolutions: [
-      {
-        type: 'herb',
-        name: 'Hawthorn',
-        description: 'Traditionally used for cardiovascular support',
-        affiliateLink: 'https://amzn.to/example-hawthorn',
-        price: '$15-25',
-        productLink: '/herbs/hawthorn'
+    variants: {
+      'Default': {
+        paragraphs: [
+          "Blood pressure is a critical indicator of cardiovascular health. High or low blood pressure can lead to various health complications, including heart disease, stroke, and kidney problems. Understanding the causes and symptoms of blood pressure imbalance is important for managing this vital health marker.",
+          "Common symptoms of blood pressure imbalance include high or low blood pressure, dizziness, headaches, and fatigue. These symptoms can vary in intensity and duration, and they can be influenced by various factors, including diet, stress, genetics, and medical conditions."
+        ],
+        symptoms: [
+          'High or low blood pressure',
+          'Dizziness',
+          'Headaches',
+          'Fatigue'
+        ],
+        causes: [
+          'Diet',
+          'Stress',
+          'Genetics',
+          'Medical conditions'
+        ],
+        naturalSolutions: [
+          {
+            type: 'herb',
+            name: 'Hawthorn',
+            description: 'Traditionally used for cardiovascular support',
+            affiliateLink: 'https://amzn.to/example-hawthorn',
+            price: '$15-25',
+            productLink: '/herbs/hawthorn'
+          }
+        ],
+        variants: {},
+        herb: null,
+        extract: null,
+        supplements: null,
+        cautions: null,
+        related: null,
+        faq: null,
       }
-    ],
-    variants: {},
+    },
     herb: null,
     extract: null,
     supplements: null,
@@ -491,90 +471,121 @@ const symptoms: Record<string, Symptom> = {
   'heart-support': {
     title: 'Heart Muscle Support',
     description: 'Support for heart muscle function and cardiovascular health.',
-    symptoms: [
-      'Fatigue',
-      'Shortness of breath',
-      'Chest discomfort',
-      'Palpitations'
-    ],
-    causes: [
-      'Cardiovascular conditions',
-      'Nutrient deficiencies',
-      'Stress'
-    ],
-    naturalSolutions: [
-      {
-        type: 'supplement',
-        name: 'CoQ10',
-        description: 'Supports heart muscle energy and function',
-        affiliateLink: 'https://amzn.to/example-coq10',
-        price: '$20-35'
-      },
-      {
-        type: 'herb',
-        name: 'Hawthorn (Crataegus oxyacantha)',
-        description: 'Traditional cardiovascular herb useful for heart palpitations, flutters, panic-related tachycardia, and overall heart support',
-        affiliateLink: 'https://amzn.to/example-hawthorn-heart',
-        price: '$15-25'
+    variants: {
+      'Default': {
+        paragraphs: [
+          "Heart health is crucial for overall well-being. Fatigue, shortness of breath, chest discomfort, and palpitations are common symptoms of heart-related issues. Understanding the causes and symptoms of heart muscle support is important for addressing the underlying cause and finding effective natural solutions.",
+          "Common symptoms of heart muscle support include fatigue, shortness of breath, chest discomfort, and palpitations. These symptoms can vary in intensity and duration, and they can be influenced by various factors, including cardiovascular conditions, nutrient deficiencies, and stress."
+        ],
+        symptoms: [
+          'Fatigue',
+          'Shortness of breath',
+          'Chest discomfort',
+          'Palpitations'
+        ],
+        causes: [
+          'Cardiovascular conditions',
+          'Nutrient deficiencies',
+          'Stress'
+        ],
+        naturalSolutions: [
+          {
+            type: 'supplement',
+            name: 'CoQ10',
+            description: 'Supports heart muscle energy and function',
+            affiliateLink: 'https://amzn.to/example-coq10',
+            price: '$20-35'
+          },
+          {
+            type: 'herb',
+            name: 'Hawthorn (Crataegus oxyacantha)',
+            description: 'Traditional cardiovascular herb useful for heart palpitations, flutters, panic-related tachycardia, and overall heart support',
+            affiliateLink: 'https://amzn.to/example-hawthorn-heart',
+            price: '$15-25'
+          }
+        ],
+        variants: {},
+        herb: null,
+        extract: null,
+        supplements: null,
+        cautions: null,
+        related: null,
+        faq: null,
       }
-    ],
-    variants: {},
+    },
     herb: null,
     extract: null,
     supplements: null,
     cautions: null,
     related: null,
-    faq: null,
+    faq: null
   },
   'liver-detox': {
     title: 'Liver Function Support / Toxicity',
     description: 'Support for liver detoxification and function.',
-    quickActions: [
-      { name: 'Hormonal Imbalances', href: '/symptoms/hormonal-imbalances', color: 'purple' },
-      { name: 'Digestive Health', href: '/symptoms/digestive-health', color: 'blue' },
-      { name: 'Fatigue', href: '/symptoms/fatigue', color: 'green' },
-    ],
     variants: {
-      'Liver Detox': {
+      'Default': {
         paragraphs: [
-          "The liver can struggle for many reasons—not just from self-inflicted causes like alcohol or chemical use, but also due to genetics, chronic illness, medications, infections, or nutrient deficiencies. When the liver is not functioning optimally, it cannot effectively clear hormones and metabolic byproducts from the bloodstream. This impaired clearance can disrupt healthy hormonal feedback loops and rhythms, leading to hormonal imbalances that may profoundly affect mood, focus, energy, and general wellbeing. Supporting liver health is therefore essential not only for detoxification, but also for maintaining balanced hormone signaling and overall vitality.",
-          "Common symptoms of poor liver function include fatigue, digestive issues, skin problems, and brain fog. Addressing these symptoms often requires a holistic approach, including dietary changes, herbal support, and targeted supplementation.",
-          "Natural approaches to liver detoxification focus on supporting the body's own detox pathways, reducing toxin exposure, and providing nutrients and herbs that enhance liver function."
+          "The liver is one of the body's most important organs, responsible for detoxification, metabolism, and hormone regulation. When liver function is compromised, it cannot effectively clear toxins and metabolic byproducts from the bloodstream, leading to hormonal imbalances and other health issues. Understanding the causes and symptoms of poor liver function is crucial for addressing the underlying cause and finding effective natural solutions.",
+          "Common symptoms of poor liver function include fatigue, digestive issues, skin problems, and brain fog. These symptoms can vary in intensity and duration, and they can be influenced by various factors, including genetic predisposition, chronic illness, medications, infections, or nutrient deficiencies."
         ],
-        bestHerb: {
-          name: 'Milk Thistle',
-          description: 'Traditional liver herb with strong evidence for supporting detoxification and liver cell regeneration.',
-          affiliateLink: 'https://amzn.to/milk-thistle-liver',
-          price: '$18-28'
-        },
-        bestStandardized: {
-          name: 'NAC (N-Acetyl Cysteine)',
-          description: 'Amino acid supplement that boosts glutathione, the body’s master antioxidant for liver health.',
-          affiliateLink: 'https://amzn.to/nac-liver',
-          price: '$20-30'
-        },
-        topSupplements: [
+        symptoms: [
+          'Fatigue',
+          'Digestive issues',
+          'Skin problems',
+          'Brain fog'
+        ],
+        causes: [
+          'Genetic predisposition',
+          'Chronic illness',
+          'Medications',
+          'Infections',
+          'Nutrient deficiencies'
+        ],
+        naturalSolutions: [
           {
+            type: 'supplement',
+            name: 'Milk Thistle',
+            description: 'Traditional liver herb with strong evidence for supporting detoxification and liver cell regeneration.',
+            affiliateLink: 'https://amzn.to/milk-thistle-liver',
+            price: '$18-28'
+          },
+          {
+            type: 'supplement',
+            name: 'NAC (N-Acetyl Cysteine)',
+            description: 'Amino acid supplement that boosts glutathione, the body’s master antioxidant for liver health.',
+            affiliateLink: 'https://amzn.to/nac-liver',
+            price: '$20-30'
+          },
+          {
+            type: 'supplement',
             name: 'Dandelion Root',
             description: 'Herbal bitter that stimulates bile flow and supports digestion and detoxification.',
             affiliateLink: 'https://amzn.to/dandelion-liver',
             price: '$15-22'
           },
           {
+            type: 'supplement',
             name: 'Alpha Lipoic Acid',
             description: 'Powerful antioxidant that supports liver cell protection and regeneration.',
             affiliateLink: 'https://amzn.to/ala-liver',
             price: '$18-28'
           }
-        ]
+        ],
+        relatedSymptoms: [
+          { name: 'Hormonal Imbalances', href: '/symptoms/hormonal-imbalances', color: 'purple' },
+          { name: 'Fatigue', href: '/symptoms/fatigue', color: 'green' },
+          { name: 'Digestive Health', href: '/symptoms/digestive-health', color: 'blue' }
+        ],
+        disclaimer: 'These recommendations are for general support. Consult your healthcare provider for personalized advice.',
+        herb: null,
+        extract: null,
+        supplements: null,
+        cautions: null,
+        related: null,
+        faq: null
       }
     },
-    relatedSymptoms: [
-      { name: 'Hormonal Imbalances', href: '/symptoms/hormonal-imbalances', color: 'purple' },
-      { name: 'Fatigue', href: '/symptoms/fatigue', color: 'green' },
-      { name: 'Digestive Health', href: '/symptoms/digestive-health', color: 'blue' }
-    ],
-    disclaimer: 'These recommendations are for general support. Consult your healthcare provider for personalized advice.',
     herb: null,
     extract: null,
     supplements: null,
@@ -585,268 +596,323 @@ const symptoms: Record<string, Symptom> = {
   'digestive-health': {
     title: 'Hormonal Imbalances / Digestive Health',
     description: 'Support for hormone balance and digestive function.',
-    symptoms: [
-      'Bloating',
-      'Irregular cycles',
-      'Digestive discomfort',
-      'Mood swings'
-    ],
-    causes: [
-      'Hormonal fluctuations',
-      'Gut dysbiosis',
-      'Diet',
-      'Stress'
-    ],
-    naturalSolutions: [
-      {
-        type: 'herb',
-        name: 'Vitex',
-        description: 'Supports hormone balance',
-        affiliateLink: 'https://amzn.to/example-vitex',
-        price: '$12-20'
+    variants: {
+      'Default': {
+        paragraphs: [
+          "Hormonal imbalances and digestive health are closely linked. Poor gut health can lead to hormonal dysregulation, which in turn can affect mood, energy, and overall wellbeing. Understanding the causes and symptoms of digestive health issues is important for addressing the underlying cause and finding effective natural solutions.",
+          "Common symptoms of digestive health issues include bloating, irregular cycles, digestive discomfort, and mood swings. These symptoms can vary in intensity and duration, and they can be influenced by various factors, including hormonal fluctuations, gut dysbiosis, diet, and stress."
+        ],
+        symptoms: [
+          'Bloating',
+          'Irregular cycles',
+          'Digestive discomfort',
+          'Mood swings'
+        ],
+        causes: [
+          'Hormonal fluctuations',
+          'Gut dysbiosis',
+          'Diet',
+          'Stress'
+        ],
+        naturalSolutions: [
+          {
+            type: 'herb',
+            name: 'Vitex',
+            description: 'Supports hormone balance',
+            affiliateLink: 'https://amzn.to/example-vitex',
+            price: '$12-20'
+          }
+        ],
+        variants: {},
+        herb: null,
+        extract: null,
+        supplements: null,
+        cautions: null,
+        related: null,
+        faq: null
       }
-    ],
-    variants: {},
+    },
     herb: null,
     extract: null,
     supplements: null,
     cautions: null,
     related: null,
-    faq: null,
+    faq: null
   },
   'adrenal-overload': {
     title: 'Adrenal Overload',
     description: 'Symptoms of excess stress and adrenal hormone output.',
-    symptoms: [
-      'Feeling wired',
-      'Trouble sleeping',
-      'Irritability',
-      'Cravings for salt or sugar'
-    ],
-    causes: [
-      'Chronic stress',
-      'Overwork',
-      'Poor sleep'
-    ],
-    naturalSolutions: [
-      {
-        type: 'herb',
-        name: 'Rhodiola',
-        description: 'Adaptogen for stress resilience',
-        affiliateLink: 'https://amzn.to/example-rhodiola',
-        price: '$18-28'
+    variants: {
+      'Default': {
+        paragraphs: [
+          "Adrenal overload, or hyperadrenalism, is a state where the adrenal glands produce excessive amounts of stress hormones. This can lead to feelings of wiredness, trouble sleeping, irritability, and cravings for salt or sugar. Understanding the causes and symptoms of adrenal overload is important for addressing the underlying cause and finding effective natural solutions.",
+          "Common symptoms of adrenal overload include feeling wired, trouble sleeping, irritability, and cravings for salt or sugar. These symptoms can vary in intensity and duration, and they can be influenced by various factors, including chronic stress, overwork, and poor sleep."
+        ],
+        symptoms: [
+          'Feeling wired',
+          'Trouble sleeping',
+          'Irritability',
+          'Cravings for salt or sugar'
+        ],
+        causes: [
+          'Chronic stress',
+          'Overwork',
+          'Poor sleep'
+        ],
+        naturalSolutions: [
+          {
+            type: 'herb',
+            name: 'Rhodiola',
+            description: 'Adaptogen for stress resilience',
+            affiliateLink: 'https://amzn.to/example-rhodiola',
+            price: '$18-28'
+          }
+        ],
+        variants: {},
+        herb: null,
+        extract: null,
+        supplements: null,
+        cautions: null,
+        related: null,
+        faq: null
       }
-    ],
-    variants: {},
+    },
     herb: null,
     extract: null,
     supplements: null,
     cautions: null,
     related: null,
-    faq: null,
+    faq: null
   },
   'adrenal-exhaustion': {
     title: 'Adrenal Exhaustion',
     description: 'Symptoms of depleted adrenal function from chronic stress.',
-    symptoms: [
-      'Fatigue',
-      'Low motivation',
-      'Brain fog',
-      'Cravings for salt',
-      'Low blood pressure'
-    ],
-    causes: [
-      'Prolonged stress',
-      'Poor sleep',
-      'Nutrient deficiencies'
-    ],
-    naturalSolutions: [
-      {
-        type: 'herb',
-        name: 'Licorice Root',
-        description: 'Traditionally used for adrenal support',
-        affiliateLink: 'https://amzn.to/example-licorice',
-        price: '$12-20'
+    variants: {
+      'Default': {
+        paragraphs: [
+          "Adrenal exhaustion, or adrenal fatigue, is a state where the adrenal glands are unable to produce sufficient stress hormones to meet the body's needs. This can lead to fatigue, low motivation, brain fog, cravings for salt, and low blood pressure. Understanding the causes and symptoms of adrenal exhaustion is important for addressing the underlying cause and finding effective natural solutions.",
+          "Common symptoms of adrenal exhaustion include fatigue, low motivation, brain fog, cravings for salt, and low blood pressure. These symptoms can vary in intensity and duration, and they can be influenced by various factors, including prolonged stress, poor sleep, and nutrient deficiencies."
+        ],
+        symptoms: [
+          'Fatigue',
+          'Low motivation',
+          'Brain fog',
+          'Cravings for salt',
+          'Low blood pressure'
+        ],
+        causes: [
+          'Prolonged stress',
+          'Poor sleep',
+          'Nutrient deficiencies'
+        ],
+        naturalSolutions: [
+          {
+            type: 'herb',
+            name: 'Licorice Root',
+            description: 'Traditionally used for adrenal support',
+            affiliateLink: 'https://amzn.to/example-licorice',
+            price: '$12-20'
+          }
+        ],
+        variants: {},
+        herb: null,
+        extract: null,
+        supplements: null,
+        cautions: null,
+        related: null,
+        faq: null
       }
-    ],
-    variants: {},
+    },
     herb: null,
     extract: null,
     supplements: null,
     cautions: null,
     related: null,
-    faq: null,
+    faq: null
   },
   'circadian-support': {
     title: 'Circadian Support',
     description: 'Support for healthy sleep-wake cycles and circadian rhythm.',
-    symptoms: [
-      'Difficulty falling asleep',
-      'Daytime sleepiness',
-      'Irregular sleep patterns',
-      'Mood changes'
-    ],
-    causes: [
-      'Shift work',
-      'Jet lag',
-      'Screen time at night',
-      'Irregular routines'
-    ],
-    naturalSolutions: [
-      {
-        type: 'supplement',
-        name: 'Melatonin',
-        description: 'Supports healthy sleep onset and circadian rhythm',
-        affiliateLink: 'https://amzn.to/example-melatonin',
-        price: '$10-18'
+    variants: {
+      'Default': {
+        paragraphs: [
+          "Circadian rhythm, or the body's internal clock, plays a crucial role in regulating sleep, wakefulness, and many other physiological processes. Disruptions in circadian rhythm can lead to difficulties falling asleep, daytime sleepiness, irregular sleep patterns, and mood changes. Understanding the causes and symptoms of circadian support is important for addressing the underlying cause and finding effective natural solutions.",
+          "Common symptoms of circadian support include difficulty falling asleep, daytime sleepiness, irregular sleep patterns, and mood changes. These symptoms can vary in intensity and duration, and they can be influenced by various factors, including shift work, jet lag, screen time at night, and irregular routines."
+        ],
+        symptoms: [
+          'Difficulty falling asleep',
+          'Daytime sleepiness',
+          'Irregular sleep patterns',
+          'Mood changes'
+        ],
+        causes: [
+          'Shift work',
+          'Jet lag',
+          'Screen time at night',
+          'Irregular routines'
+        ],
+        naturalSolutions: [
+          {
+            type: 'supplement',
+            name: 'Melatonin',
+            description: 'Supports healthy sleep onset and circadian rhythm',
+            affiliateLink: 'https://amzn.to/example-melatonin',
+            price: '$10-18'
+          }
+        ],
+        variants: {},
+        herb: null,
+        extract: null,
+        supplements: null,
+        cautions: null,
+        related: null,
+        faq: null
       }
-    ],
-    variants: {},
+    },
     herb: null,
     extract: null,
     supplements: null,
     cautions: null,
     related: null,
-    faq: null,
+    faq: null
   },
   'vagus-nerve': {
     title: 'Vagus Nerve Support',
-    description: 'Support for vagus nerve function and relaxation response.',
-    symptoms: [
-      'Digestive issues',
-      'Anxiety',
-      'Heart palpitations',
-      'Difficulty relaxing'
+    description: 'Understanding and supporting your body\'s most important nerve for overall health and well-being',
+    paragraphs: [
+      'The vagus nerve is the longest cranial nerve in your body, running from your brainstem through your neck and into your chest and abdomen. It\'s often called the "wandering nerve" because of its extensive reach throughout your body.',
+      'This nerve is crucial for your parasympathetic nervous system - the "rest and digest" system that helps your body relax, recover, and maintain homeostasis. It controls many vital functions including heart rate, digestion, breathing, and immune response.'
     ],
-    causes: [
-      'Chronic stress',
-      'Nervous system imbalance',
-      'Poor gut health'
+    symptoms: [
+      'Digestive issues (bloating, constipation, acid reflux)',
+      'Heart rate variability problems',
+      'Difficulty relaxing or feeling constantly stressed',
+      'Poor immune function and frequent illness',
+      'Inflammation throughout the body',
+      'Mood disorders and anxiety',
+      'Sleep disturbances',
+      'Chronic fatigue'
     ],
     naturalSolutions: [
-      {
-        type: 'herb',
-        name: 'Gotu Kola',
-        description: 'Traditionally used for nervous system and vagus support',
-        affiliateLink: 'https://amzn.to/example-gotu-kola',
-        price: '$14-22'
-      }
+      { name: 'Omega-3 Fish Oil', description: 'High-quality fish oil supports nerve function and reduces inflammation', affiliateLink: 'https://amzn.to/3example1', price: '' },
+      { name: 'Probiotics', description: 'Support gut-brain axis and vagus nerve communication', affiliateLink: 'https://amzn.to/3example2', price: '' },
+      { name: 'Magnesium', description: 'Essential mineral for nerve function and relaxation', affiliateLink: 'https://amzn.to/3example3', price: '' },
+      { name: 'L-Theanine', description: 'Amino acid that promotes relaxation and reduces stress', affiliateLink: 'https://amzn.to/3example4', price: '' }
     ],
-    variants: {},
-    herb: null,
-    extract: null,
-    supplements: null,
-    cautions: null,
-    related: null,
-    faq: null,
+    disclaimer: 'This information is for educational purposes only. Always consult with a healthcare provider before starting any new supplement regimen, especially if you have underlying health conditions or are taking medications.'
   },
   'dysbiosis': {
     title: 'Dysbiosis',
     description: 'Imbalance of gut bacteria affecting health.',
-    symptoms: [
-      'Bloating',
-      'Digestive discomfort',
-      'Brain fog',
-      'Food sensitivities'
-    ],
-    causes: [
-      'Antibiotic use',
-      'Poor diet',
-      'Stress',
-      'Infections'
-    ],
-    naturalSolutions: [
-      {
-        type: 'supplement',
-        name: 'Probiotics',
-        description: 'Supports healthy gut flora balance',
-        affiliateLink: 'https://amzn.to/example-probiotics',
-        price: '$18-30'
+    variants: {
+      'Default': {
+        paragraphs: [
+          "Dysbiosis, or an imbalance of gut bacteria, can lead to various health issues, including digestive discomfort, brain fog, and food sensitivities. Understanding the causes and symptoms of dysbiosis is important for addressing the underlying cause and finding effective natural solutions.",
+          "Common symptoms of dysbiosis include bloating, digestive discomfort, brain fog, and food sensitivities. These symptoms can vary in intensity and duration, and they can be influenced by various factors, including antibiotic use, poor diet, stress, and infections."
+        ],
+        symptoms: [
+          'Bloating',
+          'Digestive discomfort',
+          'Brain fog',
+          'Food sensitivities'
+        ],
+        causes: [
+          'Antibiotic use',
+          'Poor diet',
+          'Stress',
+          'Infections'
+        ],
+        naturalSolutions: [
+          {
+            type: 'supplement',
+            name: 'Probiotics',
+            description: 'Supports healthy gut flora balance',
+            affiliateLink: 'https://amzn.to/example-probiotics',
+            price: '$18-30'
+          }
+        ],
+        variants: {},
+        herb: null,
+        extract: null,
+        supplements: null,
+        cautions: null,
+        related: null,
+        faq: null
       }
-    ],
-    variants: {},
+    },
     herb: null,
     extract: null,
     supplements: null,
     cautions: null,
     related: null,
-    faq: null,
+    faq: null
   },
   'leaky-gut': {
     title: 'Leaky Gut / Leaky Brain',
-    description: 'Increased intestinal permeability affecting health.',
-    symptoms: [
-      'Digestive issues',
-      'Brain fog',
-      'Fatigue',
-      'Food sensitivities'
+    description: 'Understanding the connection between gut health and brain function',
+    paragraphs: [
+      'Leaky gut, or increased intestinal permeability, occurs when the tight junctions between cells in your intestinal lining become compromised, allowing undigested food particles, toxins, and bacteria to pass through into your bloodstream.',
+      'This can trigger an immune response and inflammation throughout your body, potentially affecting your brain function and contributing to various health issues.',
+      'Your gut and brain are connected through the gut-brain axis, a complex communication network involving the vagus nerve, immune system, and various signaling molecules. When your gut barrier is compromised, it can affect brain function and contribute to brain fog, mood disorders, inflammation, and more.'
     ],
-    causes: [
-      'Gut inflammation',
-      'Poor diet',
-      'Stress',
-      'Infections'
+    symptoms: [
+      'Bloating and gas',
+      'Food sensitivities',
+      'IBS-like symptoms',
+      'Chronic diarrhea or constipation',
+      'Fatigue and low energy',
+      'Joint pain and inflammation',
+      'Skin issues (eczema, acne)',
+      'Autoimmune conditions',
+      'Brain fog and poor concentration',
+      'Mood swings and anxiety',
+      'Memory problems',
+      'Headaches and migraines',
+      'Nutrient deficiencies',
+      'Weakened immune system',
+      'Chronic inflammation',
+      'Sleep disturbances'
     ],
     naturalSolutions: [
-      {
-        type: 'supplement',
-        name: 'L-Glutamine',
-        description: 'Supports gut lining integrity',
-        affiliateLink: 'https://amzn.to/example-glutamine',
-        price: '$15-25'
-      }
+      { name: 'L-Glutamine', description: 'Supports gut lining repair and integrity', affiliateLink: 'https://amzn.to/3example10', price: '' },
+      { name: 'Collagen Peptides', description: 'Supports gut lining structure and repair', affiliateLink: 'https://amzn.to/3example11', price: '' },
+      { name: 'Probiotics', description: 'Support healthy gut microbiome and gut-brain axis', affiliateLink: 'https://amzn.to/3example12', price: '' },
+      { name: 'Omega-3 Fish Oil', description: 'Reduces inflammation and supports brain health', affiliateLink: 'https://amzn.to/3example13', price: '' },
+      { name: 'Zinc', description: 'Essential mineral for gut lining integrity and immune function', affiliateLink: 'https://amzn.to/3example14', price: '' },
+      { name: 'Curcumin', description: 'Powerful anti-inflammatory that may help with gut and brain inflammation', affiliateLink: 'https://amzn.to/3example15', price: '' }
     ],
-    variants: {},
-    herb: null,
-    extract: null,
-    supplements: null,
-    cautions: null,
-    related: null,
-    faq: null,
+    disclaimer: 'This information is for educational purposes only. Leaky gut is a complex condition that requires proper medical evaluation. Always consult with a healthcare provider for diagnosis and treatment recommendations.'
   },
   'ibs': {
     title: 'IBS (Irritable Bowel Syndrome)',
     description: 'Digestive disorder with abdominal pain and changes in bowel habits.',
-    symptoms: [
-      'Abdominal pain',
-      'Bloating',
-      'Diarrhea or constipation',
-      'Gas',
-      'Cramping'
-    ],
-    causes: [
-      'Gut-brain axis dysfunction',
-      'Food intolerances',
-      'Stress',
-      'Infections'
-    ],
-    naturalSolutions: [
-      {
-        type: 'supplement',
-        name: 'Peppermint Oil',
-        description: 'Traditionally used for IBS symptom relief',
-        affiliateLink: 'https://amzn.to/example-peppermint',
-        price: '$10-18'
+    variants: {
+      'IBS-D (Diarrhea-predominant)': {
+        paragraphs: [
+          'IBS-D is characterized by frequent loose stools and abdominal discomfort. Management focuses on calming the gut, reducing triggers, and supporting healthy digestion.',
+          'Content coming soon!'
+        ]
+      },
+      'IBS-C (Constipation-predominant)': {
+        paragraphs: [
+          'IBS-C is characterized by infrequent, hard stools and abdominal discomfort. Management focuses on improving motility, fiber intake, and gut health.',
+          'Content coming soon!'
+        ]
+      },
+      'IBS-M (Mixed type)': {
+        paragraphs: [
+          'IBS-M involves alternating diarrhea and constipation. Management focuses on balancing the gut, reducing stress, and identifying dietary triggers.',
+          'Content coming soon!'
+        ]
       }
-    ],
-    variants: {},
-    herb: null,
-    extract: null,
-    supplements: null,
-    cautions: null,
-    related: null,
-    faq: null,
+    },
+    disclaimer: 'These recommendations are for general support. Consult your healthcare provider for personalized advice.'
   },
   'migraine': {
     title: 'Migraine Relief',
     description: 'Natural solutions for migraine management and prevention.',
-    quickActions: [
-      { name: 'Anxiety & Stress', href: '/symptoms/anxiety', color: 'purple' },
-      { name: 'Sleep Issues', href: '/symptoms/insomnia', color: 'blue' },
-      { name: 'Muscle Tension', href: '/symptoms/muscle-tension', color: 'green' },
-    ],
     variants: {
-      'Migraine Relief': {
+      'Default': {
         paragraphs: [
           "Migraines are complex neurological conditions that can be debilitating. They involve changes in brain chemistry, blood vessel dilation, and inflammation. Common triggers include hormonal changes, food sensitivities, stress, sleep disturbances, environmental factors, and dehydration.",
           "Natural approaches to migraine relief focus on reducing frequency, intensity, and duration of attacks through evidence-based herbs, supplements, and lifestyle changes."
@@ -896,13 +962,8 @@ const symptoms: Record<string, Symptom> = {
   'burnout': {
     title: 'Emotional Burnout',
     description: 'Chronic stress and emotional exhaustion affecting mood, energy, and motivation.',
-    quickActions: [
-      { name: 'Anxiety', href: '/symptoms/anxiety', color: 'purple' },
-      { name: 'Fatigue', href: '/symptoms/fatigue', color: 'green' },
-      { name: 'Depression', href: '/symptoms/depression', color: 'blue' },
-    ],
     variants: {
-      'Burnout': {
+      'Default': {
         paragraphs: [
           "Burnout is a state of chronic stress and emotional exhaustion that can affect mood, energy, motivation, and overall wellbeing. It is common in high-pressure jobs, caregiving roles, and during prolonged periods of stress.",
           "Natural approaches to burnout focus on stress reduction, nervous system support, and restoring energy and resilience."
@@ -949,71 +1010,55 @@ const symptoms: Record<string, Symptom> = {
     faq: null
   },
   'thyroid-issues': {
-    title: 'Thyroid Issues',
-    description: 'Support for thyroid function, energy, and metabolism.',
-    quickActions: [
-      { name: 'Fatigue', href: '/symptoms/fatigue', color: 'green' },
-      { name: 'Mood Swings', href: '/symptoms/mood-swings', color: 'purple' },
-      { name: 'Hormonal Imbalances', href: '/symptoms/hormonal-imbalances', color: 'blue' },
-    ],
+    title: 'Thyroid Health Support',
+    description: 'Understanding and supporting thyroid function for energy and metabolism',
     variants: {
-      'Thyroid Support': {
+      'Default': {
         paragraphs: [
-          "Thyroid issues can affect energy, metabolism, mood, and overall wellbeing. Common symptoms include fatigue, weight changes, mood swings, and sensitivity to cold or heat.",
-          "Natural approaches to thyroid support focus on providing key nutrients, supporting hormone synthesis, and reducing stress."
+          'Your thyroid gland regulates metabolism, energy production, body temperature, and many other vital functions. When thyroid function is compromised, it can affect every system in your body, leading to a wide range of symptoms.',
+          'Thyroid issues can be caused by nutrient deficiencies, stress, environmental factors, autoimmune conditions, and other health imbalances. Supporting thyroid health through diet, lifestyle, and targeted supplements can help restore balance.'
         ],
         bestHerb: {
           name: 'Ashwagandha',
-          description: 'Adaptogenic herb that supports thyroid hormone balance and stress resilience.',
-          affiliateLink: 'https://amzn.to/ashwagandha-thyroid',
-          price: '$18-28'
+          description: 'Adaptogenic herb that may support thyroid function',
+          affiliateLink: 'https://amzn.to/3thyroid-ashwagandha',
+          price: ''
         },
         bestStandardized: {
-          name: 'Selenium',
-          description: 'Essential mineral for thyroid hormone synthesis and conversion.',
-          affiliateLink: 'https://amzn.to/selenium-thyroid',
-          price: '$15-22'
+          name: 'Iodine',
+          description: 'Essential mineral for thyroid hormone production',
+          affiliateLink: 'https://amzn.to/3thyroid-iodine',
+          price: ''
         },
         topSupplements: [
           {
-            name: 'Zinc',
-            description: 'Essential for thyroid hormone synthesis and immune function.',
-            affiliateLink: 'https://amzn.to/zinc-thyroid',
-            price: '$15-22'
+            name: 'Selenium',
+            description: 'Critical for thyroid hormone conversion and function',
+            affiliateLink: 'https://amzn.to/3thyroid-selenium',
+            price: ''
           },
           {
-            name: 'Vitamin D3',
-            description: 'Supports immune function and thyroid health.',
-            affiliateLink: 'https://amzn.to/vitamin-d-thyroid',
-            price: '$15-25'
+            name: 'Zinc',
+            description: 'Essential for thyroid hormone synthesis and conversion',
+            affiliateLink: 'https://amzn.to/3thyroid-zinc',
+            price: ''
           }
         ]
       }
     },
-    relatedSymptoms: [
-      { name: 'Fatigue', href: '/symptoms/fatigue', color: 'green' },
-      { name: 'Mood Swings', href: '/symptoms/mood-swings', color: 'purple' },
-      { name: 'Hormonal Imbalances', href: '/symptoms/hormonal-imbalances', color: 'blue' }
-    ],
-    disclaimer: 'These recommendations are for general support. Consult your healthcare provider for personalized advice.',
-    herb: null,
-    extract: null,
-    supplements: null,
-    cautions: null,
-    related: null,
-    faq: null
+    disclaimer: 'This information is for educational purposes only and should not replace professional medical advice. Always consult with a healthcare provider before starting any new supplement regimen, especially if you have underlying health conditions or are taking medications. The product links are affiliate links that support this educational content.'
   },
   'poor-focus': {
     title: 'Poor Focus',
     description: 'Difficulty concentrating, maintaining attention, or staying focused on tasks.',
-    paragraphs: [
-      "Poor focus can manifest as difficulty concentrating, easily getting distracted, or having trouble completing tasks. This can be caused by stress, poor sleep, nutrient deficiencies, or underlying health conditions.",
-      "Brain fog specifically refers to a feeling of mental cloudiness, confusion, or difficulty thinking clearly. It's often associated with fatigue, stress, or hormonal imbalances.",
-      "Poor memory involves difficulty recalling information, learning new things, or retaining details. This can be age-related or due to stress, sleep issues, or nutrient deficiencies.",
-      "Natural approaches to improving focus and memory often involve supporting brain health through specific herbs and supplements that enhance blood flow, neurotransmitter function, and cellular energy production."
-    ],
     variants: {
-      'Brain Fog': {
+      'Default': {
+        paragraphs: [
+          "Poor focus can manifest as difficulty concentrating, easily getting distracted, or having trouble completing tasks. This can be caused by stress, poor sleep, nutrient deficiencies, or underlying health conditions.",
+          "Brain fog specifically refers to a feeling of mental cloudiness, confusion, or difficulty thinking clearly. It's often associated with fatigue, stress, or hormonal imbalances.",
+          "Poor memory involves difficulty recalling information, learning new things, or retaining details. This can be age-related or due to stress, sleep issues, or nutrient deficiencies.",
+          "Natural approaches to improving focus and memory often involve supporting brain health through specific herbs and supplements that enhance blood flow, neurotransmitter function, and cellular energy production."
+        ],
         bestHerb: {
           name: 'Ginkgo Biloba',
           description: 'Traditional herb that improves blood flow to the brain and clears mental fog.',
@@ -1077,8 +1122,162 @@ const symptoms: Record<string, Symptom> = {
     cautions: null,
     related: null,
     faq: null
+  },
+  'fatigue': {
+    title: 'Fatigue',
+    description: 'Persistent tiredness and lack of energy.',
+    variants: {
+      'Default': {
+        paragraphs: [
+          'Fatigue is a common symptom with many possible causes, including stress, poor sleep, nutritional deficiencies, and underlying health conditions.',
+          'Content coming soon!'
+        ],
+      }
+    },
+    herb: null,
+    extract: null,
+    supplements: null,
+    cautions: null,
+    related: null,
+    faq: null
+  },
+  'hormonal-imbalances': {
+    title: 'Hormonal Imbalances',
+    description: 'Disruptions in hormone levels affecting health and wellbeing.',
+    variants: {
+      'Default': {
+        paragraphs: [
+          'Hormonal imbalances can cause a wide range of symptoms, from mood swings to fatigue and more.',
+          'Content coming soon!'
+        ],
+      }
+    },
+    herb: null,
+    extract: null,
+    supplements: null,
+    cautions: null,
+    related: null,
+    faq: null
+  },
+  'mood-swings': {
+    title: 'Mood Swings',
+    description: 'Rapid or unpredictable changes in mood, energy, or emotional state.',
+    variants: {
+      Default: {
+        paragraphs: [
+          "Mood swings can be caused by hormonal fluctuations, stress, sleep disturbances, blood sugar imbalances, or underlying mental health conditions. They can affect relationships, work, and overall quality of life.",
+          "Stabilizing mood involves supporting healthy brain chemistry, hormone balance, and stress resilience. Lifestyle changes, therapy, and targeted supplements can all play a role.",
+          "If mood swings are severe, persistent, or associated with thoughts of self-harm, seek professional help immediately.",
+          "The following recommendations are designed to support emotional balance and resilience to stress."
+        ],
+        bestHerb: {
+          name: "St. John's Wort",
+          description: "Traditional herb with clinical evidence for supporting mood stability and emotional balance. May interact with medications—consult your doctor before use.",
+          affiliateLink: 'https://amzn.to/st-johns-wort-mood',
+          price: '$20-30'
+        },
+        bestStandardized: {
+          name: 'Standardized Saffron Extract',
+          description: 'Saffron extract (standardized for crocin and safranal) has been shown in clinical trials to improve mood and reduce symptoms of mild to moderate depression and mood swings.',
+          affiliateLink: 'https://amzn.to/saffron-mood',
+          price: '$24-40'
+        },
+        topSupplements: [
+          {
+            name: 'Omega-3 EPA/DHA',
+            description: 'Essential fatty acids for brain health and mood stability. EPA in particular is linked to improved emotional balance.',
+            affiliateLink: 'https://amzn.to/omega3-mood',
+            price: '$25-40'
+          },
+          {
+            name: 'Magnesium Glycinate',
+            description: 'Supports nervous system balance and may help reduce mood swings, irritability, and anxiety.',
+            affiliateLink: 'https://amzn.to/magnesium-mood',
+            price: '$18-28'
+          }
+        ]
+      }
+    },
+    disclaimer: "This information is for educational purposes only and should not be considered medical advice. The content provided is not intended to diagnose, treat, cure, or prevent any disease. Always consult a healthcare professional before starting any new supplement regimen."
+  },
+  'stress': {
+    title: 'Stress',
+    description: 'Physical and emotional responses to challenging or demanding situations.',
+    variants: {
+      Default: {
+        paragraphs: [
+          "Stress is a natural response to perceived threats or demands, but chronic stress can negatively impact health, mood, and well-being. It can manifest as tension, irritability, sleep problems, digestive issues, and more.",
+          "Effective stress management involves a combination of lifestyle changes, relaxation techniques, and, when appropriate, targeted supplements or herbal remedies.",
+          "If stress feels overwhelming or persistent, consider seeking support from a healthcare professional or counselor."
+        ],
+        bestHerb: 'Ashwagandha',
+        bestStandardized: 'Rhodiola Extract',
+        topSupplements: ['Magnesium Glycinate', 'L-Theanine', 'B-Complex Vitamins']
+      }
+    }
   }
 };
+
+// --- Normalization pass to ensure every symptom entry is compatible with the new template ---
+Object.keys(symptoms).forEach((key) => {
+  const s = symptoms[key];
+  // Ensure title and description
+  if (!s.title) s.title = key.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+  if (!s.description) s.description = 'No description available yet.';
+  // Ensure variants object
+  if (!s.variants || typeof s.variants !== 'object' || Array.isArray(s.variants)) {
+    s.variants = { Default: { paragraphs: ["No information available for this symptom yet."] } };
+  }
+  // If variants is empty, add Default
+  if (Object.keys(s.variants).length === 0) {
+    s.variants = { Default: { paragraphs: ["No information available for this symptom yet."] } };
+  }
+  // For each variant, ensure paragraphs exists and is non-empty
+  Object.keys(s.variants).forEach((v) => {
+    const variant = s.variants[v];
+    if (!variant.paragraphs || !Array.isArray(variant.paragraphs) || variant.paragraphs.length === 0) {
+      variant.paragraphs = ["No information available for this variant yet."];
+    }
+    // Optionally, ensure products fields exist
+    if (!('bestHerb' in variant)) variant.bestHerb = undefined;
+    if (!('bestStandardized' in variant)) variant.bestStandardized = undefined;
+    if (!('topSupplements' in variant)) variant.topSupplements = [];
+  });
+});
+
+// --- Add placeholder products for any missing fields in all symptom variants ---
+Object.values(symptoms).forEach((symptom) => {
+  if (symptom.variants && typeof symptom.variants === 'object') {
+    Object.values(symptom.variants).forEach((variant) => {
+      if (!variant.bestHerb) {
+        variant.bestHerb = {
+          name: 'Example Herb',
+          description: 'Placeholder herb for demonstration purposes.',
+          affiliateLink: '#',
+          price: '$10-20'
+        };
+      }
+      if (!variant.bestStandardized) {
+        variant.bestStandardized = {
+          name: 'Example Standardized Extract',
+          description: 'Placeholder standardized extract for demonstration purposes.',
+          affiliateLink: '#',
+          price: '$15-25'
+        };
+      }
+      if (!variant.topSupplements || !Array.isArray(variant.topSupplements) || variant.topSupplements.length === 0) {
+        variant.topSupplements = [
+          {
+            name: 'Example Supplement',
+            description: 'Placeholder supplement for demonstration purposes.',
+            affiliateLink: '#',
+            price: '$12-22'
+          }
+        ];
+      }
+    });
+  }
+});
 
 export default async function SymptomPage({ params }: SymptomPageProps) {
   const { slug } = await params;

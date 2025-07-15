@@ -726,38 +726,42 @@ const symptoms: { [key: string]: Symptom } = {
   'mood-swings': {
     title: 'Mood Swings',
     description: 'Rapid or unpredictable changes in mood, energy, or emotional state.',
-    paragraphs: [
-      "Mood swings can be caused by hormonal fluctuations, stress, sleep disturbances, blood sugar imbalances, or underlying mental health conditions. They can affect relationships, work, and overall quality of life.",
-      "Stabilizing mood involves supporting healthy brain chemistry, hormone balance, and stress resilience. Lifestyle changes, therapy, and targeted supplements can all play a role.",
-      "If mood swings are severe, persistent, or associated with thoughts of self-harm, seek professional help immediately.",
-      "The following recommendations are designed to support emotional balance and resilience to stress."
-    ],
-    bestHerb: {
-      name: "St. John's Wort",
-      description: "Traditional herb with clinical evidence for supporting mood stability and emotional balance. May interact with medications—consult your doctor before use.",
-      affiliateLink: 'https://amzn.to/st-johns-wort-mood',
-      price: '$20-30'
-    },
-    bestStandardized: {
-      name: 'Standardized Saffron Extract',
-      description: 'Saffron extract (standardized for crocin and safranal) has been shown in clinical trials to improve mood and reduce symptoms of mild to moderate depression and mood swings.',
-      affiliateLink: 'https://amzn.to/saffron-mood',
-      price: '$24-40'
-    },
-    topSupplements: [
-      {
-        name: 'Omega-3 EPA/DHA',
-        description: 'Essential fatty acids for brain health and mood stability. EPA in particular is linked to improved emotional balance.',
-        affiliateLink: 'https://amzn.to/omega3-mood',
-        price: '$25-40'
-      },
-      {
-        name: 'Magnesium Glycinate',
-        description: 'Supports nervous system balance and may help reduce mood swings, irritability, and anxiety.',
-        affiliateLink: 'https://amzn.to/magnesium-mood',
-        price: '$18-28'
+    variants: {
+      Default: {
+        paragraphs: [
+          "Mood swings can be caused by hormonal fluctuations, stress, sleep disturbances, blood sugar imbalances, or underlying mental health conditions. They can affect relationships, work, and overall quality of life.",
+          "Stabilizing mood involves supporting healthy brain chemistry, hormone balance, and stress resilience. Lifestyle changes, therapy, and targeted supplements can all play a role.",
+          "If mood swings are severe, persistent, or associated with thoughts of self-harm, seek professional help immediately.",
+          "The following recommendations are designed to support emotional balance and resilience to stress."
+        ],
+        bestHerb: {
+          name: "St. John's Wort",
+          description: "Traditional herb with clinical evidence for supporting mood stability and emotional balance. May interact with medications—consult your doctor before use.",
+          affiliateLink: 'https://amzn.to/st-johns-wort-mood',
+          price: '$20-30'
+        },
+        bestStandardized: {
+          name: 'Standardized Saffron Extract',
+          description: 'Saffron extract (standardized for crocin and safranal) has been shown in clinical trials to improve mood and reduce symptoms of mild to moderate depression and mood swings.',
+          affiliateLink: 'https://amzn.to/saffron-mood',
+          price: '$24-40'
+        },
+        topSupplements: [
+          {
+            name: 'Omega-3 EPA/DHA',
+            description: 'Essential fatty acids for brain health and mood stability. EPA in particular is linked to improved emotional balance.',
+            affiliateLink: 'https://amzn.to/omega3-mood',
+            price: '$25-40'
+          },
+          {
+            name: 'Magnesium Glycinate',
+            description: 'Supports nervous system balance and may help reduce mood swings, irritability, and anxiety.',
+            affiliateLink: 'https://amzn.to/magnesium-mood',
+            price: '$18-28'
+          }
+        ]
       }
-    ],
+    },
     disclaimer: "This information is for educational purposes only and should not be considered medical advice. The content provided is not intended to diagnose, treat, cure, or prevent any disease. Always consult a healthcare professional before starting any new supplement regimen."
   }
 };
