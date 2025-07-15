@@ -24,7 +24,7 @@ const quickActionsDefault = [
 ];
 
 export default function VariantSymptomPage({ symptom }: { symptom: Symptom }) {
-  const variantNames = Object.keys(symptom.variants);
+  const variantNames = Object.keys(symptom.variants ?? {});
   const [selectedVariant, setSelectedVariant] = useState(variantNames[0]);
   const variant = symptom.variants[selectedVariant];
   const isInsomnia = symptom.title.toLowerCase().includes('insomnia');
