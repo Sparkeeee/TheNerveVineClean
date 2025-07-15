@@ -35,6 +35,7 @@ interface Symptom {
   cautions?: unknown;
   related?: unknown;
   faq?: unknown;
+  quickActions?: { name: string; href: string; color: string }[];
 }
 
 interface SymptomPageProps {
