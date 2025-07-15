@@ -190,7 +190,7 @@ const symptoms = {
         clinicalEvidence: '900mg daily extract shows effectiveness comparable to prescription antidepressants'
       }
     ],
-    variants: [],
+    variants: {},
     herb: null,
     extract: null,
     supplements: null,
@@ -267,7 +267,7 @@ const symptoms = {
         clinicalEvidence: 'Traditional use for anxiety with modern safety studies'
       }
     ],
-    variants: [],
+    variants: {},
     herb: null,
     extract: null,
     supplements: null,
@@ -350,7 +350,7 @@ const symptoms = {
         price: '$25-40'
       }
     ],
-    variants: [],
+    variants: {},
     herb: null,
     extract: null,
     supplements: null,
@@ -391,7 +391,7 @@ const symptoms = {
         price: '$14-22'
       }
     ],
-    variants: [],
+    variants: {},
     herb: null,
     extract: null,
     supplements: null,
@@ -479,7 +479,7 @@ const symptoms = {
         herbLink: '/herbs/hawthorn'
       }
     ],
-    variants: [],
+    variants: {},
     herb: null,
     extract: null,
     supplements: null,
@@ -517,7 +517,7 @@ const symptoms = {
         price: '$15-25'
       }
     ],
-    variants: [],
+    variants: {},
     herb: null,
     extract: null,
     supplements: null,
@@ -605,7 +605,7 @@ const symptoms = {
         price: '$12-20'
       }
     ],
-    variants: [],
+    variants: {},
     herb: null,
     extract: null,
     supplements: null,
@@ -636,7 +636,7 @@ const symptoms = {
         price: '$18-28'
       }
     ],
-    variants: [],
+    variants: {},
     herb: null,
     extract: null,
     supplements: null,
@@ -668,7 +668,7 @@ const symptoms = {
         price: '$12-20'
       }
     ],
-    variants: [],
+    variants: {},
     herb: null,
     extract: null,
     supplements: null,
@@ -700,7 +700,7 @@ const symptoms = {
         price: '$10-18'
       }
     ],
-    variants: [],
+    variants: {},
     herb: null,
     extract: null,
     supplements: null,
@@ -731,7 +731,7 @@ const symptoms = {
         price: '$14-22'
       }
     ],
-    variants: [],
+    variants: {},
     herb: null,
     extract: null,
     supplements: null,
@@ -763,7 +763,7 @@ const symptoms = {
         price: '$18-30'
       }
     ],
-    variants: [],
+    variants: {},
     herb: null,
     extract: null,
     supplements: null,
@@ -795,7 +795,7 @@ const symptoms = {
         price: '$15-25'
       }
     ],
-    variants: [],
+    variants: {},
     herb: null,
     extract: null,
     supplements: null,
@@ -828,7 +828,7 @@ const symptoms = {
         price: '$10-18'
       }
     ],
-    variants: [],
+    variants: {},
     herb: null,
     extract: null,
     supplements: null,
