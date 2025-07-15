@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
-import { herbs } from '../../../data/herbs';
+import { herbs, type Herb } from '../../../data/herbs';
 
 interface HerbPageProps {
   params: Promise<{ slug: string }>;
@@ -8,7 +8,7 @@ interface HerbPageProps {
 
 export default async function HerbPage({ params }: HerbPageProps) {
   const { slug } = await params;
-  const herb = herbs.find(h => h.slug === slug);
+  const herb: Herb | undefined = herbs.find(h => h.slug === slug);
 
   if (!herb) {
     notFound();
