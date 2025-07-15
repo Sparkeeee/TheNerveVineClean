@@ -11,6 +11,8 @@ type Product = {
   price: string;
   image?: string;
   type?: string; // e.g., 'herb', 'supplement', 'tincture', etc.
+  herbLink?: string; // Internal link to herb details, if available
+  // Reminder: If you add new properties to product objects, add them here to avoid TypeScript errors
 };
 
 type Variant = {
