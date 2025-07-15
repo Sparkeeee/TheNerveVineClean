@@ -13,6 +13,7 @@ export type Herb = {
     }[];
     subtitle?: string;
     benefits?: string[];
+    traditionalUses?: string[];
   };
   
   export const herbs: Herb[] = [
