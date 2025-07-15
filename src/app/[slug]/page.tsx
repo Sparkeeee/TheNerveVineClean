@@ -9,6 +9,8 @@ type Product = {
   description: string;
   affiliateLink: string;
   price: string;
+  image?: string;
+  type?: string; // e.g., 'herb', 'supplement', 'tincture', etc.
 };
 
 type Variant = {
@@ -330,14 +332,12 @@ const symptoms: { [key: string]: Symptom } = {
     ],
     naturalSolutions: [
       {
-        type: 'herb',
         name: 'Lavender',
         description: 'Calming herb that may help with muscle relaxation',
         affiliateLink: 'https://amzn.to/example-lavender',
         price: '$12-20'
       },
       {
-        type: 'herb',
         name: 'Cramp Bark (Viburnum opulus)',
         description: 'Skeletal muscle relaxant and nerve relaxant. Excellent for neck tension, muscle cramps, and pinched nerves.',
         affiliateLink: 'https://amzn.to/example-cramp-bark',
@@ -362,7 +362,6 @@ const symptoms: { [key: string]: Symptom } = {
     ],
     naturalSolutions: [
       {
-        type: 'herb',
         name: 'Hawthorn',
         description: 'Traditionally used for cardiovascular support',
         affiliateLink: 'https://amzn.to/example-hawthorn',
@@ -387,14 +386,12 @@ const symptoms: { [key: string]: Symptom } = {
     ],
     naturalSolutions: [
       {
-        type: 'supplement',
         name: 'CoQ10',
         description: 'Supports heart muscle energy and function',
         affiliateLink: 'https://amzn.to/example-coq10',
         price: '$20-35'
       },
       {
-        type: 'herb',
         name: 'Hawthorn (Crataegus oxyacantha)',
         description: 'Traditional cardiovascular herb useful for heart palpitations, flutters, panic-related tachycardia, and overall heart support',
         affiliateLink: 'https://amzn.to/example-hawthorn-heart',
@@ -419,7 +416,6 @@ const symptoms: { [key: string]: Symptom } = {
     ],
     naturalSolutions: [
       {
-        type: 'herb',
         name: 'Milk Thistle',
         description: 'Supports liver detoxification and regeneration',
         affiliateLink: 'https://amzn.to/example-milk-thistle',
@@ -444,7 +440,6 @@ const symptoms: { [key: string]: Symptom } = {
     ],
     naturalSolutions: [
       {
-        type: 'herb',
         name: 'Vitex',
         description: 'Supports hormone balance',
         affiliateLink: 'https://amzn.to/example-vitex',
@@ -468,7 +463,6 @@ const symptoms: { [key: string]: Symptom } = {
     ],
     naturalSolutions: [
       {
-        type: 'herb',
         name: 'Rhodiola',
         description: 'Adaptogen for stress resilience',
         affiliateLink: 'https://amzn.to/example-rhodiola',
@@ -493,7 +487,6 @@ const symptoms: { [key: string]: Symptom } = {
     ],
     naturalSolutions: [
       {
-        type: 'herb',
         name: 'Licorice Root',
         description: 'Traditionally used for adrenal support',
         affiliateLink: 'https://amzn.to/example-licorice',
@@ -518,7 +511,6 @@ const symptoms: { [key: string]: Symptom } = {
     ],
     naturalSolutions: [
       {
-        type: 'supplement',
         name: 'Melatonin',
         description: 'Supports healthy sleep onset and circadian rhythm',
         affiliateLink: 'https://amzn.to/example-melatonin',
@@ -542,7 +534,6 @@ const symptoms: { [key: string]: Symptom } = {
     ],
     naturalSolutions: [
       {
-        type: 'herb',
         name: 'Gotu Kola',
         description: 'Traditionally used for nervous system and vagus support',
         affiliateLink: 'https://amzn.to/example-gotu-kola',
@@ -567,7 +558,6 @@ const symptoms: { [key: string]: Symptom } = {
     ],
     naturalSolutions: [
       {
-        type: 'supplement',
         name: 'Probiotics',
         description: 'Supports healthy gut flora balance',
         affiliateLink: 'https://amzn.to/example-probiotics',
@@ -592,7 +582,6 @@ const symptoms: { [key: string]: Symptom } = {
     ],
     naturalSolutions: [
       {
-        type: 'supplement',
         name: 'L-Glutamine',
         description: 'Supports gut lining integrity',
         affiliateLink: 'https://amzn.to/example-glutamine',
@@ -618,7 +607,6 @@ const symptoms: { [key: string]: Symptom } = {
     ],
     naturalSolutions: [
       {
-        type: 'supplement',
         name: 'Peppermint Oil',
         description: 'Traditionally used for IBS symptom relief',
         affiliateLink: 'https://amzn.to/example-peppermint',
