@@ -110,7 +110,6 @@ const symptoms: { [key: string]: Symptom } = {
       "Management of depression often involves a combination of approaches, including psychotherapy (such as cognitive behavioral therapy), lifestyle changes (regular exercise, social support, healthy diet), and, in some cases, medication. Addressing underlying causes such as nutrient deficiencies, chronic illness, or hormonal imbalances can also be important.",
       "Natural remedies and supplements may provide additional support for some individuals, especially when used alongside conventional treatments. Always consult a healthcare professional before starting any new supplement, especially if you are taking prescription medications or have a history of mental health conditions."
     ],
-    variants: null,
     bestHerb: {
       name: "St. John's Wort",
       description: "Traditional herb with extensive clinical research for mild to moderate depression. St. John's Wort may help improve mood and emotional balance, but can interact with many medications.",
@@ -148,7 +147,6 @@ const symptoms: { [key: string]: Symptom } = {
       "Effective management of anxiety often involves a combination of approaches, including cognitive behavioral therapy (CBT), mindfulness practices, regular exercise, and healthy sleep habits. Reducing caffeine and alcohol intake, building social support, and addressing underlying medical issues are also important.",
       "Natural remedies and supplements may provide additional support for some individuals. Herbal medicines and nutrients can help promote relaxation and support the body’s stress response, but should be used with caution and under the guidance of a healthcare professional, especially if you are taking prescription medications."
     ],
-    variants: null,
     bestHerb: {
       name: 'Passionflower',
       description: 'Traditional nervine herb that enhances GABA activity naturally. Passionflower is used for anxiety, restlessness, and sleep disturbances, and is generally well-tolerated.',
