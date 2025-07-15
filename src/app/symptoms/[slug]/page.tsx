@@ -1085,7 +1085,7 @@ export default async function SymptomPage({ params }: SymptomPageProps) {
   const symptom = symptoms[slug as keyof typeof symptoms];
 
   if (!symptom) {
-    notFound();
+    return <div>Symptom not found.</div>;
   }
 
   // --- VARIANT LOGIC ---
