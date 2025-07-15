@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+import VariantSymptomPage from './VariantSymptomPage';
 
 interface SymptomPageProps {
   params: Promise<{ slug: string }>;
@@ -9,115 +10,116 @@ interface SymptomPageProps {
 const symptoms = {
   'insomnia': {
     title: 'Insomnia',
-    description: 'Difficulty falling asleep or staying asleep',
-    symptoms: [
-      'Trouble falling asleep',
-      'Waking up frequently during the night',
-      'Waking up too early',
-      'Feeling tired during the day',
-      'Difficulty concentrating',
-      'Mood changes'
+    description: 'Difficulty falling asleep, staying asleep, or waking up too early.',
+    paragraphs: [
+      "Insomnia is a common sleep disorder that can take several forms: trouble falling asleep, trouble staying asleep, or waking up too early and being unable to return to sleep. Each type may have different underlying causes and best solutions.",
+      "Natural approaches to insomnia focus on calming the nervous system, supporting circadian rhythms, and addressing root causes such as stress, nutrient deficiencies, or hormonal imbalances."
     ],
-    causes: [
-      'Stress and anxiety',
-      'Poor sleep habits',
-      'Medical conditions',
-      'Medications',
-      'Caffeine or alcohol consumption',
-      'Environmental factors'
-    ],
-    naturalSolutions: [
-      {
-        type: 'supplement',
-        name: 'Melatonin',
-        description: 'Most researched sleep supplement. Regulates circadian rhythm naturally.',
-        affiliateLink: 'https://amzn.to/melatonin-sleep',
-        price: '$15-25',
-        clinicalEvidence: '0.5-5mg 30-60 min before bed. Most effective for circadian rhythm issues'
+    variants: {
+      'Sleep Onset Insomnia': {
+        paragraphs: [
+          "Sleep onset insomnia is difficulty falling asleep at the beginning of the night. It is often related to stress, anxiety, or an overactive mind.",
+          "Supporting relaxation and calming the nervous system before bed is key."
+        ],
+        bestHerb: {
+          name: 'Valerian Root',
+          description: 'Traditional sleep herb with modern clinical studies showing effectiveness for falling asleep.',
+          affiliateLink: 'https://amzn.to/valerian-sleep',
+          price: '$18-25'
+        },
+        bestStandardized: {
+          name: 'Melatonin (0.5-3mg)',
+          description: 'Most researched sleep supplement. Regulates circadian rhythm and helps initiate sleep.',
+          affiliateLink: 'https://amzn.to/melatonin-sleep',
+          price: '$15-25'
+        },
+        topSupplements: [
+          {
+            name: 'Magnesium Glycinate',
+            description: 'Essential mineral for muscle relaxation and GABA support. Deficiency common in insomnia.',
+            affiliateLink: 'https://amzn.to/magnesium-sleep',
+            price: '$18-28'
+          },
+          {
+            name: 'L-Theanine',
+            description: 'Amino acid that promotes calm focus and relaxation before bed.',
+            affiliateLink: 'https://amzn.to/theanine-sleep',
+            price: '$15-25'
+          }
+        ]
       },
-      {
-        type: 'supplement',
-        name: 'Magnesium Glycinate',
-        description: 'Essential mineral for muscle relaxation and GABA support. Deficiency common in insomnia.',
-        affiliateLink: 'https://amzn.to/magnesium-sleep',
-        price: '$18-28',
-        clinicalEvidence: '200-400mg daily improves sleep quality and reduces wake time'
+      'Sleep Maintenance Insomnia': {
+        paragraphs: [
+          "Sleep maintenance insomnia is waking up frequently during the night or having trouble staying asleep. It can be related to blood sugar swings, stress hormones, or environmental factors.",
+          "Stabilizing blood sugar and supporting stress resilience can help."
+        ],
+        bestHerb: {
+          name: 'Passionflower',
+          description: 'Gentle nervine herb that enhances GABA activity for natural sleep support and reduces nighttime awakenings.',
+          affiliateLink: 'https://amzn.to/passionflower-sleep',
+          price: '$15-25'
+        },
+        bestStandardized: {
+          name: 'Magnesium Glycinate',
+          description: 'Essential mineral for muscle relaxation and sleep maintenance.',
+          affiliateLink: 'https://amzn.to/magnesium-sleep',
+          price: '$18-28'
+        },
+        topSupplements: [
+          {
+            name: '5-HTP',
+            description: 'Precursor to serotonin and melatonin. Supports natural sleep hormone production.',
+            affiliateLink: 'https://amzn.to/5htp-sleep',
+            price: '$20-30'
+          },
+          {
+            name: 'GABA',
+            description: 'Direct calming neurotransmitter that promotes deep, restorative sleep.',
+            affiliateLink: 'https://amzn.to/gaba-sleep',
+            price: '$20-30'
+          }
+        ]
       },
-      {
-        type: 'supplement',
-        name: '5-HTP',
-        description: 'Precursor to serotonin and melatonin. Supports natural sleep hormone production.',
-        affiliateLink: 'https://amzn.to/5htp-sleep',
-        price: '$20-30',
-        clinicalEvidence: '100-300mg daily increases REM sleep and reduces sleep latency'
-      },
-      {
-        type: 'supplement',
-        name: 'GABA',
-        description: 'Direct calming neurotransmitter that promotes deep, restorative sleep.',
-        affiliateLink: 'https://amzn.to/gaba-sleep',
-        price: '$20-30',
-        clinicalEvidence: '500-750mg before bed improves sleep quality and reduces anxiety'
-      },
-      {
-        type: 'herb',
-        name: 'Valerian Root',
-        description: 'Traditional sleep herb with modern clinical studies showing effectiveness.',
-        affiliateLink: 'https://amzn.to/valerian-sleep',
-        price: '$18-25',
-        clinicalEvidence: '400-900mg extract improves sleep quality and reduces time to fall asleep'
-      },
-      {
-        type: 'herb',
-        name: 'Passionflower',
-        description: 'Gentle nervine herb that enhances GABA activity for natural sleep support.',
-        affiliateLink: 'https://amzn.to/passionflower-sleep',
-        price: '$15-25',
-        clinicalEvidence: 'Traditional use with modern safety studies for sleep and anxiety'
+      'Early Morning Awakening': {
+        paragraphs: [
+          "Early morning awakening is waking up too early and being unable to return to sleep. It can be related to low mood, hormonal changes, or circadian rhythm disruptions.",
+          "Supporting circadian rhythm and mood balance can help restore healthy sleep patterns."
+        ],
+        bestHerb: {
+          name: 'St. John\'s Wort',
+          description: 'Traditional herb with evidence for mood support and circadian rhythm regulation.',
+          affiliateLink: 'https://amzn.to/st-johns-wort-sleep',
+          price: '$20-30'
+        },
+        bestStandardized: {
+          name: '5-HTP',
+          description: 'Precursor to serotonin and melatonin. Supports mood and sleep regulation.',
+          affiliateLink: 'https://amzn.to/5htp-sleep',
+          price: '$20-30'
+        },
+        topSupplements: [
+          {
+            name: 'Vitamin D3',
+            description: 'Sunshine vitamin. Deficiency linked to low mood and sleep issues.',
+            affiliateLink: 'https://amzn.to/vitamin-d-sleep',
+            price: '$15-25'
+          },
+          {
+            name: 'Magnesium Glycinate',
+            description: 'Essential mineral for sleep and mood balance.',
+            affiliateLink: 'https://amzn.to/magnesium-sleep',
+            price: '$18-28'
+          }
+        ]
       }
-    ],
-    variants: ['Sleep Onset Insomnia', 'Sleep Maintenance Insomnia', 'Early Morning Awakening'],
-    herb: {
-      name: 'Valerian Root',
-      description: 'Traditional sleep herb with modern clinical studies showing effectiveness.',
-      affiliateUrl: 'https://amzn.to/valerian-sleep',
     },
-    extract: {
-      name: 'Melatonin (0.5-5mg)',
-      description: 'Most researched sleep supplement. Regulates circadian rhythm naturally.',
-      affiliateUrl: 'https://amzn.to/melatonin-sleep',
-    },
-    supplements: [
-      {
-        name: 'Magnesium Glycinate',
-        description: 'Essential mineral for muscle relaxation and GABA support.',
-        affiliateUrl: 'https://amzn.to/magnesium-sleep',
-      },
-      {
-        name: '5-HTP',
-        description: 'Precursor to serotonin and melatonin. Supports natural sleep hormone production.',
-        affiliateUrl: 'https://amzn.to/5htp-sleep',
-      },
-    ],
-    cautions: [
-      'Consult your doctor before starting new supplements, especially if you take medication.',
-      'Valerian may cause drowsiness or vivid dreams in some people.',
-      'Melatonin is best for circadian rhythm issues, not general insomnia.',
-    ],
-    related: [
-      { slug: 'anxiety', name: 'Anxiety' },
-      { slug: 'fatigue', name: 'Fatigue' },
-    ],
-    faq: [
-      {
-        q: 'Can I take melatonin and valerian together?',
-        a: 'Yes, but start with low doses and monitor your response. Both are generally safe but may cause drowsiness.',
-      },
-      {
-        q: 'How long until I notice results?',
-        a: 'Herbal and supplement effects may take 1–2 weeks of consistent use.',
-      },
-    ],
+    disclaimer: 'These recommendations are for general support. Consult your healthcare provider for personalized advice.',
+    herb: null,
+    extract: null,
+    supplements: null,
+    cautions: null,
+    related: null,
+    faq: null
   },
   'depression': {
     title: 'Depression',
@@ -399,42 +401,58 @@ const symptoms = {
   },
   'neck-tension': {
     title: 'Neck Tension',
-    description: 'Stiffness or pain in the neck, often related to stress or posture.',
-    symptoms: [
-      'Stiff neck',
-      'Pain with movement',
-      'Tension headaches',
-      'Shoulder tightness'
+    description: 'Muscle tightness, pain, or stiffness in the neck and upper shoulders.',
+    quickActions: [
+      { name: 'Muscle Tension', href: '/symptoms/muscle-tension', color: 'green' },
+      { name: 'Migraine', href: '/symptoms/migraine', color: 'purple' },
+      { name: 'Stress', href: '/symptoms/stress', color: 'blue' },
     ],
-    causes: [
-      'Stress',
-      'Poor posture',
-      'Injury',
-      'Prolonged computer use'
-    ],
-    naturalSolutions: [
-      {
-        type: 'herb',
-        name: 'Lavender',
-        description: 'Calming herb that may help with muscle relaxation',
-        affiliateLink: 'https://amzn.to/example-lavender',
-        price: '$12-20'
-      },
-      {
-        type: 'herb',
-        name: 'Cramp Bark (Viburnum opulus)',
-        description: 'Skeletal muscle relaxant and nerve relaxant. Excellent for neck tension, muscle cramps, and pinched nerves.',
-        affiliateLink: 'https://amzn.to/example-cramp-bark',
-        price: '$14-22'
+    variants: {
+      'Neck Tension': {
+        paragraphs: [
+          "Neck tension is a common complaint, often caused by stress, poor posture, prolonged computer use, or muscle strain. It can also be associated with headaches, jaw pain, or upper back discomfort.",
+          "Natural approaches to neck tension focus on muscle relaxation, stress reduction, and supporting healthy circulation."
+        ],
+        bestHerb: {
+          name: 'Lavender',
+          description: 'Traditional herb for muscle relaxation and stress relief.',
+          affiliateLink: 'https://amzn.to/lavender-neck',
+          price: '$15-22'
+        },
+        bestStandardized: {
+          name: 'Magnesium',
+          description: 'Essential mineral for muscle relaxation and nerve function.',
+          affiliateLink: 'https://amzn.to/magnesium-neck',
+          price: '$18-28'
+        },
+        topSupplements: [
+          {
+            name: 'Valerian Root',
+            description: 'Herbal muscle relaxant and sleep aid.',
+            affiliateLink: 'https://amzn.to/valerian-neck',
+            price: '$18-25'
+          },
+          {
+            name: 'CBD Oil',
+            description: 'Supports muscle relaxation and reduces pain perception.',
+            affiliateLink: 'https://amzn.to/cbd-neck',
+            price: '$25-40'
+          }
+        ]
       }
+    },
+    relatedSymptoms: [
+      { name: 'Muscle Tension', href: '/symptoms/muscle-tension', color: 'green' },
+      { name: 'Migraine', href: '/symptoms/migraine', color: 'purple' },
+      { name: 'Stress', href: '/symptoms/stress', color: 'blue' }
     ],
-    variants: [],
+    disclaimer: 'These recommendations are for general support. Consult your healthcare provider for personalized advice.',
     herb: null,
     extract: null,
     supplements: null,
     cautions: null,
     related: null,
-    faq: null,
+    faq: null
   },
   'blood-pressure': {
     title: 'Blood Pressure Balance',
@@ -510,34 +528,58 @@ const symptoms = {
   'liver-detox': {
     title: 'Liver Function Support / Toxicity',
     description: 'Support for liver detoxification and function.',
-    symptoms: [
-      'Fatigue',
-      'Digestive issues',
-      'Skin problems',
-      'Brain fog'
+    quickActions: [
+      { name: 'Hormonal Imbalances', href: '/symptoms/hormonal-imbalances', color: 'purple' },
+      { name: 'Digestive Health', href: '/symptoms/digestive-health', color: 'blue' },
+      { name: 'Fatigue', href: '/symptoms/fatigue', color: 'green' },
     ],
-    causes: [
-      'Toxin exposure',
-      'Poor diet',
-      'Alcohol use',
-      'Medications'
-    ],
-    naturalSolutions: [
-      {
-        type: 'herb',
-        name: 'Milk Thistle',
-        description: 'Supports liver detoxification and regeneration',
-        affiliateLink: 'https://amzn.to/example-milk-thistle',
-        price: '$15-25'
+    variants: {
+      'Liver Detox': {
+        paragraphs: [
+          "The liver can struggle for many reasons—not just from self-inflicted causes like alcohol or chemical use, but also due to genetics, chronic illness, medications, infections, or nutrient deficiencies. When the liver is not functioning optimally, it cannot effectively clear hormones and metabolic byproducts from the bloodstream. This impaired clearance can disrupt healthy hormonal feedback loops and rhythms, leading to hormonal imbalances that may profoundly affect mood, focus, energy, and general wellbeing. Supporting liver health is therefore essential not only for detoxification, but also for maintaining balanced hormone signaling and overall vitality.",
+          "Common symptoms of poor liver function include fatigue, digestive issues, skin problems, and brain fog. Addressing these symptoms often requires a holistic approach, including dietary changes, herbal support, and targeted supplementation.",
+          "Natural approaches to liver detoxification focus on supporting the body's own detox pathways, reducing toxin exposure, and providing nutrients and herbs that enhance liver function."
+        ],
+        bestHerb: {
+          name: 'Milk Thistle',
+          description: 'Traditional liver herb with strong evidence for supporting detoxification and liver cell regeneration.',
+          affiliateLink: 'https://amzn.to/milk-thistle-liver',
+          price: '$18-28'
+        },
+        bestStandardized: {
+          name: 'NAC (N-Acetyl Cysteine)',
+          description: 'Amino acid supplement that boosts glutathione, the body’s master antioxidant for liver health.',
+          affiliateLink: 'https://amzn.to/nac-liver',
+          price: '$20-30'
+        },
+        topSupplements: [
+          {
+            name: 'Dandelion Root',
+            description: 'Herbal bitter that stimulates bile flow and supports digestion and detoxification.',
+            affiliateLink: 'https://amzn.to/dandelion-liver',
+            price: '$15-22'
+          },
+          {
+            name: 'Alpha Lipoic Acid',
+            description: 'Powerful antioxidant that supports liver cell protection and regeneration.',
+            affiliateLink: 'https://amzn.to/ala-liver',
+            price: '$18-28'
+          }
+        ]
       }
+    },
+    relatedSymptoms: [
+      { name: 'Hormonal Imbalances', href: '/symptoms/hormonal-imbalances', color: 'purple' },
+      { name: 'Fatigue', href: '/symptoms/fatigue', color: 'green' },
+      { name: 'Digestive Health', href: '/symptoms/digestive-health', color: 'blue' }
     ],
-    variants: [],
+    disclaimer: 'These recommendations are for general support. Consult your healthcare provider for personalized advice.',
     herb: null,
     extract: null,
     supplements: null,
     cautions: null,
     related: null,
-    faq: null,
+    faq: null
   },
   'digestive-health': {
     title: 'Hormonal Imbalances / Digestive Health',
@@ -795,55 +837,245 @@ const symptoms = {
     faq: null,
   },
   'migraine': {
-    title: 'Migraine',
-    description: 'Severe recurring headaches often accompanied by nausea, sensitivity to light and sound, and visual disturbances.',
-    symptoms: [
-      'Intense throbbing headache',
-      'Nausea and vomiting',
-      'Sensitivity to light and sound',
-      'Visual disturbances (aura)',
-      'Dizziness',
-      'Fatigue'
+    title: 'Migraine Relief',
+    description: 'Natural solutions for migraine management and prevention.',
+    quickActions: [
+      { name: 'Anxiety & Stress', href: '/symptoms/anxiety', color: 'purple' },
+      { name: 'Sleep Issues', href: '/symptoms/insomnia', color: 'blue' },
+      { name: 'Muscle Tension', href: '/symptoms/muscle-tension', color: 'green' },
     ],
-    causes: [
-      'Hormonal changes',
-      'Stress and tension',
-      'Food triggers',
-      'Environmental factors',
-      'Sleep disturbances',
-      'Dehydration'
-    ],
-    naturalSolutions: [
-      {
-        type: 'herb',
-        name: 'Feverfew',
-        description: 'Traditional herb used for migraine prevention and relief',
-        affiliateLink: 'https://amzn.to/example-feverfew',
-        price: '$12-20',
-        herbLink: '/herbs/feverfew'
-      },
-      {
-        type: 'herb',
-        name: 'Butterbur',
-        description: 'Natural supplement that may reduce migraine frequency',
-        affiliateLink: 'https://amzn.to/example-butterbur',
-        price: '$15-25'
-      },
-      {
-        type: 'supplement',
-        name: 'Magnesium',
-        description: 'Mineral that may help prevent migraines',
-        affiliateLink: 'https://amzn.to/example-magnesium',
-        price: '$10-18'
+    variants: {
+      'Migraine Relief': {
+        paragraphs: [
+          "Migraines are complex neurological conditions that can be debilitating. They involve changes in brain chemistry, blood vessel dilation, and inflammation. Common triggers include hormonal changes, food sensitivities, stress, sleep disturbances, environmental factors, and dehydration.",
+          "Natural approaches to migraine relief focus on reducing frequency, intensity, and duration of attacks through evidence-based herbs, supplements, and lifestyle changes."
+        ],
+        bestHerb: {
+          name: 'Feverfew',
+          description: 'Traditional migraine herb with anti-inflammatory properties.',
+          affiliateLink: 'https://amzn.to/feverfew-migraine',
+          price: '$15-22'
+        },
+        bestStandardized: {
+          name: 'Butterbur',
+          description: 'Clinically proven to reduce migraine frequency.',
+          affiliateLink: 'https://amzn.to/butterbur-migraine',
+          price: '$18-28'
+        },
+        topSupplements: [
+          {
+            name: 'Magnesium',
+            description: 'Essential mineral for nerve function and muscle relaxation.',
+            affiliateLink: 'https://amzn.to/magnesium-migraine',
+            price: '$18-28'
+          },
+          {
+            name: 'Riboflavin (B2)',
+            description: 'High-dose B2 reduces migraine frequency.',
+            affiliateLink: 'https://amzn.to/b2-migraine',
+            price: '$15-22'
+          }
+        ]
       }
+    },
+    relatedSymptoms: [
+      { name: 'Nausea & Vomiting', href: '/symptoms/nausea', color: 'purple' },
+      { name: 'Light Sensitivity', href: '/symptoms/light-sensitivity', color: 'blue' },
+      { name: 'Sound Sensitivity', href: '/symptoms/sound-sensitivity', color: 'green' }
     ],
-    variants: [],
+    emergencyNote: 'If you experience a severe, sudden headache unlike any you\'ve had before, seek immediate medical attention. Call emergency services or go to the nearest emergency room.',
+    disclaimer: 'These recommendations are for general support. Consult your healthcare provider for personalized advice.',
     herb: null,
     extract: null,
     supplements: null,
     cautions: null,
     related: null,
-    faq: null,
+    faq: null
+  },
+  'burnout': {
+    title: 'Emotional Burnout',
+    description: 'Chronic stress and emotional exhaustion affecting mood, energy, and motivation.',
+    quickActions: [
+      { name: 'Anxiety', href: '/symptoms/anxiety', color: 'purple' },
+      { name: 'Fatigue', href: '/symptoms/fatigue', color: 'green' },
+      { name: 'Depression', href: '/symptoms/depression', color: 'blue' },
+    ],
+    variants: {
+      'Burnout': {
+        paragraphs: [
+          "Burnout is a state of chronic stress and emotional exhaustion that can affect mood, energy, motivation, and overall wellbeing. It is common in high-pressure jobs, caregiving roles, and during prolonged periods of stress.",
+          "Natural approaches to burnout focus on stress reduction, nervous system support, and restoring energy and resilience."
+        ],
+        bestHerb: {
+          name: 'Rhodiola Rosea',
+          description: 'Adaptogenic herb that improves energy, reduces fatigue, and enhances stress resilience.',
+          affiliateLink: 'https://amzn.to/rhodiola-burnout',
+          price: '$25-35'
+        },
+        bestStandardized: {
+          name: 'Ashwagandha',
+          description: 'Adaptogenic herb that reduces stress hormones and supports adrenal function.',
+          affiliateLink: 'https://amzn.to/ashwagandha-burnout',
+          price: '$18-28'
+        },
+        topSupplements: [
+          {
+            name: 'B-Complex Vitamins',
+            description: 'Essential for energy production and nervous system function.',
+            affiliateLink: 'https://amzn.to/b-complex-burnout',
+            price: '$15-25'
+          },
+          {
+            name: 'Magnesium',
+            description: 'Essential mineral for nervous system relaxation and stress resilience.',
+            affiliateLink: 'https://amzn.to/magnesium-burnout',
+            price: '$18-28'
+          }
+        ]
+      }
+    },
+    relatedSymptoms: [
+      { name: 'Anxiety', href: '/symptoms/anxiety', color: 'purple' },
+      { name: 'Fatigue', href: '/symptoms/fatigue', color: 'green' },
+      { name: 'Depression', href: '/symptoms/depression', color: 'blue' }
+    ],
+    disclaimer: 'These recommendations are for general support. Consult your healthcare provider for personalized advice.',
+    herb: null,
+    extract: null,
+    supplements: null,
+    cautions: null,
+    related: null,
+    faq: null
+  },
+  'thyroid-issues': {
+    title: 'Thyroid Issues',
+    description: 'Support for thyroid function, energy, and metabolism.',
+    quickActions: [
+      { name: 'Fatigue', href: '/symptoms/fatigue', color: 'green' },
+      { name: 'Mood Swings', href: '/symptoms/mood-swings', color: 'purple' },
+      { name: 'Hormonal Imbalances', href: '/symptoms/hormonal-imbalances', color: 'blue' },
+    ],
+    variants: {
+      'Thyroid Support': {
+        paragraphs: [
+          "Thyroid issues can affect energy, metabolism, mood, and overall wellbeing. Common symptoms include fatigue, weight changes, mood swings, and sensitivity to cold or heat.",
+          "Natural approaches to thyroid support focus on providing key nutrients, supporting hormone synthesis, and reducing stress."
+        ],
+        bestHerb: {
+          name: 'Ashwagandha',
+          description: 'Adaptogenic herb that supports thyroid hormone balance and stress resilience.',
+          affiliateLink: 'https://amzn.to/ashwagandha-thyroid',
+          price: '$18-28'
+        },
+        bestStandardized: {
+          name: 'Selenium',
+          description: 'Essential mineral for thyroid hormone synthesis and conversion.',
+          affiliateLink: 'https://amzn.to/selenium-thyroid',
+          price: '$15-22'
+        },
+        topSupplements: [
+          {
+            name: 'Zinc',
+            description: 'Essential for thyroid hormone synthesis and immune function.',
+            affiliateLink: 'https://amzn.to/zinc-thyroid',
+            price: '$15-22'
+          },
+          {
+            name: 'Vitamin D3',
+            description: 'Supports immune function and thyroid health.',
+            affiliateLink: 'https://amzn.to/vitamin-d-thyroid',
+            price: '$15-25'
+          }
+        ]
+      }
+    },
+    relatedSymptoms: [
+      { name: 'Fatigue', href: '/symptoms/fatigue', color: 'green' },
+      { name: 'Mood Swings', href: '/symptoms/mood-swings', color: 'purple' },
+      { name: 'Hormonal Imbalances', href: '/symptoms/hormonal-imbalances', color: 'blue' }
+    ],
+    disclaimer: 'These recommendations are for general support. Consult your healthcare provider for personalized advice.',
+    herb: null,
+    extract: null,
+    supplements: null,
+    cautions: null,
+    related: null,
+    faq: null
+  },
+  'poor-focus': {
+    title: 'Poor Focus',
+    description: 'Difficulty concentrating, maintaining attention, or staying focused on tasks.',
+    paragraphs: [
+      "Poor focus can manifest as difficulty concentrating, easily getting distracted, or having trouble completing tasks. This can be caused by stress, poor sleep, nutrient deficiencies, or underlying health conditions.",
+      "Brain fog specifically refers to a feeling of mental cloudiness, confusion, or difficulty thinking clearly. It's often associated with fatigue, stress, or hormonal imbalances.",
+      "Poor memory involves difficulty recalling information, learning new things, or retaining details. This can be age-related or due to stress, sleep issues, or nutrient deficiencies.",
+      "Natural approaches to improving focus and memory often involve supporting brain health through specific herbs and supplements that enhance blood flow, neurotransmitter function, and cellular energy production."
+    ],
+    variants: {
+      'Brain Fog': {
+        bestHerb: {
+          name: 'Ginkgo Biloba',
+          description: 'Traditional herb that improves blood flow to the brain and clears mental fog.',
+          affiliateLink: 'https://amzn.to/ginkgo-brain-fog',
+          price: '$20-30'
+        },
+        bestStandardized: {
+          name: 'L-Theanine',
+          description: 'Amino acid that promotes calm focus and reduces mental fatigue.',
+          affiliateLink: 'https://amzn.to/theanine-brain-fog',
+          price: '$15-25'
+        },
+        topSupplements: [
+          {
+            name: 'Bacopa Monnieri',
+            description: 'Ayurvedic herb that enhances memory and cognitive clarity.',
+            affiliateLink: 'https://amzn.to/bacopa-brain-fog',
+            price: '$25-35'
+          },
+          {
+            name: 'Phosphatidylserine',
+            description: 'Essential brain phospholipid that supports cognitive function.',
+            affiliateLink: 'https://amzn.to/phosphatidylserine-brain-fog',
+            price: '$25-35'
+          }
+        ]
+      },
+      'Poor Memory': {
+        bestHerb: {
+          name: 'Bacopa Monnieri',
+          description: 'Ayurvedic herb that enhances memory, learning, and information retention.',
+          affiliateLink: 'https://amzn.to/bacopa-memory',
+          price: '$25-35'
+        },
+        bestStandardized: {
+          name: 'Phosphatidylserine',
+          description: 'Essential brain phospholipid that supports memory formation and recall.',
+          affiliateLink: 'https://amzn.to/phosphatidylserine-memory',
+          price: '$25-35'
+        },
+        topSupplements: [
+          {
+            name: 'Acetyl-L-Carnitine',
+            description: 'Amino acid that supports brain energy and memory function.',
+            affiliateLink: 'https://amzn.to/acetyl-carnitine-memory',
+            price: '$20-30'
+          },
+          {
+            name: 'Omega-3 DHA',
+            description: 'Essential brain fat that supports memory and cognitive performance.',
+            affiliateLink: 'https://amzn.to/omega3-memory',
+            price: '$25-40'
+          }
+        ]
+      }
+    },
+    disclaimer: 'These recommendations are for general support. Consult your healthcare provider for personalized advice.',
+    herb: null,
+    extract: null,
+    supplements: null,
+    cautions: null,
+    related: null,
+    faq: null
   }
 };
 
@@ -855,6 +1087,13 @@ export default async function SymptomPage({ params }: SymptomPageProps) {
     notFound();
   }
 
+  // --- VARIANT LOGIC ---
+  const hasVariants = symptom.variants && typeof symptom.variants === 'object' && !Array.isArray(symptom.variants);
+  if (hasVariants) {
+    return <VariantSymptomPage symptom={symptom} />;
+  }
+
+  // --- OLD STRUCTURE FALLBACK ---
   // Example: Add placeholder products if not present (for plug-and-play API integration)
   const products = symptom.products || [
     {

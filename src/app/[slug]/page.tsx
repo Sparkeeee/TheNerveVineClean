@@ -396,10 +396,9 @@ const symptoms: { [key: string]: Symptom } = {
     description: 'Support for liver detoxification and function.',
     paragraphs: [
       "The liver can struggle for many reasons—not just from self-inflicted causes like alcohol or chemical use, but also due to genetics, chronic illness, medications, infections, or nutrient deficiencies. When the liver is not functioning optimally, it cannot effectively clear hormones and metabolic byproducts from the bloodstream. This impaired clearance can disrupt healthy hormonal feedback loops and rhythms, leading to hormonal imbalances that may profoundly affect mood, focus, energy, and general wellbeing. Supporting liver health is therefore essential not only for detoxification, but also for maintaining balanced hormone signaling and overall vitality.",
-      'Fatigue',
-      'Digestive issues',
-      'Skin problems',
-      'Brain fog'
+      "Common symptoms of liver dysfunction include fatigue, digestive issues, skin problems, and brain fog. These symptoms can be subtle at first but may worsen over time if the underlying liver stress is not addressed. It's important to note that these symptoms can also be caused by other conditions, so proper medical evaluation is essential.",
+      "The liver plays a crucial role in detoxifying harmful substances, processing nutrients, and regulating metabolism. When liver function is compromised, it can affect multiple body systems and contribute to a wide range of health issues. Supporting liver health through lifestyle changes and targeted supplements can help restore optimal function.",
+      "Natural approaches to liver support include reducing toxin exposure, maintaining a healthy diet rich in antioxidants, staying hydrated, and using specific herbs and supplements that support liver function. Always consult with a healthcare professional before starting any new supplement regimen, especially if you have existing liver conditions."
     ],
     causes: [
       'Toxin exposure',
@@ -684,6 +683,80 @@ const symptoms: { [key: string]: Symptom } = {
       }
     },
     disclaimer: "This information is for educational purposes only and should not be considered medical advice. The content provided is not intended to diagnose, treat, cure, or prevent any disease. Always consult with a healthcare professional before starting any new supplement regimen."
+  },
+  'fatigue': {
+    title: 'Fatigue',
+    description: 'Persistent tiredness, low energy, or exhaustion that is not relieved by rest.',
+    paragraphs: [
+      "Fatigue is a common complaint that can have many causes, including stress, poor sleep, nutrient deficiencies, chronic illness, and hormonal imbalances. It can affect your ability to function at work, at home, and in social situations.",
+      "Addressing fatigue requires a holistic approach: improving sleep quality, managing stress, optimizing nutrition, and supporting underlying health conditions. Herbal and nutritional supplements can provide targeted support for energy, resilience, and recovery.",
+      "If fatigue is severe, persistent, or accompanied by other symptoms (such as weight loss, fever, or pain), consult a healthcare professional to rule out underlying medical conditions.",
+      "The following recommendations are evidence-based and focus on restoring healthy energy levels and resilience to stress."
+    ],
+    bestHerb: {
+      name: 'Rhodiola rosea',
+      description: 'Adaptogenic herb shown to improve energy, stamina, and resilience to stress. Rhodiola is especially helpful for fatigue related to burnout or chronic stress.',
+      affiliateLink: 'https://amzn.to/rhodiola-fatigue',
+      price: '$18-28'
+    },
+    bestStandardized: {
+      name: 'Standardized Panax Ginseng Extract',
+      description: 'Panax ginseng (standardized for ginsenosides) is a classic energy tonic with clinical evidence for reducing fatigue and improving mental and physical performance.',
+      affiliateLink: 'https://amzn.to/panax-ginseng-fatigue',
+      price: '$22-38'
+    },
+    topSupplements: [
+      {
+        name: 'CoQ10',
+        description: 'Supports cellular energy production and is especially helpful for fatigue related to statin use or mitochondrial dysfunction.',
+        affiliateLink: 'https://amzn.to/coq10-fatigue',
+        price: '$20-35'
+      },
+      {
+        name: 'Vitamin B12 (Methylcobalamin)',
+        description: 'Essential for red blood cell production and energy. B12 deficiency is a common, reversible cause of fatigue.',
+        affiliateLink: 'https://amzn.to/b12-fatigue',
+        price: '$12-20'
+      }
+    ],
+    disclaimer: "This information is for educational purposes only and should not be considered medical advice. The content provided is not intended to diagnose, treat, cure, or prevent any disease. Always consult a healthcare professional before starting any new supplement regimen."
+  },
+  'mood-swings': {
+    title: 'Mood Swings',
+    description: 'Rapid or unpredictable changes in mood, energy, or emotional state.',
+    paragraphs: [
+      "Mood swings can be caused by hormonal fluctuations, stress, sleep disturbances, blood sugar imbalances, or underlying mental health conditions. They can affect relationships, work, and overall quality of life.",
+      "Stabilizing mood involves supporting healthy brain chemistry, hormone balance, and stress resilience. Lifestyle changes, therapy, and targeted supplements can all play a role.",
+      "If mood swings are severe, persistent, or associated with thoughts of self-harm, seek professional help immediately.",
+      "The following recommendations are designed to support emotional balance and resilience to stress."
+    ],
+    bestHerb: {
+      name: "St. John's Wort",
+      description: "Traditional herb with clinical evidence for supporting mood stability and emotional balance. May interact with medications—consult your doctor before use.",
+      affiliateLink: 'https://amzn.to/st-johns-wort-mood',
+      price: '$20-30'
+    },
+    bestStandardized: {
+      name: 'Standardized Saffron Extract',
+      description: 'Saffron extract (standardized for crocin and safranal) has been shown in clinical trials to improve mood and reduce symptoms of mild to moderate depression and mood swings.',
+      affiliateLink: 'https://amzn.to/saffron-mood',
+      price: '$24-40'
+    },
+    topSupplements: [
+      {
+        name: 'Omega-3 EPA/DHA',
+        description: 'Essential fatty acids for brain health and mood stability. EPA in particular is linked to improved emotional balance.',
+        affiliateLink: 'https://amzn.to/omega3-mood',
+        price: '$25-40'
+      },
+      {
+        name: 'Magnesium Glycinate',
+        description: 'Supports nervous system balance and may help reduce mood swings, irritability, and anxiety.',
+        affiliateLink: 'https://amzn.to/magnesium-mood',
+        price: '$18-28'
+      }
+    ],
+    disclaimer: "This information is for educational purposes only and should not be considered medical advice. The content provided is not intended to diagnose, treat, cure, or prevent any disease. Always consult a healthcare professional before starting any new supplement regimen."
   }
 };
 

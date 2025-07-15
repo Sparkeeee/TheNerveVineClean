@@ -93,8 +93,8 @@ export default function BodyMap() {
         mobileOffset: { x: 0, y: 0 }
       },
       { 
-        label: "Brain Fog", 
-        href: "/symptoms/brain-fog", 
+        label: "Poor Focus", 
+        href: "/symptoms/poor-focus", 
         angle: 0, 
         radius: baseRadius,
         mobileOffset: { x: 0, y: 0 }
@@ -167,7 +167,7 @@ export default function BodyMap() {
       },
       { 
         label: "Hormonal Imbalances", 
-        href: "/symptoms/digestive-health", 
+        href: "/symptoms/hormonal-imbalances", 
         angle: 150,
         radius: 120,
         centerX: 350,
@@ -253,7 +253,7 @@ export default function BodyMap() {
         { label: "Insomnia", href: "/symptoms/insomnia" },
         { label: "Depression", href: "/symptoms/depression" },
         { label: "Anxiety", href: "/symptoms/anxiety" },
-        { label: "Brain Fog", href: "/symptoms/brain-fog" },
+        { label: "Poor Focus", href: "/symptoms/poor-focus" },
         { label: "Migraine", href: "/symptoms/migraine" },
         { label: "Tension Headaches", href: "/symptoms/muscle-tension" },
         { label: "Emotional Burnout", href: "/symptoms/burnout" },
@@ -262,7 +262,7 @@ export default function BodyMap() {
         { label: "Blood Pressure Balance", href: "/symptoms/blood-pressure" },
         { label: "Heart Muscle Support", href: "/symptoms/heart-support" },
         { label: "Liver Function Support / Toxicity", href: "/symptoms/liver-detox" },
-        { label: "Hormonal Imbalances", href: "/symptoms/digestive-health" },
+        { label: "Hormonal Imbalances", href: "/symptoms/hormonal-imbalances" },
         { label: "Overload", href: "/symptoms/adrenal-overload" },
         { label: "Exhaustion", href: "/symptoms/adrenal-exhaustion" },
         { label: "Circadian Support", href: "/symptoms/circadian-support" },
@@ -326,8 +326,29 @@ export default function BodyMap() {
       <div className="w-full max-w-6xl mx-auto mb-10">
         <div className="flex flex-col lg:flex-row gap-6 items-center">
           
-          {/* Left Column - Health Tips & Info */}
+          {/* Left Column - Featured Topics & Health Tips */}
           <div className="w-full lg:w-1/4 space-y-4">
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-xl p-6 shadow-lg border border-blue-200">
+              <h3 className="text-lg font-semibold text-blue-800 mb-4">🌟 Featured Topics</h3>
+              <div className="space-y-3 text-sm text-gray-700">
+                <div className="mb-2">
+                  <span className="font-semibold">All About Balance</span>
+                  <div>Explore the natural pendulum swing and rhythm between the PNS and SNS. Learn how stress and stimulants can overload the SNS and weaken the PNS, and how to restore balance.</div>
+                </div>
+                <div className="mb-2">
+                  <span className="font-semibold">Relaxation is Powerful</span>
+                  <div>Discover why true relaxation is a cornerstone of healing and resilience, and how calming herbs and techniques can reset your nervous system.</div>
+                </div>
+                <div className="mb-2">
+                  <span className="font-semibold">Peak Performance</span>
+                  <div>Herbs and supplements for optimum nervous system performance—nootropics, adaptogens, and tonics for focus, energy, and stress resilience.</div>
+                </div>
+                <div>
+                  <span className="font-semibold">Pain Management</span>
+                  <div>Evidence-based natural strategies for managing pain—herbs, supplements, and lifestyle tips to support comfort and healing.</div>
+                </div>
+              </div>
+            </div>
             <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-blue-200">
               <h3 className="text-lg font-semibold text-blue-800 mb-4">💡 Health Tips</h3>
               <div className="space-y-3 text-sm text-gray-700">
@@ -344,13 +365,6 @@ export default function BodyMap() {
                   <span>Quality matters - choose reputable brands</span>
                 </div>
               </div>
-            </div>
-            
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-xl p-6 shadow-lg border border-blue-200">
-              <h3 className="text-lg font-semibold text-blue-800 mb-4">🌿 Natural Approach</h3>
-              <p className="text-sm text-gray-700 leading-relaxed">
-                Our body map helps you identify which systems need support and find the right natural solutions for your specific health concerns.
-              </p>
             </div>
           </div>
 
@@ -392,8 +406,14 @@ export default function BodyMap() {
             </div>
           </div>
 
-          {/* Right Column - Quick Links & Featured */}
+          {/* Right Column - Natural Approach, Quick Links & Featured */}
           <div className="w-full lg:w-1/4 space-y-4">
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-xl p-6 shadow-lg border border-blue-200">
+              <h3 className="text-lg font-semibold text-blue-800 mb-4">🌿 Natural Approach</h3>
+              <p className="text-sm text-gray-700 leading-relaxed">
+                Our body map helps you identify which systems need support and find the right natural solutions for your specific health concerns.
+              </p>
+            </div>
             <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-blue-200">
               <h3 className="text-lg font-semibold text-blue-800 mb-4">⚡ Quick Access</h3>
               <div className="space-y-3">
@@ -414,7 +434,6 @@ export default function BodyMap() {
                 </Link>
               </div>
             </div>
-            
             <div className="bg-gradient-to-br from-indigo-50 to-blue-100 rounded-xl p-6 shadow-lg border border-blue-200">
               <h3 className="text-lg font-semibold text-blue-800 mb-4">🌟 Featured</h3>
               <div className="space-y-3 text-sm text-gray-700">
