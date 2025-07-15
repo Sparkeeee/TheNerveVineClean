@@ -10,10 +10,14 @@ export type Herb = {
       name: string;
       url: string;
       price?: string;
+      image?: string;
+      description?: string;
     }[];
     subtitle?: string;
     benefits?: string[];
     traditionalUses?: string[];
+    safety?: string;
+    preparation?: string;
   };
   
   export const herbs: Herb[] = [
