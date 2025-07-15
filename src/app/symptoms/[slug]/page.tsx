@@ -17,6 +17,7 @@ type Product = {
   affiliateRevenue?: number;
   type?: string;
   clinicalEvidence?: string;
+  productLink?: string;
 };
 
 interface Symptom {
@@ -512,7 +513,7 @@ const symptoms: Record<string, Symptom> = {
         description: 'Traditionally used for cardiovascular support',
         affiliateLink: 'https://amzn.to/example-hawthorn',
         price: '$15-25',
-        herbLink: '/herbs/hawthorn'
+        productLink: '/herbs/hawthorn'
       }
     ],
     variants: {},
