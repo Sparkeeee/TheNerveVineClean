@@ -11,6 +11,7 @@ export type Herb = {
       url: string;
       price?: string;
     }[];
+    subtitle?: string;
   };
   
   export const herbs: Herb[] = [
