@@ -3,11 +3,43 @@ import Link from 'next/link';
 import Image from 'next/image';
 import VariantSymptomPage from './VariantSymptomPage';
 
+// Explicit types for product and symptom
+
+type Product = {
+  name: string;
+  description: string;
+  affiliateLink?: string;
+  affiliateUrl?: string;
+  price: string;
+  image?: string;
+  supplier?: string;
+  qualityScore?: number;
+  affiliateRevenue?: number;
+};
+
+interface Symptom {
+  title: string;
+  description: string;
+  paragraphs?: string[];
+  variants?: Record<string, any>;
+  disclaimer?: string;
+  symptoms?: string[];
+  causes?: string[];
+  naturalSolutions?: Product[];
+  products?: Product[];
+  herb?: any;
+  extract?: any;
+  supplements?: any;
+  cautions?: any;
+  related?: any;
+  faq?: any;
+}
+
 interface SymptomPageProps {
   params: Promise<{ slug: string }>;
 }
 
-const symptoms = {
+const symptoms: Record<string, Symptom> = {
   'insomnia': {
     title: 'Insomnia',
     description: 'Difficulty falling asleep, staying asleep, or waking up too early.',
