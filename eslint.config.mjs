@@ -14,9 +14,12 @@ const eslintConfig = [
   {
     ignores: [".next/", "node_modules/"],
     rules: {
-      '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/no-unused-vars': 'off',
+      // Warn on 'any' to allow rare, justified use but discourage overuse
+      '@typescript-eslint/no-explicit-any': 'warn',
+      // Error on unused vars for code cleanliness
+      '@typescript-eslint/no-unused-vars': 'error',
     },
+    // Rationale: These settings provide strong stability without being overly strict. 'any' is allowed with a warning for rare cases. Unused vars are errors to keep code clean.
   },
 ];
 

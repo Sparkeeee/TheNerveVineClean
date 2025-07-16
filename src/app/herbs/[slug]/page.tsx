@@ -17,11 +17,26 @@ export default async function HerbPage({ params }: HerbPageProps) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100">
       <div className="max-w-4xl mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-purple-900 mb-2">{herb.name}</h1>
-          {herb.subtitle && <p className="text-xl text-purple-700 mb-4">{herb.subtitle}</p>}
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">{herb.description}</p>
+        {/* Header with Image */}
+        <div className="flex flex-col md:flex-row items-center gap-8 mb-8">
+          <div className="flex-shrink-0">
+            <Image
+              src={herb.image}
+              alt={herb.name}
+              width={200}
+              height={200}
+              className="rounded-full object-cover shadow-lg border-4 border-white"
+            />
+          </div>
+          <div className="text-center md:text-left">
+            <h1 className="text-4xl font-bold text-purple-900 mb-2">{herb.name}</h1>
+            {herb.subtitle && <p className="text-xl text-purple-700 mb-4">{herb.subtitle}</p>}
+            <div className="text-lg text-gray-600 max-w-3xl space-y-4">
+              {herb.description.split('\\n\\n').map((paragraph, index) => (
+                <p key={index}>{paragraph}</p>
+              ))}
+            </div>
+          </div>
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">

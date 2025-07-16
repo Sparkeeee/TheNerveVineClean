@@ -3,10 +3,10 @@
     "target": "ES2017",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
-    "skipLibCheck": true,
-    "strict": false, // Relax overall strictness
-    "noImplicitAny": false, // Allow 'any' type
-    "strictNullChecks": false, // Allow null/undefined without strict checks
+    "strict": true, // Enable all strict type-checking for stability
+    "noImplicitAny": true, // Disallow implicit 'any' types for type safety
+    "strictNullChecks": true, // Catch null/undefined errors
+    "skipLibCheck": true, // Keep for faster builds, safe for most projects
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",

@@ -1,0 +1,11 @@
+{
+  "models": [
+    {
+      "title": "Gemini 1.5 Flash",
+      "provider": "vertexai",
+      "model": "gemini-1.5-flash-002",
+      "projectId": "thenervevine",
+      "region": "europe-west4"
+    }
+  ]
+}

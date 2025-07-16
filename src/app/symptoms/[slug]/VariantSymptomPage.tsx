@@ -5,14 +5,14 @@ import Image from 'next/image';
 import { Symptom, Product } from '../../../types/symptom';
 
 const symptomIcons: Record<string, string> = {
-  'Insomnia': '🌙',
-  'Depression': '🌧️',
-  'Anxiety': '😰',
-  'Fatigue': '😴',
-  'Burnout': '🔥',
-  'Brain Fog': '🌫️',
-  'IBS': '💩',
-  'Thyroid Issues': '🦋',
+  'Insomnia': '',
+  'Depression': '',
+  'Anxiety': '',
+  'Fatigue': '',
+  'Burnout': '',
+  'Brain Fog': '',
+  'IBS': '',
+  'Thyroid Issues': '',
   // ...add more as needed
 };
 
@@ -43,7 +43,7 @@ export default function VariantSymptomPage({ symptom }: { symptom: Symptom }) {
   const related = relatedSymptomsMap[symptom.title] || [];
   const quickActions = symptom.quickActions || quickActionsDefault;
   const emergencyNote = symptom.emergencyNote;
-  const icon = symptomIcons[symptom.title] || '🩺';
+  const icon = '';
 
   // Calculate total text length of variant paragraphs
   const totalTextLength = (variant?.paragraphs ?? []).reduce((acc, para) => acc + para.length, 0);
@@ -73,7 +73,7 @@ export default function VariantSymptomPage({ symptom }: { symptom: Symptom }) {
         <div className="absolute top-4 left-4">
           <Link href="/" className="text-blue-600 hover:text-blue-800 text-lg font-semibold">← Body Map</Link>
         </div>
-        <div className="text-6xl mb-2">{icon}</div>
+        {/* Removed emoji icon from hero */}
         <h1 className="text-4xl md:text-5xl font-extrabold text-purple-900 mb-2 drop-shadow-lg text-center">{symptom.title}</h1>
         <p className="text-lg md:text-xl text-purple-700 text-center max-w-2xl mx-auto mb-2">{symptom.description}</p>
         {variantNames.length > 1 && (
@@ -95,7 +95,7 @@ export default function VariantSymptomPage({ symptom }: { symptom: Symptom }) {
       <div className="max-w-5xl mx-auto px-2 md:px-6 pb-12">
         {/* Tips for Insomnia */}
         {isInsomnia && (
-          <SectionDivider label="Tips for Better Sleep" icon="💡" color="blue" />
+          <SectionDivider label="Tips for Better Sleep" icon="" color="blue" />
         )}
         {isInsomnia && (
           <div className="mb-8 bg-blue-50 border-l-4 border-blue-300 rounded-lg p-6 shadow-sm">
@@ -113,7 +113,7 @@ export default function VariantSymptomPage({ symptom }: { symptom: Symptom }) {
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Left Column - Education */}
           <div className="lg:col-span-2 space-y-8">
-            <SectionDivider label="About" icon="📖" color="purple" />
+            <SectionDivider label="About" icon="" color="purple" />
             {(variant?.paragraphs ?? []).length > 0 ? (
               <div className="bg-white rounded-lg shadow-lg p-6 space-y-4 border-l-4 border-purple-300">
                 {(variant?.paragraphs ?? []).map((para: string, idx: number) => (
@@ -125,7 +125,7 @@ export default function VariantSymptomPage({ symptom }: { symptom: Symptom }) {
             )}
 
             {/* Replace Recommended Products with Herbal & Supplement Support */}
-            <SectionDivider label="Herbal & Supplement Support" icon="💊" color="blue" />
+            <SectionDivider label="Herbal & Supplement Support" icon="" color="blue" />
             <div className="bg-white rounded-lg shadow-lg p-6">
               {/* Best Herb */}
               {variant?.bestHerb ? (
@@ -151,7 +151,7 @@ export default function VariantSymptomPage({ symptom }: { symptom: Symptom }) {
 
             {Array.isArray(symptom.paragraphs) && symptom.paragraphs.length > 0 && (
               <>
-                <SectionDivider label="General Info" icon="ℹ️" color="purple" />
+                <SectionDivider label="General Info" icon="" color="purple" />
                 <div className="bg-white rounded-lg shadow-lg p-6 space-y-4 border-l-4 border-purple-200">
                   {symptom.paragraphs.map((para: string, idx: number) => (
                     <p key={idx} className="text-gray-700 text-base">{para}</p>
@@ -163,7 +163,7 @@ export default function VariantSymptomPage({ symptom }: { symptom: Symptom }) {
 
           {/* Right Column - Sidebar */}
           <div className="space-y-8">
-            <SectionDivider label="Top Picks" icon="🌿" color="green" />
+            <SectionDivider label="Top Picks" icon="" color="green" />
             {sidebarProducts.length > 0 ? (
               <div className="bg-white rounded-lg shadow-lg p-6">
                 <div className="space-y-4">
@@ -180,7 +180,7 @@ export default function VariantSymptomPage({ symptom }: { symptom: Symptom }) {
 
             {/* Herbal & Supplement Support section removed as requested */}
 
-            <SectionDivider label="Related Symptoms" icon="🔗" color="purple" />
+            <SectionDivider label="Related Symptoms" icon="" color="purple" />
             {related.length > 0 ? (
               <div className="bg-white rounded-lg shadow-lg p-6">
                 <div className="space-y-3">
@@ -200,7 +200,7 @@ export default function VariantSymptomPage({ symptom }: { symptom: Symptom }) {
             {/* Emergency/Warning Card */}
             {emergencyNote && (
               <div className="bg-yellow-50 border-l-4 border-yellow-400 rounded-lg p-6">
-                <h3 className="text-lg font-semibold text-yellow-800 mb-2">⚠️ Emergency</h3>
+                <h3 className="text-lg font-semibold text-yellow-800 mb-2">Emergency</h3>
                 <p className="text-sm text-yellow-700">{emergencyNote}</p>
               </div>
             )}
@@ -220,11 +220,9 @@ export default function VariantSymptomPage({ symptom }: { symptom: Symptom }) {
         {isInsomnia && (
           <div className="mt-8 p-4 bg-red-50 border border-red-300 rounded-lg">
             <p className="text-sm text-red-800 font-semibold mb-2">
-              <span className="mr-2">⚠️</span>
               <strong>Red flag:</strong> Insomnia accompanied by severe headache is a red flag—seek medical attention.
             </p>
             <p className="text-sm text-red-700">
-              <span className="mr-2">🚫</span>
               <strong>Caution:</strong> Do not combine Valerian or Melatonin with sedatives or alcohol.
             </p>
           </div>

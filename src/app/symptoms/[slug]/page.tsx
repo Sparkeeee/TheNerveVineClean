@@ -1245,6 +1245,51 @@ Object.keys(symptoms).forEach((key) => {
   });
 });
 
+// --- FINAL DATA CLEANUP: Fix product fields and remove non-Variant properties at the source ---
+Object.values(symptoms).forEach((symptom) => {
+  if (symptom.variants && typeof symptom.variants === 'object') {
+    Object.entries(symptom.variants).forEach(([variantName, variant]) => {
+      // Fix bestHerb
+      if (typeof variant.bestHerb === 'string') {
+        variant.bestHerb = {
+          name: variant.bestHerb,
+          description: 'Adaptogenic or nervine herb for this symptom.',
+          affiliateLink: '#',
+          price: '$15-25'
+        };
+      }
+      // Fix bestStandardized
+      if (typeof variant.bestStandardized === 'string') {
+        variant.bestStandardized = {
+          name: variant.bestStandardized,
+          description: 'Standardized extract or supplement for this symptom.',
+          affiliateLink: '#',
+          price: '$18-28'
+        };
+      }
+      // Fix topSupplements
+      if (Array.isArray(variant.topSupplements)) {
+        variant.topSupplements = variant.topSupplements.map((supp) =>
+          typeof supp === 'string'
+            ? {
+                name: supp,
+                description: 'Supplement for this symptom.',
+                affiliateLink: '#',
+                price: '$12-22'
+              }
+            : supp
+        );
+      }
+      // Remove all non-Variant properties
+      Object.keys(variant).forEach((key) => {
+        if (!['paragraphs','bestHerb','bestStandardized','topSupplements','emergencyNote','quickActions'].includes(key)) {
+          delete variant[key];
+        }
+      });
+    });
+  }
+});
+
 // --- Add placeholder products for any missing fields in all symptom variants ---
 Object.values(symptoms).forEach((symptom) => {
   if (symptom.variants && typeof symptom.variants === 'object') {
@@ -1275,6 +1320,19 @@ Object.values(symptoms).forEach((symptom) => {
           }
         ];
       }
+    });
+  }
+});
+
+// --- Remove all non-Variant properties from every variant object ---
+Object.values(symptoms).forEach((symptom) => {
+  if (symptom.variants && typeof symptom.variants === 'object') {
+    Object.values(symptom.variants).forEach((variant) => {
+      Object.keys(variant).forEach((key) => {
+        if (!['paragraphs','bestHerb','bestStandardized','topSupplements','emergencyNote','quickActions'].includes(key)) {
+          delete variant[key];
+        }
+      });
     });
   }
 });

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { herbs } from '../data/herbs';
 
 // Search data types
 interface SearchItem {
@@ -16,317 +17,25 @@ interface SearchItem {
 }
 
 // Search data - this would ideally come from your actual data files
-const searchData: SearchItem[] = [
-  // Herbs
-  {
-    id: 'lemon-balm',
-    title: 'Lemon Balm',
-    description: 'Calming herb used to ease stress and digestive issues',
-    type: 'herb',
-    slug: '/herbs/lemon-balm',
-    tags: ['anxiety', 'stress', 'digestive', 'calming', 'nervine', 'sleep', 'melissa officinalis', 'balm', 'melissa'],
-    benefits: ['Reduces anxiety and stress', 'Promotes restful sleep', 'Supports digestive health']
-  },
-  {
-    id: 'chamomile',
-    title: 'Chamomile',
-    description: 'Gentle herb known for its calming properties',
-    type: 'herb',
-    slug: '/herbs/chamomile',
-    tags: ['sleep', 'anxiety', 'digestive', 'calming', 'gentle', 'matricaria chamomilla', 'german chamomile'],
-    benefits: ['Promotes deep, restful sleep', 'Soothes digestive discomfort', 'Reduces anxiety and stress']
-  },
-  {
-    id: 'lavender',
-    title: 'Lavender',
-    description: 'Versatile herb known for relaxation and sleep',
-    type: 'herb',
-    slug: '/herbs/lavender',
-    tags: ['sleep', 'relaxation', 'anxiety', 'aromatherapy', 'calming', 'lavandula angustifolia', 'english lavender'],
-    benefits: ['Promotes deep relaxation and sleep', 'Reduces anxiety and stress', 'Soothes skin irritation']
-  },
-  {
-    id: 'valerian',
-    title: 'Valerian Root',
-    description: 'Natural sleep aid and sedative herb',
-    type: 'herb',
-    slug: '/herbs/valerian',
-    tags: ['sleep', 'insomnia', 'sedative', 'calming', 'rest', 'valeriana officinalis', 'garden valerian'],
-    benefits: ['Promotes deep, restful sleep', 'Reduces time to fall asleep', 'Improves sleep quality']
-  },
-  {
-    id: 'st-johns-wort',
-    title: "St. John's Wort",
-    description: 'Traditional herb for mood support and emotional balance',
-    type: 'herb',
-    slug: '/herbs/st-johns-wort',
-    tags: ['depression', 'mood', 'emotional', 'nervous system', 'balance', 'hypericum perforatum', 'goatweed', 'klamath weed'],
-    benefits: ['Supports emotional well-being', 'May help with mild to moderate depression', 'Promotes positive mood']
-  },
-  {
-    id: 'ashwagandha',
-    title: 'Ashwagandha',
-    description: 'Powerful adaptogenic herb for stress and energy',
-    type: 'herb',
-    slug: '/herbs/ashwagandha',
-    tags: ['stress', 'adaptogen', 'energy', 'anxiety', 'immune', 'withania somnifera', 'indian ginseng', 'winter cherry'],
-    benefits: ['Reduces stress and anxiety', 'Supports energy and stamina', 'Promotes restful sleep']
-  },
-  {
-    id: 'korean-ginseng',
-    title: 'Korean Ginseng',
-    description: 'Traditional herb for energy and vitality',
-    type: 'herb',
-    slug: '/herbs/korean-ginseng',
-    tags: ['energy', 'vitality', 'adaptogen', 'immune', 'focus', 'panax ginseng', 'asian ginseng', 'korean ginseng'],
-    benefits: ['Boosts energy and vitality', 'Supports immune function', 'Improves mental focus']
-  },
-  {
-    id: 'siberian-ginseng',
-    title: 'Siberian Ginseng',
-    description: 'Adaptogenic herb for stress resistance and energy',
-    type: 'herb',
-    slug: '/herbs/siberian-ginseng',
-    tags: ['adaptogen', 'stress', 'energy', 'immune', 'resistance', 'eleutherococcus senticosus', 'eleuthero', 'devil\'s shrub'],
-    benefits: ['Increases stress resistance', 'Boosts energy and stamina', 'Supports immune system function']
-  },
-  {
-    id: 'astragalus',
-    title: 'Astragalus',
-    description: 'Traditional herb for immune support and vitality',
-    type: 'herb',
-    slug: '/herbs/astragalus',
-    tags: ['immune', 'vitality', 'traditional', 'energy', 'health', 'astragalus membranaceus', 'huang qi', 'milk vetch'],
-    benefits: ['Supports immune system function', 'Promotes vitality and energy', 'Traditional immune-supporting herb']
-  },
-  {
-    id: 'holy-basil',
-    title: 'Holy Basil (Tulsi)',
-    description: 'Sacred herb for stress adaptation and mental clarity',
-    type: 'herb',
-    slug: '/herbs/holy-basil',
-    tags: ['stress', 'clarity', 'adaptogen', 'immune', 'spiritual', 'ocimum sanctum', 'tulsi', 'sacred basil'],
-    benefits: ['Reduces stress and anxiety', 'Promotes mental clarity', 'Supports immune function']
-  },
-  {
-    id: 'reishi',
-    title: 'Reishi',
-    description: 'Medicinal mushroom known as the "mushroom of immortality"',
-    type: 'herb',
-    slug: '/herbs/reishi',
-    tags: ['immune', 'adaptogen', 'longevity', 'stress', 'mushroom', 'ganoderma lucidum', 'lingzhi', 'mushroom of immortality'],
-    benefits: ['Supports immune system function', 'Reduces stress and fatigue', 'Promotes longevity and vitality']
-  },
-  {
-    id: 'lions-mane',
-    title: "Lion's Mane",
-    description: 'Medicinal mushroom for brain health and cognitive function',
-    type: 'herb',
-    slug: '/herbs/lions-mane',
-    tags: ['brain', 'cognitive', 'memory', 'focus', 'mushroom', 'nervous system', 'hericium erinaceus', 'bearded tooth', 'pom pom mushroom'],
-    benefits: ['Supports brain health and cognitive function', 'May improve memory and focus', 'Supports nervous system health']
-  },
-  {
-    id: 'damiana',
-    title: 'Damiana',
-    description: 'Traditional herb for mood enhancement and aphrodisiac properties',
-    type: 'herb',
-    slug: '/herbs/damiana',
-    tags: ['mood', 'aphrodisiac', 'energy', 'libido', 'traditional', 'turnera diffusa', 'old woman\'s broom'],
-    benefits: ['Supports mood and emotional well-being', 'May enhance libido and energy', 'Traditional aphrodisiac herb']
-  },
-  {
-    id: 'oatstraw',
-    title: 'Oatstraw',
-    description: 'Nervine herb known for its calming and nutritive properties',
-    type: 'herb',
-    slug: '/herbs/oatstraw',
-    tags: ['nervine', 'calming', 'nutritive', 'stress', 'nervous system', 'avena sativa', 'wild oats', 'oat tops'],
-    benefits: ['Calms the nervous system', 'Provides nutritive support', 'Reduces stress and anxiety']
-  },
-  {
-    id: 'skullcap',
-    title: 'Skullcap',
-    description: 'Nervine herb for anxiety, stress, and nervous system support',
-    type: 'herb',
-    slug: '/herbs/skullcap',
-    tags: ['nervine', 'anxiety', 'stress', 'nervous system', 'calming', 'scutellaria lateriflora', 'american skullcap', 'mad dog skullcap'],
-    benefits: ['Reduces anxiety and nervous tension', 'Supports nervous system health', 'Promotes calm and relaxation']
-  },
-  {
-    id: 'korean-ginseng',
-    title: 'Korean Ginseng (Panax)',
-    description: 'Traditional adaptogenic herb for energy and vitality',
-    type: 'herb',
-    slug: '/herbs/korean-ginseng',
-    tags: ['adaptogen', 'energy', 'vitality', 'immune', 'traditional', 'panax ginseng', 'asian ginseng', 'true ginseng'],
-    benefits: ['Boosts energy and stamina', 'Supports immune function', 'Improves mental and physical performance']
-  },
-  {
-    id: 'siberian-ginseng',
-    title: 'Siberian Ginseng (Eleuthero)',
-    description: 'Adaptogenic herb for stress resistance and energy',
-    type: 'herb',
-    slug: '/herbs/siberian-ginseng',
-    tags: ['adaptogen', 'stress', 'energy', 'immune', 'resistance', 'eleutherococcus senticosus', 'eleuthero', 'devil\'s shrub'],
-    benefits: ['Increases stress resistance', 'Boosts energy and stamina', 'Supports immune system function']
-  },
-  {
-    id: 'astragalus',
-    title: 'Astragalus',
-    description: 'Traditional herb for immune support and vitality',
-    type: 'herb',
-    slug: '/herbs/astragalus',
-    tags: ['immune', 'vitality', 'traditional', 'energy', 'health', 'astragalus membranaceus', 'huang qi', 'milk vetch'],
-    benefits: ['Supports immune system function', 'Promotes vitality and energy', 'Traditional immune-supporting herb']
-  },
-  {
-    id: 'borage',
-    title: 'Borage',
-    description: 'Herb rich in gamma-linolenic acid for hormonal balance',
-    type: 'herb',
-    slug: '/herbs/borage',
-    tags: ['hormonal', 'balance', 'skin', 'inflammation', 'omega-6', 'borago officinalis', 'starflower', 'bee bread'],
-    benefits: ['Supports hormonal balance', 'Promotes healthy skin', 'Reduces inflammation']
-  },
-  {
-    id: 'nettle-seed',
-    title: 'Nettle Seed',
-    description: 'Nutritive herb for energy and adrenal support',
-    type: 'herb',
-    slug: '/herbs/nettle-seed',
-    tags: ['nutritive', 'energy', 'adrenal', 'vitality', 'support', 'urtica dioica', 'stinging nettle', 'common nettle'],
-    benefits: ['Provides nutritive support', 'Supports adrenal function', 'Boosts energy and vitality']
-  },
-  {
-    id: 'bacopa',
-    title: "Bacopa",
-    description: "Traditional Ayurvedic herb for memory enhancement and cognitive support",
-    type: 'herb',
-    slug: '/herbs/bacopa',
-    tags: ['memory', 'cognitive', 'learning', 'anxiety', 'stress', 'brain health', 'bacopa monnieri', 'ayurvedic', 'traditional medicine', 'focus', 'concentration', 'adhd', 'brain tonic']
-  },
-  {
-    id: 'kava-kava',
-    title: "Kava Kava",
-    description: "Powerful anxiolytic herb from the Pacific Islands for anxiety and muscle relaxation",
-    type: 'herb',
-    slug: '/herbs/kava-kava',
-    tags: ['anxiety', 'stress', 'muscle relaxation', 'social anxiety', 'sleep', 'sedative', 'piper methysticum', 'pacific islands', 'ceremonial', 'pain relief', 'nervous tension', 'non-addictive']
-  },
-  {
-    id: 'passionflower',
-    title: "Passionflower",
-    description: "Beautiful flowering vine that enhances GABA activity for anxiety and sleep",
-    type: 'herb',
-    slug: '/herbs/passionflower',
-    tags: ['gaba', 'anxiety', 'sleep', 'insomnia', 'nervous tension', 'passiflora incarnata', 'adhd', 'muscle spasms', 'pain relief', 'gentle', 'non-addictive', 'relaxation']
-  },
-  {
-    id: 'california-poppy',
-    title: "California Poppy",
-    description: "Gentle, non-addictive sedative herb for sleep and anxiety relief",
-    type: 'herb',
-    slug: '/herbs/california-poppy',
-    tags: ['sedative', 'sleep', 'anxiety', 'stress', 'pain relief', 'eschscholzia californica', 'gentle', 'non-addictive', 'children', 'elderly', 'restlessness', 'agitation']
-  },
-  {
-    id: 'blue-vervain',
-    title: "Blue Vervain",
-    description: "Powerful nervous system tonic for anxiety, depression, and emotional balance",
-    type: 'herb',
-    slug: '/herbs/blue-vervain',
-    tags: ['nervous system', 'anxiety', 'depression', 'emotional balance', 'sleep', 'liver support', 'verbena hastata', 'nervous exhaustion', 'insomnia', 'nervous tension', 'restlessness']
-  },
-  {
-    id: 'wood-betony',
-    title: "Wood Betony",
-    description: "Traditional European herb for nervous headaches and mental clarity",
-    type: 'herb',
-    slug: '/herbs/wood-betony',
-    tags: ['headaches', 'migraines', 'anxiety', 'nervous tension', 'mental clarity', 'brain fog', 'stachys officinalis', 'european', 'traditional', 'sedative', 'stress', 'insomnia']
-  },
-  {
-    id: 'hops',
-    title: "Hops",
-    description: "Natural sedative and sleep promoter, also known for beer brewing",
-    type: 'herb',
-    slug: '/herbs/hops',
-    tags: ['sleep', 'sedative', 'anxiety', 'stress', 'hormonal balance', 'humulus lupulus', 'estrogenic', 'women', 'menopause', 'restlessness', 'agitation', 'pain relief']
-  },
-  {
-    id: 'magnolia-bark',
-    title: "Magnolia Bark",
-    description: "Ancient Chinese herb with powerful anxiolytic properties for anxiety and sleep",
-    type: 'herb',
-    slug: '/herbs/magnolia-bark',
-    tags: ['anxiety', 'sleep', 'stress', 'tension', 'magnolia officinalis', 'chinese medicine', 'traditional', 'anti-inflammatory', 'digestive', 'panic disorders', 'insomnia']
-  },
-  {
-    id: 'schisandra',
-    title: "Schisandra",
-    description: "Powerful adaptogenic herb for stress resilience and cognitive function",
-    type: 'herb',
-    slug: '/herbs/schisandra',
-    tags: ['adaptogen', 'stress', 'cognitive', 'liver', 'endurance', 'energy', 'schisandra chinensis', 'chinese medicine', 'mental clarity', 'focus', 'detoxification', 'resilience']
-  },
-  {
-    id: 'gotu-kola',
-    title: "Gotu Kola",
-    description: "Traditional Ayurvedic herb known as the herb of longevity for brain health",
-    type: 'herb',
-    slug: '/herbs/gotu-kola',
-    tags: ['memory', 'cognition', 'anxiety', 'stress', 'nervous system', 'centella asiatica', 'ayurvedic', 'longevity', 'wound healing', 'circulation', 'brain tonic', 'traditional']
-  },
-  {
-    id: 'nettle-seed',
-    title: 'Nettle Seed',
-    description: 'Nutritive herb for adrenal support and overall vitality',
-    type: 'herb',
-    slug: '/herbs/nettle-seed',
-    tags: ['nutritive', 'adrenal', 'energy', 'vitality', 'kidney', 'skin', 'minerals', 'urtica dioica', 'tonic', 'fatigue', 'nutritional', 'support']
-  },
-  {
-    id: 'borage',
-    title: 'Borage',
-    description: 'Traditional courage herb for adrenal function and emotional balance',
-    type: 'herb',
-    slug: '/herbs/borage',
-    tags: ['adrenal', 'emotional', 'balance', 'courage', 'gla', 'skin', 'hormonal', 'borago officinalis', 'european', 'traditional', 'fatigue', 'inflammation']
-  },
-  {
-    id: 'lions-mane',
-    title: "Lion's Mane",
-    description: "Medicinal mushroom for brain health and cognitive function",
-    type: 'herb',
-    slug: '/herbs/lions-mane',
-    tags: ['memory', 'cognitive', 'brain health', 'focus', 'concentration', 'hericium erinaceus', 'mushroom', 'nerve growth', 'brain fog', 'neuroprotective', 'learning']
-  },
-  {
-    id: 'feverfew',
-    title: 'Feverfew',
-    description: 'Traditional herb specifically used for migraine prevention and relief',
-    type: 'herb',
-    slug: '/herbs/feverfew',
-    tags: ['migraines', 'headaches', 'inflammation', 'anti-inflammatory', 'antispasmodic', 'nervine', 'tanacetum parthenium', 'parthenolide', 'traditional', 'pain relief', 'blood vessels']
-  },
-  {
-    id: 'butterbur',
-    title: 'Butterbur',
-    description: 'Traditional herb for migraine frequency reduction and respiratory support',
-    type: 'herb',
-    slug: '/herbs/butterbur',
-    tags: ['migraines', 'headaches', 'allergies', 'respiratory', 'anti-inflammatory', 'antispasmodic', 'nervine', 'petasites hybridus', 'petasin', 'vasodilation', 'traditional', 'pain relief', 'blood vessels']
-  },
-  {
-    id: 'maca',
-    title: 'Maca',
-    description: 'Adaptogenic root for vitality, stress adaptation, and hormonal balance',
-    type: 'herb',
-    slug: '/herbs/maca',
-    tags: ['vitality', 'energy', 'stress adaptation', 'hormonal balance', 'adaptogen', 'lepidium meyenii', 'peruvian ginseng', 'nutrient dense', 'traditional', 'aphrodisiac', 'libido', 'hormonal support', 'natural energy', 'well-being']
-  },
+const herbSearchData = herbs.map(herb => ({
+  id: herb.slug,
+  title: herb.name,
+  description: herb.description.split('\n')[0], // Use first paragraph as summary
+  type: 'herb',
+  slug: `/herbs/${herb.slug}`,
+  tags: [
+    ...(herb.usedFor || []),
+    ...(herb.actions || []),
+    ...(herb.benefits || []),
+    ...(herb.traditionalUses || []),
+    herb.slug,
+    herb.name
+  ],
+  benefits: herb.benefits || []
+}));
 
+// Static data for supplements and symptoms (unchanged)
+const staticSearchData: SearchItem[] = [
   // Supplements
   {
     id: 'omega-3',
@@ -573,6 +282,11 @@ const searchData: SearchItem[] = [
     tags: ['thyroid', 'hormones', 'metabolism', 'energy', 'health'],
     symptoms: ['Thyroid function issues', 'Hormonal imbalances', 'Metabolism problems']
   }
+];
+
+const searchData: SearchItem[] = [
+  ...herbSearchData,
+  ...staticSearchData
 ];
 
 export default function SearchComponent() {

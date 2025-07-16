@@ -397,7 +397,7 @@ export default function BodyMap() {
                 <div className="absolute inset-0 flex items-center justify-center">
                   <button
                     onClick={openModal}
-                    className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+                    className="font-sans bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
                   >
                     🩺 Explore by Anatomy
                   </button>
@@ -464,7 +464,7 @@ export default function BodyMap() {
               <h2 className="text-2xl font-bold text-blue-800">Interactive Body Map</h2>
               <button
                 onClick={closeModal}
-                className="text-gray-500 hover:text-gray-700 text-2xl font-bold p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                className="font-sans text-gray-500 hover:text-gray-700 text-2xl font-bold p-2 hover:bg-gray-100 rounded-lg transition-colors"
               >
                 ✕
               </button>
