@@ -109,7 +109,7 @@ These calming properties extend directly to its use as a sleep aid. Lavender hel
 Lavender also possesses significant antispasmodic and analgesic (pain-relieving) properties. It is traditionally used to ease tension headaches and migraines, particularly when stress is a trigger. It can be applied topically to the temples (as a diluted essential oil) or taken internally. This muscle-relaxing quality also makes it beneficial for relieving menstrual cramps and other forms of muscular tension.
 
 Topically, Lavender is a first-aid cabinet in a bottle. Its antimicrobial and anti-inflammatory actions make it excellent for a variety of skin issues. It can disinfect minor cuts and scrapes, soothe insect bites and stings, calm the inflammation of acne, and promote the healing of minor burns. Its regenerative properties help to minimize scarring and support healthy skin repair.`,
-      image: "/lavender.jpg",
+      image: "/images/lavender.jpg",
       benefits: [
         "Reduces anxiety and stress",
         "Promotes restful sleep",
@@ -146,7 +146,7 @@ The herb also has a strong affinity for the nervous system, earning it a reputat
 Its mood-lifting properties make St. John's Wort beneficial for anxiety, especially when it co-occurs with depression or is linked to specific situations like Seasonal Affective Disorder (SAD) or menopausal mood swings. By creating a more stable emotional foundation, it can help reduce the feelings of worry and unease that often accompany these conditions.
 
 Crucially, St. John's Wort has significant interactions with a wide array of pharmaceutical drugs. It induces the Cytochrome P450 enzyme system in the liver, which can accelerate the metabolism and reduce the effectiveness of many medications, including antidepressants (SSRIs), birth control pills, blood thinners, and organ transplant drugs. It can also increase sun sensitivity. Due to these interactions, it is essential to consult with a healthcare professional before using this herb if you are taking any prescription medications.`,
-      image: "/st-johns-wort.jpg",
+      image: "/images/st-johns-wort.jpg",
       benefits: [
         "Supports mood and emotional balance",
         "Reduces mild to moderate depression symptoms",
@@ -371,7 +371,7 @@ The primary active compound in Feverfew is parthenolide, which helps to inhibit 
 Beyond migraines, Feverfew is also used for general headache relief, menstrual discomfort, and inflammatory conditions such as arthritis. Its antispasmodic and nervine properties help to relax tense muscles and calm the nervous system, providing broader benefits for those prone to stress-related pain.
 
 Feverfew is typically taken as a daily supplement for prevention rather than acute relief. Some individuals may experience mouth ulcers or digestive upset, so it is best started at a low dose and increased gradually. It is not recommended during pregnancy or for those with allergies to the daisy family.`,
-      image: "/feverfew.jpg",
+      image: "/images/feverfew.jpg",
       benefits: [
         "Reduces frequency and severity of migraines",
         "Eases headache pain",
@@ -407,7 +407,7 @@ The primary mechanism of Passionflower is its ability to increase levels of gamm
 Modern research supports Passionflower's use as a gentle anxiolytic and sleep aid, with studies showing improvements in sleep quality and reductions in anxiety comparable to some prescription medications, but without the risk of dependency or significant side effects. It is often combined with other calming herbs like Valerian, Lemon Balm, or Hops for enhanced effect.
 
 Passionflower is best taken as a tea or tincture in the evening or before stressful events. While generally safe, it may increase drowsiness when combined with sedatives or alcohol, and should be avoided during pregnancy unless supervised by a healthcare provider.`,
-      image: "/passionflower.jpg",
+      image: "/images/passionflower.jpg",
       benefits: [
         "Promotes relaxation and calm",
         "Supports restful sleep",
@@ -443,7 +443,7 @@ Damiana's primary actions are as a nervine and mild stimulant, helping to lift t
 In addition to its emotional and sexual benefits, Damiana is used to support energy, reduce fatigue, and promote a sense of overall vitality. It is sometimes included in formulas for stress, burnout, and hormonal balance, especially during menopause or periods of emotional upheaval.
 
 Modern herbalists recommend Damiana as a gentle, non-habit-forming remedy for those seeking to improve mood, energy, and sexual health. It is generally safe, but should be avoided in pregnancy and used with caution in those with liver conditions.`,
-      image: "/damiana.jpg",
+      image: "/images/damiana.jpg",
       benefits: [
         "Enhances mood and emotional balance",
         "Supports libido and sexual health",
@@ -479,7 +479,7 @@ The herb works primarily by enhancing GABA activity in the brain, promoting a se
 Modern research supports Skullcap's use as a gentle sedative and muscle relaxant, with studies showing improvements in sleep quality and reductions in anxiety. It is often combined with other calming herbs like Valerian, Lemon Balm, or Passionflower for synergistic effects.
 
 Skullcap is best taken as a tea or tincture in the evening or during periods of acute stress. It is generally safe, but may increase drowsiness when combined with other sedatives. Avoid use during pregnancy unless supervised by a healthcare provider.`,
-      image: "/skullcap.jpg",
+      image: "/images/skullcap.jpg",
       benefits: [
         "Calms anxiety and nervous tension",
         "Relaxes muscles and reduces spasms",
@@ -515,7 +515,7 @@ Motherwort is a premier nervine, helping to soothe nervous tension, irritability
 In addition to its effects on the heart and nerves, Motherwort is an emmenagogue, meaning it can help to regulate menstrual cycles and ease menstrual cramps. It is often used in herbal formulas for PMS, perimenopause, and the emotional ups and downs that can accompany hormonal changes. Its bitter compounds also support digestion and liver function, making it a well-rounded tonic for overall vitality.
 
 Modern research supports Motherwort's traditional uses, showing mild sedative, anti-inflammatory, and cardioprotective effects. It is best taken as a tea or tincture, and is generally safe for most people, though it should be avoided during pregnancy due to its uterine-stimulating properties.`,
-      image: "/motherwort.jpg",
+      image: "/images/motherwort.jpg",
       benefits: [
         "Calms anxiety and nervous tension",
         "Supports heart health",
@@ -551,7 +551,7 @@ As a nervine tonic, Oatstraw soothes frazzled nerves, eases irritability, and pr
 Oatstraw is often used as a daily infusion or tea, providing gentle, ongoing support for the nervous system. It is safe for all ages and can be combined with other nervines like Lemon Balm, Chamomile, or Skullcap for enhanced effects. In addition to its nervous system benefits, Oatstraw supports healthy skin, hair, and bones, and is a traditional remedy for promoting restful sleep.
 
 Modern herbalists recommend Oatstraw for anyone experiencing stress, fatigue, or recovery from burnout. Its gentle, nourishing action makes it a foundational herb for long-term wellness and resilience.`,
-      image: "/oatstraw.jpg",
+      image: "/images/oatstraw.jpg",
       benefits: [
         "Nourishes and calms the nervous system",
         "Supports recovery from stress",
@@ -587,7 +587,7 @@ Valerian is especially useful for people who have trouble falling asleep due to 
 Some individuals may find Valerian stimulating rather than sedating, a paradoxical effect that is not fully understood. For most, however, it is a reliable remedy for insomnia, restlessness, and acute anxiety. It can be combined with other calming herbs like Passionflower, Lemon Balm, or Hops for enhanced effects.
 
 Valerian is best taken as a tea or tincture about 30-60 minutes before bedtime. Its taste is strong and somewhat bitter, so capsules are also a popular option. As with all sedatives, it should be used with caution alongside other medications that cause drowsiness.`,
-      image: "/valerian.jpg",
+      image: "/images/valerian.jpg",
       benefits: [
         "Promotes deep, restful sleep",
         "Reduces anxiety and restlessness",
@@ -623,7 +623,7 @@ Modern research has shown that Ginkgo can help slow age-related cognitive declin
 Ginkgo's vasodilating and antioxidant effects make it valuable for cardiovascular health as well. By improving microcirculation and reducing inflammation, it supports healthy blood vessels and may help lower the risk of stroke. It is often used as a daily supplement for long-term brain and vascular support.
 
 While generally safe, Ginkgo can increase bleeding risk, especially when combined with blood thinners. It should be used with caution in people with bleeding disorders or before surgery. The standard dose is 60-120mg of standardized extract daily, taken with food.`,
-      image: "/ginkgo.jpg",
+      image: "/images/ginkgo.jpg",
       benefits: [
         "Enhances memory and cognitive function",
         "Improves circulation to the brain",
@@ -659,7 +659,7 @@ Clinical studies have shown that standardized Butterbur extracts can significant
 Butterbur is also used for respiratory support, helping to ease coughs, asthma, and bronchial spasms. Its antispasmodic and anti-inflammatory actions make it useful for a variety of conditions involving smooth muscle tension and inflammation.
 
 It is crucial to use only PA-free (pyrrolizidine alkaloid-free) Butterbur extracts, as the raw plant contains compounds that can be toxic to the liver. Consult a healthcare provider before use, especially if you have liver disease or are taking other medications.`,
-      image: "/butterbur.jpg",
+      image: "/images/butterbur.jpg",
       benefits: [
         "Reduces migraine frequency",
         "Supports respiratory health",
@@ -878,7 +878,7 @@ While generally safe when used as directed, capsaicin can cause significant irri
 In addition to its cognitive benefits, Ginseng is prized for its ability to improve physical performance and modulate the immune system. It is frequently used by athletes to increase stamina, improve endurance, and reduce recovery time. Furthermore, it supports a balanced immune response, helping to fortify the body against pathogens while also calming excessive inflammation, making it a valuable tonic for overall resilience.
 
 Ginseng has also been studied for its ability to support healthy blood sugar levels and improve erectile function. When choosing a product, quality is paramount, as the concentration of ginsenosides can vary widely. It's also useful to know the difference between white ginseng (air-dried) and red ginseng (steam-treated before drying), with red ginseng traditionally considered more potent and stimulating.`,
-      image: "/american-ginseng.jpg",
+      image: "/images/american-ginseng.jpg",
       benefits: [
         "Boosts energy and stamina",
         "Supports immune function",

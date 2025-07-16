@@ -27,7 +27,13 @@ const symptoms = [
   { name: "Mood Swings", href: "/symptoms/mood-swings", color: "bg-pink-200 text-pink-800 border-pink-300" },
 ];
 
-function getSymptomTag(usedFor) {
+// Helper to extract latin name from description if subtitle is missing
+function getLatinName(description: string): string {
+  const match = description.match(/\(([^)]+)\)/);
+  return match ? match[1] : '';
+}
+
+function getSymptomTag(usedFor: string) {
   // Find a matching symptom (case-insensitive)
   return symptoms.find(
     s => s.name.toLowerCase() === usedFor.toLowerCase()
@@ -57,11 +63,7 @@ export default function HerbsPage() {
               </h3>
               {/* Latin name or subtitle, smaller and lighter */}
               <p className="text-gray-500 text-sm italic mb-2">
-                {herb.subtitle || (() => {
-                  // Try to extract latin name from description if subtitle missing
-                  const match = herb.description.match(/\(([^)]+)\)/);
-                  return match ? match[1] : '';
-                })()}
+                {herb.subtitle || getLatinName(herb.description)}
               </p>
               <hr className="my-3 border-blue-100" />
               {/* Tags for main indications (symptoms) */}
