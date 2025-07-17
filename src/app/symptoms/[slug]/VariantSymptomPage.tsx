@@ -29,7 +29,6 @@ export default function VariantSymptomPage({ symptom }: { symptom: Symptom }) {
   const variant = symptom.variants?.[selectedVariant];
   const isInsomnia = symptom.title.toLowerCase().includes('insomnia');
   const related = relatedSymptomsMap[symptom.title] || [];
-  const quickActions = symptom.quickActions || quickActionsDefault;
   const emergencyNote = symptom.emergencyNote;
 
   // Calculate total text length of variant paragraphs
@@ -47,10 +46,6 @@ export default function VariantSymptomPage({ symptom }: { symptom: Symptom }) {
     ...((variant?.topSupplements ?? []) as Product[])
   ];
   const sidebarProducts = allProducts.slice(0, sidebarProductCount);
-  const mainGridProducts = allProducts.slice(sidebarProductCount);
-
-  // Filter mainGridProducts to exclude any products already in sidebarProducts (by name and affiliateLink)
-  const sidebarProductSet = new Set(sidebarProducts.map(p => p.name + (p.affiliateLink || '')));
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-100">
