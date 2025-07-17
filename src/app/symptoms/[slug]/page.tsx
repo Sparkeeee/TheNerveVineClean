@@ -1302,7 +1302,7 @@ Object.values(symptoms).forEach((symptom) => {
       Object.keys(variant).forEach((key) => {
         const allowedKeys = ['paragraphs','bestHerb','bestStandardized','topSupplements','emergencyNote','quickActions'];
         if (!allowedKeys.includes(key)) {
-          delete variant[key];
+          delete (variant as Record<string, unknown>)[key];
         }
       });
     });
