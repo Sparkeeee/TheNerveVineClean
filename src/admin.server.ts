@@ -1,10 +1,10 @@
-// @ts-expect-error
+// @ts-expect-error import compatibility
 import AdminJS from 'adminjs';
-// @ts-expect-error
+// @ts-expect-error import compatibility
 import AdminJSExpress from '@adminjs/express';
 import express from 'express';
 import { PrismaClient } from '@prisma/client';
-// @ts-expect-error
+// @ts-expect-error import compatibility
 import AdminJSPrisma from '@adminjs/prisma';
 import bodyParser from 'body-parser';
 

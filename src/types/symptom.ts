@@ -19,7 +19,7 @@ export interface Variant {
   bestStandardized?: Product;
   topSupplements?: Product[];
   emergencyNote?: string;
-  quickActions?: any[];
+  quickActions?: unknown[];
 }
 
 export interface Symptom {

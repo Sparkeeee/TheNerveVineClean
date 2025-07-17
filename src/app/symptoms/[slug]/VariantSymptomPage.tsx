@@ -4,18 +4,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Symptom, Product } from '../../../types/symptom';
 
-const symptomIcons: Record<string, string> = {
-  'Insomnia': '',
-  'Depression': '',
-  'Anxiety': '',
-  'Fatigue': '',
-  'Burnout': '',
-  'Brain Fog': '',
-  'IBS': '',
-  'Thyroid Issues': '',
-  // ...add more as needed
-};
-
 const relatedSymptomsMap: Record<string, Array<{ name: string; href: string; color: string }>> = {
   'Insomnia': [
     { name: 'Anxiety', href: '/symptoms/anxiety', color: 'purple' },
@@ -43,7 +31,6 @@ export default function VariantSymptomPage({ symptom }: { symptom: Symptom }) {
   const related = relatedSymptomsMap[symptom.title] || [];
   const quickActions = symptom.quickActions || quickActionsDefault;
   const emergencyNote = symptom.emergencyNote;
-  const icon = '';
 
   // Calculate total text length of variant paragraphs
   const totalTextLength = (variant?.paragraphs ?? []).reduce((acc, para) => acc + para.length, 0);
@@ -64,7 +51,6 @@ export default function VariantSymptomPage({ symptom }: { symptom: Symptom }) {
 
   // Filter mainGridProducts to exclude any products already in sidebarProducts (by name and affiliateLink)
   const sidebarProductSet = new Set(sidebarProducts.map(p => p.name + (p.affiliateLink || '')));
-  const uniqueMainGridProducts = mainGridProducts.filter(p => !sidebarProductSet.has(p.name + (p.affiliateLink || '')));
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-100">

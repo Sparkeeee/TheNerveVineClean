@@ -1,4 +1,3 @@
-import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import VariantSymptomPage from './VariantSymptomPage';
@@ -1250,7 +1249,7 @@ Object.values(symptoms).forEach((symptom) => {
         );
       }
       // Remove all non-Variant properties
-      Object.keys(variant).forEach((key) => {
+      Object.keys(variant).forEach((key: string) => {
         const allowedKeys = ['paragraphs','bestHerb','bestStandardized','topSupplements','emergencyNote','quickActions'];
         if (!allowedKeys.includes(key as keyof Variant)) {
           delete (variant as any)[key];
