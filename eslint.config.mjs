@@ -12,6 +12,7 @@ const compat = new FlatCompat({
 const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
   {
+    // Ignore build output and dependencies
     ignores: [".next/", "node_modules/"],
     rules: {
       // Warn on 'any' to allow rare, justified use but discourage overuse
