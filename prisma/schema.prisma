@@ -1,1 +1,66 @@
- 
+// SQLite datasource for local development
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Herb {
+  id          Int          @id @default(autoincrement())
+  name        String       @unique
+  description String?
+  supplements Supplement[]
+  symptoms    Symptom[]    @relation("HerbSymptoms")
+}
+
+model Symptom {
+  id          Int          @id @default(autoincrement())
+  name        String       @unique
+  description String?
+  herbs       Herb[]       @relation("HerbSymptoms")
+  supplements Supplement[] @relation("SymptomSupplements")
+}
+
+model Supplement {
+  id                  Int      @id @default(autoincrement())
+  name                String
+  description         String?
+  organic             Boolean  @default(false)
+  strength            String?
+  formulation         String?
+  affiliatePercentage Float?
+  customerReviews     Int?
+  herb                Herb?    @relation(fields: [herbId], references: [id])
+  herbId              Int?
+  symptoms            Symptom[] @relation("SymptomSupplements")
+}
+
+model BlogPage {
+  id         Int      @id @default(autoincrement())
+  title      String
+  fileUrl    String   // URL or path to the uploaded file
+  uploadDate DateTime @default(now())
+  adminNote  String?
+}
+
+model QualitySpecification {
+  id                   Int      @id @default(autoincrement())
+  herbSlug             String
+  herbName             String
+  productType          String
+  requiredTerms        Json
+  preferredTerms       Json
+  avoidTerms           Json
+  standardization      Json?
+  alcoholSpecs         Json?
+  dosageSpecs          Json?
+  priceRange           Json
+  ratingThreshold      Float
+  reviewCountThreshold Int
+  brandPreferences     Json?
+  brandAvoid           Json?
+} 
