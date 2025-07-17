@@ -1201,16 +1201,18 @@ Object.keys(symptoms).forEach((key) => {
     s.variants = { Default: { paragraphs: ["No information available for this symptom yet."] } };
   }
   // For each variant, ensure paragraphs exists and is non-empty
-  Object.keys(s.variants).forEach((v) => {
-    const variant = s.variants[v];
-    if (!variant.paragraphs || !Array.isArray(variant.paragraphs) || variant.paragraphs.length === 0) {
-      variant.paragraphs = ["No information available for this variant yet."];
-    }
-    // Optionally, ensure products fields exist
-    if (!('bestHerb' in variant)) variant.bestHerb = undefined;
-    if (!('bestStandardized' in variant)) variant.bestStandardized = undefined;
-    if (!('topSupplements' in variant)) variant.topSupplements = [];
-  });
+  if (s.variants) {
+    Object.keys(s.variants).forEach((v) => {
+      const variant = s.variants![v];
+      if (!variant.paragraphs || !Array.isArray(variant.paragraphs) || variant.paragraphs.length === 0) {
+        variant.paragraphs = ["No information available for this variant yet."];
+      }
+      // Optionally, ensure products fields exist
+      if (!('bestHerb' in variant)) variant.bestHerb = undefined;
+      if (!('bestStandardized' in variant)) variant.bestStandardized = undefined;
+      if (!('topSupplements' in variant)) variant.topSupplements = [];
+    });
+  }
 });
 
 // --- FINAL DATA CLEANUP: Fix product fields and remove non-Variant properties at the source ---
