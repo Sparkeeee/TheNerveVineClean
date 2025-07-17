@@ -17,12 +17,6 @@ const relatedSymptomsMap: Record<string, Array<{ name: string; href: string; col
   ],
 };
 
-const quickActionsDefault = [
-  { name: 'Anxiety & Stress', href: '/symptoms/anxiety', color: 'purple' },
-  { name: 'Sleep Issues', href: '/symptoms/insomnia', color: 'blue' },
-  { name: 'Muscle Tension', href: '/symptoms/muscle-tension', color: 'green' },
-];
-
 export default function VariantSymptomPage({ symptom }: { symptom: Symptom }) {
   const variantNames = Object.keys(symptom.variants ?? {});
   const [selectedVariant, setSelectedVariant] = useState(variantNames[0]);

@@ -1216,7 +1216,7 @@ Object.keys(symptoms).forEach((key) => {
 // --- FINAL DATA CLEANUP: Fix product fields and remove non-Variant properties at the source ---
 Object.values(symptoms).forEach((symptom) => {
   if (symptom.variants && typeof symptom.variants === 'object') {
-    Object.entries(symptom.variants).forEach(([variantName, variant]) => {
+    Object.entries(symptom.variants).forEach(([, variant]) => {
       // Fix bestHerb
       if (typeof variant.bestHerb === 'string') {
         variant.bestHerb = {
