@@ -17,7 +17,7 @@ interface SearchItem {
 }
 
 // Search data - this would ideally come from your actual data files
-const herbSearchData = herbs.map(herb => ({
+const herbSearchData: SearchItem[] = herbs.map(herb => ({
   id: herb.slug,
   title: herb.name,
   description: herb.description.split('\n')[0], // Use first paragraph as summary
@@ -32,7 +32,7 @@ const herbSearchData = herbs.map(herb => ({
     herb.name
   ],
   benefits: herb.benefits || []
-}));
+})) as SearchItem[];
 
 // Static data for supplements and symptoms (unchanged)
 const staticSearchData: SearchItem[] = [

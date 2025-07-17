@@ -14,10 +14,12 @@ export type Product = {
 };
 
 export interface Variant {
+  paragraphs?: string[];
   bestHerb?: Product;
   bestStandardized?: Product;
   topSupplements?: Product[];
-  paragraphs?: string[];
+  emergencyNote?: string;
+  quickActions?: any[];
 }
 
 export interface Symptom {
