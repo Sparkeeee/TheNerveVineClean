@@ -16,6 +16,7 @@ type Product = {
 };
 
 type Variant = {
+  paragraphs?: string[];
   bestHerb?: Product;
   bestStandardized?: Product;
   topSupplements?: Product[];
