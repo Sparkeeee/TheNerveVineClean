@@ -1,10 +1,10 @@
 // Plain JavaScript version of the admin server for local admin panel
-const AdminJS = require('adminjs');
-const AdminJSExpress = require('@adminjs/express');
-const express = require('express');
-const { PrismaClient } = require('@prisma/client');
-const AdminJSPrisma = require('@adminjs/prisma');
-const bodyParser = require('body-parser');
+import AdminJS from 'adminjs';
+import AdminJSExpress from '@adminjs/express';
+import express from 'express';
+import { PrismaClient } from '@prisma/client';
+import AdminJSPrisma from '@adminjs/prisma';
+import bodyParser from 'body-parser';
 
 AdminJS.registerAdapter({ Resource: AdminJSPrisma.Resource, Database: AdminJSPrisma.Database });
 

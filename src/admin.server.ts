@@ -1,11 +1,11 @@
-// @ts-ignore
-const AdminJS = require('adminjs');
-// @ts-ignore
-const AdminJSExpress = require('@adminjs/express');
+// @ts-expect-error
+import AdminJS from 'adminjs';
+// @ts-expect-error
+import AdminJSExpress from '@adminjs/express';
 import express from 'express';
 import { PrismaClient } from '@prisma/client';
-// @ts-ignore
-const AdminJSPrisma = require('@adminjs/prisma');
+// @ts-expect-error
+import AdminJSPrisma from '@adminjs/prisma';
 import bodyParser from 'body-parser';
 
 AdminJS.registerAdapter({ Resource: AdminJSPrisma.Resource, Database: AdminJSPrisma.Database });
