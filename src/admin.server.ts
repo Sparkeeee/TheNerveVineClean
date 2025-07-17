@@ -1,4 +1,3 @@
-// @ts-expect-error import compatibility
 import AdminJS from 'adminjs';
 // @ts-expect-error import compatibility
 import AdminJSExpress from '@adminjs/express';
