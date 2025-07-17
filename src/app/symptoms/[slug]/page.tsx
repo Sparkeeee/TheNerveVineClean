@@ -1251,9 +1251,9 @@ Object.values(symptoms).forEach((symptom) => {
         );
       }
       // Remove all non-Variant properties
-      Object.keys(variant).forEach((key: string) => {
+      Object.keys(variant).forEach((key) => {
         const allowedKeys = ['paragraphs','bestHerb','bestStandardized','topSupplements','emergencyNote','quickActions'];
-        if (!allowedKeys.includes(key as keyof Variant)) {
+        if (!allowedKeys.includes(key)) {
           delete (variant as Record<string, unknown>)[key];
         }
       });
@@ -1301,7 +1301,7 @@ Object.values(symptoms).forEach((symptom) => {
     Object.values(symptom.variants).forEach((variant) => {
       Object.keys(variant).forEach((key) => {
         const allowedKeys = ['paragraphs','bestHerb','bestStandardized','topSupplements','emergencyNote','quickActions'];
-        if (!allowedKeys.includes(key as keyof Variant)) {
+        if (!allowedKeys.includes(key)) {
           delete variant[key];
         }
       });
