@@ -19,10 +19,18 @@ export interface Variant {
   bestStandardized?: Product;
   topSupplements?: Product[];
   emergencyNote?: string;
-  quickActions?: unknown[];
+  productFormulations?: Record<string, Product>;
+  cautions?: string;
+  relatedSymptoms?: { name: string; href: string; color: string }[];
+  herb?: unknown;
+  extract?: unknown;
+  supplements?: unknown;
+  related?: unknown;
+  faq?: unknown;
 }
 
 export interface Symptom {
+  name?: string;
   title: string;
   description: string;
   paragraphs?: string[];

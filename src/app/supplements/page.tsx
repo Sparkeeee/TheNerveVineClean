@@ -18,8 +18,8 @@ export default function SupplementsPage() {
               href={`/supplements/${slug}`}
               className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-blue-100 hover:shadow-xl transition-all duration-200 hover:scale-105"
             >
-              <h3 className="text-xl font-semibold text-blue-800 mb-2">{data.title}</h3>
-              <p className="text-gray-600 text-sm">{data.subtitle}</p>
+              <h3 className="text-xl font-semibold text-blue-800 mb-2">{(data as any).title ?? ''}</h3>
+              <p className="text-gray-600 text-sm">{(data as any).subtitle ?? ''}</p>
             </Link>
           ))}
         </div>

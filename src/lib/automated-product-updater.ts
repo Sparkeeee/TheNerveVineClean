@@ -26,9 +26,9 @@ export class AutomatedProductUpdater {
     
     // Define search criteria based on herb properties
     const criteria: ProductCriteria = {
-      symptoms: herb.usedFor,
-      herbs: [herb.slug.replace('-', ' ')],
-      supplements: herb.actions,
+      symptoms: herb.indications ?? [],
+      herbs: herb.slug ? [herb.slug.replace('-', ' ')] : [],
+      supplements: Array.isArray(herb.productFormulations) ? herb.productFormulations.map((p: any) => typeof p === 'string' ? p : p.name) : [],
       priceRange: { min: 5, max: 100 },
       rating: 4.0
     };
@@ -54,9 +54,11 @@ export class AutomatedProductUpdater {
     const enhancedHerbs: EnhancedHerb[] = [];
     
     for (const herb of herbs) {
-      const enhanced = await this.updateHerbProducts(herb.slug);
-      if (enhanced) {
-        enhancedHerbs.push(enhanced);
+      if (herb.slug) {
+        const enhanced = await this.updateHerbProducts(herb.slug);
+        if (enhanced) {
+          enhancedHerbs.push(enhanced);
+        }
       }
     }
     

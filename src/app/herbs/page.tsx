@@ -63,12 +63,12 @@ export default function HerbsPage() {
               </h3>
               {/* Latin name or subtitle, smaller and lighter */}
               <p className="text-gray-500 text-sm italic mb-2">
-                {herb.subtitle || getLatinName(herb.description)}
+                {('latinName' in herb ? (herb as any).latinName : getLatinName(herb.description))}
               </p>
               <hr className="my-3 border-blue-100" />
               {/* Tags for main indications (symptoms) */}
               <div className="flex flex-wrap gap-2 mt-4">
-                {herb.usedFor && herb.usedFor.map((indication, i) => {
+                {herb.indications && herb.indications.map((indication, i) => {
                   const tag = getSymptomTag(indication);
                   return tag ? (
                     <Link
@@ -80,6 +80,17 @@ export default function HerbsPage() {
                     </Link>
                   ) : null;
                 })}
+              </div>
+              {/* Traditional Uses */}
+              <div className="flex flex-wrap gap-2 mt-4">
+                {herb.traditionalUses && herb.traditionalUses.map((use, i) => (
+                  <span
+                    key={i}
+                    className="inline-block px-3 py-1 rounded-full border text-xs font-semibold mr-2 mb-2 bg-gray-100 text-gray-700 border-gray-200"
+                  >
+                    {use}
+                  </span>
+                ))}
               </div>
             </div>
           ))}

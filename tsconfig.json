@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
+    "target": "ES2015",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "strict": true, // Enable all strict type-checking for stability
     "noImplicitAny": true, // Disallow implicit 'any' types for type safety
     "strictNullChecks": true, // Catch null/undefined errors
     "skipLibCheck": true, // Keep for faster builds, safe for most projects
-    "noEmit": true,
+    "noEmit": false,
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "bundler",

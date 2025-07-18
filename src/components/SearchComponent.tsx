@@ -24,14 +24,12 @@ const herbSearchData: SearchItem[] = herbs.map(herb => ({
   type: 'herb',
   slug: `/herbs/${herb.slug}`,
   tags: [
-    ...(herb.usedFor || []),
-    ...(herb.actions || []),
-    ...(herb.benefits || []),
-    ...(herb.traditionalUses || []),
+    ...(herb.indications || []),
+    ...(herb.productFormulations || []),
     herb.slug,
     herb.name
   ],
-  benefits: herb.benefits || []
+  benefits: ('benefits' in herb ? (herb as any).benefits : [])
 })) as SearchItem[];
 
 // Static data for supplements and symptoms (unchanged)

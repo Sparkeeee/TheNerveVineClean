@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json(symptoms);
     }
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: error instanceof Error ? error.message : String(error) }, { status: 500 });
   }
 }
 
@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
     const symptom = await prisma.symptom.create({ data });
     return NextResponse.json(symptom, { status: 201 });
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+    return NextResponse.json({ error: error instanceof Error ? error.message : String(error) }, { status: 400 });
   }
 }
 
@@ -37,7 +37,7 @@ export async function PUT(req: NextRequest) {
     const symptom = await prisma.symptom.update({ where: { id: data.id }, data });
     return NextResponse.json(symptom);
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+    return NextResponse.json({ error: error instanceof Error ? error.message : String(error) }, { status: 400 });
   }
 }
 
@@ -48,6 +48,6 @@ export async function DELETE(req: NextRequest) {
     await prisma.symptom.delete({ where: { id } });
     return NextResponse.json({ success: true });
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+    return NextResponse.json({ error: error instanceof Error ? error.message : String(error) }, { status: 400 });
   }
 } 

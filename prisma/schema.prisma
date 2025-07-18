@@ -10,33 +10,48 @@ generator client {
 }
 
 model Herb {
-  id          Int          @id @default(autoincrement())
-  name        String       @unique
-  description String?
-  supplements Supplement[]
-  symptoms    Symptom[]    @relation("HerbSymptoms")
+  id              Int      @id @default(autoincrement())
+  name            String?  // keep optional for migration
+  commonName      String?  // temporarily add for migration
+  latinName       String?
+  slug            String?
+  description     String
+  metaTitle       String?
+  metaDescription String?
+  heroImageUrl    String?
+  cardImageUrl    String?
+  galleryImages   Json?     // <-- Array of image URLs
+  cautions        String?
+  productFormulations Json?    // <-- Or use a related model if you want
+  references      Json?
+  indications     Json?     // <-- Change to string array
+  traditionalUses Json?
 }
 
 model Symptom {
-  id          Int          @id @default(autoincrement())
-  name        String       @unique
+  id          Int      @id @default(autoincrement())
+  slug        String   @unique
+  title       String
   description String?
-  herbs       Herb[]       @relation("HerbSymptoms")
-  supplements Supplement[] @relation("SymptomSupplements")
+  // herbs       Herb[]      @relation("HerbSymptoms")
+  // supplements Supplement[] @relation("SymptomSupplements")
+  // indicatedHerbs Herb[]   @relation("HerbIndications")
 }
 
 model Supplement {
-  id                  Int      @id @default(autoincrement())
-  name                String
-  description         String?
-  organic             Boolean  @default(false)
-  strength            String?
-  formulation         String?
-  affiliatePercentage Float?
-  customerReviews     Int?
-  herb                Herb?    @relation(fields: [herbId], references: [id])
-  herbId              Int?
-  symptoms            Symptom[] @relation("SymptomSupplements")
+  id              Int      @id @default(autoincrement())
+  name            String
+  slug            String?
+  description     String
+  metaTitle       String?
+  metaDescription String?
+  heroImageUrl    String?
+  cardImageUrl    String?
+  galleryImages   Json?
+  cautions        String?
+  productFormulations Json?
+  references      Json?
+  tags            Json?     // <-- Add this line
 }
 
 model BlogPage {

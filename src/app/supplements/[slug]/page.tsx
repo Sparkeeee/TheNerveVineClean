@@ -6,10 +6,9 @@ interface SupplementPageProps {
 
 export const supplements = {
   'omega-3': {
-    title: 'Omega-3 Fatty Acids',
-    subtitle: 'Essential Brain Health Supplement',
+    name: 'Omega-3 Fatty Acids',
     description: 'Omega-3 fatty acids are essential fats that your body cannot produce on its own. They are crucial for brain health, heart health, and overall well-being.',
-    benefits: [
+    cautions: [
       'Supports brain function and memory',
       'Reduces inflammation throughout the body',
       'Supports heart health',
@@ -17,10 +16,7 @@ export const supplements = {
       'Supports eye health',
       'Important for fetal development during pregnancy'
     ],
-    dosage: '1000-2000mg daily',
-    bestTime: 'With meals',
-    sideEffects: 'Generally safe. May cause fishy burps or mild digestive upset.',
-    topProducts: [
+    productFormulations: [
       {
         name: 'Nordic Naturals Ultimate Omega',
         description: 'High-quality fish oil with excellent absorption',
@@ -48,10 +44,9 @@ export const supplements = {
     ]
   },
   'vitamin-d': {
-    title: 'Vitamin D',
-    subtitle: 'The Sunshine Vitamin',
+    name: 'Vitamin D',
     description: 'Vitamin D is a fat-soluble vitamin that plays a crucial role in many bodily functions. It\'s often called the "sunshine vitamin" because your body produces it when your skin is exposed to sunlight.',
-    benefits: [
+    cautions: [
       'Supports bone health and calcium absorption',
       'Boosts immune system function',
       'May improve mood and reduce depression',
@@ -59,10 +54,7 @@ export const supplements = {
       'Important for heart health',
       'May reduce risk of certain cancers'
     ],
-    dosage: '1000-4000 IU daily (consult doctor for higher doses)',
-    bestTime: 'With a meal containing fat',
-    sideEffects: 'Generally safe. High doses may cause nausea, vomiting, or kidney problems.',
-    topProducts: [
+    productFormulations: [
       {
         name: 'NatureWise Vitamin D3',
         description: 'High-potency vitamin D3 with excellent absorption',
@@ -90,10 +82,9 @@ export const supplements = {
     ]
   },
   'magnesium': {
-    title: 'Magnesium',
-    subtitle: 'The Relaxation Mineral',
+    name: 'Magnesium',
     description: 'Magnesium is an essential mineral that plays a role in over 300 enzymatic reactions in your body. It\'s particularly important for muscle and nerve function, blood sugar control, and bone health.',
-    benefits: [
+    cautions: [
       'Helps relax muscles and reduce tension',
       'Supports healthy sleep patterns',
       'May reduce anxiety and stress',
@@ -101,10 +92,7 @@ export const supplements = {
       'Helps with muscle cramps',
       'Supports bone health'
     ],
-    dosage: '200-400mg daily',
-    bestTime: 'Evening (for sleep benefits) or with meals',
-    sideEffects: 'May cause diarrhea at high doses. Start with lower doses.',
-    topProducts: [
+    productFormulations: [
       {
         name: 'Natural Calm Magnesium',
         description: 'Popular magnesium citrate powder for relaxation',
@@ -132,10 +120,9 @@ export const supplements = {
     ]
   },
   'b-complex': {
-    title: 'B-Complex Vitamins',
-    subtitle: 'Energy and Nervous System Support',
+    name: 'B-Complex Vitamins',
     description: 'B-complex vitamins are a group of eight water-soluble vitamins that play essential roles in energy production, nervous system function, and overall cellular health.',
-    benefits: [
+    cautions: [
       'Supports energy production and metabolism',
       'Essential for nervous system function',
       'Helps convert food into energy',
@@ -143,10 +130,7 @@ export const supplements = {
       'May reduce stress and anxiety',
       'Important for red blood cell formation'
     ],
-    dosage: 'Follow label instructions (typically 1 capsule daily)',
-    bestTime: 'Morning with breakfast',
-    sideEffects: 'Generally safe. May cause bright yellow urine (normal). High doses may cause nausea.',
-    topProducts: [
+    productFormulations: [
       {
         name: 'Nature Made Super B-Complex',
         description: 'Complete B-vitamin complex with folic acid',
@@ -174,10 +158,9 @@ export const supplements = {
     ]
   },
   'l-theanine': {
-    title: 'L-Theanine',
-    subtitle: 'The Calm Focus Amino Acid',
+    name: 'L-Theanine',
     description: 'L-theanine is a unique amino acid found primarily in green tea that promotes relaxation without drowsiness. It\'s known for its ability to enhance focus while reducing stress.',
-    benefits: [
+    cautions: [
       'Promotes calm focus and concentration',
       'Reduces stress and anxiety',
       'Improves sleep quality',
@@ -185,10 +168,7 @@ export const supplements = {
       'Supports relaxation without drowsiness',
       'May help with blood pressure'
     ],
-    dosage: '100-400mg daily',
-    bestTime: 'Morning or afternoon (not before bed)',
-    sideEffects: 'Very safe. May cause mild drowsiness in some people.',
-    topProducts: [
+    productFormulations: [
       {
         name: 'NOW Foods L-Theanine',
         description: 'Pure L-theanine amino acid supplement',
@@ -216,10 +196,9 @@ export const supplements = {
     ]
   },
   'melatonin': {
-    title: 'Melatonin',
-    subtitle: 'Sleep Cycle Regulator',
+    name: 'Melatonin',
     description: 'Melatonin is a hormone naturally produced by the pineal gland that helps regulate the sleep-wake cycle. Supplemental melatonin is commonly used for insomnia, jet lag, and circadian rhythm disorders.',
-    benefits: [
+    cautions: [
       'Helps regulate sleep-wake cycles',
       'May reduce time to fall asleep',
       'Supports circadian rhythm alignment',
@@ -227,10 +206,7 @@ export const supplements = {
       'May improve sleep quality in some cases',
       'Generally safe for short-term use'
     ],
-    dosage: '0.5-3mg, 30-60 minutes before bedtime',
-    bestTime: '30-60 minutes before bedtime',
-    sideEffects: 'May cause morning grogginess, vivid dreams, or headache. Not for long-term use without medical supervision.',
-    topProducts: [
+    productFormulations: [
       {
         name: 'Natrol Melatonin',
         description: 'Fast dissolve tablets for quick absorption',
@@ -258,10 +234,9 @@ export const supplements = {
     ]
   },
   'glycine': {
-    title: 'Glycine',
-    subtitle: 'Amino Acid for Sleep & Metabolism',
+    name: 'Glycine',
     description: 'Glycine is a non-essential amino acid that supports healthy sleep, cognitive function, and metabolic processes. It is often used to improve sleep quality and promote relaxation.',
-    benefits: [
+    cautions: [
       'May improve sleep quality',
       'Supports relaxation and calm',
       'Helps lower core body temperature for sleep',
@@ -269,10 +244,7 @@ export const supplements = {
       'Involved in collagen synthesis',
       'May support metabolic health'
     ],
-    dosage: '3g (3000mg) 30-60 minutes before bedtime',
-    bestTime: '30-60 minutes before bedtime',
-    sideEffects: 'Generally very safe. High doses may cause mild digestive upset.',
-    topProducts: [
+    productFormulations: [
       {
         name: 'NOW Foods Glycine',
         description: 'Pure glycine powder for flexible dosing',
@@ -300,10 +272,9 @@ export const supplements = {
     ]
   },
   'tryptophan': {
-    title: 'L-Tryptophan',
-    subtitle: 'Amino Acid for Mood & Sleep',
+    name: 'L-Tryptophan',
     description: 'L-Tryptophan is an essential amino acid and precursor to serotonin and melatonin. It supports healthy mood, relaxation, and sleep quality.',
-    benefits: [
+    cautions: [
       'Supports serotonin and melatonin production',
       'May improve mood and emotional well-being',
       'Promotes healthy sleep patterns',
@@ -311,10 +282,7 @@ export const supplements = {
       'Supports relaxation',
       'Essential amino acid (must be obtained from diet)'
     ],
-    dosage: '500-2000mg, 30-60 minutes before bedtime',
-    bestTime: '30-60 minutes before bed or between meals',
-    sideEffects: 'Generally safe. High doses may cause drowsiness, nausea, or mild digestive upset.',
-    topProducts: [
+    productFormulations: [
       {
         name: 'NOW Foods L-Tryptophan',
         description: 'Pure tryptophan capsules for mood and sleep',
@@ -342,10 +310,9 @@ export const supplements = {
     ]
   },
   'l-tyrosine': {
-    title: 'L-Tyrosine',
-    subtitle: 'Amino Acid for Focus & Stress',
+    name: 'L-Tyrosine',
     description: 'L-Tyrosine is a non-essential amino acid that supports the production of dopamine, norepinephrine, and thyroid hormones. It is used to promote focus, alertness, and stress resilience.',
-    benefits: [
+    cautions: [
       'Supports dopamine and norepinephrine synthesis',
       'May improve focus and mental performance',
       'Helps with stress adaptation',
@@ -353,10 +320,7 @@ export const supplements = {
       'May reduce fatigue during stress',
       'Non-essential amino acid (body can synthesize)'
     ],
-    dosage: '500-2000mg, 30-60 minutes before mental or physical activity',
-    bestTime: 'Before breakfast or stressful events',
-    sideEffects: 'Generally safe. High doses may cause headache, nausea, or restlessness.',
-    topProducts: [
+    productFormulations: [
       {
         name: 'NOW Foods L-Tyrosine',
         description: 'Pure tyrosine capsules for focus and stress',
@@ -384,10 +348,9 @@ export const supplements = {
     ]
   },
   'coq10': {
-    title: 'CoQ10 (Ubiquinone)',
-    subtitle: 'Cellular Energy & Heart Health',
+    name: 'CoQ10 (Ubiquinone)',
     description: 'Coenzyme Q10 (CoQ10) is a vitamin-like compound essential for mitochondrial energy production. It supports heart health, cellular energy, and antioxidant protection.',
-    benefits: [
+    cautions: [
       'Supports cellular energy production',
       'Promotes heart and cardiovascular health',
       'Acts as a powerful antioxidant',
@@ -395,10 +358,7 @@ export const supplements = {
       'Supports healthy aging',
       'May help with statin-induced muscle symptoms'
     ],
-    dosage: '100-300mg daily with food',
-    bestTime: 'With meals containing fat',
-    sideEffects: 'Very safe. Rarely may cause mild digestive upset or headache.',
-    topProducts: [
+    productFormulations: [
       {
         name: 'Qunol Ultra CoQ10',
         description: 'Highly absorbable CoQ10 softgels',
@@ -440,8 +400,8 @@ export default async function SupplementPage({ params }: SupplementPageProps) {
       <div className="max-w-4xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-green-900 mb-2">{supplement.title}</h1>
-          <p className="text-xl text-green-700 mb-4">{supplement.subtitle}</p>
+          <h1 className="text-4xl font-bold text-green-900 mb-2">{supplement.name}</h1>
+          <p className="text-xl text-green-700 mb-4">{supplement.description}</p>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">{supplement.description}</p>
         </div>
 
@@ -451,10 +411,10 @@ export default async function SupplementPage({ params }: SupplementPageProps) {
             <div className="bg-white rounded-lg p-6 shadow-lg">
               <h2 className="text-2xl font-semibold text-green-800 mb-4">Key Benefits</h2>
               <ul className="space-y-3">
-                {supplement.benefits.map((benefit, index) => (
+                {supplement.cautions.map((caution, index) => (
                   <li key={index} className="flex items-start">
                     <span className="text-green-500 mr-3 mt-1">✓</span>
-                    <span className="text-gray-700">{benefit}</span>
+                    <span className="text-gray-700">{caution}</span>
                   </li>
                 ))}
               </ul>
@@ -463,15 +423,15 @@ export default async function SupplementPage({ params }: SupplementPageProps) {
             <div className="grid md:grid-cols-3 gap-4">
               <div className="bg-white rounded-lg p-4 shadow-lg">
                 <h3 className="font-semibold text-green-800 mb-2">Recommended Dosage</h3>
-                <p className="text-gray-700">{supplement.dosage}</p>
+                <p className="text-gray-700">Follow label instructions (typically 1 capsule daily)</p>
               </div>
               <div className="bg-white rounded-lg p-4 shadow-lg">
                 <h3 className="font-semibold text-green-800 mb-2">Best Time to Take</h3>
-                <p className="text-gray-700">{supplement.bestTime}</p>
+                <p className="text-gray-700">Morning with breakfast</p>
               </div>
               <div className="bg-white rounded-lg p-4 shadow-lg">
                 <h3 className="font-semibold text-green-800 mb-2">Side Effects</h3>
-                <p className="text-gray-700 text-sm">{supplement.sideEffects}</p>
+                <p className="text-gray-700 text-sm">Generally safe. May cause bright yellow urine (normal). High doses may cause nausea.</p>
               </div>
             </div>
           </div>
@@ -480,7 +440,7 @@ export default async function SupplementPage({ params }: SupplementPageProps) {
           <div className="bg-white rounded-lg p-6 shadow-lg h-fit">
             <h2 className="text-2xl font-semibold text-green-800 mb-6">Top Products</h2>
             <div className="space-y-4">
-              {supplement.topProducts.map((product, index) => (
+              {supplement.productFormulations.map((product, index) => (
                 <div key={index} className="border border-green-200 rounded-lg p-4 hover:shadow-md transition-shadow">
                   <h3 className="font-semibold text-green-900 mb-2">{product.name}</h3>
                   <p className="text-gray-600 text-sm mb-3">{product.description}</p>
