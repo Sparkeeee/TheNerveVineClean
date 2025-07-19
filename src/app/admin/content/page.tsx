@@ -5,6 +5,85 @@ import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import dynamic from "next/dynamic";
 
+// TypeScript interfaces
+interface Herb {
+  id: number;
+  name: string;
+  latinName?: string;
+  slug: string;
+  description?: string;
+  metaTitle?: string;
+  metaDescription?: string;
+  heroImageUrl?: string;
+  cardImageUrl?: string;
+  galleryImages?: string[];
+  cautions?: string;
+  productFormulations?: Array<{
+    type: string;
+    qualityCriteria: string;
+    tags: string[];
+    affiliateLink: string;
+    price: string;
+  }>;
+  references?: Array<{
+    type: string;
+    value: string;
+  }>;
+  indications?: string[];
+  traditionalUses?: string[];
+}
+
+interface Supplement {
+  id: number;
+  name: string;
+  slug: string;
+  description?: string;
+  metaTitle?: string;
+  metaDescription?: string;
+  heroImageUrl?: string;
+  cardImageUrl?: string;
+  galleryImages?: string[];
+  cautions?: string;
+  productFormulations?: Array<{
+    type: string;
+    qualityCriteria: string;
+    tags: string[];
+    affiliateLink: string;
+    price: string;
+  }>;
+  references?: Array<{
+    type: string;
+    value: string;
+  }>;
+  indications?: string[];
+  traditionalUses?: string[];
+}
+
+interface Symptom {
+  id: number;
+  name: string;
+  slug: string;
+  description?: string;
+  metaTitle?: string;
+  metaDescription?: string;
+  heroImageUrl?: string;
+  cardImageUrl?: string;
+  galleryImages?: string[];
+  cautions?: string;
+  products?: Array<{
+    name: string;
+    description: string;
+    affiliateLink: string;
+    price: string;
+  }>;
+  references?: Array<{
+    type: string;
+    value: string;
+  }>;
+  indications?: string[];
+  traditionalUses?: string[];
+}
+
 const TiptapEditor = dynamic(() => import("../../../components/TiptapEditor"), { ssr: false });
 
 const TABS = ["Herbs", "Supplements", "Symptoms"];
@@ -50,16 +129,16 @@ const PRODUCT_QUALITY_FIELDS = [
 
 export default function AdminContentDashboard() {
   const [tab, setTab] = useState("Herbs");
-  const [data, setData] = useState<any[]>([]);
+  const [data, setData] = useState<Herb[] | Supplement[] | Symptom[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [formMode, setFormMode] = useState<"add" | "edit">("add");
   const [formData, setFormData] = useState<any>({});
-  const [allSymptoms, setAllSymptoms] = useState<any[]>([]);
+  const [allSymptoms, setAllSymptoms] = useState<Symptom[]>([]);
   // Add state for allHerbs and allSupplements
-  const [allHerbs, setAllHerbs] = useState<any[]>([]);
-  const [allSupplements, setAllSupplements] = useState<any[]>([]);
+  const [allHerbs, setAllHerbs] = useState<Herb[]>([]);
+  const [allSupplements, setAllSupplements] = useState<Supplement[]>([]);
 
   // Fetch all herbs and supplements when Symptoms tab is active
   useEffect(() => {
@@ -83,7 +162,7 @@ export default function AdminContentDashboard() {
       if (!res.ok) throw new Error("Failed to fetch symptoms");
       const items = await res.json();
       setAllSymptoms(items);
-    } catch (e: any) {
+    } catch (e) {
       setAllSymptoms([]);
     }
   }
@@ -119,8 +198,8 @@ export default function AdminContentDashboard() {
       if (!res.ok) throw new Error("Failed to fetch " + tab);
       const items = await res.json();
       setData(items);
-    } catch (e: any) {
-      setError(e.message);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'An error occurred');
       setData([]);
     } finally {
       setLoading(false);
@@ -133,13 +212,13 @@ export default function AdminContentDashboard() {
     setShowForm(true);
   }
 
-  function openEditForm(item: any) {
+  function openEditForm(item: Herb | Supplement | Symptom) {
     setFormMode("edit");
     setFormData({ ...item });
     setShowForm(true);
   }
 
-  async function handleFormSubmit(e: any) {
+  async function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
     setError("");
@@ -154,8 +233,8 @@ export default function AdminContentDashboard() {
       if (!res.ok) throw new Error("Failed to save " + tab.slice(0, -1));
       setShowForm(false);
       await fetchData();
-    } catch (e: any) {
-      setError(e.message);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'An error occurred');
     } finally {
       setLoading(false);
     }
@@ -174,8 +253,8 @@ export default function AdminContentDashboard() {
       });
       if (!res.ok) throw new Error("Failed to delete " + tab.slice(0, -1));
       await fetchData();
-    } catch (e: any) {
-      setError(e.message);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'An error occurred');
     } finally {
       setLoading(false);
     }
@@ -217,24 +296,26 @@ export default function AdminContentDashboard() {
     );
   }
 
-  function renderTableRow(item: any) {
+  function renderTableRow(item: Herb | Supplement | Symptom) {
+    // Type assertion to handle dynamic field access
+    const itemAny = item as any;
     if (tab === "Herbs") {
       return (
         <tr key={item.id} className="border-t border-gray-700">
           <td className="p-2">{item.id}</td>
           {HERB_FIELDS.map((f) => (
             <td key={f.key} className="p-2 text-xs max-w-[180px] truncate">
-              {typeof item[f.key] === "object" && item[f.key] !== null
-                ? JSON.stringify(item[f.key])
-                : item[f.key] || <span className="text-gray-500">(none)</span>}
+              {typeof itemAny[f.key] === "object" && itemAny[f.key] !== null
+                ? JSON.stringify(itemAny[f.key])
+                : itemAny[f.key] || <span className="text-gray-500">(none)</span>}
             </td>
           ))}
           <td className="p-2">
             {item.indications && item.indications.length > 0 ? (
               <div className="flex flex-wrap gap-1">
-                {item.indications.map((sym: any) => (
-                  <span key={sym.id} className="bg-blue-900 text-blue-200 px-2 py-1 rounded text-xs border border-blue-700">
-                    {sym.name}
+                {item.indications.map((sym: string, index: number) => (
+                  <span key={index} className="bg-blue-900 text-blue-200 px-2 py-1 rounded text-xs border border-blue-700">
+                    {sym}
                   </span>
                 ))}
               </div>
@@ -265,9 +346,9 @@ export default function AdminContentDashboard() {
           <td className="p-2">{item.id}</td>
           {SUPPLEMENT_FIELDS.map((f) => (
             <td key={f.key} className="p-2 text-xs max-w-[180px] truncate">
-              {typeof item[f.key] === "object" && item[f.key] !== null
-                ? JSON.stringify(item[f.key])
-                : item[f.key] === true ? 'Yes' : item[f.key] === false ? 'No' : item[f.key] || <span className="text-gray-500">(none)</span>}
+              {typeof itemAny[f.key] === "object" && itemAny[f.key] !== null
+                ? JSON.stringify(itemAny[f.key])
+                : itemAny[f.key] === true ? 'Yes' : itemAny[f.key] === false ? 'No' : itemAny[f.key] || <span className="text-gray-500">(none)</span>}
             </td>
           ))}
           <td className="p-2 space-x-2">
@@ -358,7 +439,7 @@ export default function AdminContentDashboard() {
             value={formData.indications || []}
             onChange={e => {
               const selected = Array.from(e.target.selectedOptions).map(opt => Number(opt.value));
-              setFormData({ ...formData, indications: selected });
+              setFormData({ ...formData, indications: selected.map(s => s.toString()) });
             }}
           >
             {allSymptoms.map(sym => (
@@ -367,8 +448,8 @@ export default function AdminContentDashboard() {
           </select>
           {formData.indications && formData.indications.length > 0 && (
             <div className="flex flex-wrap gap-1 mt-2">
-              {formData.indications.map((id: number) => {
-                const sym = allSymptoms.find(s => s.id === id);
+              {formData.indications.map((id: string, index: number) => {
+                                  const sym = allSymptoms.find(s => s.id === Number(id));
                 return sym ? (
                   <span key={id} className="bg-blue-900 text-blue-200 px-2 py-1 rounded text-xs border border-blue-700">
                     {sym.name}

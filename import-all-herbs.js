@@ -1,96 +1,69 @@
-export type Herb = {
-  id?: number;
-  name: string;
-  slug?: string;
-  description: string;
-  metaTitle?: string;
-  metaDescription?: string;
-  heroImageUrl?: string;
-  cardImageUrl?: string;
-  galleryImages?: string[];
-  cautions?: string;
-  productFormulations?: Array<{
-    type: string;
-    qualityCriteria?: string;
-    tags?: string[];
-    affiliateLink?: string;
-    price?: string;
-  }>;
-  references?: Array<{ type: string; value: string }>;
-  indications?: string[];
-  traditionalUses?: string[];
-  latinName?: string;
-};
+const { PrismaClient } = require('@prisma/client');
 
-export const herbs: Herb[] = [
+const prisma = new PrismaClient();
+
+const herbs = [
   {
     name: "Lemon Balm",
     latinName: "Melissa officinalis",
     slug: "lemon-balm",
-    description: "Lemon Balm is a calming herb that eases stress and digestive issues by supporting the parasympathetic nervous system. As a premier nervine tonic, it excels at soothing agitation, irritability, and the 'wired and tired' feeling that comes from chronic stress. It gently uplifts the mood while calming the mind, making it a classic remedy for those who feel overwhelmed and frazzled. Historically, it was cherished for its ability to 'make the heart merry.'",
-    metaTitle: "Lemon Balm - Calming Herb for Stress Relief",
-    metaDescription: "Lemon Balm is a calming herb that eases stress and digestive issues by supporting the parasympathetic nervous system.",
+    description: "Lemon Balm is a calming herb that eases stress and digestive issues by supporting the parasympathetic nervous system.",
+    metaTitle: "Lemon Balm - Calming Herb",
+    metaDescription: "Lemon Balm is a calming herb that eases stress and digestive issues...",
     heroImageUrl: "/images/Melissa_officinalis_Le_0.jpg",
     cardImageUrl: "/images/Melissa_officinalis_Le_0.jpg",
     galleryImages: ["/images/Melissa_officinalis_Le_0.jpg"],
     cautions: "Generally safe. May cause mild sedation.",
     productFormulations: [
-      { type: "tincture", qualityCriteria: "1:3, organic", tags: ["organic"], affiliateLink: "", price: "" },
-      { type: "tea", qualityCriteria: "loose leaf, organic", tags: ["organic"], affiliateLink: "", price: "" }
+      { type: "tincture", qualityCriteria: "1:3, organic", tags: ["organic"], affiliateLink: "", price: "" }
     ],
     references: [
       { type: "traditional", value: "Used for stress relief in European herbalism." }
     ],
-    indications: ["anxiety", "digestive tension", "insomnia"],
-    traditionalUses: ["Stress and anxiety relief", "Digestive upset", "Sleep aid"]
+    indications: ["anxiety", "digestive tension"],
+    traditionalUses: ["Stress and anxiety relief", "Digestive upset"]
   },
   {
     name: "Ashwagandha",
     latinName: "Withania somnifera",
     slug: "ashwagandha",
-    description: "Ashwagandha is an adaptogenic herb used to support stress resilience and energy. Known as the 'Indian ginseng,' it has been used in Ayurvedic medicine for over 3,000 years to help the body adapt to stress and maintain balance. It works by modulating the hypothalamic-pituitary-adrenal (HPA) axis, helping to normalize cortisol levels and reduce the impact of chronic stress on the body. Ashwagandha is particularly effective for those experiencing adrenal fatigue, burnout, or the 'wired and tired' state.",
-    metaTitle: "Ashwagandha - Adaptogenic Herb for Stress Resilience",
+    description: "Ashwagandha is an adaptogenic herb used to support stress resilience and energy.",
+    metaTitle: "Ashwagandha - Adaptogen",
     metaDescription: "Ashwagandha is an adaptogenic herb for stress and energy support.",
     heroImageUrl: "/images/Withania_somnifera_Ash_2.jpg",
     cardImageUrl: "/images/Withania_somnifera_Ash_2.jpg",
     galleryImages: ["/images/Withania_somnifera_Ash_2.jpg"],
-    cautions: "Avoid in hyperthyroidism unless supervised. May interact with immunosuppressants.",
+    cautions: "Avoid in hyperthyroidism unless supervised.",
     productFormulations: [
-      { type: "capsule", qualityCriteria: "standardized to 5% withanolides", tags: ["standardized"], affiliateLink: "", price: "" },
-      { type: "powder", qualityCriteria: "organic, full spectrum", tags: ["organic"], affiliateLink: "", price: "" }
+      { type: "capsule", qualityCriteria: "standardized to 5% withanolides", tags: ["standardized"], affiliateLink: "", price: "" }
     ],
     references: [
       { type: "clinical", value: "Shown to reduce cortisol in clinical studies." }
     ],
-    indications: ["stress", "fatigue", "adrenal exhaustion"],
-    traditionalUses: ["Ayurvedic tonic", "Energy support", "Stress adaptation"]
+    indications: ["stress", "fatigue"],
+    traditionalUses: ["Ayurvedic tonic", "Energy support"]
   },
   {
     name: "Chamomile",
     latinName: "Matricaria recutita",
     slug: "chamomile",
-    description: "Chamomile is a gentle, calming herb for relaxation and sleep. This beloved herb has been used for centuries as a natural sedative and digestive aid. It contains compounds like apigenin that bind to benzodiazepine receptors in the brain, promoting relaxation and sleep. Chamomile is particularly effective for those with nervous tension, anxiety, or difficulty falling asleep due to a racing mind. It's also excellent for digestive issues that stem from stress and nervous tension.",
-    metaTitle: "Chamomile - Gentle Relaxation Herb",
+    description: "Chamomile is a gentle, calming herb for relaxation and sleep.",
+    metaTitle: "Chamomile - Relaxation Herb",
     metaDescription: "Chamomile is a gentle, calming herb for relaxation and sleep.",
     heroImageUrl: "/images/Matricaria_recutita_Ch_2.jpg",
     cardImageUrl: "/images/Matricaria_recutita_Ch_2.jpg",
     galleryImages: ["/images/Matricaria_recutita_Ch_2.jpg"],
-    cautions: "Rare allergy in those sensitive to ragweed. Generally very safe.",
-    productFormulations: [
-      { type: "tea", qualityCriteria: "organic, loose leaf", tags: ["organic"], affiliateLink: "", price: "" },
-      { type: "tincture", qualityCriteria: "1:3, organic", tags: ["organic"], affiliateLink: "", price: "" }
-    ],
-    references: [
-      { type: "traditional", value: "Used for sleep and relaxation in European herbalism." }
-    ],
-    indications: ["anxiety", "insomnia", "digestive tension"],
-    traditionalUses: ["Sleep aid", "Digestive tonic", "Nervous tension"]
+    cautions: "Rare allergy in those sensitive to ragweed.",
+    productFormulations: [],
+    references: [],
+    indications: ["anxiety", "insomnia"],
+    traditionalUses: ["Sleep aid", "Digestive tonic"]
   },
   {
     name: "Lavender",
     latinName: "Lavandula angustifolia",
     slug: "lavender",
-    description: "Lavender is a classic calming herb known for its soothing aroma and gentle sedative properties. The essential oil contains linalool and linalyl acetate, compounds that have been shown to reduce anxiety and promote relaxation. Lavender is particularly effective for those experiencing nervous tension, restlessness, or difficulty sleeping. It can be used as an essential oil, tea, or tincture, and is often combined with other calming herbs for enhanced effects.",
+    description: "Lavender is a classic calming herb known for its soothing aroma and gentle sedative properties.",
     metaTitle: "Lavender - Soothing Calming Herb",
     metaDescription: "Lavender is a classic calming herb known for its soothing aroma and gentle sedative properties.",
     heroImageUrl: "/images/lavender.jpg",
@@ -98,8 +71,7 @@ export const herbs: Herb[] = [
     galleryImages: ["/images/lavender.jpg"],
     cautions: "Essential oil should be diluted. Generally safe when used properly.",
     productFormulations: [
-      { type: "essential oil", qualityCriteria: "pure, therapeutic grade", tags: ["pure"], affiliateLink: "", price: "" },
-      { type: "tea", qualityCriteria: "organic, loose leaf", tags: ["organic"], affiliateLink: "", price: "" }
+      { type: "essential oil", qualityCriteria: "pure, therapeutic grade", tags: ["pure"], affiliateLink: "", price: "" }
     ],
     references: [
       { type: "clinical", value: "Shown to reduce anxiety in clinical studies." }
@@ -111,7 +83,7 @@ export const herbs: Herb[] = [
     name: "St. John's Wort",
     latinName: "Hypericum perforatum",
     slug: "st-johns-wort",
-    description: "St. John's Wort is a well-researched herb for mild to moderate depression and seasonal affective disorder. It contains hypericin and hyperforin, compounds that appear to work similarly to selective serotonin reuptake inhibitors (SSRIs) by increasing serotonin, dopamine, and norepinephrine levels in the brain. This herb is particularly effective for those experiencing low mood, seasonal depression, or mild depressive symptoms.",
+    description: "St. John's Wort is a well-researched herb for mild to moderate depression and seasonal affective disorder.",
     metaTitle: "St. John's Wort - Natural Mood Support",
     metaDescription: "St. John's Wort is a well-researched herb for mild to moderate depression and seasonal affective disorder.",
     heroImageUrl: "/images/st-johns-wort.jpg",
@@ -119,8 +91,7 @@ export const herbs: Herb[] = [
     galleryImages: ["/images/st-johns-wort.jpg"],
     cautions: "Interacts with many medications. Consult healthcare provider. Avoid sun exposure.",
     productFormulations: [
-      { type: "capsule", qualityCriteria: "standardized to 0.3% hypericin", tags: ["standardized"], affiliateLink: "", price: "" },
-      { type: "tincture", qualityCriteria: "1:3, organic", tags: ["organic"], affiliateLink: "", price: "" }
+      { type: "capsule", qualityCriteria: "standardized to 0.3% hypericin", tags: ["standardized"], affiliateLink: "", price: "" }
     ],
     references: [
       { type: "clinical", value: "Multiple studies show effectiveness for mild depression." }
@@ -132,7 +103,7 @@ export const herbs: Herb[] = [
     name: "Rhodiola Rosea",
     latinName: "Rhodiola rosea",
     slug: "rhodiola-rosea",
-    description: "Rhodiola Rosea is an adaptogenic herb that helps the body adapt to stress and maintain energy levels. It contains rosavins and salidroside, compounds that help regulate cortisol levels and support the nervous system. This herb is particularly effective for those experiencing stress-related fatigue, burnout, or difficulty maintaining energy throughout the day. It's often used by those with demanding lifestyles or high-stress jobs.",
+    description: "Rhodiola Rosea is an adaptogenic herb that helps the body adapt to stress and maintain energy levels.",
     metaTitle: "Rhodiola Rosea - Adaptogenic Energy Support",
     metaDescription: "Rhodiola Rosea is an adaptogenic herb that helps the body adapt to stress and maintain energy levels.",
     heroImageUrl: "/images/Rhodiola_rosea_Rhodiol_3.jpg",
@@ -140,8 +111,7 @@ export const herbs: Herb[] = [
     galleryImages: ["/images/Rhodiola_rosea_Rhodiol_3.jpg"],
     cautions: "May be stimulating. Avoid in the evening. Generally safe.",
     productFormulations: [
-      { type: "capsule", qualityCriteria: "standardized to 3% rosavins", tags: ["standardized"], affiliateLink: "", price: "" },
-      { type: "tincture", qualityCriteria: "1:3, organic", tags: ["organic"], affiliateLink: "", price: "" }
+      { type: "capsule", qualityCriteria: "standardized to 3% rosavins", tags: ["standardized"], affiliateLink: "", price: "" }
     ],
     references: [
       { type: "clinical", value: "Shown to improve stress resilience and energy in studies." }
@@ -153,7 +123,7 @@ export const herbs: Herb[] = [
     name: "Holy Basil (Tulsi)",
     latinName: "Ocimum sanctum",
     slug: "holy-basil",
-    description: "Holy Basil, also known as Tulsi, is a sacred herb in Ayurvedic medicine with powerful adaptogenic properties. It helps the body adapt to stress while supporting the nervous system and promoting mental clarity. Tulsi contains compounds like eugenol and ursolic acid that help regulate cortisol levels and support cognitive function. This herb is particularly effective for those experiencing mental fog, stress-related cognitive issues, or spiritual seeking.",
+    description: "Holy Basil, also known as Tulsi, is a sacred herb in Ayurvedic medicine with powerful adaptogenic properties.",
     metaTitle: "Holy Basil (Tulsi) - Sacred Adaptogenic Herb",
     metaDescription: "Holy Basil is a sacred herb in Ayurvedic medicine with powerful adaptogenic properties.",
     heroImageUrl: "/images/holy-basil.jpg",
@@ -161,8 +131,7 @@ export const herbs: Herb[] = [
     galleryImages: ["/images/holy-basil.jpg"],
     cautions: "May lower blood sugar. Monitor if diabetic. Generally safe.",
     productFormulations: [
-      { type: "tea", qualityCriteria: "organic, loose leaf", tags: ["organic"], affiliateLink: "", price: "" },
-      { type: "capsule", qualityCriteria: "full spectrum, organic", tags: ["organic"], affiliateLink: "", price: "" }
+      { type: "tea", qualityCriteria: "organic, loose leaf", tags: ["organic"], affiliateLink: "", price: "" }
     ],
     references: [
       { type: "traditional", value: "Sacred herb in Ayurvedic medicine for stress and spiritual support." }
@@ -174,7 +143,7 @@ export const herbs: Herb[] = [
     name: "Licorice Root",
     latinName: "Glycyrrhiza glabra",
     slug: "licorice-root",
-    description: "Licorice Root is a sweet-tasting herb that supports the adrenal glands and helps regulate cortisol levels. It contains glycyrrhizin, a compound that helps extend the half-life of cortisol and supports adrenal function. This herb is particularly effective for those experiencing adrenal fatigue, low energy, or stress-related hormonal imbalances. It's often used in combination with other adaptogenic herbs for enhanced effects.",
+    description: "Licorice Root is a sweet-tasting herb that supports the adrenal glands and helps regulate cortisol levels.",
     metaTitle: "Licorice Root - Adrenal Support Herb",
     metaDescription: "Licorice Root is a sweet-tasting herb that supports the adrenal glands and helps regulate cortisol levels.",
     heroImageUrl: "/images/licorice-root.jpg",
@@ -182,8 +151,7 @@ export const herbs: Herb[] = [
     galleryImages: ["/images/licorice-root.jpg"],
     cautions: "May raise blood pressure. Avoid if hypertensive. Use deglycyrrhizinated form for long-term use.",
     productFormulations: [
-      { type: "tea", qualityCriteria: "organic, loose leaf", tags: ["organic"], affiliateLink: "", price: "" },
-      { type: "tincture", qualityCriteria: "1:3, organic", tags: ["organic"], affiliateLink: "", price: "" }
+      { type: "tea", qualityCriteria: "organic, loose leaf", tags: ["organic"], affiliateLink: "", price: "" }
     ],
     references: [
       { type: "clinical", value: "Shown to support adrenal function and cortisol regulation." }
@@ -195,7 +163,7 @@ export const herbs: Herb[] = [
     name: "Ginseng",
     latinName: "Panax ginseng",
     slug: "ginseng",
-    description: "Ginseng is a powerful adaptogenic herb that has been used in traditional Chinese medicine for thousands of years. It contains ginsenosides, compounds that help the body adapt to stress and maintain energy levels. Ginseng is particularly effective for those experiencing fatigue, low energy, or stress-related cognitive decline. It's often used by those with demanding lifestyles or high-stress jobs.",
+    description: "Ginseng is a powerful adaptogenic herb that has been used in traditional Chinese medicine for thousands of years.",
     metaTitle: "Ginseng - Powerful Adaptogenic Herb",
     metaDescription: "Ginseng is a powerful adaptogenic herb that has been used in traditional Chinese medicine for thousands of years.",
     heroImageUrl: "/images/Panax_ginseng_Korean_g_1.jpg",
@@ -203,8 +171,7 @@ export const herbs: Herb[] = [
     galleryImages: ["/images/Panax_ginseng_Korean_g_1.jpg"],
     cautions: "May be stimulating. Avoid in the evening. May interact with blood thinners.",
     productFormulations: [
-      { type: "capsule", qualityCriteria: "standardized to 4% ginsenosides", tags: ["standardized"], affiliateLink: "", price: "" },
-      { type: "tea", qualityCriteria: "organic, loose leaf", tags: ["organic"], affiliateLink: "", price: "" }
+      { type: "capsule", qualityCriteria: "standardized to 4% ginsenosides", tags: ["standardized"], affiliateLink: "", price: "" }
     ],
     references: [
       { type: "clinical", value: "Extensive research shows effectiveness for energy and stress adaptation." }
@@ -216,7 +183,7 @@ export const herbs: Herb[] = [
     name: "Feverfew",
     latinName: "Tanacetum parthenium",
     slug: "feverfew",
-    description: "Feverfew is a traditional herb used for migraine prevention and relief. It contains parthenolide, a compound that helps reduce inflammation and prevent the release of substances that cause blood vessels to dilate. This herb is particularly effective for those experiencing frequent migraines, tension headaches, or stress-related headaches. It's often used as a preventive measure rather than acute treatment.",
+    description: "Feverfew is a traditional herb used for migraine prevention and relief.",
     metaTitle: "Feverfew - Migraine Prevention Herb",
     metaDescription: "Feverfew is a traditional herb used for migraine prevention and relief.",
     heroImageUrl: "/images/feverfew.jpg",
@@ -224,8 +191,7 @@ export const herbs: Herb[] = [
     galleryImages: ["/images/feverfew.jpg"],
     cautions: "May cause mouth ulcers in some people. Generally safe when used properly.",
     productFormulations: [
-      { type: "capsule", qualityCriteria: "standardized to 0.2% parthenolide", tags: ["standardized"], affiliateLink: "", price: "" },
-      { type: "tincture", qualityCriteria: "1:3, organic", tags: ["organic"], affiliateLink: "", price: "" }
+      { type: "capsule", qualityCriteria: "standardized to 0.2% parthenolide", tags: ["standardized"], affiliateLink: "", price: "" }
     ],
     references: [
       { type: "clinical", value: "Multiple studies show effectiveness for migraine prevention." }
@@ -237,7 +203,7 @@ export const herbs: Herb[] = [
     name: "Passionflower",
     latinName: "Passiflora incarnata",
     slug: "passionflower",
-    description: "Passionflower is a gentle sedative herb that promotes relaxation and sleep. It contains compounds like chrysin and vitexin that help calm the nervous system and reduce anxiety. This herb is particularly effective for those experiencing nervous tension, anxiety, or difficulty falling asleep due to a racing mind. It's often combined with other calming herbs like valerian or chamomile for enhanced effects.",
+    description: "Passionflower is a gentle sedative herb that promotes relaxation and sleep.",
     metaTitle: "Passionflower - Gentle Sedative Herb",
     metaDescription: "Passionflower is a gentle sedative herb that promotes relaxation and sleep.",
     heroImageUrl: "/images/passionflower.jpg",
@@ -245,8 +211,7 @@ export const herbs: Herb[] = [
     galleryImages: ["/images/passionflower.jpg"],
     cautions: "May cause drowsiness. Avoid when driving. Generally safe.",
     productFormulations: [
-      { type: "tincture", qualityCriteria: "1:3, organic", tags: ["organic"], affiliateLink: "", price: "" },
-      { type: "tea", qualityCriteria: "organic, loose leaf", tags: ["organic"], affiliateLink: "", price: "" }
+      { type: "tincture", qualityCriteria: "1:3, organic", tags: ["organic"], affiliateLink: "", price: "" }
     ],
     references: [
       { type: "traditional", value: "Used for anxiety and sleep in European herbalism." }
@@ -258,7 +223,7 @@ export const herbs: Herb[] = [
     name: "Damiana",
     latinName: "Turnera diffusa",
     slug: "damiana",
-    description: "Damiana is a traditional herb used for mood enhancement and nervous system support. It contains compounds that help balance neurotransmitters and promote a sense of well-being. This herb is particularly effective for those experiencing low mood, mild depression, or stress-related emotional imbalances. It's often used as a natural mood enhancer and nervous system tonic.",
+    description: "Damiana is a traditional herb used for mood enhancement and nervous system support.",
     metaTitle: "Damiana - Mood Enhancement Herb",
     metaDescription: "Damiana is a traditional herb used for mood enhancement and nervous system support.",
     heroImageUrl: "/images/damiana.jpg",
@@ -266,8 +231,7 @@ export const herbs: Herb[] = [
     galleryImages: ["/images/damiana.jpg"],
     cautions: "May lower blood sugar. Monitor if diabetic. Generally safe.",
     productFormulations: [
-      { type: "tincture", qualityCriteria: "1:3, organic", tags: ["organic"], affiliateLink: "", price: "" },
-      { type: "tea", qualityCriteria: "organic, loose leaf", tags: ["organic"], affiliateLink: "", price: "" }
+      { type: "tincture", qualityCriteria: "1:3, organic", tags: ["organic"], affiliateLink: "", price: "" }
     ],
     references: [
       { type: "traditional", value: "Used for mood enhancement in traditional medicine." }
@@ -279,7 +243,7 @@ export const herbs: Herb[] = [
     name: "Skullcap",
     latinName: "Scutellaria lateriflora",
     slug: "skullcap",
-    description: "Skullcap is a nervine herb that helps calm the nervous system and reduce anxiety. It contains compounds like baicalin and baicalein that help regulate GABA receptors in the brain, promoting relaxation and reducing nervous tension. This herb is particularly effective for those experiencing anxiety, nervous tension, or stress-related symptoms. It's often used in combination with other calming herbs.",
+    description: "Skullcap is a nervine herb that helps calm the nervous system and reduce anxiety.",
     metaTitle: "Skullcap - Nervine Calming Herb",
     metaDescription: "Skullcap is a nervine herb that helps calm the nervous system and reduce anxiety.",
     heroImageUrl: "/images/skullcap.jpg",
@@ -287,8 +251,7 @@ export const herbs: Herb[] = [
     galleryImages: ["/images/skullcap.jpg"],
     cautions: "May cause drowsiness. Avoid when driving. Generally safe.",
     productFormulations: [
-      { type: "tincture", qualityCriteria: "1:3, organic", tags: ["organic"], affiliateLink: "", price: "" },
-      { type: "tea", qualityCriteria: "organic, loose leaf", tags: ["organic"], affiliateLink: "", price: "" }
+      { type: "tincture", qualityCriteria: "1:3, organic", tags: ["organic"], affiliateLink: "", price: "" }
     ],
     references: [
       { type: "traditional", value: "Used for nervous tension in European herbalism." }
@@ -300,7 +263,7 @@ export const herbs: Herb[] = [
     name: "Motherwort",
     latinName: "Leonurus cardiaca",
     slug: "motherwort",
-    description: "Motherwort is a traditional herb used for heart and nervous system support. It contains compounds that help calm the heart and reduce anxiety. This herb is particularly effective for those experiencing heart palpitations, anxiety, or stress-related cardiovascular symptoms. It's often used as a natural remedy for nervous heart conditions.",
+    description: "Motherwort is a traditional herb used for heart and nervous system support.",
     metaTitle: "Motherwort - Heart and Nervous System Support",
     metaDescription: "Motherwort is a traditional herb used for heart and nervous system support.",
     heroImageUrl: "/images/motherwort.jpg",
@@ -308,8 +271,7 @@ export const herbs: Herb[] = [
     galleryImages: ["/images/motherwort.jpg"],
     cautions: "May affect blood clotting. Avoid if on blood thinners. Generally safe.",
     productFormulations: [
-      { type: "tincture", qualityCriteria: "1:3, organic", tags: ["organic"], affiliateLink: "", price: "" },
-      { type: "tea", qualityCriteria: "organic, loose leaf", tags: ["organic"], affiliateLink: "", price: "" }
+      { type: "tincture", qualityCriteria: "1:3, organic", tags: ["organic"], affiliateLink: "", price: "" }
     ],
     references: [
       { type: "traditional", value: "Used for heart and nervous system support in traditional medicine." }
@@ -321,7 +283,7 @@ export const herbs: Herb[] = [
     name: "Oatstraw",
     latinName: "Avena sativa",
     slug: "oatstraw",
-    description: "Oatstraw is a gentle nervine herb that supports the nervous system and promotes relaxation. It contains compounds that help nourish and strengthen the nervous system. This herb is particularly effective for those experiencing nervous exhaustion, stress-related fatigue, or difficulty maintaining calm. It's often used as a long-term tonic for nervous system health.",
+    description: "Oatstraw is a gentle nervine herb that supports the nervous system and promotes relaxation.",
     metaTitle: "Oatstraw - Gentle Nervine Tonic",
     metaDescription: "Oatstraw is a gentle nervine herb that supports the nervous system and promotes relaxation.",
     heroImageUrl: "/images/oatstraw.jpg",
@@ -329,8 +291,7 @@ export const herbs: Herb[] = [
     galleryImages: ["/images/oatstraw.jpg"],
     cautions: "May contain gluten. Avoid if celiac. Generally very safe.",
     productFormulations: [
-      { type: "tea", qualityCriteria: "organic, loose leaf", tags: ["organic"], affiliateLink: "", price: "" },
-      { type: "tincture", qualityCriteria: "1:3, organic", tags: ["organic"], affiliateLink: "", price: "" }
+      { type: "tea", qualityCriteria: "organic, loose leaf", tags: ["organic"], affiliateLink: "", price: "" }
     ],
     references: [
       { type: "traditional", value: "Used for nervous system support in European herbalism." }
@@ -342,7 +303,7 @@ export const herbs: Herb[] = [
     name: "Valerian Root",
     latinName: "Valeriana officinalis",
     slug: "valerian-root",
-    description: "Valerian Root is a powerful sedative herb that promotes deep sleep and relaxation. It contains compounds like valerenic acid that help increase GABA levels in the brain, promoting sedation and sleep. This herb is particularly effective for those experiencing insomnia, difficulty falling asleep, or restless sleep. It's often combined with other calming herbs for enhanced effects.",
+    description: "Valerian Root is a powerful sedative herb that promotes deep sleep and relaxation.",
     metaTitle: "Valerian Root - Powerful Sleep Aid",
     metaDescription: "Valerian Root is a powerful sedative herb that promotes deep sleep and relaxation.",
     heroImageUrl: "/images/valerian-root.jpg",
@@ -350,8 +311,7 @@ export const herbs: Herb[] = [
     galleryImages: ["/images/valerian-root.jpg"],
     cautions: "May cause drowsiness. Avoid when driving. May interact with sedatives.",
     productFormulations: [
-      { type: "capsule", qualityCriteria: "standardized to 0.8% valerenic acid", tags: ["standardized"], affiliateLink: "", price: "" },
-      { type: "tincture", qualityCriteria: "1:3, organic", tags: ["organic"], affiliateLink: "", price: "" }
+      { type: "capsule", qualityCriteria: "standardized to 0.8% valerenic acid", tags: ["standardized"], affiliateLink: "", price: "" }
     ],
     references: [
       { type: "clinical", value: "Multiple studies show effectiveness for sleep improvement." }
@@ -363,7 +323,7 @@ export const herbs: Herb[] = [
     name: "Ginkgo Biloba",
     latinName: "Ginkgo biloba",
     slug: "ginkgo-biloba",
-    description: "Ginkgo Biloba is a traditional herb used for cognitive support and memory enhancement. It contains compounds like ginkgolides and bilobalide that help improve blood flow to the brain and protect against oxidative damage. This herb is particularly effective for those experiencing cognitive decline, poor memory, or stress-related mental fog. It's often used as a long-term cognitive support supplement.",
+    description: "Ginkgo Biloba is a traditional herb used for cognitive support and memory enhancement.",
     metaTitle: "Ginkgo Biloba - Cognitive Support Herb",
     metaDescription: "Ginkgo Biloba is a traditional herb used for cognitive support and memory enhancement.",
     heroImageUrl: "/images/ginkgo-biloba.jpg",
@@ -371,8 +331,7 @@ export const herbs: Herb[] = [
     galleryImages: ["/images/ginkgo-biloba.jpg"],
     cautions: "May affect blood clotting. Avoid if on blood thinners. May interact with antidepressants.",
     productFormulations: [
-      { type: "capsule", qualityCriteria: "standardized to 24% flavone glycosides", tags: ["standardized"], affiliateLink: "", price: "" },
-      { type: "tincture", qualityCriteria: "1:3, organic", tags: ["organic"], affiliateLink: "", price: "" }
+      { type: "capsule", qualityCriteria: "standardized to 24% flavone glycosides", tags: ["standardized"], affiliateLink: "", price: "" }
     ],
     references: [
       { type: "clinical", value: "Extensive research shows effectiveness for cognitive support." }
@@ -384,7 +343,7 @@ export const herbs: Herb[] = [
     name: "Butterbur",
     latinName: "Petasites hybridus",
     slug: "butterbur",
-    description: "Butterbur is a traditional herb used for migraine prevention and relief. It contains petasin and isopetasin, compounds that help reduce inflammation and prevent the release of substances that cause blood vessels to dilate. This herb is particularly effective for those experiencing frequent migraines, tension headaches, or stress-related headaches. It's often used as a preventive measure.",
+    description: "Butterbur is a traditional herb used for migraine prevention and relief.",
     metaTitle: "Butterbur - Migraine Prevention Herb",
     metaDescription: "Butterbur is a traditional herb used for migraine prevention and relief.",
     heroImageUrl: "/images/butterbur.jpg",
@@ -392,8 +351,7 @@ export const herbs: Herb[] = [
     galleryImages: ["/images/butterbur.jpg"],
     cautions: "May contain pyrrolizidine alkaloids. Use PA-free products. Generally safe when properly processed.",
     productFormulations: [
-      { type: "capsule", qualityCriteria: "PA-free, standardized", tags: ["safe"], affiliateLink: "", price: "" },
-      { type: "tincture", qualityCriteria: "PA-free, organic", tags: ["safe"], affiliateLink: "", price: "" }
+      { type: "capsule", qualityCriteria: "PA-free, standardized", tags: ["safe"], affiliateLink: "", price: "" }
     ],
     references: [
       { type: "clinical", value: "Multiple studies show effectiveness for migraine prevention." }
@@ -405,7 +363,7 @@ export const herbs: Herb[] = [
     name: "Maca",
     latinName: "Lepidium meyenii",
     slug: "maca",
-    description: "Maca is a traditional Peruvian herb used for energy and hormonal balance. It contains compounds that help support the endocrine system and promote natural energy. This herb is particularly effective for those experiencing fatigue, low energy, or stress-related hormonal imbalances. It's often used as a natural energy tonic and adaptogen.",
+    description: "Maca is a traditional Peruvian herb used for energy and hormonal balance.",
     metaTitle: "Maca - Energy and Hormonal Balance Herb",
     metaDescription: "Maca is a traditional Peruvian herb used for energy and hormonal balance.",
     heroImageUrl: "/images/Lepidium_meyenii_Maca_0.jpg",
@@ -413,8 +371,7 @@ export const herbs: Herb[] = [
     galleryImages: ["/images/Lepidium_meyenii_Maca_0.jpg"],
     cautions: "May affect hormone levels. Monitor if on hormone therapy. Generally safe.",
     productFormulations: [
-      { type: "powder", qualityCriteria: "organic, raw", tags: ["organic"], affiliateLink: "", price: "" },
-      { type: "capsule", qualityCriteria: "organic, full spectrum", tags: ["organic"], affiliateLink: "", price: "" }
+      { type: "powder", qualityCriteria: "organic, raw", tags: ["organic"], affiliateLink: "", price: "" }
     ],
     references: [
       { type: "traditional", value: "Used for energy and hormonal balance in traditional Peruvian medicine." }
@@ -426,7 +383,7 @@ export const herbs: Herb[] = [
     name: "Siberian Ginseng (Eleuthero)",
     latinName: "Eleutherococcus senticosus",
     slug: "siberian-ginseng",
-    description: "Siberian Ginseng, also known as Eleuthero, is an adaptogenic herb that helps the body adapt to stress and maintain energy levels. It contains eleutherosides, compounds that help regulate the stress response and support adrenal function. This herb is particularly effective for those experiencing stress-related fatigue, burnout, or difficulty maintaining energy throughout the day.",
+    description: "Siberian Ginseng, also known as Eleuthero, is an adaptogenic herb that helps the body adapt to stress and maintain energy levels.",
     metaTitle: "Siberian Ginseng - Adaptogenic Energy Support",
     metaDescription: "Siberian Ginseng is an adaptogenic herb that helps the body adapt to stress and maintain energy levels.",
     heroImageUrl: "/images/Eleutherococcus_sentic_3.jpg",
@@ -434,8 +391,7 @@ export const herbs: Herb[] = [
     galleryImages: ["/images/Eleutherococcus_sentic_3.jpg"],
     cautions: "May be stimulating. Avoid in the evening. May interact with blood thinners.",
     productFormulations: [
-      { type: "capsule", qualityCriteria: "standardized to 0.8% eleutherosides", tags: ["standardized"], affiliateLink: "", price: "" },
-      { type: "tincture", qualityCriteria: "1:3, organic", tags: ["organic"], affiliateLink: "", price: "" }
+      { type: "capsule", qualityCriteria: "standardized to 0.8% eleutherosides", tags: ["standardized"], affiliateLink: "", price: "" }
     ],
     references: [
       { type: "clinical", value: "Shown to improve stress resilience and energy in studies." }
@@ -447,7 +403,7 @@ export const herbs: Herb[] = [
     name: "Hawthorn",
     latinName: "Crataegus monogyna",
     slug: "hawthorn",
-    description: "Hawthorn is a traditional herb used for heart and cardiovascular support. It contains compounds like oligomeric proanthocyanidins that help strengthen the heart muscle and improve blood flow. This herb is particularly effective for those experiencing heart palpitations, stress-related cardiovascular symptoms, or poor circulation. It's often used as a long-term heart tonic.",
+    description: "Hawthorn is a traditional herb used for heart and cardiovascular support.",
     metaTitle: "Hawthorn - Heart and Cardiovascular Support",
     metaDescription: "Hawthorn is a traditional herb used for heart and cardiovascular support.",
     heroImageUrl: "/images/hawthorn.jpg",
@@ -455,8 +411,7 @@ export const herbs: Herb[] = [
     galleryImages: ["/images/hawthorn.jpg"],
     cautions: "May affect blood pressure. Monitor if hypertensive. May interact with heart medications.",
     productFormulations: [
-      { type: "capsule", qualityCriteria: "standardized to 1.8% vitexin", tags: ["standardized"], affiliateLink: "", price: "" },
-      { type: "tincture", qualityCriteria: "1:3, organic", tags: ["organic"], affiliateLink: "", price: "" }
+      { type: "capsule", qualityCriteria: "standardized to 1.8% vitexin", tags: ["standardized"], affiliateLink: "", price: "" }
     ],
     references: [
       { type: "clinical", value: "Multiple studies show effectiveness for cardiovascular support." }
@@ -468,7 +423,7 @@ export const herbs: Herb[] = [
     name: "Willow Bark",
     latinName: "Salix alba",
     slug: "willow-bark",
-    description: "Willow Bark is a traditional herb used for pain relief and inflammation reduction. It contains salicin, a compound that is converted to salicylic acid in the body, providing natural pain relief. This herb is particularly effective for those experiencing tension headaches, muscle pain, or stress-related pain. It's often used as a natural alternative to aspirin.",
+    description: "Willow Bark is a traditional herb used for pain relief and inflammation reduction.",
     metaTitle: "Willow Bark - Natural Pain Relief",
     metaDescription: "Willow Bark is a traditional herb used for pain relief and inflammation reduction.",
     heroImageUrl: "/images/willow-bark.jpg",
@@ -476,8 +431,7 @@ export const herbs: Herb[] = [
     galleryImages: ["/images/willow-bark.jpg"],
     cautions: "May affect blood clotting. Avoid if on blood thinners. May cause stomach upset.",
     productFormulations: [
-      { type: "capsule", qualityCriteria: "standardized to 15% salicin", tags: ["standardized"], affiliateLink: "", price: "" },
-      { type: "tincture", qualityCriteria: "1:3, organic", tags: ["organic"], affiliateLink: "", price: "" }
+      { type: "capsule", qualityCriteria: "standardized to 15% salicin", tags: ["standardized"], affiliateLink: "", price: "" }
     ],
     references: [
       { type: "traditional", value: "Used for pain relief in traditional medicine for centuries." }
@@ -489,7 +443,7 @@ export const herbs: Herb[] = [
     name: "Capsaicin (Chilli Extract)",
     latinName: "Capsicum annuum",
     slug: "capsaicin",
-    description: "Capsaicin is the active compound found in chili peppers that provides natural pain relief. It works by depleting substance P, a neurotransmitter involved in pain transmission. This compound is particularly effective for those experiencing nerve pain, muscle pain, or stress-related tension. It's often used topically as a natural pain reliever.",
+    description: "Capsaicin is the active compound found in chili peppers that provides natural pain relief.",
     metaTitle: "Capsaicin - Natural Pain Relief Compound",
     metaDescription: "Capsaicin is the active compound found in chili peppers that provides natural pain relief.",
     heroImageUrl: "/images/capsaicin.jpg",
@@ -497,8 +451,7 @@ export const herbs: Herb[] = [
     galleryImages: ["/images/capsaicin.jpg"],
     cautions: "May cause burning sensation. Avoid contact with eyes. Test on small area first.",
     productFormulations: [
-      { type: "cream", qualityCriteria: "0.025-0.075% capsaicin", tags: ["topical"], affiliateLink: "", price: "" },
-      { type: "patch", qualityCriteria: "8% capsaicin", tags: ["topical"], affiliateLink: "", price: "" }
+      { type: "cream", qualityCriteria: "0.025-0.075% capsaicin", tags: ["topical"], affiliateLink: "", price: "" }
     ],
     references: [
       { type: "clinical", value: "Multiple studies show effectiveness for pain relief." }
@@ -510,7 +463,7 @@ export const herbs: Herb[] = [
     name: "American Ginseng",
     latinName: "Panax quinquefolius",
     slug: "american-ginseng",
-    description: "American Ginseng is an adaptogenic herb that helps the body adapt to stress and maintain energy levels. It contains ginsenosides, compounds that help regulate the stress response and support cognitive function. This herb is particularly effective for those experiencing stress-related fatigue, mental fog, or difficulty maintaining energy throughout the day.",
+    description: "American Ginseng is an adaptogenic herb that helps the body adapt to stress and maintain energy levels.",
     metaTitle: "American Ginseng - Adaptogenic Energy Support",
     metaDescription: "American Ginseng is an adaptogenic herb that helps the body adapt to stress and maintain energy levels.",
     heroImageUrl: "/images/american-ginseng.jpg",
@@ -518,8 +471,7 @@ export const herbs: Herb[] = [
     galleryImages: ["/images/american-ginseng.jpg"],
     cautions: "May be stimulating. Avoid in the evening. May interact with blood thinners.",
     productFormulations: [
-      { type: "capsule", qualityCriteria: "standardized to 4% ginsenosides", tags: ["standardized"], affiliateLink: "", price: "" },
-      { type: "tea", qualityCriteria: "organic, loose leaf", tags: ["organic"], affiliateLink: "", price: "" }
+      { type: "capsule", qualityCriteria: "standardized to 4% ginsenosides", tags: ["standardized"], affiliateLink: "", price: "" }
     ],
     references: [
       { type: "clinical", value: "Shown to improve stress resilience and cognitive function in studies." }
@@ -531,7 +483,7 @@ export const herbs: Herb[] = [
     name: "Schisandra Berry",
     latinName: "Schisandra chinensis",
     slug: "schisandra-berry",
-    description: "Schisandra Berry is an adaptogenic herb used in traditional Chinese medicine for stress adaptation and liver support. It contains lignans that help regulate the stress response and support liver function. This herb is particularly effective for those experiencing stress-related fatigue, liver stress, or difficulty maintaining energy. It's often used as a comprehensive adaptogen.",
+    description: "Schisandra Berry is an adaptogenic herb used in traditional Chinese medicine for stress adaptation and liver support.",
     metaTitle: "Schisandra Berry - Comprehensive Adaptogenic Herb",
     metaDescription: "Schisandra Berry is an adaptogenic herb used in traditional Chinese medicine for stress adaptation and liver support.",
     heroImageUrl: "/images/Schisandra_chinensis_S_0.jpg",
@@ -539,8 +491,7 @@ export const herbs: Herb[] = [
     galleryImages: ["/images/Schisandra_chinensis_S_0.jpg"],
     cautions: "May affect liver enzymes. Monitor if on liver medications. Generally safe.",
     productFormulations: [
-      { type: "capsule", qualityCriteria: "standardized to 2% schisandrin", tags: ["standardized"], affiliateLink: "", price: "" },
-      { type: "tincture", qualityCriteria: "1:3, organic", tags: ["organic"], affiliateLink: "", price: "" }
+      { type: "capsule", qualityCriteria: "standardized to 2% schisandrin", tags: ["standardized"], affiliateLink: "", price: "" }
     ],
     references: [
       { type: "traditional", value: "Used for stress adaptation and liver support in traditional Chinese medicine." }
@@ -552,7 +503,7 @@ export const herbs: Herb[] = [
     name: "Astragalus Root",
     latinName: "Astragalus membranaceus",
     slug: "astragalus-root",
-    description: "Astragalus Root is an adaptogenic herb used in traditional Chinese medicine for immune support and stress adaptation. It contains polysaccharides and saponins that help support the immune system and regulate the stress response. This herb is particularly effective for those experiencing stress-related immune suppression, fatigue, or difficulty maintaining energy. It's often used as a long-term tonic.",
+    description: "Astragalus Root is an adaptogenic herb used in traditional Chinese medicine for immune support and stress adaptation.",
     metaTitle: "Astragalus Root - Immune and Stress Support",
     metaDescription: "Astragalus Root is an adaptogenic herb used in traditional Chinese medicine for immune support and stress adaptation.",
     heroImageUrl: "/images/Astragalus_membranaceu_2.jpg",
@@ -560,8 +511,7 @@ export const herbs: Herb[] = [
     galleryImages: ["/images/Astragalus_membranaceu_2.jpg"],
     cautions: "May affect immune function. Avoid if on immunosuppressants. Generally safe.",
     productFormulations: [
-      { type: "capsule", qualityCriteria: "standardized to 0.5% astragaloside IV", tags: ["standardized"], affiliateLink: "", price: "" },
-      { type: "tincture", qualityCriteria: "1:3, organic", tags: ["organic"], affiliateLink: "", price: "" }
+      { type: "capsule", qualityCriteria: "standardized to 0.5% astragaloside IV", tags: ["standardized"], affiliateLink: "", price: "" }
     ],
     references: [
       { type: "traditional", value: "Used for immune support and stress adaptation in traditional Chinese medicine." }
@@ -570,4 +520,57 @@ export const herbs: Herb[] = [
     traditionalUses: ["Immune support", "Stress adaptation", "Energy tonic"]
   }
 ];
+
+async function importHerbs() {
+  console.log('Starting herb import...');
   
+  try {
+    // Check existing herbs
+    const existingHerbs = await prisma.herb.findMany();
+    console.log(`Found ${existingHerbs.length} existing herbs`);
+    
+    for (const herb of herbs) {
+      // Check if herb already exists
+      const existing = await prisma.herb.findFirst({
+        where: { name: herb.name }
+      });
+      
+      if (existing) {
+        console.log(`Skipping ${herb.name} - already exists`);
+        continue;
+      }
+      
+      try {
+        await prisma.herb.create({
+          data: {
+            name: herb.name,
+            latinName: herb.latinName,
+            slug: herb.slug,
+            description: herb.description,
+            metaTitle: herb.metaTitle,
+            metaDescription: herb.metaDescription,
+            heroImageUrl: herb.heroImageUrl,
+            cardImageUrl: herb.cardImageUrl,
+            galleryImages: herb.galleryImages,
+            cautions: herb.cautions,
+            productFormulations: herb.productFormulations,
+            references: herb.references,
+            indications: herb.indications,
+            traditionalUses: herb.traditionalUses,
+          },
+        });
+        console.log(`Imported herb: ${herb.name}`);
+      } catch (e) {
+        console.error(`Failed to import herb: ${herb.name}`, e);
+      }
+    }
+    
+    console.log('Herb import completed!');
+  } catch (error) {
+    console.error('Error during import:', error);
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+importHerbs(); 

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { herbs } from "../../data/herbs";
+import { PrismaClient } from '@prisma/client';
 
 // Import the full symptoms list from the symptoms page
 const symptoms = [
@@ -40,9 +40,23 @@ function getSymptomTag(usedFor: string) {
   );
 }
 
-export default function HerbsPage() {
-  // Sort herbs alphabetically by name
-  const sortedHerbs = [...herbs].sort((a, b) => a.name.localeCompare(b.name));
+async function getHerbs() {
+  const prisma = new PrismaClient();
+  try {
+    const herbs = await prisma.herb.findMany();
+    return herbs;
+  } catch (error) {
+    console.error('Error fetching herbs:', error);
+    return [];
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+export default async function HerbsPage() {
+  // Fetch herbs from database and sort alphabetically by name
+  const herbs = await getHerbs();
+  const sortedHerbs = herbs.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-blue-50 to-blue-100">
@@ -61,15 +75,15 @@ export default function HerbsPage() {
               <h3 className="text-xl font-semibold text-blue-800 mb-1">
                 <Link href={`/herbs/${herb.slug}`}>{herb.name}</Link>
               </h3>
-              {/* Latin name or subtitle, smaller and lighter */}
+              {/* Latin name from database */}
               <p className="text-gray-500 text-sm italic mb-2">
-                {('latinName' in herb ? (herb as any).latinName : getLatinName(herb.description))}
+                {herb.latinName || getLatinName(herb.description || '')}
               </p>
               <hr className="my-3 border-blue-100" />
               {/* Tags for main indications (symptoms) */}
               <div className="flex flex-wrap gap-2 mt-4">
-                {herb.indications && herb.indications.map((indication, i) => {
-                  const tag = getSymptomTag(indication);
+                {herb.indications && Array.isArray(herb.indications) && herb.indications.map((indication, i) => {
+                  const tag = getSymptomTag(indication as string);
                   return tag ? (
                     <Link
                       key={i}
@@ -83,12 +97,12 @@ export default function HerbsPage() {
               </div>
               {/* Traditional Uses */}
               <div className="flex flex-wrap gap-2 mt-4">
-                {herb.traditionalUses && herb.traditionalUses.map((use, i) => (
+                {herb.traditionalUses && Array.isArray(herb.traditionalUses) && herb.traditionalUses.map((use, i) => (
                   <span
                     key={i}
                     className="inline-block px-3 py-1 rounded-full border text-xs font-semibold mr-2 mb-2 bg-gray-100 text-gray-700 border-gray-200"
                   >
-                    {use}
+                                            {use as string}
                   </span>
                 ))}
               </div>

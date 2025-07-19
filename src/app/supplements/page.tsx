@@ -1,7 +1,24 @@
 import Link from "next/link";
-import { supplements } from "./[slug]/page";
+import { PrismaClient } from '@prisma/client';
 
-export default function SupplementsPage() {
+async function getSupplements() {
+  const prisma = new PrismaClient();
+  try {
+    const supplements = await prisma.supplement.findMany();
+    return supplements;
+  } catch (error) {
+    console.error('Error fetching supplements:', error);
+    return [];
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+export default async function SupplementsPage() {
+  // Fetch supplements from database and sort alphabetically by name
+  const supplements = await getSupplements();
+  const sortedSupplements = supplements.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-blue-50 to-blue-100">
       <div className="max-w-6xl mx-auto px-6 py-8">
@@ -12,14 +29,14 @@ export default function SupplementsPage() {
           nutritional gaps and enhance your natural healing processes.
         </p>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {Object.entries(supplements).map(([slug, data]) => (
+          {sortedSupplements.map((supplement, index) => (
             <Link 
-              key={slug} 
-              href={`/supplements/${slug}`}
+              key={index} 
+              href={`/supplements/${supplement.slug}`}
               className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-blue-100 hover:shadow-xl transition-all duration-200 hover:scale-105"
             >
-              <h3 className="text-xl font-semibold text-blue-800 mb-2">{(data as any).title ?? ''}</h3>
-              <p className="text-gray-600 text-sm">{(data as any).subtitle ?? ''}</p>
+              <h3 className="text-xl font-semibold text-blue-800 mb-2">{supplement.name}</h3>
+              <p className="text-gray-600 text-sm">{supplement.description?.split('\n')[0] || ''}</p>
             </Link>
           ))}
         </div>

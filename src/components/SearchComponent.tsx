@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { herbs } from '../data/herbs';
 
 // Search data types
 interface SearchItem {
@@ -17,20 +16,7 @@ interface SearchItem {
 }
 
 // Search data - this would ideally come from your actual data files
-const herbSearchData: SearchItem[] = herbs.map(herb => ({
-  id: herb.slug,
-  title: herb.name,
-  description: herb.description.split('\n')[0], // Use first paragraph as summary
-  type: 'herb',
-  slug: `/herbs/${herb.slug}`,
-  tags: [
-    ...(herb.indications || []),
-    ...(herb.productFormulations || []),
-    herb.slug,
-    herb.name
-  ],
-  benefits: ('benefits' in herb ? (herb as any).benefits : [])
-})) as SearchItem[];
+const herbSearchData: SearchItem[] = [] as SearchItem[];
 
 // Static data for supplements and symptoms (unchanged)
 const staticSearchData: SearchItem[] = [

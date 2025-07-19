@@ -1,15 +1,30 @@
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
-import { herbs, type Herb } from '../../../data/herbs';
+import { PrismaClient } from '@prisma/client';
 import Link from "next/link";
 
 interface HerbPageProps {
   params: Promise<{ slug: string }>;
 }
 
+async function getHerb(slug: string) {
+  const prisma = new PrismaClient();
+  try {
+    const herb = await prisma.herb.findFirst({
+      where: { slug: slug }
+    });
+    return herb;
+  } catch (error) {
+    console.error('Error fetching herb:', error);
+    return null;
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
 export default async function HerbPage({ params }: HerbPageProps) {
   const { slug } = await params;
-  const herb: Herb | undefined = herbs.find(h => h.slug === slug);
+  const herb = await getHerb(slug);
 
   if (!herb) {
     notFound();
@@ -23,7 +38,7 @@ export default async function HerbPage({ params }: HerbPageProps) {
           <div className="flex-shrink-0">
             <Image
               src={herb.heroImageUrl || '/images/placeholder.png'}
-              alt={herb.name}
+              alt={herb.name || 'Herb image'}
               width={200}
               height={200}
               className="rounded-full object-cover shadow-lg border-4 border-white"
@@ -31,15 +46,18 @@ export default async function HerbPage({ params }: HerbPageProps) {
           </div>
           <div className="text-center md:text-left">
             <h1 className="text-4xl font-bold text-purple-900 mb-2">{herb.name}</h1>
+            {herb.latinName && (
+              <p className="text-xl text-gray-600 italic mb-4">{herb.latinName}</p>
+            )}
             <div className="text-lg text-gray-600 max-w-3xl space-y-4">
-              {herb.description.split('\\n\\n').map((paragraph, index) => (
+              {herb.description && herb.description.split('\n\n').map((paragraph, index) => (
                 <p key={index}>{paragraph}</p>
               ))}
             </div>
           </div>
         </div>
 
-        {herb.indications && herb.indications.length > 0 && (
+        {herb.indications && Array.isArray(herb.indications) && herb.indications.length > 0 && (
           <div className="my-4">
             <h3 className="text-lg font-semibold text-purple-800 mb-2">Common Uses</h3>
             <div className="flex flex-wrap gap-2">
@@ -70,8 +88,8 @@ export default async function HerbPage({ params }: HerbPageProps) {
                   { name: "Mood Swings", slug: "mood-swings" },
                 ];
                 const match = symptoms.find(s =>
-                  s.slug.toLowerCase() === indication.toLowerCase() ||
-                  s.name.toLowerCase() === indication.toLowerCase()
+                  s.slug.toLowerCase() === (indication as string)?.toLowerCase() ||
+                  s.name.toLowerCase() === (indication as string)?.toLowerCase()
                 );
                 return match ? (
                   <Link
@@ -79,14 +97,14 @@ export default async function HerbPage({ params }: HerbPageProps) {
                     href={`/symptoms/${match.slug}`}
                     className="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-semibold hover:bg-blue-200 transition"
                   >
-                    {indication}
+                    {indication as string}
                   </Link>
                 ) : (
                   <span
                     key={idx}
                     className="inline-block bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-xs font-semibold"
                   >
-                    {indication}
+                    {indication as string}
                   </span>
                 );
               })}
@@ -95,14 +113,14 @@ export default async function HerbPage({ params }: HerbPageProps) {
         )}
 
         {/* Traditional Uses Section */}
-        {herb.traditionalUses && (
+        {herb.traditionalUses && Array.isArray(herb.traditionalUses) && (
           <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-4 my-4">
             <h3 className="font-semibold text-green-800 mb-2">Traditional Wisdom</h3>
             <ul className="space-y-1">
               {herb.traditionalUses.map((use, index) => (
                 <li key={index} className="flex items-start">
                   <span className="text-green-500 mr-2">•</span>
-                  <span className="text-gray-700 text-sm">{use}</span>
+                  <span className="text-gray-700 text-sm">{use as string}</span>
                 </li>
               ))}
             </ul>
@@ -122,18 +140,18 @@ export default async function HerbPage({ params }: HerbPageProps) {
           </div>
         )}
 
-        {herb.productFormulations && herb.productFormulations.length > 0 && (
+        {herb.productFormulations && Array.isArray(herb.productFormulations) && herb.productFormulations.length > 0 && (
           <div className="bg-white rounded-lg p-6 shadow-lg my-4">
             <h2 className="text-2xl font-semibold text-purple-800 mb-4">Top Products</h2>
             <div className="space-y-4">
               {herb.productFormulations.map((product, idx) => (
                 <div key={idx} className="border border-purple-200 rounded-lg p-4 flex flex-col gap-2">
-                  <div className="font-semibold">{product.type}</div>
-                  <div className="text-sm text-gray-600">{product.qualityCriteria}</div>
-                  {product.price && <div className="text-purple-600 font-bold">{product.price}</div>}
-                  {product.affiliateLink && (
+                  <div className="font-semibold">{(product as any).type}</div>
+                  <div className="text-sm text-gray-600">{(product as any).qualityCriteria}</div>
+                  {(product as any).price && <div className="text-purple-600 font-bold">{(product as any).price}</div>}
+                  {(product as any).affiliateLink && (
                     <a
-                      href={product.affiliateLink}
+                      href={(product as any).affiliateLink}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="block w-full bg-purple-600 text-white text-center py-2 rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium mt-2"

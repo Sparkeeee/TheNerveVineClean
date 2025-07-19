@@ -5,7 +5,19 @@ import { supplements } from '../data/supplements';
 const prisma = new PrismaClient();
 
 async function importHerbs() {
+  console.log('Checking for existing herbs...');
+  const existingHerbs = await prisma.herb.findMany();
+  const existingHerbNames = existingHerbs.map(h => h.name?.toLowerCase());
+  
+  console.log(`Found ${existingHerbs.length} existing herbs:`, existingHerbNames);
+  
   for (const herb of herbs) {
+    // Check if herb already exists
+    if (existingHerbNames.includes(herb.name.toLowerCase())) {
+      console.log(`Skipping ${herb.name} - already exists`);
+      continue;
+    }
+    
     try {
       await prisma.herb.create({
         data: {
@@ -33,7 +45,19 @@ async function importHerbs() {
 }
 
 async function importSupplements() {
+  console.log('Checking for existing supplements...');
+  const existingSupplements = await prisma.supplement.findMany();
+  const existingSupplementNames = existingSupplements.map(s => s.name.toLowerCase());
+  
+  console.log(`Found ${existingSupplements.length} existing supplements:`, existingSupplementNames);
+  
   for (const supp of supplements) {
+    // Check if supplement already exists
+    if (existingSupplementNames.includes(supp.name.toLowerCase())) {
+      console.log(`Skipping ${supp.name} - already exists`);
+      continue;
+    }
+    
     try {
       await prisma.supplement.create({
         data: {
