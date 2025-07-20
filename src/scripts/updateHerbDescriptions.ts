@@ -8,9 +8,25 @@ async function updateHerbDescriptions() {
   
   for (const herb of herbs) {
     try {
-      const updatedHerb = await prisma.herb.update({
+      const updatedHerb = await prisma.herb.upsert({
         where: { name: herb.name },
-        data: {
+        update: {
+          description: herb.description,
+          metaTitle: herb.metaTitle,
+          metaDescription: herb.metaDescription,
+          heroImageUrl: herb.heroImageUrl,
+          cardImageUrl: herb.cardImageUrl,
+          galleryImages: herb.galleryImages,
+          cautions: herb.cautions,
+          productFormulations: herb.productFormulations,
+          references: herb.references,
+          indications: herb.indications,
+          traditionalUses: herb.traditionalUses,
+          latinName: herb.latinName,
+        },
+        create: {
+          name: herb.name,
+          slug: herb.slug,
           description: herb.description,
           metaTitle: herb.metaTitle,
           metaDescription: herb.metaDescription,
