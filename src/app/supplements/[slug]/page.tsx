@@ -4,7 +4,7 @@ interface SupplementPageProps {
   params: Promise<{ slug: string }>;
 }
 
-export const supplements = {
+const supplements = {
   'omega-3': {
     name: 'Omega-3 Fatty Acids',
     description: 'Omega-3 fatty acids are essential fats that your body cannot produce on its own. They are crucial for brain health, heart health, and overall well-being.',
