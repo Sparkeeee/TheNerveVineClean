@@ -1,10 +1,6 @@
 import { notFound } from 'next/navigation';
 import { PrismaClient } from '@prisma/client';
 
-interface SupplementPageProps {
-  params: { slug: string };
-}
-
 function formatParagraphs(text: string) {
   // Split by double newlines or periods for basic paragraphing
   return text
@@ -26,7 +22,7 @@ async function getSupplement(slug: string) {
   }
 }
 
-export default async function SupplementPage({ params }: SupplementPageProps) {
+export default async function SupplementPage({ params }: { params: { slug: string } }) {
   const { slug } = params;
   const supplement = await getSupplement(slug);
 
