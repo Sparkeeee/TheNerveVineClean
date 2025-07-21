@@ -86,6 +86,14 @@ interface Symptom {
   traditionalUses?: string[];
 }
 
+type Article = {
+  title: string;
+  adminNote: string;
+  uploadDate: string;
+  content: string | ArrayBuffer | null;
+  fileName: any;
+};
+
 const TiptapEditor = dynamic(() => import("../../../components/TiptapEditor"), { ssr: false });
 
 const TABS = ["Herbs", "Supplements", "Symptoms"];
@@ -135,12 +143,12 @@ function getFormattedDate() {
 
 export default function AdminContentPage() {
   // Blog/article upload state
-  const [articles, setArticles] = useState([]);
+  const [articles, setArticles] = useState<Article[]>([]);
   const [title, setTitle] = useState("");
   const [adminNote, setAdminNote] = useState("");
-  const [file, setFile] = useState(null);
+  const [file, setFile] = useState<File | null>(null);
   const [textContent, setTextContent] = useState("");
-  const [editingIndex, setEditingIndex] = useState(null);
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editContent, setEditContent] = useState("");
 
   // Handle file upload and/or text entry
@@ -149,15 +157,15 @@ export default function AdminContentPage() {
     let content = textContent;
     if (file) {
       const reader = new FileReader();
-      reader.onload = (event) => {
+      reader.onload = (event: any) => {
         setArticles((prev) => [
           ...prev,
           {
             title,
             adminNote,
-            uploadDate: getFormattedDate(),
-            content: event.target.result,
-            fileName: file.name,
+            uploadDate: new Date().toLocaleString(),
+            content: event.target && event.target.result,
+            fileName: file ? file.name : null,
           },
         ]);
       };
@@ -181,7 +189,7 @@ export default function AdminContentPage() {
   };
 
   // Handle edit save
-  const handleEditSave = (idx) => {
+  const handleEditSave = (idx: any) => {
     setArticles((prev) =>
       prev.map((a, i) => (i === idx ? { ...a, content: editContent } : a))
     );
@@ -476,10 +484,10 @@ export default function AdminContentPage() {
                   type="file"
                   accept=".txt,.html,.md"
                   className="mt-2"
-                  onChange={async (e) => {
-                    const file = e.target.files?.[0];
+                  onChange={(e: any) => {
+                    const file = e.target && e.target.files ? e.target.files[0] : null;
                     if (!file) return;
-                    const text = await file.text();
+                    const text = file.text();
                     setFormData({ ...formData, [f.key]: text });
                   }}
                 />
@@ -552,10 +560,10 @@ export default function AdminContentPage() {
                   type="file"
                   accept=".txt,.html,.md"
                   className="hidden"
-                  onChange={async (e) => {
-                    const file = e.target.files?.[0];
+                  onChange={async (e: any) => {
+                    const file = e.target && e.target.files ? e.target.files[0] : null;
                     if (!file) return;
-                    const text = await file.text();
+                    const text = file.text();
                     setFormData({ ...formData, [f.key]: text });
                   }}
                 />
@@ -797,7 +805,7 @@ export default function AdminContentPage() {
             <input
               type="file"
               accept=".pdf,.docx,.md,.txt"
-              onChange={(e) => setFile(e.target.files[0])}
+              onChange={(e: any) => setFile(e.target && e.target.files ? e.target.files[0] : null)}
               className="border border-white px-3 py-2 rounded text-white bg-transparent"
             />
             <span className="text-white">or</span>
@@ -832,7 +840,7 @@ export default function AdminContentPage() {
                       className="bg-blue-700 text-white px-3 py-1 rounded shadow hover:bg-blue-800 transition font-bold"
                       onClick={() => {
                         setEditingIndex(idx);
-                        setEditContent(article.content);
+                        setEditContent(article.content as string);
                       }}
                     >
                       Edit
