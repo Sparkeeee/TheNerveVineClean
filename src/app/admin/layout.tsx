@@ -3,7 +3,6 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "../api/auth/authOptions";
 import SessionProviderWrapper from "@/components/SessionProviderWrapper";
-import Header from "@/components/Header";
 import { headers } from "next/headers";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -18,7 +17,6 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   }
   return (
     <SessionProviderWrapper>
-      <Header />
       {children}
     </SessionProviderWrapper>
   );

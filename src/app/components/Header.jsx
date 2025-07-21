@@ -2,16 +2,9 @@
 import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
-
 export default function Header() {
-  const { data: session, status } = useSession();
-
-  if (status === "loading") {
-    return null; // or a loading spinner if you prefer
-  }
-
-  return (
-    <header className="flex items-center justify-between px-6 py-4 bg-white shadow w-full">
+    const { data: session } = useSession();
+    return (<header className="flex items-center justify-between px-6 py-4 bg-white shadow w-full">
       {/* Left: Nav */}
       <nav className="flex items-center gap-8 flex-shrink-0">
         {/* ...existing nav and logo... */}
@@ -25,30 +18,15 @@ export default function Header() {
       </nav>
       {/* Center: Search Bar */}
       <div className="flex-1 flex justify-center items-center min-w-0">
-        <input
-          type="text"
-          placeholder="Search herbs, supplements, symptoms..."
-          className="w-full max-w-xs border rounded px-3 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-green-400"
-        />
+        <input type="text" placeholder="Search herbs, supplements, symptoms..." className="w-full max-w-xs border rounded px-3 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-green-400"/>
       </div>
       {/* Right: Login/Logout Button */}
       <div className="flex items-center flex-shrink-0 ml-4">
-        {session?.user ? (
-          <button
-            onClick={() => window.location.href = "/logout"}
-            className="px-4 py-2 bg-green-700 text-black rounded font-bold hover:bg-green-800 transition"
-          >
+        {(session === null || session === void 0 ? void 0 : session.user) ? (<button onClick={() => signOut({ callbackUrl: "/admin/login" })} className="px-4 py-2 bg-green-700 text-black rounded font-bold hover:bg-green-800 transition">
             Logout
-          </button>
-        ) : (
-          <Link
-            href="/admin/login"
-            className="px-4 py-2 bg-green-700 text-black rounded font-bold hover:bg-green-800 transition"
-          >
+          </button>) : (<Link href="/admin/login" className="px-4 py-2 bg-green-700 text-black rounded font-bold hover:bg-green-800 transition">
             Admin Login
-          </Link>
-        )}
+          </Link>)}
       </div>
-    </header>
-  );
-} 
+    </header>);
+}

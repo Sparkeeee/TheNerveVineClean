@@ -13,7 +13,16 @@ import { supplements } from '../data/supplements';
 const prisma = new PrismaClient();
 function importHerbs() {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log('Checking for existing herbs...');
+        const existingHerbs = yield prisma.herb.findMany();
+        const existingHerbNames = existingHerbs.map(h => { var _a; return (_a = h.name) === null || _a === void 0 ? void 0 : _a.toLowerCase(); });
+        console.log(`Found ${existingHerbs.length} existing herbs:`, existingHerbNames);
         for (const herb of herbs) {
+            // Check if herb already exists
+            if (existingHerbNames.includes(herb.name.toLowerCase())) {
+                console.log(`Skipping ${herb.name} - already exists`);
+                continue;
+            }
             try {
                 yield prisma.herb.create({
                     data: {
@@ -43,7 +52,16 @@ function importHerbs() {
 }
 function importSupplements() {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log('Checking for existing supplements...');
+        const existingSupplements = yield prisma.supplement.findMany();
+        const existingSupplementNames = existingSupplements.map(s => s.name.toLowerCase());
+        console.log(`Found ${existingSupplements.length} existing supplements:`, existingSupplementNames);
         for (const supp of supplements) {
+            // Check if supplement already exists
+            if (existingSupplementNames.includes(supp.name.toLowerCase())) {
+                console.log(`Skipping ${supp.name} - already exists`);
+                continue;
+            }
             try {
                 yield prisma.supplement.create({
                     data: {

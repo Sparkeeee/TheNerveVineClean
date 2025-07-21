@@ -1,11 +1,24 @@
 'use client';
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 import Link from 'next/link';
 import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import SearchComponent from './SearchComponent';
+import { useSession, signOut } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 export default function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const pathname = usePathname();
+    const { data: session, status } = useSession();
+    const router = useRouter();
     const navigation = [
         { name: 'Home', href: '/' },
         { name: 'Assisted Search', href: '/search' },
@@ -34,6 +47,17 @@ export default function Header() {
               <div className="ml-8 w-80 max-w-xs">
                 <SearchComponent />
               </div>
+              {/* Login/Logout Button */}
+              <div className="flex-shrink-0 ml-4">
+                {status === 'loading' ? null : session ? (<button onClick={() => __awaiter(this, void 0, void 0, function* () {
+                yield signOut({ redirect: false });
+                router.push('/login');
+            })} className="bg-gray-200 text-black px-4 py-2 rounded hover:bg-gray-300 font-semibold transition-colors duration-200">
+                    Logout
+                  </button>) : (<Link href="/login" className="bg-gray-200 text-black px-4 py-2 rounded hover:bg-gray-300 font-semibold transition-colors duration-200">
+                    Admin Login
+                  </Link>)}
+              </div>
             </div>
             {/* Mobile menu button */}
             <div className="custom900:hidden">
@@ -58,6 +82,17 @@ export default function Header() {
                 {navigation.map((item) => (<Link key={item.name} href={item.href} className={`text-gray-700 hover:text-green-800 block px-3 py-2 text-base font-medium transition-colors duration-200 ${pathname === item.href ? 'border-b-2 border-green-700 font-bold' : ''}`} onClick={() => setIsMenuOpen(false)}>
                     {item.name}
                   </Link>))}
+                {/* Mobile Login/Logout Button */}
+                <div className="mt-2">
+                  {status === 'loading' ? null : session ? (<button onClick={() => __awaiter(this, void 0, void 0, function* () {
+                    yield signOut({ redirect: false });
+                    router.push('/login');
+                })} className="w-full bg-gray-200 text-black px-4 py-2 rounded hover:bg-gray-300 font-semibold transition-colors duration-200">
+                      Logout
+                    </button>) : (<Link href="/login" className="w-full block bg-gray-200 text-black px-4 py-2 rounded hover:bg-gray-300 font-semibold transition-colors duration-200 text-center">
+                      Admin Login
+                    </Link>)}
+                </div>
               </div>
             </div>)}
         </div>

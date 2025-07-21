@@ -1,22 +1,8 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { herbs } from '../data/herbs';
 // Search data - this would ideally come from your actual data files
-const herbSearchData = herbs.map(herb => ({
-    id: herb.slug,
-    title: herb.name,
-    description: herb.description.split('\n')[0], // Use first paragraph as summary
-    type: 'herb',
-    slug: `/herbs/${herb.slug}`,
-    tags: [
-        ...(herb.indications || []),
-        ...(herb.productFormulations || []),
-        herb.slug,
-        herb.name
-    ],
-    benefits: ('benefits' in herb ? herb.benefits : [])
-}));
+const herbSearchData = [];
 // Static data for supplements and symptoms (unchanged)
 const staticSearchData = [
     // Supplements

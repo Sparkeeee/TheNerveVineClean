@@ -29,7 +29,6 @@ export default function TiptapEditor({ value, onChange }) {
         if (editor && value !== editor.getHTML()) {
             editor.commands.setContent(value || "");
         }
-        // eslint-disable-next-line
     }, [value]);
     if (!hasMounted)
         return null;
