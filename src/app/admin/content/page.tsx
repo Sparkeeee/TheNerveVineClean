@@ -144,7 +144,7 @@ export default function AdminContentPage() {
   const [editContent, setEditContent] = useState("");
 
   // Handle file upload and/or text entry
-  const handleUpload = (e) => {
+  const handleUpload = (e: any) => {
     e.preventDefault();
     let content = textContent;
     if (file) {
