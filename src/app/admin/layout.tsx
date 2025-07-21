@@ -12,17 +12,13 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   if (!pathname.includes("/admin/login")) {
     const session = await getServerSession(authOptions);
     if (!session) {
-      redirect("/admin/login");
+      redirect("/login");
     }
   }
   return (
-    <html lang="en">
-      <body>
-        <SessionProviderWrapper>
-          <Header />
-          {children}
-        </SessionProviderWrapper>
-      </body>
-    </html>
+    <SessionProviderWrapper>
+      <Header />
+      {children}
+    </SessionProviderWrapper>
   );
 } 
