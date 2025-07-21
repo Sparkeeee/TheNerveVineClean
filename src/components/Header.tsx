@@ -4,10 +4,14 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { usePathname } from 'next/navigation'
 import SearchComponent from './SearchComponent'
+import { useSession, signOut } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const pathname = usePathname();
+  const { data: session, status } = useSession();
+  const router = useRouter();
 
   const navigation = [
     { name: 'Home', href: '/' },
@@ -44,6 +48,27 @@ export default function Header() {
               </nav>
               <div className="ml-8 w-80 max-w-xs">
                 <SearchComponent />
+              </div>
+              {/* Login/Logout Button */}
+              <div className="flex-shrink-0 ml-4">
+                {status === 'loading' ? null : session ? (
+                  <button
+                    onClick={async () => {
+                      await signOut({ redirect: false });
+                      router.push('/login');
+                    }}
+                    className="bg-gray-200 text-black px-4 py-2 rounded hover:bg-gray-300 font-semibold transition-colors duration-200"
+                  >
+                    Logout
+                  </button>
+                ) : (
+                  <Link
+                    href="/login"
+                    className="bg-gray-200 text-black px-4 py-2 rounded hover:bg-gray-300 font-semibold transition-colors duration-200"
+                  >
+                    Admin Login
+                  </Link>
+                )}
               </div>
             </div>
             {/* Mobile menu button */}
@@ -85,6 +110,27 @@ export default function Header() {
                     {item.name}
                   </Link>
                 ))}
+                {/* Mobile Login/Logout Button */}
+                <div className="mt-2">
+                  {status === 'loading' ? null : session ? (
+                    <button
+                      onClick={async () => {
+                        await signOut({ redirect: false });
+                        router.push('/login');
+                      }}
+                      className="w-full bg-gray-200 text-black px-4 py-2 rounded hover:bg-gray-300 font-semibold transition-colors duration-200"
+                    >
+                      Logout
+                    </button>
+                  ) : (
+                    <Link
+                      href="/login"
+                      className="w-full block bg-gray-200 text-black px-4 py-2 rounded hover:bg-gray-300 font-semibold transition-colors duration-200 text-center"
+                    >
+                      Admin Login
+                    </Link>
+                  )}
+                </div>
               </div>
             </div>
           )}

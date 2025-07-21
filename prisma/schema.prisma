@@ -26,6 +26,7 @@ model Herb {
   references      Json?
   indications     Json?     // <-- Change to string array
   traditionalUses Json?
+  products        Product[] @relation("HerbProducts")
 }
 
 model Symptom {
@@ -33,6 +34,7 @@ model Symptom {
   slug        String   @unique
   title       String
   description String?
+  products    Product[] @relation("SymptomProducts")
   // herbs       Herb[]      @relation("HerbSymptoms")
   // supplements Supplement[] @relation("SymptomSupplements")
   // indicatedHerbs Herb[]   @relation("HerbIndications")
@@ -52,12 +54,14 @@ model Supplement {
   productFormulations Json?
   references      Json?
   tags            Json?     // <-- Add this line
+  products        Product[] @relation("SupplementProducts")
 }
 
 model BlogPage {
   id         Int      @id @default(autoincrement())
   title      String
-  fileUrl    String   // URL or path to the uploaded file
+  fileUrl    String?   // URL or path to the uploaded file (optional)
+  content    String?   // The main article content (Markdown, HTML, or plain text)
   uploadDate DateTime @default(now())
   adminNote  String?
 }
@@ -79,3 +83,64 @@ model QualitySpecification {
   brandPreferences     Json?
   brandAvoid           Json?
 } 
+
+model Merchant {
+  id         Int      @id @default(autoincrement())
+  name       String
+  apiSource  String?
+  logoUrl    String?
+  websiteUrl String?
+  region     String   // e.g., "US", "UK", "EU"
+  products   Product[]
+  pendingProducts PendingProduct[]
+  defaultAffiliateRate Float? // e.g., 0.10 for 10%
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model PendingProduct {
+  id            Int      @id @default(autoincrement())
+  name          String
+  description   String?
+  merchant      Merchant @relation(fields: [merchantId], references: [id])
+  merchantId    Int
+  affiliateLink String
+  price         Float?
+  currency      String   // e.g., "USD", "GBP"
+  region        String?  // Optional: "US", "UK", etc.
+  imageUrl      String?
+  qualityScore  Int?
+  affiliateRate Float?   // e.g., 0.10 for 10%
+  affiliateYield Float?  // e.g., 1.00 for $1 yield
+  rawApiData    Json?
+  createdAt     DateTime @default(now())
+  expiresAt     DateTime
+  herbId        Int?
+  supplementId  Int?
+  symptomId     Int?
+}
+
+model Product {
+  id            Int      @id @default(autoincrement())
+  name          String
+  description   String?
+  merchant      Merchant @relation(fields: [merchantId], references: [id])
+  merchantId    Int
+  affiliateLink String
+  price         Float?
+  currency      String   // e.g., "USD", "GBP"
+  region        String?  // Optional: "US", "UK", etc.
+  imageUrl      String?
+  qualityScore  Int?
+  affiliateRate Float?   // e.g., 0.10 for 10%
+  affiliateYield Float?  // e.g., 1.00 for $1 yield
+  approvedBy    String?
+  approvedAt    DateTime?
+  herbs         Herb[]   @relation("HerbProducts")
+  supplements   Supplement[] @relation("SupplementProducts")
+  symptoms      Symptom[] @relation("SymptomProducts")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+// Add join tables for many-to-many relations if needed (Prisma handles this automatically with @relation) 

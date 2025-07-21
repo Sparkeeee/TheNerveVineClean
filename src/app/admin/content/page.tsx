@@ -4,6 +4,8 @@ import { useEffect, useState, useRef } from "react";
 import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import dynamic from "next/dynamic";
+import React from 'react';
+import Link from 'next/link';
 
 // TypeScript interfaces
 interface Herb {
@@ -127,7 +129,66 @@ const PRODUCT_QUALITY_FIELDS = [
   { key: "tags", label: "Tags (comma separated, e.g. organic, >4 stars)", required: false },
 ];
 
-export default function AdminContentDashboard() {
+function getFormattedDate() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+export default function AdminContentPage() {
+  // Blog/article upload state
+  const [articles, setArticles] = useState([]);
+  const [title, setTitle] = useState("");
+  const [adminNote, setAdminNote] = useState("");
+  const [file, setFile] = useState(null);
+  const [textContent, setTextContent] = useState("");
+  const [editingIndex, setEditingIndex] = useState(null);
+  const [editContent, setEditContent] = useState("");
+
+  // Handle file upload and/or text entry
+  const handleUpload = (e) => {
+    e.preventDefault();
+    let content = textContent;
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setArticles((prev) => [
+          ...prev,
+          {
+            title,
+            adminNote,
+            uploadDate: getFormattedDate(),
+            content: event.target.result,
+            fileName: file.name,
+          },
+        ]);
+      };
+      reader.readAsText(file);
+    } else if (textContent.trim()) {
+      setArticles((prev) => [
+        ...prev,
+        {
+          title,
+          adminNote,
+          uploadDate: getFormattedDate(),
+          content: textContent,
+          fileName: null,
+        },
+      ]);
+    }
+    setTitle("");
+    setAdminNote("");
+    setFile(null);
+    setTextContent("");
+  };
+
+  // Handle edit save
+  const handleEditSave = (idx) => {
+    setArticles((prev) =>
+      prev.map((a, i) => (i === idx ? { ...a, content: editContent } : a))
+    );
+    setEditingIndex(null);
+    setEditContent("");
+  };
+
   const [tab, setTab] = useState("Herbs");
   const [data, setData] = useState<Herb[] | Supplement[] | Symptom[]>([]);
   const [loading, setLoading] = useState(false);
@@ -154,6 +215,11 @@ export default function AdminContentDashboard() {
       fetchSymptoms();
     }
      
+  }, [tab]);
+
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line
   }, [tab]);
 
   async function fetchSymptoms() {
@@ -305,7 +371,9 @@ export default function AdminContentDashboard() {
           <td className="p-2">{item.id}</td>
           {HERB_FIELDS.map((f) => (
             <td key={f.key} className="p-2 text-xs max-w-[180px] truncate">
-              {typeof itemAny[f.key] === "object" && itemAny[f.key] !== null
+              {f.key === "commonName"
+                ? itemAny.commonName || itemAny.name || <span className="text-gray-500">(none)</span>
+                : typeof itemAny[f.key] === "object" && itemAny[f.key] !== null
                 ? JSON.stringify(itemAny[f.key])
                 : itemAny[f.key] || <span className="text-gray-500">(none)</span>}
             </td>
@@ -703,69 +771,154 @@ export default function AdminContentDashboard() {
         backgroundRepeat: 'no-repeat',
       }}
     >
-      <h1 className="text-3xl font-bold mb-8">Admin Content Dashboard</h1>
+      <div className="mb-6">
+        <Link href="/admin" className="bg-blue-700 text-white px-4 py-2 rounded shadow hover:bg-blue-800 transition font-bold">&larr; Admin Home</Link>
+      </div>
+
+      {/* Blog/Article Upload Section */}
+      <section className="bg-gray-800 rounded shadow p-6 mb-8">
+        <h2 className="text-2xl font-bold text-white mb-4">Upload Blog/Article</h2>
+        <form className="flex flex-col gap-4" onSubmit={handleUpload}>
+          <input
+            type="text"
+            placeholder="Title"
+            className="border border-white px-3 py-2 rounded text-white bg-transparent placeholder-white"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+          />
+          <textarea
+            placeholder="Admin Note (optional)"
+            className="border border-white px-3 py-2 rounded text-white bg-transparent placeholder-white"
+            value={adminNote}
+            onChange={(e) => setAdminNote(e.target.value)}
+          />
+          <div className="flex flex-col md:flex-row gap-4 items-center">
+            <input
+              type="file"
+              accept=".pdf,.docx,.md,.txt"
+              onChange={(e) => setFile(e.target.files[0])}
+              className="border border-white px-3 py-2 rounded text-white bg-transparent"
+            />
+            <span className="text-white">or</span>
+            <textarea
+              placeholder="Paste or write article content here (Markdown or plain text)"
+              className="border border-white px-3 py-2 rounded text-white bg-transparent placeholder-white w-full"
+              value={textContent}
+              onChange={(e) => setTextContent(e.target.value)}
+              rows={4}
+            />
+          </div>
+          <button type="submit" className="bg-green-700 text-white px-6 py-2 rounded shadow hover:bg-green-800 transition font-bold w-40">Upload</button>
+        </form>
+      </section>
+
+      {/* Uploaded Articles List */}
+      {articles.length > 0 && (
+        <section className="bg-gray-800 rounded shadow p-6 mb-8">
+          <h2 className="text-xl font-bold text-white mb-4">Uploaded Articles</h2>
+          <ul className="divide-y divide-white">
+            {articles.map((article, idx) => (
+              <li key={idx} className="py-4">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+                  <div>
+                    <div className="font-bold text-lg text-white">{article.title}</div>
+                    <div className="text-white text-sm">Uploaded: {article.uploadDate}</div>
+                    {article.adminNote && <div className="text-white text-sm italic">Note: {article.adminNote}</div>}
+                    {article.fileName && <div className="text-white text-xs">File: {article.fileName}</div>}
+                  </div>
+                  <div className="flex gap-2 mt-2 md:mt-0">
+                    <button
+                      className="bg-blue-700 text-white px-3 py-1 rounded shadow hover:bg-blue-800 transition font-bold"
+                      onClick={() => {
+                        setEditingIndex(idx);
+                        setEditContent(article.content);
+                      }}
+                    >
+                      Edit
+                    </button>
+                  </div>
+                </div>
+                {/* Article Content Editor */}
+                {editingIndex === idx ? (
+                  <div className="mt-4">
+                    <textarea
+                      className="border border-white px-3 py-2 rounded text-white bg-transparent w-full"
+                      value={editContent}
+                      onChange={(e) => setEditContent(e.target.value)}
+                      rows={8}
+                    />
+                    <div className="flex gap-2 mt-2">
+                      <button
+                        className="bg-green-700 text-white px-4 py-1 rounded shadow hover:bg-green-800 transition font-bold"
+                        onClick={() => handleEditSave(idx)}
+                      >
+                        Save
+                      </button>
+                      <button
+                        className="bg-gray-300 text-gray-800 px-4 py-1 rounded shadow hover:bg-gray-400 transition font-bold"
+                        onClick={() => setEditingIndex(null)}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                ) : null}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {/* Tabs for Herbs, Supplements, Symptoms */}
       <div className="flex space-x-4 mb-6">
         {TABS.map((t) => (
           <button
             key={t}
-            className={`px-4 py-2 rounded ${tab === t ? "bg-blue-600 text-white" : "bg-gray-700 text-gray-300"}`}
+            className={`px-4 py-2 rounded-t font-bold text-white ${tab === t ? 'bg-gray-800' : 'bg-gray-600 hover:bg-gray-700'}`}
             onClick={() => setTab(t)}
           >
             {t}
           </button>
         ))}
       </div>
-      {loading ? (
-        <div>Loading {tab}...</div>
-      ) : error ? (
-        <div className="text-red-400">{error}</div>
-      ) : (
-        <div>
-          <button
-            className="mb-4 px-4 py-2 bg-green-600 rounded hover:bg-green-700"
-            onClick={openAddForm}
-          >
-            + Add New {tab.slice(0, -1)}
-          </button>
-          <table className="w-full text-left border border-gray-700 rounded bg-gray-800">
-            <thead>{renderTableHeaders()}</thead>
-            <tbody>
-              {data.map(renderTableRow)}
-              {data.length === 0 && (
-                <tr>
-                  <td colSpan={tab === "Herbs" ? HERB_FIELDS.length + 2 : tab === "Supplements" ? SUPPLEMENT_FIELDS.length + 1 : 4} className="p-4 text-center text-gray-400">No {tab.toLowerCase()} found.</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-
-          {showForm && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-              <form
-                className="bg-gray-800 p-8 rounded shadow-lg min-w-[320px] max-w-[90vw] max-h-[90vh] overflow-y-auto flex flex-col"
-                onSubmit={handleFormSubmit}
-                style={{ boxSizing: 'border-box' }}
-              >
-                <h2 className="text-xl font-bold mb-4">{formMode === "add" ? "Add New" : "Edit"} {tab.slice(0, -1)}</h2>
-                {renderFormFields()}
-                <div className="flex space-x-4 mt-4">
-                  <button
-                    type="submit"
-                    className="px-4 py-2 bg-blue-600 rounded hover:bg-blue-700"
-                  >
-                    Save
-                  </button>
-                  <button
-                    type="button"
-                    className="px-4 py-2 bg-gray-600 rounded hover:bg-gray-700"
-                    onClick={() => setShowForm(false)}
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </form>
+      <div className="bg-gray-800 rounded-b shadow p-6 mb-8">
+        {loading ? (
+          <div>Loading {tab}...</div>
+        ) : error ? (
+          <div className="text-red-400">{error}</div>
+        ) : (
+          <div>
+            <button
+              className="mb-4 px-4 py-2 bg-green-600 rounded hover:bg-green-700"
+              onClick={openAddForm}
+            >
+              + Add New {tab.slice(0, -1)}
+            </button>
+            <table className="w-full text-left border border-gray-700 rounded bg-gray-800">
+              <thead>{renderTableHeaders()}</thead>
+              <tbody>
+                {[...data].sort((a, b) => (a.name || '').localeCompare(b.name || '')).map(renderTableRow)}
+                {data.length === 0 && (
+                  <tr>
+                    <td colSpan={tab === "Herbs" ? HERB_FIELDS.length + 2 : tab === "Supplements" ? SUPPLEMENT_FIELDS.length + 1 : 4} className="p-4 text-center text-gray-400">No {tab.toLowerCase()} found.</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+      {showForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+          <form className="bg-gray-900 p-8 rounded shadow-lg w-full max-w-2xl" onSubmit={handleFormSubmit}>
+            <h2 className="text-2xl font-bold mb-4 text-white">{formMode === "add" ? `Add New ${tab.slice(0, -1)}` : `Edit ${tab.slice(0, -1)}`}</h2>
+            {renderFormFields()}
+            <div className="flex gap-4 mt-6">
+              <button type="submit" className="bg-green-700 text-white px-6 py-2 rounded font-bold">Save</button>
+              <button type="button" className="bg-gray-500 text-white px-6 py-2 rounded font-bold" onClick={() => setShowForm(false)}>Cancel</button>
             </div>
-          )}
+          </form>
         </div>
       )}
     </div>

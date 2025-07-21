@@ -22,6 +22,36 @@ async function getHerb(slug: string) {
   }
 }
 
+// Helper to generate mock products for a given herb
+function getMockProducts(herbName: string) {
+  return [
+    {
+      name: `${herbName} Supreme by Herbalist's Choice`,
+      description: `A premium, organic ${herbName.toLowerCase()} extract designed for maximum potency and purity. Trusted by herbalists for daily wellness support.`,
+      price: '$24.99',
+      tags: ['organic', 'high potency', 'vegan'],
+      company: "Herbalist's Choice",
+      affiliateLink: '#',
+    },
+    {
+      name: `${herbName} Vitality Drops by Nature's Gold`,
+      description: `Concentrated liquid ${herbName.toLowerCase()} for fast absorption and rapid results. Perfect for busy lifestyles and on-the-go support.`,
+      price: '$19.99',
+      tags: ['liquid', 'fast-acting', 'non-GMO'],
+      company: "Nature's Gold",
+      affiliateLink: '#',
+    },
+    {
+      name: `${herbName} Pure Capsules by GreenLeaf Labs`,
+      description: `Clean, lab-tested ${herbName.toLowerCase()} in easy-to-swallow capsules. Ideal for daily use and formulated for optimal bioavailability.`,
+      price: '$17.99',
+      tags: ['capsule', 'lab-tested', 'gluten-free'],
+      company: 'GreenLeaf Labs',
+      affiliateLink: '#',
+    },
+  ];
+}
+
 export default async function HerbPage({ params }: HerbPageProps) {
   const { slug } = await params;
   const herb = await getHerb(slug);
@@ -30,8 +60,10 @@ export default async function HerbPage({ params }: HerbPageProps) {
     notFound();
   }
 
+  const mockProducts = getMockProducts(herb.name || 'Herb');
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-100">
       <div className="max-w-4xl mx-auto px-4 py-8">
         {/* Header with Image */}
         <div className="flex flex-col md:flex-row items-center gap-8 mb-8">
@@ -140,30 +172,29 @@ export default async function HerbPage({ params }: HerbPageProps) {
           </div>
         )}
 
-        {herb.productFormulations && Array.isArray(herb.productFormulations) && herb.productFormulations.length > 0 && (
-          <div className="bg-white rounded-lg p-6 shadow-lg my-4">
-            <h2 className="text-2xl font-semibold text-purple-800 mb-4">Top Products</h2>
-            <div className="space-y-4">
-              {herb.productFormulations.map((product, idx) => (
-                <div key={idx} className="border border-purple-200 rounded-lg p-4 flex flex-col gap-2">
-                  <div className="font-semibold">{(product as any).type}</div>
-                  <div className="text-sm text-gray-600">{(product as any).qualityCriteria}</div>
-                  {(product as any).price && <div className="text-purple-600 font-bold">{(product as any).price}</div>}
-                  {(product as any).affiliateLink && (
-                    <a
-                      href={(product as any).affiliateLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="block w-full bg-purple-600 text-white text-center py-2 rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium mt-2"
-                    >
-                      Buy Now →
-                    </a>
-                  )}
+        {/* Top Products */}
+        <div className="bg-white rounded-lg p-6 shadow-lg h-fit">
+          <h2 className="text-2xl font-semibold text-green-800 mb-6">Top Products</h2>
+          <div className="space-y-4">
+            {mockProducts.map((product, idx) => (
+              <div key={idx} className="border border-green-200 rounded-lg p-4 hover:shadow-md transition-shadow mb-4 bg-white">
+                <h3 className="font-semibold text-green-900 mb-2">{product.name}</h3>
+                <p className="text-gray-600 text-sm mb-2 text-left">{product.description}</p>
+                <img src="/images/closed-medical-brown-glass-bottle-yellow-vitamins.png" alt="Product" className="w-24 h-24 object-contain mb-2" />
+                <div className="text-green-600 font-bold mb-2">{product.price}</div>
+                <div className="flex flex-wrap gap-2 mb-2">
+                  {product.tags.map((tag: string, i: number) => (
+                    <span key={i} className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">{tag}</span>
+                  ))}
                 </div>
-              ))}
-            </div>
+                <div className="text-xs text-gray-500 mb-1">by {product.company}</div>
+                {product.affiliateLink && (
+                  <a href={product.affiliateLink} target="_blank" rel="noopener noreferrer" className="block w-full bg-green-600 text-white text-center py-2 rounded-lg hover:bg-green-700 transition-colors text-sm font-medium mt-2">Check Price →</a>
+                )}
+              </div>
+            ))}
           </div>
-        )}
+        </div>
 
         {/* Disclaimer */}
         <div className="mt-8 bg-yellow-50 border border-yellow-200 rounded-lg p-4">

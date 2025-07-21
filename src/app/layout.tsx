@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Lato, Merriweather } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
+import SessionProviderWrapper from "@/components/SessionProviderWrapper";
 
 const lato = Lato({
   variable: "--font-lato",
@@ -123,8 +124,10 @@ export default function RootLayout({
         />
       </head>
       <body className={`${lato.variable} ${merriweather.variable} font-sans`}>
-        <Header />
-        {children}
+        <SessionProviderWrapper>
+          <Header />
+          {children}
+        </SessionProviderWrapper>
       </body>
     </html>
   );
