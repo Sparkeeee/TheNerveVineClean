@@ -22,7 +22,7 @@ async function getSupplement(slug: string) {
   }
 }
 
-export default async function SupplementPage({ params }: { params: { slug: string } }) {
+export default async function SupplementPage({ params }: any) {
   const { slug } = params;
   const supplement = await getSupplement(slug);
 
