@@ -3,10 +3,6 @@ import Image from 'next/image';
 import { PrismaClient } from '@prisma/client';
 import Link from "next/link";
 
-interface HerbPageProps {
-  params: Promise<{ slug: string }>;
-}
-
 async function getHerb(slug: string) {
   const prisma = new PrismaClient();
   try {
@@ -52,8 +48,8 @@ function getMockProducts(herbName: string) {
   ];
 }
 
-export default async function HerbPage({ params }: HerbPageProps) {
-  const { slug } = await params;
+export default async function HerbPage({ params }: any) {
+  const { slug } = params;
   const herb = await getHerb(slug);
 
   if (!herb) {

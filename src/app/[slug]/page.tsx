@@ -1,9 +1,5 @@
 import { notFound } from 'next/navigation';
 
-interface SymptomPageProps {
-  params: Promise<{ slug: string }>;
-}
-
 type Product = {
   name: string;
   description: string;
@@ -767,8 +763,8 @@ const symptoms: { [key: string]: Symptom } = {
   }
 };
 
-export default async function SymptomPage({ params }: SymptomPageProps) {
-  const { slug } = await params;
+export default async function SymptomPage({ params }: any) {
+  const { slug } = params;
   const symptom = symptoms[slug as keyof typeof symptoms] as Symptom;
 
   if (!symptom) {

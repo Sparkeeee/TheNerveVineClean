@@ -3,10 +3,6 @@ import Image from 'next/image';
 import VariantSymptomPage from './VariantSymptomPage';
 import { Symptom, Product } from '../../../types/symptom';
 
-interface SymptomPageProps {
-  params: Promise<{ slug: string }>;
-}
-
 const symptoms: Record<string, Symptom> = {
   'insomnia': {
     name: 'Insomnia',
@@ -1249,8 +1245,8 @@ Object.values(symptoms).forEach((symptom) => {
   }
 });
 
-export default async function SymptomPage({ params }: SymptomPageProps) {
-  const { slug } = await params;
+export default async function SymptomPage({ params }: any) {
+  const { slug } = params;
   const symptom = symptoms[slug as keyof typeof symptoms];
 
   if (!symptom) {
