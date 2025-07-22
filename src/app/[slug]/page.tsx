@@ -1,7 +1,11 @@
 import { notFound } from 'next/navigation';
 
-export default function Page({ params }: { params: { slug: string } }) {
-  const { slug } = params;
+interface PageParams {
+  params: Promise<{ slug: string }>;
+}
+
+export default async function Page({ params }: PageParams) {
+  const { slug } = await params;
   
   if (!slug) {
     notFound();
