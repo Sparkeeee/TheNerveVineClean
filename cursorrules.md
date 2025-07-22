@@ -1,5 +1,8 @@
 # CursorRules for TheNerveVineClean
 
+- **FIRST RULE:** Always read cursorrules before making any changes or suggestions.
+- **NO DESTRUCTION:** Never remove or overwrite existing features or UI elements unless explicitly authorized by the user. All refactors must preserve existing functionality unless otherwise agreed.
+
 ## User Profile & Working Style
 - **Technical Background**: 6-month full-stack bootcamp (Django backend, 2 years ago), 50 years old, ADHD
 - **Current Level**: Overview understanding, familiar with Git/version control, not actively coding since bootcamp
@@ -77,6 +80,9 @@
 - When providing long step-by-step plans or lengthy text, also make it available as a downloadable file (Markdown or text) in addition to the chat feed
 - Always ask before making any destructive or irreversible changes
 - When in doubt, ask for clarification rather than making assumptions
+- **PRE-EMPTIVE CLEANUP**: Before making major changes, always check for and remove duplicate files (.js/.ts pairs) to prevent approval fatigue
+- **DUPLICATE PREVENTION**: Always check for existing .js files before creating .ts versions, and remove duplicates immediately
+- **BATCH OPERATIONS**: When possible, group file operations to minimize approval requests
 
 ## Deployment & Environment
 - Use Vercel for all deployments
