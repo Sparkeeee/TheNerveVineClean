@@ -186,7 +186,7 @@ export class DataProcessingHub {
 
   // Process and score products
   private async processAndScore(rawProducts: any[], criteria: ProcessingCriteria): Promise<ProcessedProduct[]> {
-    return rawProducts.map(product => {
+    return Promise.all(rawProducts.map(async product => {
       const processed: ProcessedProduct = {
         id: product.id,
         name: product.name,
@@ -204,21 +204,18 @@ export class DataProcessingHub {
         description: product.description,
         tags: product.tags || [],
         availability: product.availability !== false,
-        
         // Calculated scores
         profitMargin: this.calculateProfitMargin(product),
         userValueScore: this.calculateUserValueScore(product),
         compositeScore: 0, // Will be calculated in sorting
         regionalScore: this.calculateRegionalScore(product, criteria.region),
-        
         // Metadata
         source: product.source || 'unknown',
         lastUpdated: new Date(),
         processingPriority: this.calculateProcessingPriority(product, criteria)
       };
-      
       return processed;
-    });
+    }));
   }
 
   // Apply intelligent sorting based on criteria
