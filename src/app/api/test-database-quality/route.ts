@@ -76,12 +76,13 @@ export async function GET(request: NextRequest) {
       analysis: {
         herbSlug,
         supplementSlug,
-        name: dbSpecs.name,
-        indications: dbSpecs.indications,
-        traditionalUses: dbSpecs.traditionalUses,
-        productFormulations: dbSpecs.productFormulations,
-        cautions: dbSpecs.cautions,
-        tags: dbSpecs.tags
+        // TODO: The following properties do not exist on the spec object returned from the database.
+        // name: spec.name,
+        // indications: spec.indications,
+        // traditionalUses: spec.traditionalUses,
+        // productFormulations: spec.productFormulations,
+        // cautions: spec.cautions,
+        // tags: spec.tags
       }
     });
   } catch (error) {

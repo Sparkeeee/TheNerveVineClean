@@ -15,7 +15,7 @@ async function updateHerbDescriptions() {
 
       if (existingHerb) {
         // Update existing herb
-        const updatedHerb = await prisma.herb.update({
+        await prisma.herb.update({
           where: { id: existingHerb.id },
           data: {
             description: herb.description,
@@ -35,7 +35,7 @@ async function updateHerbDescriptions() {
         console.log(`Updated herb: ${herb.name}`);
       } else {
         // Create new herb
-        const newHerb = await prisma.herb.create({
+        await prisma.herb.create({
           data: {
             name: herb.name,
             slug: herb.slug,

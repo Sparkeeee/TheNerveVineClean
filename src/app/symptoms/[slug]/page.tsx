@@ -1245,7 +1245,7 @@ Object.values(symptoms).forEach((symptom) => {
   }
 });
 
-export default async function SymptomPage({ params }: any) {
+export default async function SymptomPage({ params }: { params: { slug: string } }) {
   const { slug } = params;
   const symptom = symptoms[slug as keyof typeof symptoms];
 

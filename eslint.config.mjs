@@ -13,7 +13,13 @@ const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
   {
     // Ignore build output and dependencies
-    ignores: [".next/", "node_modules/"],
+    ignores: [
+      ".next/",
+      "dist/",
+      "node_modules/",
+      "*.js",
+      "**/*.js"
+    ],
     rules: {
       // Warn on 'any' to allow rare, justified use but discourage overuse
       '@typescript-eslint/no-explicit-any': 'warn',

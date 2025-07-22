@@ -763,8 +763,8 @@ const symptoms: { [key: string]: Symptom } = {
   }
 };
 
-export default async function SymptomPage({ params }: any) {
-  const { slug } = params;
+export default async function SymptomPage({ params }: { params: { slug: string } }) {
+  const { slug } = params as { slug: string };
   const symptom = symptoms[slug as keyof typeof symptoms] as Symptom;
 
   if (!symptom) {

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 
 interface ProcessingCriteria {
@@ -100,7 +100,7 @@ export default function DataHubAdminPage() {
     }
   };
 
-  const updateCriteria = (field: keyof ProcessingCriteria, value: any) => {
+  const updateCriteria = (field: keyof ProcessingCriteria, value: unknown) => {
     setCriteria(prev => ({
       ...prev,
       [field]: value
@@ -198,7 +198,7 @@ export default function DataHubAdminPage() {
               <label className="block text-sm font-semibold mb-2">User Segment:</label>
               <select
                 value={criteria.userSegment || 'balanced'}
-                onChange={(e) => updateCriteria('userSegment', e.target.value)}
+                onChange={(e) => updateCriteria('userSegment', e.target.value as ProcessingCriteria['userSegment'])}
                 className="w-full border rounded px-3 py-2"
               >
                 <option value="quality-focused">Quality Focused</option>
@@ -363,7 +363,7 @@ export default function DataHubAdminPage() {
               </div>
             ) : (
               <div className="text-gray-500 text-center py-8">
-                No results yet. Set criteria and click "Process Data" to get started.
+                No results yet. Set criteria and click &quot;Process Data&quot; to get started.
               </div>
             )}
           </div>

@@ -28,7 +28,7 @@ export class AutomatedProductUpdater {
     const criteria: ProductCriteria = {
       symptoms: herb.indications ?? [],
       herbs: herb.slug ? [herb.slug.replace('-', ' ')] : [],
-      supplements: Array.isArray(herb.productFormulations) ? herb.productFormulations.map((p: any) => typeof p === 'string' ? p : p.name) : [],
+      supplements: Array.isArray(herb.productFormulations) ? herb.productFormulations.map((p: unknown) => typeof p === 'string' ? p : (p as { name: string }).name) : [],
       priceRange: { min: 5, max: 100 },
       rating: 4.0
     };

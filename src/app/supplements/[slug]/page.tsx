@@ -1,13 +1,6 @@
 import { notFound } from 'next/navigation';
 import { PrismaClient } from '@prisma/client';
-
-function formatParagraphs(text: string) {
-  // Split by double newlines or periods for basic paragraphing
-  return text
-    .split(/\n\n|(?<=\.) /)
-    .filter(Boolean)
-    .map((p, i) => <p key={i} className="mb-4 text-lg text-green-700">{p.trim()}</p>);
-}
+import Image from 'next/image';
 
 async function getSupplement(slug: string) {
   const prisma = new PrismaClient();
@@ -22,7 +15,7 @@ async function getSupplement(slug: string) {
   }
 }
 
-export default async function SupplementPage({ params }: any) {
+export default async function SupplementPage({ params }: { params: { slug: string } }) {
   const { slug } = params;
   const supplement = await getSupplement(slug);
 
@@ -46,22 +39,21 @@ export default async function SupplementPage({ params }: any) {
   // Prepare product cards from productFormulations (mock)
   let productCards: JSX.Element[] = [];
   if (Array.isArray(supplement.productFormulations) && supplement.productFormulations.length > 0) {
-    productCards = supplement.productFormulations.map((product: any, idx: number) => (
+    const validProducts = Array.isArray(supplement.productFormulations) ? supplement.productFormulations.filter((p): p is { name: string; description: string; price: string; tags: string[]; affiliateLink: string } => !!(p && typeof p === 'object' && 'name' in p && 'description' in p && 'price' in p && 'tags' in p && 'affiliateLink' in p)) : [];
+    productCards = validProducts.map((product, idx) => (
       <div key={idx} className="border border-green-200 rounded-lg p-4 hover:shadow-md transition-shadow mb-4 bg-white">
-        <h3 className="font-semibold text-green-900 mb-2">{product.name || product.type || 'Product'}</h3>
+        <h3 className="font-semibold text-green-900 mb-2">{product.name || 'Product'}</h3>
         {product.description && <p className="text-gray-600 text-sm mb-2 text-left">{product.description}</p>}
-        <img src="/images/closed-medical-brown-glass-bottle-yellow-vitamins.png" alt="Product" className="w-24 h-24 object-contain mb-2" />
-        {product.price && <div className="text-green-600 font-bold mb-2">{product.price}</div>}
-        {product.tags && Array.isArray(product.tags) && (
-          <div className="flex flex-wrap gap-2 mb-2">
-            {product.tags.map((tag: string, i: number) => (
-              <span key={i} className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">{tag}</span>
-            ))}
-          </div>
-        )}
-        {product.affiliateLink && (
-          <a href={product.affiliateLink} target="_blank" rel="noopener noreferrer" className="block w-full bg-green-600 text-white text-center py-2 rounded-lg hover:bg-green-700 transition-colors text-sm font-medium mt-2">Check Price →</a>
-        )}
+        <Image src="/images/closed-medical-brown-glass-bottle-yellow-vitamins.png" alt="Product" width={96} height={96} className="w-24 h-24 object-contain mb-2" />
+        <div className="flex flex-wrap gap-2 mb-2">
+          {product.tags.map((tag, i) => (
+            <span key={i} className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs border border-green-300">{tag}</span>
+          ))}
+        </div>
+        <div className="flex items-center justify-between">
+          <span className="text-lg font-bold text-green-900">{product.price}</span>
+          <a href={product.affiliateLink} target="_blank" rel="noopener noreferrer" className="ml-2 px-3 py-1 bg-green-700 text-white rounded hover:bg-green-800 text-xs">Buy</a>
+        </div>
       </div>
     ));
   } else {

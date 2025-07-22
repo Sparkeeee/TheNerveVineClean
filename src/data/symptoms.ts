@@ -34,12 +34,12 @@ export type Symptom = {
     clinicalEvidence?: string;
   }[];
   disclaimer?: string;
-  herb?: any;
-  extract?: any;
-  supplements?: any;
-  cautions?: any;
-  related?: any;
-  faq?: any;
+  herb?: unknown;
+  extract?: unknown;
+  supplements?: unknown;
+  cautions?: unknown;
+  related?: unknown;
+  faq?: unknown;
 };
 
 export const symptoms: Symptom[] = [

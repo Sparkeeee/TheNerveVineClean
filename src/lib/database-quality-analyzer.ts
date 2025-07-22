@@ -12,7 +12,7 @@ export interface DatabaseQualityScore {
     alcoholSpecs: string[];
     dosageSpecs: string[];
   };
-  qualitySpec?: any;
+  qualitySpec?: unknown;
 }
 
 export class DatabaseQualityAnalyzer {
@@ -24,7 +24,7 @@ export class DatabaseQualityAnalyzer {
 
   // Analyze product quality based on QualitySpecification database records
   async analyzeProductQuality(
-    product: any, 
+    product: unknown, 
     herbSlug?: string, 
     supplementSlug?: string,
     productType?: string
@@ -45,7 +45,7 @@ export class DatabaseQualityAnalyzer {
 
     try {
       // Get quality specifications from database
-      let qualitySpecs = [];
+      let qualitySpecs: unknown[] = [];
 
       if (herbSlug) {
         qualitySpecs = await this.prisma.qualitySpecification.findMany({
@@ -77,19 +77,17 @@ export class DatabaseQualityAnalyzer {
   }
 
   private async analyzeAgainstQualitySpecs(
-    product: any, 
-    qualitySpecs: any[], 
+    product: unknown, 
+    qualitySpecs: unknown[], 
     score: DatabaseQualityScore
   ): Promise<number> {
     let bestScore = 0;
-    let bestSpec = null;
 
     for (const spec of qualitySpecs) {
       const specScore = await this.analyzeSingleQualitySpec(product, spec);
       
       if (specScore.score > bestScore) {
         bestScore = specScore.score;
-        bestSpec = spec;
         // Update the main score object with the best analysis
         score.reasons = specScore.reasons;
         score.warnings = specScore.warnings;
@@ -101,7 +99,7 @@ export class DatabaseQualityAnalyzer {
     return bestScore;
   }
 
-  private async analyzeSingleQualitySpec(product: any, spec: any): Promise<DatabaseQualityScore> {
+  private async analyzeSingleQualitySpec(product: unknown, spec: unknown): Promise<DatabaseQualityScore> {
     const score: DatabaseQualityScore = {
       score: 0,
       reasons: [],
@@ -116,18 +114,18 @@ export class DatabaseQualityAnalyzer {
       }
     };
 
-    const productText = `${product.name} ${product.description} ${product.brand || ''}`.toLowerCase();
+    const productText = `${((product as { name?: string; description?: string; brand?: string }).name || '').toLowerCase()} ${(product as { name?: string; description?: string; brand?: string }).description || ''} ${(product as { brand?: string }).brand || ''}`.toLowerCase();
 
     // Check required terms
-    const requiredTerms = Array.isArray(spec.requiredTerms) 
-      ? spec.requiredTerms 
-      : JSON.parse(spec.requiredTerms as string);
+    const requiredTerms = Array.isArray((spec as { requiredTerms?: string | string[] }).requiredTerms) 
+      ? (spec as { requiredTerms?: string | string[] }).requiredTerms 
+      : JSON.parse((spec as { requiredTerms?: string | string[] }).requiredTerms as string);
     
     const requiredMatches = this.findMatchingTerms(productText, requiredTerms);
     score.matches.required = requiredMatches;
 
     if (requiredMatches.length < requiredTerms.length) {
-      const missingTerms = requiredTerms.filter(term => !requiredMatches.includes(term));
+      const missingTerms = requiredTerms.filter((term: string) => !requiredMatches.includes(term));
       score.warnings.push(`Missing required terms: ${missingTerms.join(', ')}`);
       score.score -= 30;
     } else {
@@ -136,9 +134,9 @@ export class DatabaseQualityAnalyzer {
     }
 
     // Check preferred terms
-    const preferredTerms = Array.isArray(spec.preferredTerms)
-      ? spec.preferredTerms
-      : JSON.parse(spec.preferredTerms as string);
+    const preferredTerms = Array.isArray((spec as { preferredTerms?: string | string[] }).preferredTerms)
+      ? (spec as { preferredTerms?: string | string[] }).preferredTerms
+      : JSON.parse((spec as { preferredTerms?: string | string[] }).preferredTerms as string);
     
     const preferredMatches = this.findMatchingTerms(productText, preferredTerms);
     score.matches.preferred = preferredMatches;
@@ -149,9 +147,9 @@ export class DatabaseQualityAnalyzer {
     }
 
     // Check avoid terms
-    const avoidTerms = Array.isArray(spec.avoidTerms)
-      ? spec.avoidTerms
-      : JSON.parse(spec.avoidTerms as string);
+    const avoidTerms = Array.isArray((spec as { avoidTerms?: string | string[] }).avoidTerms)
+      ? (spec as { avoidTerms?: string | string[] }).avoidTerms
+      : JSON.parse((spec as { avoidTerms?: string | string[] }).avoidTerms as string);
     
     const avoidMatches = this.findMatchingTerms(productText, avoidTerms);
     score.matches.avoid = avoidMatches;
@@ -162,10 +160,10 @@ export class DatabaseQualityAnalyzer {
     }
 
     // Check standardization
-    if (spec.standardization) {
-      const standardization = Array.isArray(spec.standardization)
-        ? spec.standardization
-        : JSON.parse(spec.standardization as string);
+    if ((spec as { standardization?: string | string[] }).standardization) {
+      const standardization = Array.isArray((spec as { standardization?: string | string[] }).standardization)
+        ? (spec as { standardization?: string | string[] }).standardization
+        : JSON.parse((spec as { standardization?: string | string[] }).standardization as string);
       
       const standardizationScore = this.checkStandardization(product, standardization);
       score.score += standardizationScore;
@@ -176,10 +174,10 @@ export class DatabaseQualityAnalyzer {
     }
 
     // Check alcohol specifications
-    if (spec.alcoholSpecs) {
-      const alcoholSpecs = Array.isArray(spec.alcoholSpecs)
-        ? spec.alcoholSpecs
-        : JSON.parse(spec.alcoholSpecs as string);
+    if ((spec as { alcoholSpecs?: string | string[] }).alcoholSpecs) {
+      const alcoholSpecs = Array.isArray((spec as { alcoholSpecs?: string | string[] }).alcoholSpecs)
+        ? (spec as { alcoholSpecs?: string | string[] }).alcoholSpecs
+        : JSON.parse((spec as { alcoholSpecs?: string | string[] }).alcoholSpecs as string);
       
       const alcoholScore = this.checkAlcoholSpecs(product, alcoholSpecs);
       score.score += alcoholScore;
@@ -190,10 +188,10 @@ export class DatabaseQualityAnalyzer {
     }
 
     // Check dosage specifications
-    if (spec.dosageSpecs) {
-      const dosageSpecs = Array.isArray(spec.dosageSpecs)
-        ? spec.dosageSpecs
-        : JSON.parse(spec.dosageSpecs as string);
+    if ((spec as { dosageSpecs?: string | string[] }).dosageSpecs) {
+      const dosageSpecs = Array.isArray((spec as { dosageSpecs?: string | string[] }).dosageSpecs)
+        ? (spec as { dosageSpecs?: string | string[] }).dosageSpecs
+        : JSON.parse((spec as { dosageSpecs?: string | string[] }).dosageSpecs as string);
       
       const dosageScore = this.checkDosageSpecs(product, dosageSpecs);
       score.score += dosageScore;
@@ -204,13 +202,13 @@ export class DatabaseQualityAnalyzer {
     }
 
     // Check price range
-    if (spec.priceRange) {
-      const priceRange = Array.isArray(spec.priceRange)
-        ? spec.priceRange
-        : JSON.parse(spec.priceRange as string);
+    if ((spec as { priceRange?: string | string[] }).priceRange) {
+      const priceRange = Array.isArray((spec as { priceRange?: string | string[] }).priceRange)
+        ? (spec as { priceRange?: string | string[] }).priceRange
+        : JSON.parse((spec as { priceRange?: string | string[] }).priceRange as string);
       
-      if (product.price) {
-        const price = parseFloat(product.price.toString().replace(/[^0-9.]/g, ''));
+      if ((product as { price?: number }).price) {
+        const price = parseFloat(((product as { price?: number }).price as number).toString().replace(/[^0-9.]/g, ''));
         if (price >= priceRange.min && price <= priceRange.max) {
           score.score += 10;
           score.reasons.push(`Price ${price} within range ${priceRange.min}-${priceRange.max}`);
@@ -222,34 +220,38 @@ export class DatabaseQualityAnalyzer {
     }
 
     // Check rating threshold
-    if (spec.ratingThreshold && product.rating) {
-      if (product.rating >= spec.ratingThreshold) {
+    if ((spec as { ratingThreshold?: number }).ratingThreshold && (product as { rating?: number }).rating) {
+      const ratingThreshold = (spec as { ratingThreshold?: number }).ratingThreshold;
+      const rating = (product as { rating?: number }).rating;
+      if (ratingThreshold !== undefined && rating !== undefined && rating >= ratingThreshold) {
         score.score += 10;
-        score.reasons.push(`Rating ${product.rating} meets threshold ${spec.ratingThreshold}`);
+        score.reasons.push(`Rating ${(product as { rating?: number }).rating} meets threshold ${(spec as { ratingThreshold?: number }).ratingThreshold}`);
       } else {
         score.score -= 10;
-        score.warnings.push(`Rating ${product.rating} below threshold ${spec.ratingThreshold}`);
+        score.warnings.push(`Rating ${(product as { rating?: number }).rating} below threshold ${(spec as { ratingThreshold?: number }).ratingThreshold}`);
       }
     }
 
     // Check review count threshold
-    if (spec.reviewCountThreshold && product.reviewCount) {
-      if (product.reviewCount >= spec.reviewCountThreshold) {
+    if ((spec as { reviewCountThreshold?: number }).reviewCountThreshold && (product as { reviewCount?: number }).reviewCount) {
+      const reviewCountThreshold = (spec as { reviewCountThreshold?: number }).reviewCountThreshold;
+      const reviewCount = (product as { reviewCount?: number }).reviewCount;
+      if (reviewCountThreshold !== undefined && reviewCount !== undefined && reviewCount >= reviewCountThreshold) {
         score.score += 5;
-        score.reasons.push(`Sufficient reviews (${product.reviewCount})`);
+        score.reasons.push(`Sufficient reviews ${(product as { reviewCount?: number }).reviewCount}`);
       } else {
         score.score -= 5;
-        score.warnings.push(`Insufficient reviews (${product.reviewCount})`);
+        score.warnings.push(`Insufficient reviews ${(product as { reviewCount?: number }).reviewCount}`);
       }
     }
 
     // Check brand preferences
-    if (spec.brandPreferences) {
-      const brandPreferences = Array.isArray(spec.brandPreferences)
-        ? spec.brandPreferences
-        : JSON.parse(spec.brandPreferences as string);
+    if ((spec as { brandPreferences?: string | string[] }).brandPreferences) {
+      const brandPreferences = Array.isArray((spec as { brandPreferences?: string | string[] }).brandPreferences)
+        ? (spec as { brandPreferences?: string | string[] }).brandPreferences
+        : JSON.parse((spec as { brandPreferences?: string | string[] }).brandPreferences as string);
       
-      const productBrand = product.brand?.toLowerCase() || '';
+      const productBrand = ((product as { brand?: string }).brand || '').toLowerCase() || '';
       const hasPreferredBrand = brandPreferences.some((brand: string) => 
         productBrand.includes(brand.toLowerCase())
       );
@@ -261,12 +263,12 @@ export class DatabaseQualityAnalyzer {
     }
 
     // Check brand avoid
-    if (spec.brandAvoid) {
-      const brandAvoid = Array.isArray(spec.brandAvoid)
-        ? spec.brandAvoid
-        : JSON.parse(spec.brandAvoid as string);
+    if ((spec as { brandAvoid?: string | string[] }).brandAvoid) {
+      const brandAvoid = Array.isArray((spec as { brandAvoid?: string | string[] }).brandAvoid)
+        ? (spec as { brandAvoid?: string | string[] }).brandAvoid
+        : JSON.parse((spec as { brandAvoid?: string | string[] }).brandAvoid as string);
       
-      const productBrand = product.brand?.toLowerCase() || '';
+      const productBrand = ((product as { brand?: string }).brand || '').toLowerCase() || '';
       const hasAvoidedBrand = brandAvoid.some((brand: string) => 
         productBrand.includes(brand.toLowerCase())
       );
@@ -280,20 +282,21 @@ export class DatabaseQualityAnalyzer {
     return score;
   }
 
-  private checkStandardization(product: any, standardization: any): number {
-    if (!standardization || !standardization.compound) return 0;
+  private checkStandardization(product: unknown, standardization: unknown): number {
+    if (!standardization || !(standardization as { compound?: string }).compound) return 0;
     
-    const productText = `${product.name} ${product.description}`.toLowerCase();
-    const compound = standardization.compound.toLowerCase();
+    const productText = `${((product as { name?: string; description?: string }).name || '').toLowerCase()} ${(product as { name?: string; description?: string }).description || ''}`.toLowerCase();
+    const compound = ((standardization as { compound?: string }).compound || '').toLowerCase();
     
     if (productText.includes(compound)) {
       // Look for percentage or amount
       const percentageMatch = productText.match(new RegExp(`${compound}.*?([0-9.]+)%`, 'i'));
-      const amountMatch = productText.match(new RegExp(`${compound}.*?([0-9.]+)\\s*(mg|mcg)`, 'i'));
+      const amountMatch = productText.match(new RegExp(`${compound}.*?([0-9.]+)\s*(mg|mcg)`, 'i'));
       
       if (percentageMatch) {
         const foundPercentage = parseFloat(percentageMatch[1]);
-        if (standardization.percentage && foundPercentage >= standardization.percentage) {
+        const percentage = (standardization as { percentage?: number }).percentage;
+        if (percentage !== undefined && foundPercentage >= percentage) {
           return 20;
         } else {
           return 10;
@@ -308,25 +311,25 @@ export class DatabaseQualityAnalyzer {
     return 0;
   }
 
-  private checkAlcoholSpecs(product: any, alcoholSpecs: any): number {
+  private checkAlcoholSpecs(product: unknown, alcoholSpecs: unknown): number {
     if (!alcoholSpecs) return 0;
     
-    const productText = `${product.name} ${product.description}`.toLowerCase();
+    const productText = `${((product as { name?: string; description?: string }).name || '').toLowerCase()} ${(product as { name?: string; description?: string }).description || ''}`.toLowerCase();
     let score = 0;
     
     // Check for ratio
-    if (alcoholSpecs.ratio && productText.includes(alcoholSpecs.ratio.toLowerCase())) {
+    if ((alcoholSpecs as { ratio?: string }).ratio && productText.includes(((alcoholSpecs as { ratio?: string }).ratio || '').toLowerCase())) {
       score += 15;
     }
     
     // Check for organic alcohol
-    if (alcoholSpecs.organic && productText.includes('organic alcohol')) {
+    if ((alcoholSpecs as { organic?: boolean }).organic && productText.includes('organic alcohol')) {
       score += 10;
     }
     
     // Check for alcohol type
-    if (alcoholSpecs.type) {
-      const hasCorrectType = alcoholSpecs.type.some((type: string) => 
+    if ((alcoholSpecs as { type?: string[] }).type) {
+      const hasCorrectType = ((alcoholSpecs as { type?: string[] }).type || []).some((type: string) => 
         productText.includes(type.toLowerCase())
       );
       if (hasCorrectType) {
@@ -337,34 +340,32 @@ export class DatabaseQualityAnalyzer {
     return score;
   }
 
-  private checkDosageSpecs(product: any, dosageSpecs: any): number {
+  private checkDosageSpecs(product: unknown, dosageSpecs: unknown): number {
     if (!dosageSpecs) return 0;
     
-    const productText = `${product.name} ${product.description}`.toLowerCase();
+    const productText = `${((product as { name?: string; description?: string }).name || '').toLowerCase()} ${(product as { name?: string; description?: string }).description || ''}`.toLowerCase();
     let score = 0;
     
     // Check for minimum amount
-    if (dosageSpecs.minAmount) {
-      const amountMatch = productText.match(new RegExp(`([0-9.]+)\\s*${dosageSpecs.unit}`, 'i'));
+    if ((dosageSpecs as { minAmount?: number; unit?: string }).minAmount) {
+      const amountMatch = productText.match(new RegExp(`([0-9.]+)\s*${((dosageSpecs as { unit?: string }).unit || '')}`, 'i'));
       if (amountMatch) {
         const foundAmount = parseFloat(amountMatch[1]);
-        if (foundAmount >= dosageSpecs.minAmount) {
+        if (foundAmount >= ((dosageSpecs as { minAmount?: number }).minAmount as number)) {
           score += 10;
         }
       }
     }
     
     // Check for frequency
-    if (dosageSpecs.frequency && productText.includes(dosageSpecs.frequency.toLowerCase())) {
+    if ((dosageSpecs as { frequency?: string }).frequency && productText.includes(((dosageSpecs as { frequency?: string }).frequency || '').toLowerCase())) {
       score += 5;
     }
     
     return score;
   }
 
-  private analyzeBasicProduct(product: any, score: DatabaseQualityScore) {
-    const productText = `${product.name} ${product.description} ${product.brand || ''}`.toLowerCase();
-
+  private analyzeBasicProduct(product: unknown, score: DatabaseQualityScore) {
     // Basic quality indicators
     this.checkQualityIndicators(product, score);
 
@@ -375,8 +376,8 @@ export class DatabaseQualityAnalyzer {
     this.analyzeRating(product, score);
   }
 
-  private checkQualityIndicators(product: any, score: DatabaseQualityScore) {
-    const productText = `${product.name} ${product.description} ${product.brand || ''}`.toLowerCase();
+  private checkQualityIndicators(product: unknown, score: DatabaseQualityScore) {
+    const productText = `${((product as { name?: string; description?: string; brand?: string }).name || '').toLowerCase()} ${(product as { name?: string; description?: string; brand?: string }).description || ''} ${(product as { brand?: string }).brand || ''}`.toLowerCase();
 
     // Quality indicators
     const qualityTerms = [
@@ -409,9 +410,9 @@ export class DatabaseQualityAnalyzer {
     }
   }
 
-  private analyzePrice(product: any, score: DatabaseQualityScore) {
-    if (product.price) {
-      const price = parseFloat(product.price.toString().replace(/[^0-9.]/g, ''));
+  private analyzePrice(product: unknown, score: DatabaseQualityScore) {
+    if ((product as { price?: number }).price) {
+      const price = parseFloat(((product as { price?: number }).price as number).toString().replace(/[^0-9.]/g, ''));
       
       // Price quality analysis
       if (price < 5) {
@@ -427,27 +428,29 @@ export class DatabaseQualityAnalyzer {
     }
   }
 
-  private analyzeRating(product: any, score: DatabaseQualityScore) {
-    if (product.rating) {
-      if (product.rating >= 4.5) {
+  private analyzeRating(product: unknown, score: DatabaseQualityScore) {
+    if ((product as { rating?: number }).rating) {
+      const rating = (product as { rating?: number }).rating;
+      if (rating !== undefined && rating >= 4.5) {
         score.score += 15;
-        score.reasons.push(`Excellent rating: ${product.rating}`);
-      } else if (product.rating >= 4.0) {
+        score.reasons.push(`Excellent rating: ${rating}`);
+      } else if (rating !== undefined && rating >= 4.0) {
         score.score += 10;
-        score.reasons.push(`Good rating: ${product.rating}`);
-      } else if (product.rating < 3.5) {
+        score.reasons.push(`Good rating: ${rating}`);
+      } else if (rating !== undefined && rating < 3.5) {
         score.score -= 10;
-        score.warnings.push(`Low rating: ${product.rating}`);
+        score.warnings.push(`Low rating: ${rating}`);
       }
     }
 
-    if (product.reviewCount) {
-      if (product.reviewCount >= 100) {
+    if ((product as { reviewCount?: number }).reviewCount) {
+      const reviewCount = (product as { reviewCount?: number }).reviewCount;
+      if (reviewCount !== undefined && reviewCount >= 100) {
         score.score += 5;
-        score.reasons.push(`Well-reviewed: ${product.reviewCount} reviews`);
-      } else if (product.reviewCount < 10) {
+        score.reasons.push(`Well-reviewed: ${reviewCount} reviews`);
+      } else if (reviewCount !== undefined && reviewCount < 10) {
         score.score -= 5;
-        score.warnings.push(`Few reviews: ${product.reviewCount}`);
+        score.warnings.push(`Few reviews: ${reviewCount}`);
       }
     }
   }
@@ -480,22 +483,22 @@ export class DatabaseQualityAnalyzer {
 
   // Filter products by database-driven quality criteria
   async filterProductsByDatabaseQuality(
-    products: any[], 
+    products: unknown[], 
     herbSlug?: string, 
     productType?: string
-  ): Promise<(any & { qualityScore: DatabaseQualityScore })[]> {
+  ): Promise<(unknown & { qualityScore: DatabaseQualityScore })[]> {
     const scoredProducts = await Promise.all(
       products.map(async (product) => {
         const qualityScore = await this.analyzeProductQuality(product, herbSlug, undefined, productType);
         return {
-          ...product,
+          ...(typeof product === 'object' && product !== null ? product : {}),
           qualityScore
         };
       })
     );
 
     return scoredProducts
-      .filter(product => product.qualityScore.score >= 50)
-      .sort((a, b) => b.qualityScore.score - a.qualityScore.score);
+      .filter((product: unknown) => (product as { qualityScore: DatabaseQualityScore }).qualityScore.score >= 50)
+      .sort((a: unknown, b: unknown) => (a as { qualityScore: DatabaseQualityScore }).qualityScore.score - (b as { qualityScore: DatabaseQualityScore }).qualityScore.score);
   }
 } 

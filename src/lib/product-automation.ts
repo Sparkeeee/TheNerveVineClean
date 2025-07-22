@@ -101,8 +101,8 @@ import { ProductQualityAnalyzer } from './product-quality-specs';
 // Product categorization and matching
 export class ProductAutomation {
   private providers: AffiliateProvider[];
-  private amazonAPI: AmazonAssociatesAPI;
-  private iherbAPI: IHerbAPI;
+  public amazonAPI: AmazonAssociatesAPI;
+  public iherbAPI: IHerbAPI;
   private qualityAnalyzer: ProductQualityAnalyzer;
   
   constructor(providers: AffiliateProvider[]) {

@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
+import Image from 'next/image';
 
 interface PendingProduct {
   id: string;
@@ -40,12 +41,7 @@ export default function HerbSubstancePage() {
   const [approving, setApproving] = useState(false);
   const [rejecting, setRejecting] = useState(false);
 
-  useEffect(() => {
-    fetchHerbInfo();
-    fetchPendingProducts();
-  }, [slug]);
-
-  const fetchHerbInfo = async () => {
+  const fetchHerbInfo = useCallback(async () => {
     try {
       // Mock data - in real implementation, this would come from your API
       const mockHerbInfo: HerbInfo = {
@@ -58,9 +54,9 @@ export default function HerbSubstancePage() {
     } catch (error) {
       console.error('Error fetching herb info:', error);
     }
-  };
+  }, [slug]);
 
-  const fetchPendingProducts = async () => {
+  const fetchPendingProducts = useCallback(async () => {
     setLoading(true);
     try {
       // Mock data - in real implementation, this would come from your API
@@ -124,7 +120,12 @@ export default function HerbSubstancePage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [slug, herbInfo]);
+
+  useEffect(() => {
+    fetchHerbInfo();
+    fetchPendingProducts();
+  }, [fetchHerbInfo, fetchPendingProducts]);
 
   const handleProductSelection = (productId: string) => {
     setSelectedProducts(prev => 
@@ -319,9 +320,11 @@ export default function HerbSubstancePage() {
                 >
                   {/* Product Image */}
                   <div className="mb-4">
-                    <img
+                    <Image
                       src={product.image || '/images/placeholder-product.jpg'}
                       alt={product.name}
+                      width={200}
+                      height={120}
                       className="w-full h-48 object-cover rounded-md"
                       onError={(e) => {
                         e.currentTarget.src = '/images/placeholder-product.jpg';

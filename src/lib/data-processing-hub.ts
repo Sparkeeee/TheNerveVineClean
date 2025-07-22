@@ -89,7 +89,7 @@ export class DataProcessingHub {
   
   constructor(providers: APIProvider[]) {
     this.providers = providers.filter(p => p.enabled);
-    this.affiliateOptimizer = new AffiliateOptimizer([]);
+    this.affiliateOptimizer = new AffiliateOptimizer();
     this.productAutomation = new ProductAutomation(providers);
     this.qualityAnalyzer = new DatabaseQualityAnalyzer();
   }
@@ -104,7 +104,7 @@ export class DataProcessingHub {
     if (cached) {
       return {
         products: cached,
-        summary: this.generateSummary(cached),
+        summary: this.generateSummary(cached) as { totalFound: number; totalProcessed: number; averageQualityScore: number; averageCommissionRate: number; topSuppliers: string[]; recommendations: string[]; },
         metadata: {
           processingTime: 0,
           sourcesUsed: ['cache'],
@@ -129,7 +129,7 @@ export class DataProcessingHub {
     
     return {
       products: sortedProducts,
-      summary: this.generateSummary(sortedProducts),
+      summary: this.generateSummary(sortedProducts) as { totalFound: number; totalProcessed: number; averageQualityScore: number; averageCommissionRate: number; topSuppliers: string[]; recommendations: string[]; },
       metadata: {
         processingTime,
         sourcesUsed: this.providers.map(p => p.name),
@@ -139,8 +139,8 @@ export class DataProcessingHub {
   }
 
   // Fetch data from all providers
-  private async fetchFromAllProviders(criteria: ProcessingCriteria): Promise<any[]> {
-    const allProducts: any[] = [];
+  private async fetchFromAllProviders(criteria: ProcessingCriteria): Promise<ProcessedProduct[]> {
+    const allProducts: ProcessedProduct[] = [];
     
     // Sort providers by priority
     const sortedProviders = this.providers.sort((a, b) => b.priority - a.priority);
@@ -166,26 +166,42 @@ export class DataProcessingHub {
   }
 
   // Fetch from specific provider
-  private async fetchFromProvider(provider: APIProvider, criteria: ProcessingCriteria): Promise<any[]> {
+  private async fetchFromProvider(provider: APIProvider, criteria: ProcessingCriteria): Promise<ProcessedProduct[]> {
     switch (provider.name.toLowerCase()) {
       case 'amazon':
-        return await this.productAutomation.amazonAPI.searchProducts(
+        return (await this.productAutomation.amazonAPI.searchProducts(
           this.buildSearchQuery(criteria),
           this.buildFilters(criteria)
-        );
+        )).map((p: unknown) => ({
+          ...p,
+          commissionRate: (p as unknown as { commissionRate?: number }).commissionRate ?? 0,
+          qualityScore: (p as unknown as { qualityScore?: number }).qualityScore ?? 0,
+          supplier: (p as unknown as { supplier?: string }).supplier ?? '',
+          category: (p as unknown as { category?: string }).category ?? '',
+          processingPriority: (p as unknown as { processingPriority?: number }).processingPriority ?? 0,
+          // add other required fields with defaults as needed
+        })) as ProcessedProduct[];
       case 'iherb':
-        return await this.productAutomation.iherbAPI.searchProducts(
+        return (await this.productAutomation.iherbAPI.searchProducts(
           this.buildSearchQuery(criteria),
           this.buildFilters(criteria)
-        );
+        )).map((p: unknown) => ({
+          ...p,
+          commissionRate: (p as unknown as { commissionRate?: number }).commissionRate ?? 0,
+          qualityScore: (p as unknown as { qualityScore?: number }).qualityScore ?? 0,
+          supplier: (p as unknown as { supplier?: string }).supplier ?? '',
+          category: (p as unknown as { category?: string }).category ?? '',
+          processingPriority: (p as unknown as { processingPriority?: number }).processingPriority ?? 0,
+          // add other required fields with defaults as needed
+        })) as ProcessedProduct[];
       default:
         // Mock data for other providers
-        return this.generateMockProducts(provider, criteria);
+        return this.generateMockProducts(provider);
     }
   }
 
   // Process and score products
-  private async processAndScore(rawProducts: any[], criteria: ProcessingCriteria): Promise<ProcessedProduct[]> {
+  private async processAndScore(rawProducts: ProcessedProduct[], criteria: ProcessingCriteria): Promise<ProcessedProduct[]> {
     return Promise.all(rawProducts.map(async product => {
       const processed: ProcessedProduct = {
         id: product.id,
@@ -251,9 +267,8 @@ export class DataProcessingHub {
   }
 
   // Helper methods
-  private categorizeProduct(product: any): 'traditional' | 'phytopharmaceutical' | 'mass-market' {
+  private categorizeProduct(product: ProcessedProduct): 'traditional' | 'phytopharmaceutical' | 'mass-market' {
     const name = product.name.toLowerCase();
-    const description = product.description?.toLowerCase() || '';
     
     if (name.includes('tincture') || name.includes('loose') || name.includes('powder')) {
       return 'traditional';
@@ -264,18 +279,18 @@ export class DataProcessingHub {
     }
   }
 
-  private getCommissionRate(product: any): number {
+  private getCommissionRate(product: ProcessedProduct): number {
     const supplier = this.providers.find(p => p.name.toLowerCase() === product.supplier?.toLowerCase());
     return supplier?.commission || 0.05;
   }
 
-  private calculateProfitMargin(product: any): number {
+  private calculateProfitMargin(product: ProcessedProduct): number {
     const commissionRate = this.getCommissionRate(product);
     const qualityCost = (10 - product.qualityScore) * 0.01; // Higher quality = lower cost
     return Math.max(0, commissionRate - qualityCost);
   }
 
-  private calculateUserValueScore(product: any): number {
+  private calculateUserValueScore(product: ProcessedProduct): number {
     const qualityScore = product.qualityScore || 5;
     const priceScore = Math.max(0, 10 - (product.price / 10)); // Lower price = higher score
     const ratingScore = product.rating || 3;
@@ -283,7 +298,7 @@ export class DataProcessingHub {
     return (qualityScore * 0.5) + (priceScore * 0.3) + (ratingScore * 0.2);
   }
 
-  private calculateRegionalScore(product: any, region?: string): number {
+  private calculateRegionalScore(product: ProcessedProduct, region?: string): number {
     if (!region) return 5; // Neutral score if no region specified
     
     // Simple regional scoring - can be enhanced
@@ -297,7 +312,7 @@ export class DataProcessingHub {
     return regionalFactors[region as keyof typeof regionalFactors] || 0.5;
   }
 
-  private calculateProcessingPriority(product: any, criteria: ProcessingCriteria): number {
+  private calculateProcessingPriority(product: ProcessedProduct, criteria: ProcessingCriteria): number {
     let priority = 5; // Base priority
     
     // Boost priority for products matching specific criteria
@@ -327,8 +342,8 @@ export class DataProcessingHub {
     return terms.join(' ');
   }
 
-  private buildFilters(criteria: ProcessingCriteria): Record<string, any> {
-    const filters: Record<string, any> = {};
+  private buildFilters(criteria: ProcessingCriteria): Record<string, unknown> {
+    const filters: Record<string, unknown> = {};
     
     if (criteria.priceRange) {
       filters.priceMin = criteria.priceRange.min;
@@ -346,27 +361,35 @@ export class DataProcessingHub {
     return filters;
   }
 
-  private generateMockProducts(provider: APIProvider, criteria: ProcessingCriteria): any[] {
+  private generateMockProducts(provider: APIProvider): ProcessedProduct[] {
     // Generate realistic mock data based on criteria
-    const mockProducts = [];
-    const searchTerms = this.buildSearchQuery(criteria);
+    const mockProducts: ProcessedProduct[] = [];
     
     for (let i = 1; i <= 5; i++) {
       mockProducts.push({
         id: `${provider.name.toLowerCase()}-${i}`,
-        name: `${searchTerms} Product ${i}`,
-        brand: `${provider.name} Brand`,
+        name: `Mock Product ${i + 1}`,
+        brand: 'MockBrand',
         supplier: provider.name,
-        price: 10 + (i * 5),
+        price: 19.99,
         currency: 'USD',
-        affiliateUrl: `https://${provider.baseUrl}/product-${i}`,
-        imageUrl: `/images/mock-product-${i}.jpg`,
-        rating: 4.0 + (Math.random() * 1),
-        reviewCount: Math.floor(Math.random() * 1000),
+        affiliateUrl: 'https://example.com',
+        imageUrl: '/images/closed-medical-brown-glass-bottle-yellow-vitamins.png',
+        rating: 4.5,
+        reviewCount: 100,
         availability: true,
-        categories: ['supplements', 'herbs'],
-        tags: criteria.herbs || [],
-        source: provider.name
+        category: 'mass-market',
+        commissionRate: 0.1,
+        qualityScore: 80,
+        processingPriority: 5,
+        tags: [],
+        profitMargin: 0.2,
+        userValueScore: 7,
+        compositeScore: 80,
+        regionalScore: 1.0,
+        lastUpdated: new Date(),
+        description: 'Mock product description',
+        source: provider.name,
       });
     }
     
@@ -377,7 +400,7 @@ export class DataProcessingHub {
     return JSON.stringify(criteria);
   }
 
-  private generateSummary(products: ProcessedProduct[]): any {
+  private generateSummary(products: ProcessedProduct[]): unknown {
     if (products.length === 0) {
       return {
         totalFound: 0,
@@ -437,7 +460,7 @@ export class DataProcessingHub {
     return result.products.slice(0, limit);
   }
 
-  async updateProductData(productId: string): Promise<ProcessedProduct | null> {
+  async updateProductData(): Promise<ProcessedProduct | null> {
     // Implementation for updating specific product data
     // This would fetch fresh data for a specific product
     return null;

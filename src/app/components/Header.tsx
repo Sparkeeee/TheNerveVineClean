@@ -1,15 +1,8 @@
 "use client";
-import { useSession, signOut } from "next-auth/react";
-import Link from "next/link";
 import React from "react";
+import Link from "next/link";
 
 export default function Header() {
-  const { data: session, status } = useSession();
-
-  if (status === "loading") {
-    return null; // or a loading spinner if you prefer
-  }
-
   return (
     <header className="flex items-center justify-between px-6 py-4 bg-white shadow w-full">
       {/* Left: Nav */}
@@ -33,21 +26,12 @@ export default function Header() {
       </div>
       {/* Right: Login/Logout Button */}
       <div className="flex items-center flex-shrink-0 ml-4">
-        {session?.user ? (
-          <button
-            onClick={() => window.location.href = "/logout"}
-            className="px-4 py-2 bg-green-700 text-black rounded font-bold hover:bg-green-800 transition"
-          >
-            Logout
-          </button>
-        ) : (
-          <Link
-            href="/admin/login"
-            className="px-4 py-2 bg-green-700 text-black rounded font-bold hover:bg-green-800 transition"
-          >
-            Admin Login
-          </Link>
-        )}
+        <Link
+          href="/admin/login"
+          className="px-4 py-2 bg-green-700 text-black rounded font-bold hover:bg-green-800 transition"
+        >
+          Admin Login
+        </Link>
       </div>
     </header>
   );

@@ -48,7 +48,7 @@ function getMockProducts(herbName: string) {
   ];
 }
 
-export default async function HerbPage({ params }: any) {
+export default async function HerbPage({ params }: { params: { slug: string } }) {
   const { slug } = params;
   const herb = await getHerb(slug);
 
@@ -176,7 +176,13 @@ export default async function HerbPage({ params }: any) {
               <div key={idx} className="border border-green-200 rounded-lg p-4 hover:shadow-md transition-shadow mb-4 bg-white">
                 <h3 className="font-semibold text-green-900 mb-2">{product.name}</h3>
                 <p className="text-gray-600 text-sm mb-2 text-left">{product.description}</p>
-                <img src="/images/closed-medical-brown-glass-bottle-yellow-vitamins.png" alt="Product" className="w-24 h-24 object-contain mb-2" />
+                <Image
+                  src="/images/closed-medical-brown-glass-bottle-yellow-vitamins.png"
+                  alt="Product"
+                  width={96}
+                  height={96}
+                  className="w-24 h-24 object-contain mb-2"
+                />
                 <div className="text-green-600 font-bold mb-2">{product.price}</div>
                 <div className="flex flex-wrap gap-2 mb-2">
                   {product.tags.map((tag: string, i: number) => (

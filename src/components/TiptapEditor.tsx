@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
-import { EditorContent, useEditor, Editor } from '@tiptap/react';
+import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 import Link from '@tiptap/extension-link';
@@ -22,7 +22,7 @@ export default function TiptapEditor({ value, onChange }: { value: string, onCha
       editor.commands.setContent(value || "");
     }
      
-  }, [value]);
+  }, [value, editor]);
   if (!hasMounted) return null;
 
   const setFileContent = async (e: React.ChangeEvent<HTMLInputElement>) => {

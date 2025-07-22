@@ -59,7 +59,15 @@ export async function POST(request: NextRequest) {
     };
 
     const newSpecification = await prisma.qualitySpecification.create({
-      data: specification
+      data: {
+        ...specification,
+        standardization: specification.standardization ? JSON.parse(specification.standardization) : undefined,
+        alcoholSpecs: specification.alcoholSpecs ? JSON.parse(specification.alcoholSpecs) : undefined,
+        dosageSpecs: specification.dosageSpecs ? JSON.parse(specification.dosageSpecs) : undefined,
+        priceRange: specification.priceRange ? JSON.parse(specification.priceRange) : undefined,
+        brandPreferences: specification.brandPreferences ? JSON.parse(specification.brandPreferences) : undefined,
+        brandAvoid: specification.brandAvoid ? JSON.parse(specification.brandAvoid) : undefined,
+      }
     });
 
     return NextResponse.json(newSpecification, { status: 201 });

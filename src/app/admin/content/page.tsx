@@ -1,9 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
-import { EditorContent, useEditor } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
 import React from 'react';
 import Link from 'next/link';
 
@@ -86,20 +83,28 @@ interface Symptom {
   traditionalUses?: string[];
 }
 
+// Define ProductFormulation type for clarity
+interface ProductFormulation {
+  name?: string;
+  type: string;
+  qualityCriteria: string;
+  tags?: string[];
+  affiliateLink?: string;
+  price?: string;
+}
+
 type Article = {
   title: string;
   adminNote: string;
   uploadDate: string;
   content: string | ArrayBuffer | null;
-  fileName: any;
+  fileName: string | null;
 };
-
-const TiptapEditor = dynamic(() => import("../../../components/TiptapEditor"), { ssr: false });
 
 const TABS = ["Herbs", "Supplements", "Symptoms"];
 
 const HERB_FIELDS = [
-  { key: "commonName", label: "Common Name", required: true },
+  { key: "name", label: "Name", required: true },
   { key: "latinName", label: "Latin Name" },
   { key: "slug", label: "Slug" },
   { key: "description", label: "Description" },
@@ -132,13 +137,21 @@ const SUPPLEMENT_FIELDS = [
   { key: "customerReviews", label: "Customer Reviews" },
 ];
 
-const PRODUCT_QUALITY_FIELDS = [
-  { key: "qualityCriteria", label: "Quality Criteria (free text)", required: false },
-  { key: "tags", label: "Tags (comma separated, e.g. organic, >4 stars)", required: false },
-];
-
 function getFormattedDate() {
   return new Date().toISOString().slice(0, 10);
+}
+
+function getHerbFieldValue(herb: Herb, key: string): unknown {
+  if (Object.prototype.hasOwnProperty.call(herb, key)) {
+    return (herb as unknown as Record<string, unknown>)[key];
+  }
+  return undefined;
+}
+function getSupplementFieldValue(supp: Supplement, key: string): unknown {
+  if (Object.prototype.hasOwnProperty.call(supp, key)) {
+    return (supp as unknown as Record<string, unknown>)[key];
+  }
+  return undefined;
 }
 
 export default function AdminContentPage() {
@@ -152,19 +165,18 @@ export default function AdminContentPage() {
   const [editContent, setEditContent] = useState("");
 
   // Handle file upload and/or text entry
-  const handleUpload = (e: any) => {
+  const handleUpload = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    let content = textContent;
     if (file) {
       const reader = new FileReader();
-      reader.onload = (event: any) => {
+      reader.onload = (event: ProgressEvent<FileReader>) => {
         setArticles((prev) => [
           ...prev,
           {
             title,
             adminNote,
             uploadDate: new Date().toLocaleString(),
-            content: event.target && event.target.result,
+            content: event.target?.result ?? null,
             fileName: file ? file.name : null,
           },
         ]);
@@ -189,7 +201,7 @@ export default function AdminContentPage() {
   };
 
   // Handle edit save
-  const handleEditSave = (idx: any) => {
+  const handleEditSave = (idx: number) => {
     setArticles((prev) =>
       prev.map((a, i) => (i === idx ? { ...a, content: editContent } : a))
     );
@@ -203,7 +215,50 @@ export default function AdminContentPage() {
   const [error, setError] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [formMode, setFormMode] = useState<"add" | "edit">("add");
-  const [formData, setFormData] = useState<any>({});
+  type HerbForm = {
+    name?: string;
+    latinName?: string;
+    slug?: string;
+    description?: string;
+    cautions?: string;
+    heroImageUrl?: string;
+    cardImageUrl?: string;
+    galleryImages?: string;
+    metaTitle?: string;
+    metaDescription?: string;
+    productFormulations?: ProductFormulation[];
+    references?: string;
+    indications?: string[];
+    [key: string]: unknown;
+  };
+  type SupplementForm = {
+    name?: string;
+    slug?: string;
+    description?: string;
+    cautions?: string;
+    heroImageUrl?: string;
+    cardImageUrl?: string;
+    galleryImages?: string;
+    metaTitle?: string;
+    metaDescription?: string;
+    productFormulations?: ProductFormulation[];
+    references?: string;
+    strength?: string;
+    formulation?: string;
+    affiliatePercentage?: string;
+    customerReviews?: string;
+    organic?: boolean;
+    [key: string]: unknown;
+  };
+  type SymptomForm = {
+    name?: string;
+    description?: string;
+    selectedHerbs?: number[];
+    selectedSupplements?: number[];
+    [key: string]: unknown;
+  };
+  type FormDataType = HerbForm | SupplementForm | SymptomForm | Record<string, unknown>;
+  const [formData, setFormData] = useState<FormDataType>({});
   const [allSymptoms, setAllSymptoms] = useState<Symptom[]>([]);
   // Add state for allHerbs and allSupplements
   const [allHerbs, setAllHerbs] = useState<Herb[]>([]);
@@ -234,9 +289,9 @@ export default function AdminContentPage() {
     try {
       const res = await fetch("/api/symptoms");
       if (!res.ok) throw new Error("Failed to fetch symptoms");
-      const items = await res.json();
+      const items: Symptom[] = await res.json();
       setAllSymptoms(items);
-    } catch (e) {
+    } catch {
       setAllSymptoms([]);
     }
   }
@@ -245,9 +300,9 @@ export default function AdminContentPage() {
     try {
       const res = await fetch("/api/herbs");
       if (!res.ok) throw new Error("Failed to fetch herbs");
-      const items = await res.json();
+      const items: Herb[] = await res.json();
       setAllHerbs(items);
-    } catch (e) {
+    } catch {
       setAllHerbs([]);
     }
   }
@@ -256,9 +311,9 @@ export default function AdminContentPage() {
     try {
       const res = await fetch("/api/supplements");
       if (!res.ok) throw new Error("Failed to fetch supplements");
-      const items = await res.json();
+      const items: Supplement[] = await res.json();
       setAllSupplements(items);
-    } catch (e) {
+    } catch {
       setAllSupplements([]);
     }
   }
@@ -266,14 +321,14 @@ export default function AdminContentPage() {
   async function fetchData() {
     setLoading(true);
     setError("");
-    let url = "/api/" + tab.toLowerCase();
+    const url = "/api/" + tab.toLowerCase();
     try {
       const res = await fetch(url);
       if (!res.ok) throw new Error("Failed to fetch " + tab);
-      const items = await res.json();
+      const items: Herb[] | Supplement[] | Symptom[] = await res.json();
       setData(items);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'An error occurred');
+    } catch {
+      setError('An error occurred');
       setData([]);
     } finally {
       setLoading(false);
@@ -296,8 +351,8 @@ export default function AdminContentPage() {
     e.preventDefault();
     setLoading(true);
     setError("");
-    let url = "/api/" + tab.toLowerCase();
-    let method = formMode === "add" ? "POST" : "PUT";
+    const url = "/api/" + tab.toLowerCase();
+    const method = formMode === "add" ? "POST" : "PUT";
     try {
       const res = await fetch(url, {
         method,
@@ -307,8 +362,8 @@ export default function AdminContentPage() {
       if (!res.ok) throw new Error("Failed to save " + tab.slice(0, -1));
       setShowForm(false);
       await fetchData();
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'An error occurred');
+    } catch {
+      setError('An error occurred');
     } finally {
       setLoading(false);
     }
@@ -318,7 +373,7 @@ export default function AdminContentPage() {
     if (!window.confirm("Are you sure you want to delete this entry?")) return;
     setLoading(true);
     setError("");
-    let url = "/api/" + tab.toLowerCase();
+    const url = "/api/" + tab.toLowerCase();
     try {
       const res = await fetch(url, {
         method: "DELETE",
@@ -327,8 +382,8 @@ export default function AdminContentPage() {
       });
       if (!res.ok) throw new Error("Failed to delete " + tab.slice(0, -1));
       await fetchData();
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'An error occurred');
+    } catch {
+      setError('An error occurred');
     } finally {
       setLoading(false);
     }
@@ -371,26 +426,29 @@ export default function AdminContentPage() {
   }
 
   function renderTableRow(item: Herb | Supplement | Symptom) {
-    // Type assertion to handle dynamic field access
-    const itemAny = item as any;
+    let itemAny: unknown;
     if (tab === "Herbs") {
+      itemAny = item as Herb;
       return (
         <tr key={item.id} className="border-t border-gray-700">
           <td className="p-2">{item.id}</td>
-          {HERB_FIELDS.map((f) => (
-            <td key={f.key} className="p-2 text-xs max-w-[180px] truncate">
-              {f.key === "commonName"
-                ? itemAny.commonName || itemAny.name || <span className="text-gray-500">(none)</span>
-                : typeof itemAny[f.key] === "object" && itemAny[f.key] !== null
-                ? JSON.stringify(itemAny[f.key])
-                : itemAny[f.key] || <span className="text-gray-500">(none)</span>}
-            </td>
-          ))}
+          {HERB_FIELDS.map((f) => {
+            const value = getHerbFieldValue(itemAny as Herb, f.key);
+            return (
+              <td key={f.key} className="p-2 text-xs max-w-[180px] truncate">
+                {f.key === "name"
+                  ? (itemAny as Herb).name || '—'
+                  : (typeof value === "string" || typeof value === "number" || typeof value === "boolean")
+                    ? value
+                    : '—'}
+              </td>
+            );
+          })}
           <td className="p-2">
             {item.indications && item.indications.length > 0 ? (
               <div className="flex flex-wrap gap-1">
-                {item.indications.map((sym: string, index: number) => (
-                  <span key={index} className="bg-blue-900 text-blue-200 px-2 py-1 rounded text-xs border border-blue-700">
+                {item.indications.map((sym: string) => (
+                  <span key={sym} className="bg-blue-900 text-blue-200 px-2 py-1 rounded text-xs border border-blue-700">
                     {sym}
                   </span>
                 ))}
@@ -417,16 +475,20 @@ export default function AdminContentPage() {
       );
     }
     if (tab === "Supplements") {
+      itemAny = item as Supplement;
       return (
         <tr key={item.id} className="border-t border-gray-700">
           <td className="p-2">{item.id}</td>
-          {SUPPLEMENT_FIELDS.map((f) => (
-            <td key={f.key} className="p-2 text-xs max-w-[180px] truncate">
-              {typeof itemAny[f.key] === "object" && itemAny[f.key] !== null
-                ? JSON.stringify(itemAny[f.key])
-                : itemAny[f.key] === true ? 'Yes' : itemAny[f.key] === false ? 'No' : itemAny[f.key] || <span className="text-gray-500">(none)</span>}
-            </td>
-          ))}
+          {SUPPLEMENT_FIELDS.map((f) => {
+            const value = getSupplementFieldValue(itemAny as Supplement, f.key);
+            return (
+              <td key={f.key} className="p-2 text-xs max-w-[180px] truncate">
+                {(typeof value === "string" || typeof value === "number" || typeof value === "boolean")
+                  ? value
+                  : value === true ? 'Yes' : value === false ? 'No' : '—'}
+              </td>
+            );
+          })}
           <td className="p-2 space-x-2">
             <button
               className="px-2 py-1 bg-blue-500 rounded hover:bg-blue-600"
@@ -445,6 +507,7 @@ export default function AdminContentPage() {
       );
     }
     // Fallback for other tabs
+    itemAny = item as Symptom;
     return (
       <tr key={item.id} className="border-t border-gray-700">
         <td className="p-2">{item.id}</td>
@@ -470,25 +533,27 @@ export default function AdminContentPage() {
 
   function renderFormFields() {
     if (tab === "Herbs") {
+      const herbForm = formData as HerbForm;
       return <>
         {HERB_FIELDS.map((f) => {
           if (f.key === "description" || f.key === "cautions") {
             return (
               <div className="mb-4" key={f.key}>
                 <label className="block mb-1">{f.label}{f.required && <span className="text-red-400">*</span>}</label>
-                <TiptapEditor
-                  value={formData[f.key] || ""}
-                  onChange={val => setFormData({ ...formData, [f.key]: val })}
+                <textarea
+                  className="w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
+                  value={herbForm[f.key] || ""}
+                  onChange={e => setFormData({ ...herbForm, [f.key]: e.target.value })}
                 />
                 <input
                   type="file"
                   accept=".txt,.html,.md"
                   className="mt-2"
-                  onChange={(e: any) => {
-                    const file = e.target && e.target.files ? e.target.files[0] : null;
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    const file = e.target.files ? e.target.files[0] : null;
                     if (!file) return;
                     const text = file.text();
-                    setFormData({ ...formData, [f.key]: text });
+                    setFormData({ ...herbForm, [f.key]: text });
                   }}
                 />
                 <span className="text-xs text-gray-400">Upload .txt, .html, or .md to import content</span>
@@ -500,8 +565,8 @@ export default function AdminContentPage() {
               <label className="block mb-1">{f.label}{f.required && <span className="text-red-400">*</span>}</label>
               <input
                 className="w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
-                value={formData[f.key] || ""}
-                onChange={e => setFormData({ ...formData, [f.key]: e.target.value })}
+                value={String(herbForm[f.key] ?? '')}
+                onChange={e => setFormData({ ...herbForm, [f.key]: e.target.value })}
                 required={!!f.required}
               />
             </div>
@@ -512,19 +577,19 @@ export default function AdminContentPage() {
           <select
             multiple
             className="w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600 h-32"
-            value={formData.indications || []}
+            value={herbForm.indications || []}
             onChange={e => {
               const selected = Array.from(e.target.selectedOptions).map(opt => Number(opt.value));
-              setFormData({ ...formData, indications: selected.map(s => s.toString()) });
+              setFormData({ ...herbForm, indications: selected.map(s => s.toString()) });
             }}
           >
             {allSymptoms.map(sym => (
               <option key={sym.id} value={sym.id}>{sym.name}</option>
             ))}
           </select>
-          {formData.indications && formData.indications.length > 0 && (
+          {Array.isArray(herbForm.indications) && herbForm.indications.length > 0 && (
             <div className="flex flex-wrap gap-1 mt-2">
-              {formData.indications.map((id: string, index: number) => {
+              {herbForm.indications.map((id: string) => {
                                   const sym = allSymptoms.find(s => s.id === Number(id));
                 return sym ? (
                   <span key={id} className="bg-blue-900 text-blue-200 px-2 py-1 rounded text-xs border border-blue-700">
@@ -538,15 +603,17 @@ export default function AdminContentPage() {
       </>;
     }
     if (tab === "Supplements") {
+      const supplementForm = formData as SupplementForm;
       return <>
         {SUPPLEMENT_FIELDS.map((f) => {
           if (f.key === "description" || f.key === "cautions") {
             return (
               <div className="mb-4" key={f.key}>
                 <label className="block mb-1">{f.label}{f.required && <span className="text-red-400">*</span>}</label>
-                <TiptapEditor
-                  value={formData[f.key] || ""}
-                  onChange={val => setFormData({ ...formData, [f.key]: val })}
+                <textarea
+                  className="w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
+                  value={supplementForm[f.key] || ""}
+                  onChange={e => setFormData({ ...supplementForm, [f.key]: e.target.value })}
                 />
                 <button
                   type="button"
@@ -560,11 +627,11 @@ export default function AdminContentPage() {
                   type="file"
                   accept=".txt,.html,.md"
                   className="hidden"
-                  onChange={async (e: any) => {
-                    const file = e.target && e.target.files ? e.target.files[0] : null;
+                  onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
+                    const file = e.target.files ? e.target.files[0] : null;
                     if (!file) return;
                     const text = file.text();
-                    setFormData({ ...formData, [f.key]: text });
+                    setFormData({ ...supplementForm, [f.key]: text });
                   }}
                 />
                 <span className="text-xs text-gray-400">Upload .txt, .html, or .md to import content</span>
@@ -577,8 +644,8 @@ export default function AdminContentPage() {
                 <label className="block mb-1">{f.label}</label>
                 <select
                   className="w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
-                  value={formData[f.key] === true ? 'true' : formData[f.key] === false ? 'false' : ''}
-                  onChange={e => setFormData({ ...formData, [f.key]: e.target.value === 'true' ? true : e.target.value === 'false' ? false : undefined })}
+                  value={supplementForm[f.key] === true ? 'true' : supplementForm[f.key] === false ? 'false' : ''}
+                  onChange={e => setFormData({ ...supplementForm, [f.key]: e.target.value === 'true' ? true : e.target.value === 'false' ? false : undefined })}
                 >
                   <option value="">Select</option>
                   <option value="true">Yes</option>
@@ -592,8 +659,8 @@ export default function AdminContentPage() {
               <label className="block mb-1">{f.label}{f.required && <span className="text-red-400">*</span>}</label>
               <input
                 className="w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
-                value={formData[f.key] || ""}
-                onChange={e => setFormData({ ...formData, [f.key]: e.target.value })}
+                value={String(supplementForm[f.key] ?? '')}
+                onChange={e => setFormData({ ...supplementForm, [f.key]: e.target.value })}
                 required={!!f.required}
               />
             </div>
@@ -602,16 +669,16 @@ export default function AdminContentPage() {
         {((tab as string) === "Herbs" || (tab as string) === "Supplements") && (
           <div className="mb-4">
             <label className="block mb-1">Product Formulations</label>
-            {(formData.productFormulations || []).map((form: any, idx: number) => (
-              <div key={idx} className="border border-gray-600 rounded p-3 mb-2 bg-gray-900">
+            {(supplementForm.productFormulations || []).map((form: ProductFormulation, index: number) => (
+              <div key={index} className="border border-gray-600 rounded p-3 mb-2 bg-gray-900">
                 <input
                   className="w-full p-2 mb-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
                   placeholder="Name"
                   value={form.name || ""}
                   onChange={e => {
-                    const arr = [...(formData.productFormulations || [])];
-                    arr[idx].name = e.target.value;
-                    setFormData({ ...formData, productFormulations: arr });
+                    const arr = [...(supplementForm.productFormulations || [])];
+                    arr[index].name = e.target.value;
+                    setFormData({ ...supplementForm, productFormulations: arr });
                   }}
                 />
                 <input
@@ -619,9 +686,9 @@ export default function AdminContentPage() {
                   placeholder="Type (e.g. tincture, extract, cream)"
                   value={form.type || ""}
                   onChange={e => {
-                    const arr = [...(formData.productFormulations || [])];
-                    arr[idx].type = e.target.value;
-                    setFormData({ ...formData, productFormulations: arr });
+                    const arr = [...(supplementForm.productFormulations || [])];
+                    arr[index].type = e.target.value;
+                    setFormData({ ...supplementForm, productFormulations: arr });
                   }}
                 />
                 <input
@@ -629,9 +696,9 @@ export default function AdminContentPage() {
                   placeholder="Affiliate Link"
                   value={form.affiliateLink || ""}
                   onChange={e => {
-                    const arr = [...(formData.productFormulations || [])];
-                    arr[idx].affiliateLink = e.target.value;
-                    setFormData({ ...formData, productFormulations: arr });
+                    const arr = [...(supplementForm.productFormulations || [])];
+                    arr[index].affiliateLink = e.target.value;
+                    setFormData({ ...supplementForm, productFormulations: arr });
                   }}
                 />
                 <input
@@ -639,9 +706,9 @@ export default function AdminContentPage() {
                   placeholder="Price"
                   value={form.price || ""}
                   onChange={e => {
-                    const arr = [...(formData.productFormulations || [])];
-                    arr[idx].price = e.target.value;
-                    setFormData({ ...formData, productFormulations: arr });
+                    const arr = [...(supplementForm.productFormulations || [])];
+                    arr[index].price = e.target.value;
+                    setFormData({ ...supplementForm, productFormulations: arr });
                   }}
                 />
                 <input
@@ -649,28 +716,28 @@ export default function AdminContentPage() {
                   placeholder="Quality Criteria (free text)"
                   value={form.qualityCriteria || ""}
                   onChange={e => {
-                    const arr = [...(formData.productFormulations || [])];
-                    arr[idx].qualityCriteria = e.target.value;
-                    setFormData({ ...formData, productFormulations: arr });
+                    const arr = [...(supplementForm.productFormulations || [])];
+                    arr[index].qualityCriteria = e.target.value;
+                    setFormData({ ...supplementForm, productFormulations: arr });
                   }}
                 />
                 <input
                   className="w-full p-2 mb-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
                   placeholder="Tags (comma separated, e.g. organic, >4 stars)"
-                  value={form.tags || ""}
+                  value={Array.isArray(form.tags) ? form.tags.join(', ') : ''}
                   onChange={e => {
-                    const arr = [...(formData.productFormulations || [])];
-                    arr[idx].tags = e.target.value;
-                    setFormData({ ...formData, productFormulations: arr });
+                    const arr = [...(supplementForm.productFormulations || [])];
+                    arr[index].tags = e.target.value.split(',').map(tag => tag.trim());
+                    setFormData({ ...supplementForm, productFormulations: arr });
                   }}
                 />
                 <button
                   type="button"
                   className="px-2 py-1 bg-red-700 rounded hover:bg-red-800 text-xs"
                   onClick={() => {
-                    const arr = [...(formData.productFormulations || [])];
-                    arr.splice(idx, 1);
-                    setFormData({ ...formData, productFormulations: arr });
+                    const arr = [...(supplementForm.productFormulations || [])];
+                    arr.splice(index, 1);
+                    setFormData({ ...supplementForm, productFormulations: arr });
                   }}
                 >Remove</button>
               </div>
@@ -678,20 +745,21 @@ export default function AdminContentPage() {
             <button
               type="button"
               className="px-3 py-1 bg-green-700 rounded hover:bg-green-800 text-xs mt-2"
-              onClick={() => setFormData({ ...formData, productFormulations: [...(formData.productFormulations || []), {}] })}
+              onClick={() => setFormData({ ...supplementForm, productFormulations: [...(supplementForm.productFormulations || []), { type: '', qualityCriteria: '', tags: [], affiliateLink: '', price: '', name: '' }] })}
             >+ Add Product Formulation</button>
           </div>
         )}
       </>;
     }
     if (tab === "Symptoms") {
+      const symptomForm = formData as SymptomForm;
       return <>
         <div className="mb-4">
           <label className="block mb-1">Name</label>
           <input
             className="w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
-            value={formData.name || ""}
-            onChange={e => setFormData({ ...formData, name: e.target.value })}
+            value={symptomForm.name || ""}
+            onChange={e => setFormData({ ...symptomForm, name: e.target.value })}
             required
           />
         </div>
@@ -699,26 +767,26 @@ export default function AdminContentPage() {
           <label className="block mb-1">Description</label>
           <textarea
             className="w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
-            value={formData.description || ""}
-            onChange={e => setFormData({ ...formData, description: e.target.value })}
+            value={symptomForm.description || ""}
+            onChange={e => setFormData({ ...symptomForm, description: e.target.value })}
           />
         </div>
         <div className="mb-4">
           <label className="block mb-1">Select Herbs to Display</label>
           <div className="max-h-48 overflow-y-auto border border-gray-600 rounded p-2 bg-gray-900">
-            {allHerbs.map((herb, idx) => (
+            {allHerbs.map((herb) => (
               <div key={herb.id} className="flex items-center mb-2">
                 <input
                   type="checkbox"
-                  checked={(formData.selectedHerbs || []).includes(herb.id)}
+                  checked={(symptomForm.selectedHerbs || []).includes(herb.id)}
                   onChange={e => {
-                    const selected = new Set(formData.selectedHerbs || []);
+                    const selected = new Set(symptomForm.selectedHerbs || []);
                     if (e.target.checked) selected.add(herb.id); else selected.delete(herb.id);
-                    setFormData({ ...formData, selectedHerbs: Array.from(selected) });
+                    setFormData({ ...symptomForm, selectedHerbs: Array.from(selected) });
                   }}
                 />
                 <span className="ml-2 font-bold">{herb.name}</span>
-                <span className="ml-2 text-xs text-gray-400">{herb.productFormulations?.map((f: any) => `${f.type || ''} (${f.qualityCriteria || ''})`).join(', ')}</span>
+                <span className="ml-2 text-xs text-gray-400">{herb.productFormulations?.map((f: ProductFormulation) => `${f.type || '—'} (${f.qualityCriteria || '—'})`).join(', ')}</span>
               </div>
             ))}
           </div>
@@ -726,19 +794,19 @@ export default function AdminContentPage() {
         <div className="mb-4">
           <label className="block mb-1">Select Supplements to Display</label>
           <div className="max-h-48 overflow-y-auto border border-gray-600 rounded p-2 bg-gray-900">
-            {allSupplements.map((supp, idx) => (
+            {allSupplements.map((supp) => (
               <div key={supp.id} className="flex items-center mb-2">
                 <input
                   type="checkbox"
-                  checked={(formData.selectedSupplements || []).includes(supp.id)}
+                  checked={(symptomForm.selectedSupplements || []).includes(supp.id)}
                   onChange={e => {
-                    const selected = new Set(formData.selectedSupplements || []);
+                    const selected = new Set(symptomForm.selectedSupplements || []);
                     if (e.target.checked) selected.add(supp.id); else selected.delete(supp.id);
-                    setFormData({ ...formData, selectedSupplements: Array.from(selected) });
+                    setFormData({ ...symptomForm, selectedSupplements: Array.from(selected) });
                   }}
                 />
                 <span className="ml-2 font-bold">{supp.name}</span>
-                <span className="ml-2 text-xs text-gray-400">{supp.productFormulations?.map((f: any) => `${f.type || ''} (${f.qualityCriteria || ''})`).join(', ')}</span>
+                <span className="ml-2 text-xs text-gray-400">{supp.productFormulations?.map((f: ProductFormulation) => `${f.type || '—'} (${f.qualityCriteria || '—'})`).join(', ')}</span>
               </div>
             ))}
           </div>
@@ -752,7 +820,7 @@ export default function AdminContentPage() {
           <label className="block mb-1">Name</label>
           <input
             className="w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
-            value={formData.name || ""}
+            value={(formData as { name?: string }).name || ""}
             onChange={e => setFormData({ ...formData, name: e.target.value })}
             required
           />
@@ -761,7 +829,7 @@ export default function AdminContentPage() {
           <label className="block mb-1">Description</label>
           <textarea
             className="w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
-            value={formData.description || ""}
+            value={(formData as { description?: string }).description || ""}
             onChange={e => setFormData({ ...formData, description: e.target.value })}
           />
         </div>
@@ -805,7 +873,7 @@ export default function AdminContentPage() {
             <input
               type="file"
               accept=".pdf,.docx,.md,.txt"
-              onChange={(e: any) => setFile(e.target && e.target.files ? e.target.files[0] : null)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFile(e.target && e.target.files ? e.target.files[0] : null)}
               className="border border-white px-3 py-2 rounded text-white bg-transparent"
             />
             <span className="text-white">or</span>
@@ -826,8 +894,8 @@ export default function AdminContentPage() {
         <section className="bg-gray-800 rounded shadow p-6 mb-8">
           <h2 className="text-xl font-bold text-white mb-4">Uploaded Articles</h2>
           <ul className="divide-y divide-white">
-            {articles.map((article, idx) => (
-              <li key={idx} className="py-4">
+            {articles.map((article, index) => (
+              <li key={index} className="py-4">
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
                   <div>
                     <div className="font-bold text-lg text-white">{article.title}</div>
@@ -839,7 +907,7 @@ export default function AdminContentPage() {
                     <button
                       className="bg-blue-700 text-white px-3 py-1 rounded shadow hover:bg-blue-800 transition font-bold"
                       onClick={() => {
-                        setEditingIndex(idx);
+                        setEditingIndex(index);
                         setEditContent(article.content as string);
                       }}
                     >
@@ -848,7 +916,7 @@ export default function AdminContentPage() {
                   </div>
                 </div>
                 {/* Article Content Editor */}
-                {editingIndex === idx ? (
+                {editingIndex === index ? (
                   <div className="mt-4">
                     <textarea
                       className="border border-white px-3 py-2 rounded text-white bg-transparent w-full"
@@ -859,7 +927,7 @@ export default function AdminContentPage() {
                     <div className="flex gap-2 mt-2">
                       <button
                         className="bg-green-700 text-white px-4 py-1 rounded shadow hover:bg-green-800 transition font-bold"
-                        onClick={() => handleEditSave(idx)}
+                        onClick={() => handleEditSave(index)}
                       >
                         Save
                       </button>
