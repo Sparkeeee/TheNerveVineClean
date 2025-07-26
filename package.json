@@ -7,7 +7,17 @@
     "dev": "next dev",
     "build": "prisma generate && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "migrate:prepare": "tsx src/scripts/prepareMigration.ts",
+    "migrate:execute": "tsx src/scripts/executeMigration.ts",
+    "migrate:dry-run": "tsx src/scripts/dryRunMigration.ts",
+    "migrate:comprehensive": "tsx src/scripts/comprehensiveMigration.ts",
+    "migrate:comprehensive-dry-run": "tsx src/scripts/comprehensiveDryRun.ts",
+    "migrate:symptoms": "tsx src/scripts/symptomsOnlyMigration.ts",
+    "rollback:symptoms": "tsx src/scripts/rollbackSymptoms.ts",
+    "migrate:symptom-data": "tsx src/scripts/migrateSymptomData.ts",
+    "migrate:variant-content": "node src/scripts/migrateVariantContent.js",
+    "audit:description-lengths": "node src/scripts/auditDescriptionLengths.js"
   },
   "dependencies": {
     "@prisma/client": "^6.12.0",
@@ -36,6 +46,7 @@
     "eslint-config-next": "15.3.5",
     "prisma": "^6.12.0",
     "tailwindcss": "^4",
+    "tsx": "^4.20.3",
     "typescript": "^5.8.3"
   }
 }

@@ -2,10 +2,15 @@ import { notFound } from 'next/navigation';
 import { PrismaClient } from '@prisma/client';
 import Image from 'next/image';
 
-async function getSupplement(slug: string) {
+async function getSupplementWithProducts(slug: string) {
   const prisma = new PrismaClient();
   try {
-    const supplement = await prisma.supplement.findFirst({ where: { slug } });
+    const supplement = await prisma.supplement.findFirst({
+      where: { slug },
+      include: {
+        products: true
+      }
+    });
     return supplement;
   } catch (error) {
     console.error('Error fetching supplement:', error);
@@ -17,7 +22,7 @@ async function getSupplement(slug: string) {
 
 export default async function SupplementPage({ params }: { params: { slug: string } }) {
   const { slug } = params;
-  const supplement = await getSupplement(slug);
+  const supplement = await getSupplementWithProducts(slug);
 
   if (!supplement) {
     notFound();
@@ -30,29 +35,29 @@ export default async function SupplementPage({ params }: { params: { slug: strin
     if (paraArr.length >= 4) {
       paragraphs = paraArr.slice(0, 4).map((p, i) => <p key={i} className="mb-4 text-lg text-green-700 text-left">{p.trim()}</p>);
     } else {
-      // If not enough, repeat or generate more
       while (paraArr.length < 4) paraArr.push(paraArr[0] || 'This supplement supports overall wellness.');
       paragraphs = paraArr.slice(0, 4).map((p, i) => <p key={i} className="mb-4 text-lg text-green-700 text-left">{p.trim()}</p>);
     }
   }
 
-  // Prepare product cards from productFormulations (mock)
+  // Prepare product cards from DB
   let productCards: JSX.Element[] = [];
-  if (Array.isArray(supplement.productFormulations) && supplement.productFormulations.length > 0) {
-    const validProducts = Array.isArray(supplement.productFormulations) ? supplement.productFormulations.filter((p): p is { name: string; description: string; price: string; tags: string[]; affiliateLink: string } => !!(p && typeof p === 'object' && 'name' in p && 'description' in p && 'price' in p && 'tags' in p && 'affiliateLink' in p)) : [];
-    productCards = validProducts.map((product, idx) => (
+  if (Array.isArray(supplement.products) && supplement.products.length > 0) {
+    productCards = supplement.products.map((product, idx) => (
       <div key={idx} className="border border-green-200 rounded-lg p-4 hover:shadow-md transition-shadow mb-4 bg-white">
         <h3 className="font-semibold text-green-900 mb-2">{product.name || 'Product'}</h3>
         {product.description && <p className="text-gray-600 text-sm mb-2 text-left">{product.description}</p>}
-        <Image src="/images/closed-medical-brown-glass-bottle-yellow-vitamins.png" alt="Product" width={96} height={96} className="w-24 h-24 object-contain mb-2" />
+        <Image src={product.imageUrl || "/images/closed-medical-brown-glass-bottle-yellow-vitamins.png"} alt="Product" width={96} height={96} className="w-24 h-24 object-contain mb-2" />
         <div className="flex flex-wrap gap-2 mb-2">
-          {product.tags.map((tag, i) => (
+          {product.tags && Array.isArray(product.tags) && product.tags.map((tag: string, i: number) => (
             <span key={i} className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs border border-green-300">{tag}</span>
           ))}
         </div>
         <div className="flex items-center justify-between">
-          <span className="text-lg font-bold text-green-900">{product.price}</span>
-          <a href={product.affiliateLink} target="_blank" rel="noopener noreferrer" className="ml-2 px-3 py-1 bg-green-700 text-white rounded hover:bg-green-800 text-xs">Buy</a>
+          <span className="text-lg font-bold text-green-900">{product.price ? `$${product.price}` : ''}</span>
+          {product.affiliateLink && (
+            <a href={product.affiliateLink} target="_blank" rel="noopener noreferrer" className="ml-2 px-3 py-1 bg-green-700 text-white rounded hover:bg-green-800 text-xs">Buy</a>
+          )}
         </div>
       </div>
     ));

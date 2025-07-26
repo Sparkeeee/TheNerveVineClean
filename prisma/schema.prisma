@@ -1,73 +1,74 @@
-// PostgreSQL datasource for production
+generator client {
+  provider = "prisma-client-js"
+}
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
-}
-
 model Herb {
-  id              Int      @id @default(autoincrement())
-  name            String?  // keep optional for migration
-  commonName      String?  // temporarily add for migration
-  latinName       String?
-  slug            String?
-  description     String
-  metaTitle       String?
-  metaDescription String?
-  heroImageUrl    String?
-  cardImageUrl    String?
-  galleryImages   Json?     // <-- Array of image URLs
-  cautions        String?
-  productFormulations Json?    // <-- Or use a related model if you want
-  references      Json?
-  indications     Json?     // <-- Change to string array
-  traditionalUses Json?
-  products        Product[] @relation("HerbProducts")
+  id                  Int       @id @default(autoincrement())
+  name                String?
+  commonName          String?
+  latinName           String?
+  slug                String?   @unique
+  description         String
+  metaTitle           String?
+  metaDescription     String?
+  heroImageUrl        String?
+  cardImageUrl        String?
+  galleryImages       Json?
+  cautions            String?
+  productFormulations Json?
+  references          Json?
+  indications         Json?
+  traditionalUses     Json?
+  products            Product[] @relation("HerbProducts")
 }
 
 model Symptom {
-  id          Int      @id @default(autoincrement())
-  slug        String   @unique
-  title       String
-  description String?
-  products    Product[] @relation("SymptomProducts")
-  // herbs       Herb[]      @relation("HerbSymptoms")
-  // supplements Supplement[] @relation("SymptomSupplements")
-  // indicatedHerbs Herb[]   @relation("HerbIndications")
+  id                  Int       @id @default(autoincrement())
+  slug                String    @unique
+  title               String
+  description         String?
+  articles            Json?
+  associatedSymptoms  Json?
+  cautions            String?
+  variants            Json?
+  references          Json?
+  variantDescriptions Json?
+  products            Product[] @relation("SymptomProducts")
 }
 
 model Supplement {
-  id              Int      @id @default(autoincrement())
-  name            String
-  slug            String?
-  description     String
-  metaTitle       String?
-  metaDescription String?
-  heroImageUrl    String?
-  cardImageUrl    String?
-  galleryImages   Json?
-  cautions        String?
+  id                  Int       @id @default(autoincrement())
+  name                String
+  slug                String?   @unique
+  description         String
+  metaTitle           String?
+  metaDescription     String?
+  heroImageUrl        String?
+  cardImageUrl        String?
+  galleryImages       Json?
+  cautions            String?
   productFormulations Json?
-  references      Json?
-  tags            Json?     // <-- Add this line
-  products        Product[] @relation("SupplementProducts")
+  references          Json?
+  tags                Json?
+  products            Product[] @relation("SupplementProducts")
 }
 
 model BlogPage {
   id         Int      @id @default(autoincrement())
   title      String
-  fileUrl    String?   // URL or path to the uploaded file (optional)
-  content    String?   // The main article content (Markdown, HTML, or plain text)
+  fileUrl    String?
   uploadDate DateTime @default(now())
   adminNote  String?
+  content    String?
 }
 
 model QualitySpecification {
-  id                   Int      @id @default(autoincrement())
+  id                   Int    @id @default(autoincrement())
   herbSlug             String
   herbName             String
   productType          String
@@ -82,65 +83,63 @@ model QualitySpecification {
   reviewCountThreshold Int
   brandPreferences     Json?
   brandAvoid           Json?
-} 
+}
 
 model Merchant {
-  id         Int      @id @default(autoincrement())
-  name       String
-  apiSource  String?
-  logoUrl    String?
-  websiteUrl String?
-  region     String   // e.g., "US", "UK", "EU"
-  products   Product[]
-  pendingProducts PendingProduct[]
-  defaultAffiliateRate Float? // e.g., 0.10 for 10%
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id                   Int              @id @default(autoincrement())
+  name                 String
+  apiSource            String?
+  logoUrl              String?
+  websiteUrl           String?
+  region               String
+  createdAt            DateTime         @default(now())
+  updatedAt            DateTime         @updatedAt
+  defaultAffiliateRate Float?
+  pendingProducts      PendingProduct[]
+  products             Product[]
 }
 
 model PendingProduct {
-  id            Int      @id @default(autoincrement())
-  name          String
-  description   String?
-  merchant      Merchant @relation(fields: [merchantId], references: [id])
-  merchantId    Int
-  affiliateLink String
-  price         Float?
-  currency      String   // e.g., "USD", "GBP"
-  region        String?  // Optional: "US", "UK", etc.
-  imageUrl      String?
-  qualityScore  Int?
-  affiliateRate Float?   // e.g., 0.10 for 10%
-  affiliateYield Float?  // e.g., 1.00 for $1 yield
-  rawApiData    Json?
-  createdAt     DateTime @default(now())
-  expiresAt     DateTime
-  herbId        Int?
-  supplementId  Int?
-  symptomId     Int?
+  id             Int      @id @default(autoincrement())
+  name           String
+  description    String?
+  merchantId     Int
+  affiliateLink  String
+  price          Float?
+  currency       String
+  region         String?
+  imageUrl       String?
+  qualityScore   Int?
+  rawApiData     Json?
+  createdAt      DateTime @default(now())
+  expiresAt      DateTime
+  herbId         Int?
+  supplementId   Int?
+  symptomId      Int?
+  affiliateRate  Float?
+  affiliateYield Float?
+  merchant       Merchant @relation(fields: [merchantId], references: [id])
 }
 
 model Product {
-  id            Int      @id @default(autoincrement())
-  name          String
-  description   String?
-  merchant      Merchant @relation(fields: [merchantId], references: [id])
-  merchantId    Int
-  affiliateLink String
-  price         Float?
-  currency      String   // e.g., "USD", "GBP"
-  region        String?  // Optional: "US", "UK", etc.
-  imageUrl      String?
-  qualityScore  Int?
-  affiliateRate Float?   // e.g., 0.10 for 10%
-  affiliateYield Float?  // e.g., 1.00 for $1 yield
-  approvedBy    String?
-  approvedAt    DateTime?
-  herbs         Herb[]   @relation("HerbProducts")
-  supplements   Supplement[] @relation("SupplementProducts")
-  symptoms      Symptom[] @relation("SymptomProducts")
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id             Int          @id @default(autoincrement())
+  name           String
+  description    String?
+  merchantId     Int
+  affiliateLink  String
+  price          Float?
+  currency       String
+  region         String?
+  imageUrl       String?
+  qualityScore   Int?
+  approvedBy     String?
+  approvedAt     DateTime?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  affiliateRate  Float?
+  affiliateYield Float?
+  merchant       Merchant     @relation(fields: [merchantId], references: [id])
+  herbs          Herb[]       @relation("HerbProducts")
+  supplements    Supplement[] @relation("SupplementProducts")
+  symptoms       Symptom[]    @relation("SymptomProducts")
 }
-
-// Add join tables for many-to-many relations if needed (Prisma handles this automatically with @relation) 

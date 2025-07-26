@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 
 export default function BodyMap() {
   const [hoveredArea, setHoveredArea] = useState<string | null>(null);
@@ -9,6 +10,7 @@ export default function BodyMap() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const searchParams = useSearchParams();
 
   // Detect touch device and screen size properly
   useEffect(() => {
@@ -21,6 +23,14 @@ export default function BodyMap() {
     window.addEventListener('resize', checkDeviceAndSize);
     return () => window.removeEventListener('resize', checkDeviceAndSize);
   }, []);
+
+  // Check URL parameter for modal state
+  useEffect(() => {
+    const showBodymap = searchParams.get('showBodymap');
+    if (showBodymap === 'true') {
+      setIsModalOpen(true);
+    }
+  }, [searchParams]);
 
   // Persist modal state across navigation
   useEffect(() => {
@@ -93,8 +103,8 @@ export default function BodyMap() {
         mobileOffset: { x: 0, y: 0 }
       },
       { 
-        label: "Poor Focus", 
-        href: "/symptoms/poor-focus", 
+        label: "Brain Fog", 
+        href: "/symptoms/brain-fog", 
         angle: 0, 
         radius: baseRadius,
         mobileOffset: { x: 0, y: 0 }
@@ -253,7 +263,7 @@ export default function BodyMap() {
         { label: "Insomnia", href: "/symptoms/insomnia" },
         { label: "Depression", href: "/symptoms/depression" },
         { label: "Anxiety", href: "/symptoms/anxiety" },
-        { label: "Poor Focus", href: "/symptoms/poor-focus" },
+        { label: "Brain Fog", href: "/symptoms/brain-fog" },
         { label: "Migraine", href: "/symptoms/migraine" },
         { label: "Tension Headaches", href: "/symptoms/muscle-tension" },
         { label: "Emotional Burnout", href: "/symptoms/burnout" },
