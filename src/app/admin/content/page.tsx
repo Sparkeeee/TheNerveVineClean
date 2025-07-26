@@ -60,7 +60,7 @@ interface Supplement {
 
 interface Symptom {
   id: number;
-  name: string;
+  title: string;
   slug: string;
   description?: string;
   metaTitle?: string;
@@ -252,7 +252,7 @@ export default function AdminContentPage() {
     [key: string]: unknown;
   };
   type SymptomForm = {
-    name?: string;
+    title?: string;
     description?: string;
     selectedHerbs?: number[];
     selectedSupplements?: number[];
@@ -344,7 +344,43 @@ export default function AdminContentPage() {
 
   function openEditForm(item: Herb | Supplement | Symptom) {
     setFormMode("edit");
-    setFormData({ ...item });
+    
+    // Parse JSON fields that come from the database
+    const processedItem = { ...item } as any;
+    
+    // Handle indications field - it comes as JSON from database but needs to be an array
+    if (processedItem.indications && typeof processedItem.indications === 'string') {
+      try {
+        processedItem.indications = JSON.parse(processedItem.indications as string);
+      } catch {
+        processedItem.indications = [];
+      }
+    } else if (!processedItem.indications) {
+      processedItem.indications = [];
+    }
+    
+    // Handle other JSON fields similarly
+    if (processedItem.productFormulations && typeof processedItem.productFormulations === 'string') {
+      try {
+        processedItem.productFormulations = JSON.parse(processedItem.productFormulations as string);
+      } catch {
+        processedItem.productFormulations = [];
+      }
+    } else if (!processedItem.productFormulations) {
+      processedItem.productFormulations = [];
+    }
+    
+    if (processedItem.references && typeof processedItem.references === 'string') {
+      try {
+        processedItem.references = JSON.parse(processedItem.references as string);
+      } catch {
+        processedItem.references = [];
+      }
+    } else if (!processedItem.references) {
+      processedItem.references = [];
+    }
+    
+    setFormData(processedItem);
     setShowForm(true);
   }
 
@@ -507,12 +543,12 @@ export default function AdminContentPage() {
         </tr>
       );
     }
-    // Fallback for other tabs
-    itemAny = item as Symptom;
+    // Fallback for other tabs (Symptoms)
+    const symptomItem = item as Symptom;
     return (
       <tr key={item.id} className="border-t border-gray-700">
         <td className="p-2">{item.id}</td>
-        <td className="p-2">{item.name}</td>
+        <td className="p-2">{symptomItem.title}</td>
         <td className="p-2">{item.description || <span className="text-gray-500">(none)</span>}</td>
         <td className="p-2 space-x-2">
           <button
@@ -590,7 +626,7 @@ export default function AdminContentPage() {
                     setFormData({ ...herbForm, indications: newIndications });
                   }}
                 />
-                <span className="ml-2 font-bold">{sym.name}</span>
+                <span className="ml-2 font-bold text-gray-100">{sym.title}</span>
               </div>
             ))}
           </div>
@@ -600,7 +636,7 @@ export default function AdminContentPage() {
                 const sym = allSymptoms.find(s => s.id === Number(id));
                 return sym ? (
                   <span key={id} className="bg-blue-900 text-blue-200 px-2 py-1 rounded text-xs border border-blue-700">
-                    {sym.name}
+                    {sym.title}
                   </span>
                 ) : null;
               })}
@@ -773,7 +809,7 @@ export default function AdminContentPage() {
                     setFormData({ ...supplementForm, indications: newIndications });
                   }}
                 />
-                <span className="ml-2 font-bold">{sym.name}</span>
+                <span className="ml-2 font-bold text-gray-100">{sym.title}</span>
               </div>
             ))}
           </div>
@@ -783,7 +819,7 @@ export default function AdminContentPage() {
                 const sym = allSymptoms.find(s => s.id === Number(id));
                 return sym ? (
                   <span key={id} className="bg-blue-900 text-blue-200 px-2 py-1 rounded text-xs border border-blue-700">
-                    {sym.name}
+                    {sym.title}
                   </span>
                 ) : null;
               })}
@@ -796,11 +832,11 @@ export default function AdminContentPage() {
       const symptomForm = formData as SymptomForm;
       return <>
         <div className="mb-4">
-          <label className="block mb-1">Name</label>
+          <label className="block mb-1">Title</label>
           <input
             className="w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
-            value={symptomForm.name || ""}
-            onChange={e => setFormData({ ...symptomForm, name: e.target.value })}
+            value={symptomForm.title || ""}
+            onChange={e => setFormData({ ...symptomForm, title: e.target.value })}
             required
           />
         </div>
@@ -826,7 +862,7 @@ export default function AdminContentPage() {
                     setFormData({ ...symptomForm, selectedHerbs: Array.from(selected) });
                   }}
                 />
-                <span className="ml-2 font-bold">{herb.name}</span>
+                <span className="ml-2 font-bold text-gray-100">{herb.name}</span>
                 <span className="ml-2 text-xs text-gray-400">{herb.productFormulations?.map((f: ProductFormulation) => `${f.type || '—'} (${f.qualityCriteria || '—'})`).join(', ')}</span>
               </div>
             ))}
@@ -846,7 +882,7 @@ export default function AdminContentPage() {
                     setFormData({ ...symptomForm, selectedSupplements: Array.from(selected) });
                   }}
                 />
-                <span className="ml-2 font-bold">{supp.name}</span>
+                <span className="ml-2 font-bold text-gray-100">{supp.name}</span>
                 <span className="ml-2 text-xs text-gray-400">{supp.productFormulations?.map((f: ProductFormulation) => `${f.type || '—'} (${f.qualityCriteria || '—'})`).join(', ')}</span>
               </div>
             ))}
@@ -1015,7 +1051,11 @@ export default function AdminContentPage() {
             <table className="w-full text-left border border-gray-700 rounded bg-gray-800">
               <thead>{renderTableHeaders()}</thead>
               <tbody>
-                {[...data].sort((a, b) => (a.name || '').localeCompare(b.name || '')).map(renderTableRow)}
+                {[...data].sort((a, b) => {
+                  const aName = 'name' in a ? a.name : 'title' in a ? a.title : '';
+                  const bName = 'name' in b ? b.name : 'title' in b ? b.title : '';
+                  return aName.localeCompare(bName);
+                }).map(renderTableRow)}
                 {data.length === 0 && (
                   <tr>
                     <td colSpan={tab === "Herbs" ? HERB_FIELDS.length + 2 : tab === "Supplements" ? SUPPLEMENT_FIELDS.length + 1 : 4} className="p-4 text-center text-gray-400">No {tab.toLowerCase()} found.</td>
@@ -1027,15 +1067,19 @@ export default function AdminContentPage() {
         )}
       </div>
       {showForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
-          <form className="bg-gray-900 p-8 rounded shadow-lg w-full max-w-2xl" onSubmit={handleFormSubmit}>
-            <h2 className="text-2xl font-bold mb-4 text-white">{formMode === "add" ? `Add New ${tab.slice(0, -1)}` : `Edit ${tab.slice(0, -1)}`}</h2>
-            {renderFormFields()}
-            <div className="flex gap-4 mt-6">
-              <button type="submit" className="bg-green-700 text-white px-6 py-2 rounded font-bold">Save</button>
-              <button type="button" className="bg-gray-500 text-white px-6 py-2 rounded font-bold" onClick={() => setShowForm(false)}>Cancel</button>
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
+          <div className="bg-gray-900 rounded shadow-lg w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
+            <form id="add-edit-form" className="p-8 overflow-y-auto flex-1" onSubmit={handleFormSubmit}>
+              <h2 className="text-2xl font-bold mb-4 text-white">{formMode === "add" ? `Add New ${tab.slice(0, -1)}` : `Edit ${tab.slice(0, -1)}`}</h2>
+              {renderFormFields()}
+            </form>
+            <div className="p-8 pt-0 border-t border-gray-700">
+              <div className="flex gap-4">
+                <button type="submit" form="add-edit-form" className="bg-green-700 text-white px-6 py-2 rounded font-bold">Save</button>
+                <button type="button" className="bg-gray-500 text-white px-6 py-2 rounded font-bold" onClick={() => setShowForm(false)}>Cancel</button>
+              </div>
             </div>
-          </form>
+          </div>
         </div>
       )}
     </div>

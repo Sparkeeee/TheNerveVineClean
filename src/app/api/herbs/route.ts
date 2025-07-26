@@ -29,9 +29,7 @@ export async function POST(req: NextRequest) {
     const herb = await prisma.herb.create({
       data: {
         ...herbData,
-        indications: indications && indications.length > 0
-          ? { connect: indications.map((id: number) => ({ id })) }
-          : undefined,
+        indications: indications && indications.length > 0 ? indications : null,
       },
     });
     return NextResponse.json(herb, { status: 201 });
@@ -49,11 +47,7 @@ export async function PUT(req: NextRequest) {
       where: { id: data.id },
       data: {
         ...herbData,
-        indications: indications
-          ? {
-              set: indications.map((id: number) => ({ id })),
-            }
-          : undefined,
+        indications: indications && indications.length > 0 ? indications : null,
       },
     });
     return NextResponse.json(herb);

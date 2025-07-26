@@ -55,6 +55,7 @@ model Supplement {
   productFormulations Json?
   references          Json?
   tags                Json?
+  indications         Json?
   products            Product[] @relation("SupplementProducts")
 }
 
