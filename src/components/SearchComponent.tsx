@@ -15,269 +15,35 @@ interface SearchItem {
   symptoms?: string[];
 }
 
-// Search data - this would ideally come from your actual data files
-const herbSearchData: SearchItem[] = [] as SearchItem[];
-
-// Static data for supplements and symptoms (unchanged)
-const staticSearchData: SearchItem[] = [
-  // Supplements
-  {
-    id: 'omega-3',
-    title: 'Omega-3 Fatty Acids',
-    description: 'Essential fats for brain health and heart health',
-    type: 'supplement',
-    slug: '/supplements/omega-3',
-    tags: ['brain', 'heart', 'inflammation', 'mood', 'memory'],
-    benefits: ['Supports brain function and memory', 'Reduces inflammation', 'Supports heart health']
-  },
-  {
-    id: 'vitamin-d',
-    title: 'Vitamin D',
-    description: 'Sunshine vitamin for mood and bone health',
-    type: 'supplement',
-    slug: '/supplements/vitamin-d',
-    tags: ['mood', 'bones', 'immune', 'depression', 'energy'],
-    benefits: ['Supports mood and brain function', 'Essential for bone health', 'Supports immune function']
-  },
-  {
-    id: 'magnesium',
-    title: 'Magnesium',
-    description: 'Essential mineral for relaxation and muscle function',
-    type: 'supplement',
-    slug: '/supplements/magnesium',
-    tags: ['relaxation', 'muscles', 'sleep', 'anxiety', 'calm'],
-    benefits: ['Helps relax muscles and reduce tension', 'Supports healthy sleep patterns', 'May reduce anxiety']
-  },
-  {
-    id: 'b-complex',
-    title: 'B-Complex Vitamins',
-    description: 'Essential vitamins for energy and nervous system',
-    type: 'supplement',
-    slug: '/supplements/b-complex',
-    tags: ['energy', 'nervous system', 'brain', 'metabolism', 'stress'],
-    benefits: ['Supports energy production', 'Essential for nervous system function', 'Helps convert food into energy']
-  },
-  {
-    id: 'l-theanine',
-    title: 'L-Theanine',
-    description: 'Amino acid for calm focus and relaxation',
-    type: 'supplement',
-    slug: '/supplements/l-theanine',
-    tags: ['focus', 'calm', 'anxiety', 'relaxation', 'amino acid'],
-    benefits: ['Promotes calm focus and concentration', 'Reduces stress and anxiety', 'Improves sleep quality']
-  },
-
-  // Symptoms
-  {
-    id: 'insomnia',
-    title: 'Insomnia',
-    description: 'Difficulty falling asleep or staying asleep',
-    type: 'symptom',
-    slug: '/symptoms/insomnia',
-    tags: ['sleep', 'restlessness', 'fatigue', 'stress', 'anxiety'],
-    symptoms: ['Trouble falling asleep', 'Waking up frequently', 'Feeling tired during the day']
-  },
-  {
-    id: 'depression',
-    title: 'Depression',
-    description: 'Persistent feelings of sadness and loss of interest',
-    type: 'symptom',
-    slug: '/symptoms/depression',
-    tags: ['mood', 'sadness', 'fatigue', 'hopelessness', 'emotional'],
-    symptoms: ['Persistent sad mood', 'Loss of interest', 'Fatigue or loss of energy']
-  },
-  {
-    id: 'anxiety',
-    title: 'Anxiety',
-    description: 'Excessive worry and nervousness',
-    type: 'symptom',
-    slug: '/symptoms/anxiety',
-    tags: ['worry', 'nervousness', 'stress', 'tension', 'fear'],
-    symptoms: ['Excessive worrying', 'Restlessness', 'Muscle tension']
-  },
-  {
-    id: 'brain-fog',
-    title: 'Brain Fog',
-    description: 'Difficulty thinking clearly and concentrating',
-    type: 'symptom',
-    slug: '/symptoms/brain-fog',
-    tags: ['concentration', 'memory', 'focus', 'mental clarity', 'cognitive'],
-    symptoms: ['Difficulty concentrating', 'Memory problems', 'Mental fatigue']
-  },
-  {
-    id: 'stress',
-    title: 'Stress',
-    description: 'Physical and emotional tension from pressure',
-    type: 'symptom',
-    slug: '/symptoms/stress',
-    tags: ['tension', 'pressure', 'overwhelm', 'emotional', 'physical'],
-    symptoms: ['Muscle tension', 'Irritability', 'Difficulty relaxing']
-  },
-  {
-    id: 'fatigue',
-    title: 'Fatigue',
-    description: 'Persistent tiredness and lack of energy',
-    type: 'symptom',
-    slug: '/symptoms/fatigue',
-    tags: ['tiredness', 'energy', 'exhaustion', 'weakness', 'lethargy'],
-    symptoms: ['Persistent tiredness', 'Lack of energy', 'Difficulty with daily activities']
-  },
-  {
-    id: 'burnout',
-    title: 'Emotional Burnout',
-    description: 'Physical and emotional exhaustion from chronic stress',
-    type: 'symptom',
-    slug: '/symptoms/burnout',
-    tags: ['exhaustion', 'stress', 'emotional', 'overwhelm', 'depletion'],
-    symptoms: ['Emotional exhaustion', 'Reduced performance', 'Cynicism']
-  },
-  {
-    id: 'muscle-tension',
-    title: 'Muscle Tension',
-    description: 'Tight, contracted muscles causing discomfort',
-    type: 'symptom',
-    slug: '/symptoms/muscle-tension',
-    tags: ['tension', 'pain', 'muscles', 'stress', 'discomfort'],
-    symptoms: ['Tight muscles', 'Pain and discomfort', 'Reduced flexibility']
-  },
-  {
-    id: 'neck-tension',
-    title: 'Neck Tension',
-    description: 'Tightness and discomfort in the neck area',
-    type: 'symptom',
-    slug: '/symptoms/neck-tension',
-    tags: ['neck', 'tension', 'pain', 'stress', 'posture'],
-    symptoms: ['Neck stiffness', 'Pain and discomfort', 'Limited range of motion']
-  },
-  {
-    id: 'blood-pressure',
-    title: 'Blood Pressure Issues',
-    description: 'Abnormal blood pressure levels affecting health',
-    type: 'symptom',
-    slug: '/symptoms/blood-pressure',
-    tags: ['cardiovascular', 'pressure', 'heart', 'circulation', 'health'],
-    symptoms: ['High or low blood pressure', 'Dizziness', 'Headaches']
-  },
-  {
-    id: 'heart-support',
-    title: 'Heart Health Support',
-    description: 'Supporting cardiovascular health and function',
-    type: 'symptom',
-    slug: '/symptoms/heart-support',
-    tags: ['heart', 'cardiovascular', 'circulation', 'health', 'support'],
-    symptoms: ['Heart health concerns', 'Circulation issues', 'Cardiovascular support needs']
-  },
-  {
-    id: 'liver-detox',
-    title: 'Liver Function Support',
-    description: 'Supporting liver health and detoxification',
-    type: 'symptom',
-    slug: '/symptoms/liver-detox',
-    tags: ['liver', 'detox', 'toxicity', 'health', 'cleansing'],
-    symptoms: ['Liver health concerns', 'Toxicity issues', 'Detoxification support needs']
-  },
-  {
-    id: 'digestive-health',
-    title: 'Digestive Health',
-    description: 'Supporting healthy digestion and gut function',
-    type: 'symptom',
-    slug: '/symptoms/digestive-health',
-    tags: ['digestion', 'gut', 'stomach', 'health', 'comfort'],
-    symptoms: ['Digestive discomfort', 'Gut health issues', 'Digestion support needs']
-  },
-  {
-    id: 'adrenal-overload',
-    title: 'Adrenal Overload',
-    description: 'Excessive stress affecting adrenal gland function',
-    type: 'symptom',
-    slug: '/symptoms/adrenal-overload',
-    tags: ['adrenals', 'stress', 'overload', 'hormones', 'exhaustion'],
-    symptoms: ['Adrenal fatigue', 'Chronic stress', 'Hormonal imbalances']
-  },
-  {
-    id: 'adrenal-exhaustion',
-    title: 'Adrenal Exhaustion',
-    description: 'Severe fatigue from chronic stress and adrenal depletion',
-    type: 'symptom',
-    slug: '/symptoms/adrenal-exhaustion',
-    tags: ['adrenals', 'exhaustion', 'fatigue', 'stress', 'depletion'],
-    symptoms: ['Severe fatigue', 'Adrenal depletion', 'Chronic exhaustion']
-  },
-  {
-    id: 'circadian-support',
-    title: 'Circadian Rhythm Support',
-    description: 'Supporting natural sleep-wake cycles',
-    type: 'symptom',
-    slug: '/symptoms/circadian-support',
-    tags: ['sleep', 'circadian', 'rhythm', 'cycles', 'timing'],
-    symptoms: ['Sleep cycle issues', 'Timing problems', 'Rhythm disruption']
-  },
-  {
-    id: 'vagus-nerve',
-    title: 'Vagus Nerve Support',
-    description: 'Supporting the body\'s main parasympathetic nerve',
-    type: 'symptom',
-    slug: '/symptoms/vagus-nerve',
-    tags: ['vagus', 'nervous system', 'parasympathetic', 'calm', 'regulation'],
-    symptoms: ['Nervous system issues', 'Regulation problems', 'Calm support needs']
-  },
-  {
-    id: 'dysbiosis',
-    title: 'Dysbiosis',
-    description: 'Imbalance in gut microbiome affecting health',
-    type: 'symptom',
-    slug: '/symptoms/dysbiosis',
-    tags: ['gut', 'microbiome', 'imbalance', 'digestion', 'health'],
-    symptoms: ['Gut microbiome issues', 'Digestive imbalances', 'Health concerns']
-  },
-  {
-    id: 'leaky-gut',
-    title: 'Leaky Gut / Leaky Brain',
-    description: 'Increased intestinal permeability affecting health',
-    type: 'symptom',
-    slug: '/symptoms/leaky-gut',
-    tags: ['gut', 'permeability', 'inflammation', 'brain', 'health'],
-    symptoms: ['Intestinal permeability', 'Inflammation', 'Health issues']
-  },
-  {
-    id: 'ibs',
-    title: 'IBS',
-    description: 'Irritable bowel syndrome affecting digestive health',
-    type: 'symptom',
-    slug: '/symptoms/ibs',
-    tags: ['ibs', 'digestive', 'bowel', 'irritable', 'discomfort'],
-    symptoms: ['Digestive discomfort', 'Bowel issues', 'Irritable symptoms']
-  },
-  {
-    id: 'mood-swings',
-    title: 'Mood Swings',
-    description: 'Rapid changes in emotional state and mood',
-    type: 'symptom',
-    slug: '/symptoms/mood-swings',
-    tags: ['mood', 'emotions', 'swings', 'emotional', 'stability'],
-    symptoms: ['Rapid mood changes', 'Emotional instability', 'Mood regulation issues']
-  },
-  {
-    id: 'thyroid-issues',
-    title: 'Thyroid Issues',
-    description: 'Problems with thyroid gland function and hormones',
-    type: 'symptom',
-    slug: '/symptoms/thyroid-issues',
-    tags: ['thyroid', 'hormones', 'metabolism', 'energy', 'health'],
-    symptoms: ['Thyroid function issues', 'Hormonal imbalances', 'Metabolism problems']
-  }
-];
-
-const searchData: SearchItem[] = [
-  ...herbSearchData,
-  ...staticSearchData
-];
-
 export default function SearchComponent() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [searchData, setSearchData] = useState<SearchItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const searchRef = useRef<HTMLDivElement>(null);
+
+  // Fetch search data from database on component mount
+  useEffect(() => {
+    const fetchSearchData = async () => {
+      try {
+        const response = await fetch('/api/search');
+        const data = await response.json();
+        
+        if (data.success) {
+          setSearchData(data.data);
+        } else {
+          console.error('Failed to fetch search data:', data.error);
+        }
+      } catch (error) {
+        console.error('Error fetching search data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+      fetchSearchData();
+  }, []);
 
   // Close search when clicking outside
   useEffect(() => {
@@ -293,7 +59,7 @@ export default function SearchComponent() {
 
   // Search functionality
   useEffect(() => {
-    if (query.trim() === "") {
+    if (query.trim() === "" || isLoading) {
       setResults([]);
       return;
     }
@@ -322,7 +88,7 @@ export default function SearchComponent() {
     });
 
     setResults(filteredResults.slice(0, 8)); // Limit to 8 results
-  }, [query]);
+  }, [query, searchData, isLoading]);
 
   const getTypeIcon = (type: string) => {
     switch (type) {
@@ -348,19 +114,27 @@ export default function SearchComponent() {
       <div className="relative">
         <input
           type="text"
-          placeholder="Search herbs, supplements, symptoms..."
+          placeholder={isLoading ? "Loading search data..." : "Search herbs, supplements, symptoms..."}
           value={query}
           onChange={(e) => {
             setQuery(e.target.value);
             setIsOpen(true);
           }}
           onFocus={() => setIsOpen(true)}
-          className="w-full px-3 py-2 pl-10 pr-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm text-gray-900 placeholder-gray-600"
+          disabled={isLoading}
+          className="w-full px-3 py-2 pl-10 pr-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm text-gray-900 placeholder-gray-600 disabled:bg-gray-50 disabled:cursor-not-allowed"
         />
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <svg className="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
+          {isLoading ? (
+            <svg className="h-4 w-4 text-gray-400 animate-spin" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+          ) : (
+            <svg className="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          )}
         </div>
       </div>
 
@@ -417,13 +191,22 @@ export default function SearchComponent() {
       )}
 
       {/* No Results */}
-      {isOpen && query.trim() !== "" && results.length === 0 && (
+      {isOpen && query.trim() !== "" && results.length === 0 && !isLoading && (
         <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-50 p-4">
           <p className="text-sm text-gray-500 text-center">
             No results found for &quot;{query}&quot;
           </p>
           <p className="text-xs text-gray-400 text-center mt-1">
             Try searching for herbs, supplements, or symptoms
+          </p>
+        </div>
+      )}
+
+      {/* Loading State */}
+      {isOpen && isLoading && (
+        <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-50 p-4">
+          <p className="text-sm text-gray-500 text-center">
+            Loading search data...
           </p>
         </div>
       )}
