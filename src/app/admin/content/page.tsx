@@ -137,6 +137,22 @@ const SUPPLEMENT_FIELDS = [
   { key: "customerReviews", label: "Customer Reviews" },
 ];
 
+const SYMPTOM_FIELDS = [
+  { key: "title", label: "Title", required: true },
+  { key: "slug", label: "Slug" },
+  { key: "description", label: "Description" },
+  { key: "cautions", label: "Cautions" },
+  { key: "heroImageUrl", label: "Hero Image URL" },
+  { key: "cardImageUrl", label: "Card Image URL" },
+  { key: "galleryImages", label: "Gallery Images (JSON)" },
+  { key: "metaTitle", label: "Meta Title" },
+  { key: "metaDescription", label: "Meta Description" },
+  { key: "products", label: "Products (JSON)" },
+  { key: "references", label: "References (JSON)" },
+  { key: "indications", label: "Indications (JSON)" },
+  { key: "traditionalUses", label: "Traditional Uses (JSON)" },
+];
+
 function getFormattedDate() {
   return new Date().toISOString().slice(0, 10);
 }
@@ -253,7 +269,23 @@ export default function AdminContentPage() {
   };
   type SymptomForm = {
     title?: string;
+    slug?: string;
     description?: string;
+    cautions?: string;
+    heroImageUrl?: string;
+    cardImageUrl?: string;
+    galleryImages?: string;
+    metaTitle?: string;
+    metaDescription?: string;
+    products?: Array<{
+      name: string;
+      description: string;
+      affiliateLink: string;
+      price: string;
+    }>;
+    references?: string;
+    indications?: string[];
+    traditionalUses?: string[];
     selectedHerbs?: number[];
     selectedSupplements?: number[];
     [key: string]: unknown;
@@ -431,48 +463,67 @@ export default function AdminContentPage() {
     if (tab === "Herbs") {
       return (
         <tr>
-          <th className="p-2">ID</th>
+          <th className="px-2 py-1 text-xs">Actions</th>
+          <th className="px-2 py-1 text-xs">ID</th>
           {HERB_FIELDS.map((f) => (
-            <th key={f.key} className="p-2">{f.label}</th>
+            <th key={f.key} className="px-2 py-1 text-xs">{f.label}</th>
           ))}
-          <th className="p-2">Indications</th>
-          <th className="p-2">Actions</th>
+          <th className="px-2 py-1 text-xs">Indications</th>
         </tr>
       );
     }
     if (tab === "Supplements") {
       return (
         <tr>
-          <th className="p-2">ID</th>
+          <th className="px-2 py-1 text-xs">Actions</th>
+          <th className="px-2 py-1 text-xs">ID</th>
           {SUPPLEMENT_FIELDS.map((f) => (
-            <th key={f.key} className="p-2">{f.label}</th>
+            <th key={f.key} className="px-2 py-1 text-xs">{f.label}</th>
           ))}
-          <th className="p-2">Actions</th>
         </tr>
       );
     }
     // Fallback for other tabs
     return (
       <tr>
-        <th className="p-2">ID</th>
-        <th className="p-2">Name</th>
-        <th className="p-2">Description</th>
-        <th className="p-2">Actions</th>
+        <th className="px-2 py-1 text-xs">Actions</th>
+        <th className="px-2 py-1 text-xs">ID</th>
+        <th className="px-2 py-1 text-xs">Name</th>
+        <th className="px-2 py-1 text-xs">Description</th>
       </tr>
     );
   }
 
-  function renderTableRow(item: Herb | Supplement | Symptom) {
+  function renderTableRow(item: Herb | Supplement | Symptom, index: number) {
     let itemAny: unknown;
+    const isEven = index % 2 === 0;
+    const rowBgClass = isEven ? "bg-gray-800" : "bg-gray-900";
+    
     if (tab === "Herbs") {
       itemAny = item as Herb;
       return (
-        <tr key={item.id} className="border-t border-gray-700">
-          <td className="p-2">{item.id}</td>
+        <tr key={item.id} className={`border-t border-gray-700 ${rowBgClass}`}>
+          <td className="px-2 py-1">
+            <div className="flex gap-1">
+              <button
+                className="px-1.5 py-0.5 bg-blue-500 rounded text-xs hover:bg-blue-600 transition-colors"
+                onClick={() => openEditForm(item)}
+              >
+                Edit
+              </button>
+              <button
+                className="px-1.5 py-0.5 bg-red-500 rounded text-xs hover:bg-red-600 transition-colors"
+                onClick={() => handleDelete(item.id)}
+              >
+                Delete
+              </button>
+            </div>
+          </td>
+          <td className="px-2 py-1 text-xs">{item.id}</td>
           {HERB_FIELDS.map((f) => {
             const value = getHerbFieldValue(itemAny as Herb, f.key);
             return (
-              <td key={f.key} className="p-2 text-xs max-w-[180px] truncate">
+              <td key={f.key} className="px-2 py-1 text-xs max-w-[180px] truncate">
                 {f.key === "name"
                   ? (itemAny as Herb).name || '—'
                   : (typeof value === "string" || typeof value === "number" || typeof value === "boolean")
@@ -481,32 +532,18 @@ export default function AdminContentPage() {
               </td>
             );
           })}
-          <td className="p-2">
+          <td className="px-2 py-1">
             {item.indications && item.indications.length > 0 ? (
-              <div className="flex flex-wrap gap-1">
+              <div className="flex gap-1 overflow-x-auto">
                 {item.indications.map((sym: string) => (
-                  <span key={sym} className="bg-blue-900 text-blue-200 px-2 py-1 rounded text-xs border border-blue-700">
+                  <span key={sym} className="bg-blue-900 text-blue-200 px-1.5 py-0.5 rounded text-xs border border-blue-700 whitespace-nowrap">
                     {sym}
                   </span>
                 ))}
               </div>
             ) : (
-              <span className="text-gray-500">(none)</span>
+              <span className="text-gray-500 text-xs">(none)</span>
             )}
-          </td>
-          <td className="p-2 space-x-2">
-            <button
-              className="px-2 py-1 bg-blue-500 rounded hover:bg-blue-600"
-              onClick={() => openEditForm(item)}
-            >
-              Edit
-            </button>
-            <button
-              className="px-2 py-1 bg-red-500 rounded hover:bg-red-600"
-              onClick={() => handleDelete(item.id)}
-            >
-              Delete
-            </button>
           </td>
         </tr>
       );
@@ -514,56 +551,60 @@ export default function AdminContentPage() {
     if (tab === "Supplements") {
       itemAny = item as Supplement;
       return (
-        <tr key={item.id} className="border-t border-gray-700">
-          <td className="p-2">{item.id}</td>
+        <tr key={item.id} className={`border-t border-gray-700 ${rowBgClass}`}>
+          <td className="px-2 py-1">
+            <div className="flex gap-1">
+              <button
+                className="px-1.5 py-0.5 bg-blue-500 rounded text-xs hover:bg-blue-600 transition-colors"
+                onClick={() => openEditForm(item)}
+              >
+                Edit
+              </button>
+              <button
+                className="px-1.5 py-0.5 bg-red-500 rounded text-xs hover:bg-red-600 transition-colors"
+                onClick={() => handleDelete(item.id)}
+              >
+                Delete
+              </button>
+            </div>
+          </td>
+          <td className="px-2 py-1 text-xs">{item.id}</td>
           {SUPPLEMENT_FIELDS.map((f) => {
             const value = getSupplementFieldValue(itemAny as Supplement, f.key);
             return (
-              <td key={f.key} className="p-2 text-xs max-w-[180px] truncate">
+              <td key={f.key} className="px-2 py-1 text-xs max-w-[180px] truncate">
                 {(typeof value === "string" || typeof value === "number" || typeof value === "boolean")
                   ? value
                   : value === true ? 'Yes' : value === false ? 'No' : '—'}
               </td>
             );
           })}
-          <td className="p-2 space-x-2">
-            <button
-              className="px-2 py-1 bg-blue-500 rounded hover:bg-blue-600"
-              onClick={() => openEditForm(item)}
-            >
-              Edit
-            </button>
-            <button
-              className="px-2 py-1 bg-red-500 rounded hover:bg-red-600"
-              onClick={() => handleDelete(item.id)}
-            >
-              Delete
-            </button>
-          </td>
         </tr>
       );
     }
     // Fallback for other tabs (Symptoms)
     const symptomItem = item as Symptom;
     return (
-      <tr key={item.id} className="border-t border-gray-700">
-        <td className="p-2">{item.id}</td>
-        <td className="p-2">{symptomItem.title}</td>
-        <td className="p-2">{item.description || <span className="text-gray-500">(none)</span>}</td>
-        <td className="p-2 space-x-2">
-          <button
-            className="px-2 py-1 bg-blue-500 rounded hover:bg-blue-600"
-            onClick={() => openEditForm(item)}
-          >
-            Edit
-          </button>
-          <button
-            className="px-2 py-1 bg-red-500 rounded hover:bg-red-600"
-            onClick={() => handleDelete(item.id)}
-          >
-            Delete
-          </button>
+      <tr key={item.id} className={`border-t border-gray-700 ${rowBgClass}`}>
+        <td className="px-2 py-1">
+          <div className="flex gap-1">
+            <button
+              className="px-1.5 py-0.5 bg-blue-500 rounded text-xs hover:bg-blue-600 transition-colors"
+              onClick={() => openEditForm(item)}
+            >
+              Edit
+            </button>
+            <button
+              className="px-1.5 py-0.5 bg-red-500 rounded text-xs hover:bg-red-600 transition-colors"
+              onClick={() => handleDelete(item.id)}
+            >
+              Delete
+            </button>
+          </div>
         </td>
+        <td className="px-2 py-1 text-xs">{item.id}</td>
+        <td className="px-2 py-1 text-xs">{symptomItem.title}</td>
+        <td className="px-2 py-1 text-xs">{item.description || <span className="text-gray-500">(none)</span>}</td>
       </tr>
     );
   }
@@ -831,23 +872,43 @@ export default function AdminContentPage() {
     if (tab === "Symptoms") {
       const symptomForm = formData as SymptomForm;
       return <>
-        <div className="mb-4">
-          <label className="block mb-1">Title</label>
-          <input
-            className="w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
-            value={symptomForm.title || ""}
-            onChange={e => setFormData({ ...symptomForm, title: e.target.value })}
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block mb-1">Description</label>
-          <textarea
-            className="w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
-            value={symptomForm.description || ""}
-            onChange={e => setFormData({ ...symptomForm, description: e.target.value })}
-          />
-        </div>
+        {SYMPTOM_FIELDS.map((f) => {
+          if (f.key === "description" || f.key === "cautions") {
+            return (
+              <div className="mb-4" key={f.key}>
+                <label className="block mb-1">{f.label}{f.required && <span className="text-red-400">*</span>}</label>
+                <textarea
+                  className="w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
+                  value={symptomForm[f.key] || ""}
+                  onChange={e => setFormData({ ...symptomForm, [f.key]: e.target.value })}
+                />
+                <input
+                  type="file"
+                  accept=".txt,.html,.md"
+                  className="mt-2"
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    const file = e.target.files ? e.target.files[0] : null;
+                    if (!file) return;
+                    const text = file.text();
+                    setFormData({ ...symptomForm, [f.key]: text });
+                  }}
+                />
+                <span className="text-xs text-gray-400">Upload .txt, .html, or .md to import content</span>
+              </div>
+            );
+          }
+          return (
+            <div className="mb-4" key={f.key}>
+              <label className="block mb-1">{f.label}{f.required && <span className="text-red-400">*</span>}</label>
+              <input
+                className="w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
+                value={String(symptomForm[f.key] ?? '')}
+                onChange={e => setFormData({ ...symptomForm, [f.key]: e.target.value })}
+                required={!!f.required}
+              />
+            </div>
+          );
+        })}
         <div className="mb-4">
           <label className="block mb-1">Select Herbs to Display</label>
           <div className="max-h-48 overflow-y-auto border border-gray-600 rounded p-2 bg-gray-900">
@@ -1055,7 +1116,7 @@ export default function AdminContentPage() {
                   const aName = 'name' in a ? a.name : 'title' in a ? a.title : '';
                   const bName = 'name' in b ? b.name : 'title' in b ? b.title : '';
                   return aName.localeCompare(bName);
-                }).map(renderTableRow)}
+                }).map((item, index) => renderTableRow(item, index))}
                 {data.length === 0 && (
                   <tr>
                     <td colSpan={tab === "Herbs" ? HERB_FIELDS.length + 2 : tab === "Supplements" ? SUPPLEMENT_FIELDS.length + 1 : 4} className="p-4 text-center text-gray-400">No {tab.toLowerCase()} found.</td>
