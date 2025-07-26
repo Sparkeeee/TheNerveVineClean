@@ -295,39 +295,6 @@ const symptoms: Record<string, Symptom> = {
     related: null,
     faq: null
   },
-  'muscle-tension': {
-    name: 'Muscle Tension / Tension Headaches',
-    title: 'Muscle Tension / Tension Headaches',
-    description: 'Muscle tightness, tension, or headaches related to stress or posture.',
-    variants: {
-      'Default': {
-        paragraphs: [
-          "Muscle tension and tension headaches are common complaints that can be caused by stress, poor posture, overuse, or dehydration. They can also be associated with neck or shoulder pain, jaw clenching, and difficulty relaxing. Understanding the causes and symptoms of muscle tension is important for finding effective natural solutions.",
-          "Common symptoms of muscle tension include tight or sore muscles, tension headaches, neck or shoulder pain, jaw clenching, and difficulty relaxing. These symptoms can vary in intensity and duration, and they can be influenced by various factors, including stress, poor posture, and sleep issues."
-        ],
-        productFormulations: {
-          Skullcap: {
-            name: 'Skullcap',
-            description: 'Traditionally used for muscle tension and nervous headaches',
-            affiliateLink: 'https://amzn.to/example-skullcap',
-            price: '$15-25'
-          },
-             "Cramp Bark": {
-            name: 'Cramp Bark (Viburnum opulus)',
-            description: 'Skeletal muscle relaxant and nerve relaxant. Traditionally used for pain, pinched nerves, muscle cramps, and menstrual cramps.',
-            affiliateLink: 'https://amzn.to/example-cramp-bark',
-            price: '$14-22'
-          }
-        },
-      }
-    },
-    herb: null,
-    extract: null,
-    supplements: null,
-    
-    related: null,
-    faq: null
-  },
   'neck-tension': {
     name: 'Neck Tension',
     title: 'Neck Tension',
@@ -352,17 +319,52 @@ const symptoms: Record<string, Symptom> = {
             price: '$18-28'
           }
         },
-        relatedSymptoms: [
-          { name: 'Muscle Tension', href: '/symptoms/muscle-tension', color: 'green' },
-          { name: 'Migraine', href: '/symptoms/migraine', color: 'purple' },
-          { name: 'Stress', href: '/symptoms/stress', color: 'blue' }
+      },
+      'Muscle Tension': {
+        paragraphs: [
+          "Muscle tension is a common complaint that can be caused by stress, poor posture, overuse, or dehydration. It can also be associated with neck or shoulder pain, jaw clenching, and difficulty relaxing.",
+          "Understanding the causes and symptoms of muscle tension is important for finding effective natural solutions."
         ],
+        productFormulations: {
+          Skullcap: {
+            name: 'Skullcap',
+            description: 'Traditionally used for muscle tension and nervous headaches',
+            affiliateLink: 'https://amzn.to/example-skullcap',
+            price: '$15-25'
+          },
+          "Cramp Bark": {
+            name: 'Cramp Bark (Viburnum opulus)',
+            description: 'Skeletal muscle relaxant and nerve relaxant. Traditionally used for pain, pinched nerves, muscle cramps, and menstrual cramps.',
+            affiliateLink: 'https://amzn.to/example-cramp-bark',
+            price: '$14-22'
+          }
+        },
+      },
+      'Tension Headaches': {
+        paragraphs: [
+          "Tension headaches are the most common type of headache, characterized by a dull, aching pain that feels like a tight band around the head. They are often caused by stress, poor posture, eye strain, or muscle tension in the neck and shoulders.",
+          "Natural approaches to tension headaches focus on stress reduction, muscle relaxation, and addressing underlying causes."
+        ],
+        productFormulations: {
+          Peppermint: {
+            name: 'Peppermint',
+            description: 'Traditional herb for headache relief and muscle relaxation.',
+            affiliateLink: 'https://amzn.to/peppermint-headache',
+            price: '$12-20'
+          },
+          "Willow Bark": {
+            name: 'Willow Bark',
+            description: 'Natural source of salicin, similar to aspirin, for pain relief.',
+            affiliateLink: 'https://amzn.to/willow-bark-pain',
+            price: '$15-25'
+          }
+        },
       }
     },
     relatedSymptoms: [
-      { name: 'Muscle Tension', href: '/symptoms/muscle-tension', color: 'green' },
       { name: 'Migraine', href: '/symptoms/migraine', color: 'purple' },
-      { name: 'Stress', href: '/symptoms/stress', color: 'blue' }
+      { name: 'Stress', href: '/symptoms/stress', color: 'blue' },
+      { name: 'Fatigue', href: '/symptoms/fatigue', color: 'green' }
     ],
     disclaimer: 'These recommendations are for general support. Consult your healthcare provider for personalized advice.',
     herb: null,
@@ -1245,8 +1247,8 @@ Object.values(symptoms).forEach((symptom) => {
   }
 });
 
-export default async function SymptomPage({ params }: { params: { slug: string } }) {
-  const { slug } = params;
+export default async function SymptomPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   const symptom = symptoms[slug as keyof typeof symptoms];
 
   if (!symptom) {

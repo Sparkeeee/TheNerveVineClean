@@ -1,16 +1,7 @@
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-import Link from 'next/link';
-import Image from 'next/image';
-import VariantSymptomPage from './VariantSymptomPage';
-const symptoms = {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.symptoms = void 0;
+exports.symptoms = {
     'insomnia': {
         name: 'Insomnia',
         title: 'Insomnia',
@@ -18,61 +9,73 @@ const symptoms = {
         variants: {
             "Sleep Onset Insomnia": {
                 paragraphs: [
-                    "Sleep onset insomnia is difficulty falling asleep at the beginning of the night. It is often related to stress, anxiety, or an overactive mind.",
-                    "Supporting relaxation and calming the nervous system before bed is key."
+                    'Sleep onset insomnia is difficulty falling asleep at the beginning of the night. It is often related to stress, anxiety, or an overactive mind.',
+                    'Supporting relaxation and calming the nervous system before bed is key. Establishing a consistent bedtime routine, reducing screen time before bed, and practicing relaxation techniques such as deep breathing or meditation can help signal to your body that it is time to sleep.',
+                    'Limiting caffeine and heavy meals in the evening, as well as creating a comfortable sleep environment, are also important strategies for improving sleep onset. Even small changes in your evening habits can make a noticeable difference over time.',
+                    'Remember, persistent sleep difficulties may indicate an underlying health issue. Consulting a healthcare professional is always a wise step if insomnia continues.'
                 ],
                 productFormulations: {
                     "Valerian Root": {
                         name: 'Valerian Root',
                         description: 'Traditional sleep herb with modern clinical studies showing effectiveness for falling asleep.',
                         affiliateLink: 'https://amzn.to/valerian-sleep',
-                        price: '$18-25'
+                        price: '$18-25',
+                        type: 'herb'
                     },
                     Melatonin: {
                         name: 'Melatonin (0.5-3mg)',
                         description: 'Most researched sleep supplement. Regulates circadian rhythm and helps initiate sleep.',
                         affiliateLink: 'https://amzn.to/melatonin-sleep',
-                        price: '$15-25'
+                        price: '$15-25',
+                        type: 'supplement'
                     }
                 },
             },
             "Sleep Maintenance Insomnia": {
                 paragraphs: [
-                    "Sleep maintenance insomnia is waking up frequently during the night or having trouble staying asleep. It can be related to blood sugar swings, stress hormones, or environmental factors.",
-                    "Stabilizing blood sugar and supporting stress resilience can help."
+                    'Sleep maintenance insomnia is waking up frequently during the night or having trouble staying asleep. It can be related to blood sugar swings, stress hormones, or environmental factors.',
+                    'Nighttime awakenings can be frustrating and may leave you feeling unrested. Consider keeping your bedroom cool, dark, and quiet, and avoid using electronic devices if you wake up during the night.',
+                    'Gentle stretching or a brief relaxation exercise can sometimes help you return to sleep. If you find yourself awake for more than 20 minutes, it may be helpful to get up and do a quiet activity until you feel sleepy again.',
+                    'If sleep maintenance insomnia persists, it is important to discuss your symptoms with a healthcare provider to rule out underlying conditions such as sleep apnea or restless legs syndrome.'
                 ],
                 productFormulations: {
                     Passionflower: {
                         name: 'Passionflower',
                         description: 'Gentle nervine herb that enhances GABA activity for natural sleep support and reduces nighttime awakenings.',
                         affiliateLink: 'https://amzn.to/passionflower-sleep',
-                        price: '$15-25'
+                        price: '$15-25',
+                        type: 'herb'
                     },
                     "Magnesium Glycinate": {
                         name: 'Magnesium Glycinate',
                         description: 'Essential mineral for muscle relaxation and sleep maintenance.',
                         affiliateLink: 'https://amzn.to/magnesium-sleep',
-                        price: '$18-28'
+                        price: '$18-28',
+                        type: 'supplement'
                     }
                 },
             },
             "Early Morning Awakening": {
                 paragraphs: [
-                    "Early morning awakening is waking up too early and being unable to return to sleep. It can be related to low mood, hormonal changes, or circadian rhythm disruptions.",
-                    "Supporting circadian rhythm and mood balance can help restore healthy sleep patterns."
+                    'Early morning awakening is waking up too early and being unable to return to sleep. This pattern can be particularly distressing, especially if it leads to daytime fatigue.',
+                    'Mood changes, hormonal fluctuations, and disruptions in your circadian rhythm are common contributors. Try to maintain a regular sleep schedule and get exposure to natural light in the morning to help reset your body clock.',
+                    'Mindfulness practices and gentle morning routines can ease the transition from sleep to wakefulness. Avoid checking your phone or engaging in stressful activities immediately upon waking.',
+                    'If early morning awakening becomes a persistent issue, consider seeking guidance from a sleep specialist or mental health professional.'
                 ],
                 productFormulations: {
                     "St. John's Wort": {
                         name: 'St. John\'s Wort',
                         description: 'Traditional herb with evidence for mood support and circadian rhythm regulation.',
                         affiliateLink: 'https://amzn.to/st-johns-wort-sleep',
-                        price: '$20-30'
+                        price: '$20-30',
+                        type: 'herb'
                     },
                     "L-Theanine": {
                         name: '5-HTP',
                         description: 'Precursor to serotonin and melatonin. Supports mood and sleep regulation.',
                         affiliateLink: 'https://amzn.to/5htp-sleep',
-                        price: '$20-30'
+                        price: '$20-30',
+                        type: 'supplement'
                     }
                 },
             }
@@ -156,8 +159,10 @@ const symptoms = {
         variants: {
             'Default': {
                 paragraphs: [
-                    "Depression is a complex mental health condition that affects how you feel, think, and behave. It's more than just feeling sad or having the blues for a few days. It's a medical illness that can be treated with medications, therapy, and lifestyle changes. Understanding the symptoms and causes of depression is crucial for effective treatment.",
-                    "Common symptoms of depression include persistent sadness, loss of interest in activities, changes in appetite or weight, sleep problems, fatigue, and feelings of worthlessness. These symptoms can vary in intensity and duration, and they can be triggered by various factors, including biological, environmental, and lifestyle factors."
+                    'Depression is a complex mental health condition that affects how you feel, think, and behave. It is more than just feeling sad or having the blues for a few days. This condition can impact every aspect of your life, from work and relationships to your physical health.',
+                    'Many factors contribute to depression, including genetics, brain chemistry, environmental stressors, and life events. Recognizing the symptoms early and seeking support can make a significant difference in recovery. Remember, you are not alone—many people experience depression at some point in their lives.',
+                    'Treatment for depression is highly individualized. It may include therapy, medication, lifestyle changes, and natural approaches such as nutrition and exercise. Building a strong support network and practicing self-care are essential steps on the path to healing.',
+                    'If you or someone you know is struggling with depression, reaching out to a healthcare professional is a wise and courageous step. Early intervention can lead to better outcomes and a brighter future.'
                 ]
             }
         },
@@ -232,7 +237,7 @@ const symptoms = {
         extract: null,
         supplements: null,
         related: null,
-        faq: null,
+        faq: null
     },
     'anxiety': {
         name: 'Anxiety',
@@ -241,8 +246,10 @@ const symptoms = {
         variants: {
             'Default': {
                 paragraphs: [
-                    "Anxiety is a normal response to stress, but when it becomes excessive or chronic, it can significantly impact your quality of life. It's characterized by feelings of worry, nervousness, and fear, often accompanied by physical symptoms like rapid heartbeat, sweating, and trembling. Anxiety disorders are treatable, and natural approaches can play a supportive role in managing symptoms.",
-                    "Common symptoms of anxiety include excessive worrying, restlessness or feeling on edge, difficulty concentrating, irritability, muscle tension, and sleep problems. These symptoms can vary in intensity and duration, and they can be influenced by various factors, including genetics, brain chemistry, environmental stressors, and medical conditions."
+                    'Anxiety is a normal response to stress, but when it becomes excessive or chronic, it can significantly impact your quality of life. It is characterized by persistent worry, nervousness, and sometimes physical symptoms like a racing heart or muscle tension.',
+                    'Everyone experiences anxiety from time to time, but for some, it can become overwhelming and interfere with daily activities. Learning to recognize your triggers and practicing relaxation techniques can help you manage anxious feelings.',
+                    'Support from friends, family, or a mental health professional can make a big difference. Remember, seeking help is a sign of strength, not weakness.',
+                    'With the right strategies and support, most people can learn to manage anxiety effectively and lead fulfilling lives.'
                 ],
                 productFormulations: {
                     Passionflower: {
@@ -273,8 +280,10 @@ const symptoms = {
         variants: {
             'Default': {
                 paragraphs: [
-                    "Memory loss, or cognitive impairment, can affect your ability to learn, remember, and retain information. It's a common symptom of various conditions, including stress, sleep deprivation, nutritional deficiencies, and underlying health issues. Understanding the causes and symptoms of memory loss is important for addressing the underlying cause and finding effective natural solutions.",
-                    "Common symptoms of memory loss include forgetting recent events, difficulty learning new information, confusion about time or place, trouble with familiar tasks, poor judgment, and changes in mood or behavior. These symptoms can range in severity and duration, and they can be influenced by various factors, including aging, stress, sleep issues, and nutrient deficiencies."
+                    'Memory loss can be unsettling, whether it is occasional forgetfulness or more persistent difficulties. It is a common experience as we age, but can also be influenced by stress, lack of sleep, or medical conditions.',
+                    'Staying mentally active, maintaining social connections, and getting regular physical exercise are all important for brain health. Simple lifestyle changes, such as keeping a routine and using reminders, can help manage mild memory issues.',
+                    'If memory loss is sudden, severe, or accompanied by other symptoms, it is important to seek medical advice promptly. Early intervention can sometimes prevent further decline.',
+                    'Remember, everyone forgets things from time to time. Being proactive about your brain health is a positive and empowering step.'
                 ],
                 productFormulations: {
                     "Bacopa Monnieri": {
@@ -305,8 +314,10 @@ const symptoms = {
         variants: {
             'Default': {
                 paragraphs: [
-                    "Muscle tension and tension headaches are common complaints that can be caused by stress, poor posture, overuse, or dehydration. They can also be associated with neck or shoulder pain, jaw clenching, and difficulty relaxing. Understanding the causes and symptoms of muscle tension is important for finding effective natural solutions.",
-                    "Common symptoms of muscle tension include tight or sore muscles, tension headaches, neck or shoulder pain, jaw clenching, and difficulty relaxing. These symptoms can vary in intensity and duration, and they can be influenced by various factors, including stress, poor posture, and sleep issues."
+                    'Muscle tension and tension headaches are common complaints that can be caused by stress, poor posture, overuse, or dehydration. These sensations may range from mild discomfort to more persistent pain.',
+                    'Taking regular breaks, practicing good posture, and staying hydrated can help prevent and relieve muscle tension. Gentle stretching, massage, and relaxation exercises are also beneficial.',
+                    'If you experience frequent or severe tension headaches, it is wise to consult a healthcare provider to rule out underlying causes. Sometimes, simple changes in your daily routine can make a significant difference.',
+                    'Listening to your body and addressing tension early can help you maintain comfort and mobility throughout your day.'
                 ],
                 productFormulations: {
                     Skullcap: {
@@ -337,8 +348,10 @@ const symptoms = {
         variants: {
             'Default': {
                 paragraphs: [
-                    "Neck tension is a common complaint, often caused by stress, poor posture, prolonged computer use, or muscle strain. It can also be associated with headaches, jaw pain, or upper back discomfort.",
-                    "Natural approaches to neck tension focus on muscle relaxation, stress reduction, and supporting healthy circulation."
+                    'Neck tension is a common complaint, often caused by stress, poor posture, prolonged computer use, or muscle strain. It can also be associated with headaches, jaw pain, or upper back discomfort.',
+                    'Natural approaches to neck tension focus on muscle relaxation, stress reduction, and supporting healthy circulation. Regular stretching, mindful posture, and taking breaks from screens can help prevent and relieve discomfort.',
+                    'Applying gentle heat, practicing relaxation techniques, and staying hydrated are simple yet effective ways to support neck comfort. If pain persists or is severe, consult a healthcare provider to rule out underlying issues.',
+                    'Listening to your body and addressing tension early can help you maintain comfort and mobility throughout your day.'
                 ],
                 productFormulations: {
                     Lavender: {
@@ -380,8 +393,10 @@ const symptoms = {
         variants: {
             'Default': {
                 paragraphs: [
-                    "Blood pressure is a critical indicator of cardiovascular health. High or low blood pressure can lead to various health complications, including heart disease, stroke, and kidney problems. Understanding the causes and symptoms of blood pressure imbalance is important for managing this vital health marker.",
-                    "Common symptoms of blood pressure imbalance include high or low blood pressure, dizziness, headaches, and fatigue. These symptoms can vary in intensity and duration, and they can be influenced by various factors, including diet, stress, genetics, and medical conditions."
+                    "Blood pressure is a vital sign that reflects the force of blood against the walls of your arteries. Both high and low blood pressure can have significant health implications, so it is important to monitor and manage your levels appropriately.",
+                    'Lifestyle factors such as diet, exercise, stress, and sleep all play a role in maintaining healthy blood pressure. Regular check-ups and self-monitoring can help you stay on top of any changes.',
+                    'If you experience symptoms like dizziness, headaches, or fatigue, it may be related to blood pressure fluctuations. Do not hesitate to consult a healthcare provider for personalized advice.',
+                    'Remember, small adjustments in your daily routine can make a meaningful difference in your cardiovascular health.'
                 ]
             }
         },
@@ -420,8 +435,10 @@ const symptoms = {
         variants: {
             'Default': {
                 paragraphs: [
-                    "Heart health is crucial for overall well-being. Fatigue, shortness of breath, chest discomfort, and palpitations are common symptoms of heart-related issues. Understanding the causes and symptoms of heart muscle support is important for addressing the underlying cause and finding effective natural solutions.",
-                    "Common symptoms of heart muscle support include fatigue, shortness of breath, chest discomfort, and palpitations. These symptoms can vary in intensity and duration, and they can be influenced by various factors, including cardiovascular conditions, nutrient deficiencies, and stress."
+                    'Heart health is crucial for overall well-being. Fatigue, shortness of breath, chest discomfort, and palpitations are common symptoms of heart-related issues. Understanding the causes and symptoms of heart muscle support is important for addressing the underlying cause and finding effective natural solutions.',
+                    'Maintaining a balanced diet, regular physical activity, and managing stress are foundational for cardiovascular health. It is also important to monitor blood pressure and cholesterol levels as part of routine care.',
+                    'If you experience persistent symptoms or have a family history of heart disease, consult a healthcare provider for personalized advice. Early intervention can make a significant difference in outcomes.',
+                    'Remember, small lifestyle changes can have a big impact on your heart health over time.'
                 ]
             }
         },
@@ -466,7 +483,9 @@ const symptoms = {
             'Default': {
                 paragraphs: [
                     "The liver is one of the body's most important organs, responsible for detoxification, metabolism, and hormone regulation. When liver function is compromised, it cannot effectively clear toxins and metabolic byproducts from the bloodstream, leading to hormonal imbalances and other health issues. Understanding the causes and symptoms of poor liver function is crucial for addressing the underlying cause and finding effective natural solutions.",
-                    "Common symptoms of poor liver function include fatigue, digestive issues, skin problems, and brain fog. These symptoms can vary in intensity and duration, and they can be influenced by various factors, including genetic predisposition, chronic illness, medications, infections, or nutrient deficiencies."
+                    'Supporting your liver involves a combination of healthy eating, regular exercise, and minimizing exposure to toxins. Foods rich in antioxidants, such as leafy greens and berries, can help protect liver cells.',
+                    'If you notice symptoms like persistent fatigue, digestive issues, or yellowing of the skin, it is important to seek medical advice. Early detection and intervention can prevent further complications.',
+                    'Remember, your liver works hard every day to keep your body in balance. Treating it with care is an investment in your long-term health.'
                 ]
             }
         },
@@ -532,8 +551,10 @@ const symptoms = {
         variants: {
             'Default': {
                 paragraphs: [
-                    "Hormonal imbalances and digestive health are closely linked. Poor gut health can lead to hormonal dysregulation, which in turn can affect mood, energy, and overall wellbeing. Understanding the causes and symptoms of digestive health issues is important for addressing the underlying cause and finding effective natural solutions.",
-                    "Common symptoms of digestive health issues include bloating, irregular cycles, digestive discomfort, and mood swings. These symptoms can vary in intensity and duration, and they can be influenced by various factors, including hormonal fluctuations, gut dysbiosis, diet, and stress."
+                    'Hormonal imbalances and digestive health are closely linked. Poor gut health can lead to hormonal dysregulation, which in turn can affect mood, energy, and overall wellbeing. Understanding the causes and symptoms of digestive health issues is important for addressing the underlying cause and finding effective natural solutions.',
+                    'Maintaining a balanced diet, managing stress, and getting regular exercise are key strategies for supporting both digestive and hormonal health. Probiotics and fiber-rich foods can also play a supportive role.',
+                    'If you experience persistent digestive discomfort or irregular cycles, consult a healthcare provider for a thorough evaluation. Early intervention can help restore balance and prevent complications.',
+                    'Remember, small daily habits can have a profound impact on your digestive and hormonal wellbeing.'
                 ]
             }
         },
@@ -571,8 +592,10 @@ const symptoms = {
         variants: {
             'Default': {
                 paragraphs: [
-                    "Adrenal overload, or hyperadrenalism, is a state where the adrenal glands produce excessive amounts of stress hormones. This can lead to feelings of wiredness, trouble sleeping, irritability, and cravings for salt or sugar. Understanding the causes and symptoms of adrenal overload is important for addressing the underlying cause and finding effective natural solutions.",
-                    "Common symptoms of adrenal overload include feeling wired, trouble sleeping, irritability, and cravings for salt or sugar. These symptoms can vary in intensity and duration, and they can be influenced by various factors, including chronic stress, overwork, and poor sleep."
+                    'Adrenal overload, or hyperadrenalism, is a state where the adrenal glands produce excessive amounts of stress hormones. This can lead to feelings of wiredness, trouble sleeping, irritability, and cravings for salt or sugar. Understanding the causes and symptoms of adrenal overload is important for addressing the underlying cause and finding effective natural solutions.',
+                    'Managing stress through relaxation techniques, adequate sleep, and balanced nutrition is essential for adrenal health. Reducing caffeine and sugar intake can also help regulate energy levels.',
+                    'If you notice persistent symptoms of adrenal overload, such as chronic fatigue or mood swings, consult a healthcare provider for personalized guidance. Early support can prevent further imbalance.',
+                    'Remember, your body is resilient. With the right support, it can recover from periods of stress and restore balance.'
                 ]
             }
         },
@@ -610,7 +633,9 @@ const symptoms = {
             'Default': {
                 paragraphs: [
                     "Adrenal exhaustion, or adrenal fatigue, is a state where the adrenal glands are unable to produce sufficient stress hormones to meet the body's needs. This can lead to fatigue, low motivation, brain fog, cravings for salt, and low blood pressure. Understanding the causes and symptoms of adrenal exhaustion is important for addressing the underlying cause and finding effective natural solutions.",
-                    "Common symptoms of adrenal exhaustion include fatigue, low motivation, brain fog, cravings for salt, and low blood pressure. These symptoms can vary in intensity and duration, and they can be influenced by various factors, including prolonged stress, poor sleep, and nutrient deficiencies."
+                    'Supporting adrenal health involves prioritizing rest, managing stress, and ensuring adequate nutrition. Adaptogenic herbs and gentle exercise can also be beneficial.',
+                    'If you experience ongoing symptoms of adrenal exhaustion, seek advice from a healthcare provider. Early intervention can help restore energy and prevent further depletion.',
+                    'Remember, recovery from adrenal exhaustion is a gradual process. Be patient with yourself and celebrate small improvements along the way.'
                 ]
             }
         },
@@ -649,7 +674,9 @@ const symptoms = {
             'Default': {
                 paragraphs: [
                     "Circadian rhythm, or the body's internal clock, plays a crucial role in regulating sleep, wakefulness, and many other physiological processes. Disruptions in circadian rhythm can lead to difficulties falling asleep, daytime sleepiness, irregular sleep patterns, and mood changes. Understanding the causes and symptoms of circadian support is important for addressing the underlying cause and finding effective natural solutions.",
-                    "Common symptoms of circadian support include difficulty falling asleep, daytime sleepiness, irregular sleep patterns, and mood changes. These symptoms can vary in intensity and duration, and they can be influenced by various factors, including shift work, jet lag, screen time at night, and irregular routines."
+                    'Maintaining a consistent sleep schedule, getting exposure to natural light during the day, and limiting screen time at night are key strategies for supporting circadian health.',
+                    'If you struggle with sleep issues or mood changes, consider consulting a healthcare provider for personalized advice. Early support can help restore your natural rhythms.',
+                    'Remember, your body thrives on routine. Small adjustments to your daily habits can make a big difference in your sleep and overall wellbeing.'
                 ]
             }
         },
@@ -1142,287 +1169,3 @@ const symptoms = {
         }
     }
 };
-// --- Normalization pass to ensure every symptom entry is compatible with the new template ---
-Object.keys(symptoms).forEach((key) => {
-    const s = symptoms[key];
-    // Ensure name and description
-    if (!s.name)
-        s.name = key.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-    if (!s.description)
-        s.description = 'No description available yet.';
-    // Ensure variants object
-    if (!s.variants || typeof s.variants !== 'object' || Array.isArray(s.variants)) {
-        s.variants = { Default: { paragraphs: ["No information available for this symptom yet."] } };
-    }
-    // If variants is empty, add Default
-    if (Object.keys(s.variants).length === 0) {
-        s.variants = { Default: { paragraphs: ["No information available for this symptom yet."] } };
-    }
-    // For each variant, ensure paragraphs exists and is non-empty
-    if (s.variants) {
-        Object.keys(s.variants).forEach((v) => {
-            const variant = s.variants[v];
-            if (!variant.paragraphs || !Array.isArray(variant.paragraphs) || variant.paragraphs.length === 0) {
-                variant.paragraphs = ["No information available for this variant yet."];
-            }
-            // Optionally, ensure products fields exist
-            if (!('productFormulations' in variant))
-                variant.productFormulations = {};
-        });
-    }
-});
-// --- FINAL DATA CLEANUP: Fix product fields and remove non-Variant properties at the source ---
-Object.values(symptoms).forEach((symptom) => {
-    if (symptom.variants && typeof symptom.variants === 'object') {
-        Object.entries(symptom.variants).forEach(([, variant]) => {
-            // Fix productFormulations
-            if (typeof variant.productFormulations === 'string') {
-                variant.productFormulations = {
-                    [variant.productFormulations]: {
-                        name: variant.productFormulations,
-                        description: 'Adaptogenic or nervine herb for this symptom.',
-                        affiliateLink: '#',
-                        price: '$15-25'
-                    }
-                };
-            }
-            // Remove all non-Variant properties
-            Object.keys(variant).forEach((key) => {
-                const allowedKeys = ['paragraphs', 'productFormulations', 'emergencyNote', 'quickActions'];
-                if (!allowedKeys.includes(key)) {
-                    delete variant[key];
-                }
-            });
-        });
-    }
-});
-// --- Add placeholder products for any missing fields in all symptom variants ---
-Object.values(symptoms).forEach((symptom) => {
-    if (symptom.variants && typeof symptom.variants === 'object') {
-        Object.values(symptom.variants).forEach((variant) => {
-            if (!variant.productFormulations) {
-                variant.productFormulations = {};
-            }
-            if (Object.keys(variant.productFormulations).length === 0) {
-                variant.productFormulations = {
-                    ExampleHerb: {
-                        name: 'Example Herb',
-                        description: 'Placeholder herb for demonstration purposes.',
-                        affiliateLink: '#',
-                        price: '$10-20'
-                    }
-                };
-            }
-        });
-    }
-});
-// --- Remove all non-Variant properties from every variant object ---
-Object.values(symptoms).forEach((symptom) => {
-    if (symptom.variants && typeof symptom.variants === 'object') {
-        Object.values(symptom.variants).forEach((variant) => {
-            Object.keys(variant).forEach((key) => {
-                const allowedKeys = ['paragraphs', 'productFormulations', 'emergencyNote', 'quickActions'];
-                if (!allowedKeys.includes(key)) {
-                    delete variant[key];
-                }
-            });
-        });
-    }
-});
-export default function SymptomPage(_a) {
-    return __awaiter(this, arguments, void 0, function* ({ params }) {
-        var _b, _c;
-        const { slug } = params;
-        const symptom = symptoms[slug];
-        if (!symptom) {
-            return <div>Symptom not found.</div>;
-        }
-        // --- VARIANT LOGIC ---
-        const hasVariants = symptom.variants && typeof symptom.variants === 'object' && !Array.isArray(symptom.variants);
-        if (hasVariants) {
-            return <VariantSymptomPage symptom={symptom}/>;
-        }
-        // --- OLD STRUCTURE FALLBACK ---
-        // Example: Add placeholder products if not present (for plug-and-play API integration)
-        const products = symptom.products || [
-            {
-                name: "Best Magnesium Glycinate",
-                description: "Highly bioavailable magnesium for stress and sleep support.",
-                affiliateUrl: "https://amzn.to/placeholder-magnesium",
-                price: "$18.99",
-                qualityScore: 9.2,
-                affiliateRevenue: 0.08, // 8% commission
-                image: "/images/magnesium.jpg",
-                supplier: "Amazon"
-            },
-            {
-                name: "Premium Ashwagandha Extract",
-                description: "Clinically studied adaptogen for stress and anxiety.",
-                affiliateUrl: "https://amzn.to/placeholder-ashwagandha",
-                price: "$21.99",
-                qualityScore: 9.5,
-                affiliateRevenue: 0.10,
-                image: "/images/ashwagandha.jpg",
-                supplier: "Amazon"
-            },
-            {
-                name: "Top L-Theanine Capsules",
-                description: "Supports calm focus and relaxation without drowsiness.",
-                affiliateUrl: "https://amzn.to/placeholder-theanine",
-                price: "$16.99",
-                qualityScore: 9.0,
-                affiliateRevenue: 0.07,
-                image: "/images/theanine.jpg",
-                supplier: "Amazon"
-            }
-        ];
-        return (<div className="min-h-screen bg-gradient-to-br from-blue-50 to-white">
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-800 mb-4">
-            {symptom.name}
-          </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            {symptom.description}
-          </p>
-        </div>
-
-        {/* Navigation */}
-        <div className="mb-8">
-          <Link href="/" className="text-blue-600 hover:text-blue-800 transition-colors">
-            ← Back to Body Map
-          </Link>
-        </div>
-
-        {/* Main Content */}
-        <div className="grid md:grid-cols-3 gap-8">
-          {/* Left Column - Education */}
-          <div className="md:col-span-2 space-y-8">
-            {/* Understanding Section */}
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-                Understanding {symptom.name}
-              </h2>
-              <div className="prose prose-gray max-w-none">
-                <p className="text-gray-700 mb-4">
-                  {symptom.description} Understanding the underlying causes and symptoms can help you 
-                  make informed decisions about natural support options.
-                </p>
-                <p className="text-gray-700 mb-4">
-                  Natural approaches to {((_c = (_b = symptom.name) === null || _b === void 0 ? void 0 : _b.toLowerCase()) !== null && _c !== void 0 ? _c : "")} often involve addressing root causes, 
-                  supporting the body&apos;s natural healing processes, and using evidence-based herbs and 
-                  supplements that have been traditionally and clinically studied.
-                </p>
-              </div>
-            </div>
-
-            {/* Symptoms Section */}
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-                Common Symptoms
-              </h2>
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <h3 className="font-semibold text-gray-800 mb-2">Primary Symptoms</h3>
-                  <ul className="text-gray-700 space-y-1">
-                    {symptom.symptoms && symptom.symptoms.slice(0, 6).map((symptomItem, index) => (<li key={index}>• {symptomItem}</li>))}
-                  </ul>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-800 mb-2">Common Causes</h3>
-                  <ul className="text-gray-700 space-y-1">
-                    {symptom.causes && symptom.causes.slice(0, 6).map((cause, index) => (<li key={index}>• {cause}</li>))}
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            {/* Natural Solutions Section */}
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-                Natural Support Options
-              </h2>
-              <div className="space-y-4">
-                <div>
-                  <h3 className="font-semibold text-gray-800 mb-2">Herbal Support</h3>
-                  <ul className="text-gray-700 space-y-1">
-                    {symptom.naturalSolutions && symptom.naturalSolutions
-                .filter((solution) => solution.type === 'herb')
-                .slice(0, 3)
-                .map((solution, index) => (<li key={index}>• {solution.name} - {solution.description}</li>))}
-                  </ul>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-800 mb-2">Supplemental Support</h3>
-                  <ul className="text-gray-700 space-y-1">
-                    {symptom.naturalSolutions && symptom.naturalSolutions
-                .filter((solution) => solution.type === 'supplement')
-                .slice(0, 3)
-                .map((solution, index) => (<li key={index}>• {solution.name} - {solution.description}</li>))}
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Column - Product Recommendations */}
-          <div className="space-y-6">
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-xl font-semibold text-gray-800 mb-4">
-                Recommended Products
-              </h2>
-              <div className="space-y-4">
-                {products.map((product, index) => {
-                var _a;
-                return (<div key={index} className="border border-gray-200 rounded-lg p-4 flex flex-col gap-4">
-                    <Image src={product.image || '/images/closed-medical-brown-glass-bottle-yellow-vitamins.png'} alt={product.name} width={80} height={80} className="object-contain rounded mb-2"/>
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-gray-800 mb-1">{product.name}</h3>
-                      <p className="text-gray-600 text-sm mb-2">{product.description}</p>
-                      <div className="flex items-center gap-2 mb-2 flex-wrap">
-                        <span className="text-blue-700 font-bold">{product.price}</span>
-                        <span className="text-xs text-green-700 bg-green-100 rounded px-2 py-0.5">Quality: {product.qualityScore}</span>
-                        <span className="text-xs text-purple-700 bg-purple-100 rounded px-2 py-0.5">Affiliate: {Math.round(((_a = product.affiliateRevenue) !== null && _a !== void 0 ? _a : 0) * 100)}%</span>
-                        {product.supplier && (<span className="text-xs text-gray-500 ml-2">{product.supplier}</span>)}
-                      </div>
-                      <a href={product.affiliateUrl} target="_blank" rel="noopener noreferrer" className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors text-sm">
-                        View on {product.supplier || 'Amazon'} →
-                      </a>
-                    </div>
-                  </div>);
-            })}
-              </div>
-            </div>
-
-            {/* Related Conditions */}
-            <div className="bg-blue-50 rounded-lg p-6">
-              <h3 className="font-semibold text-gray-800 mb-3">Related Conditions</h3>
-              <div className="space-y-2">
-                <Link href="/symptoms/anxiety" className="block text-blue-600 hover:text-blue-800 transition-colors">
-                  → Anxiety
-                </Link>
-                <Link href="/symptoms/depression" className="block text-blue-600 hover:text-blue-800 transition-colors">
-                  → Depression
-                </Link>
-                <Link href="/symptoms/fatigue" className="block text-blue-600 hover:text-blue-800 transition-colors">
-                  → Fatigue
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Disclaimer */}
-        <div className="mt-8 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-          <p className="text-sm text-yellow-800">
-            <strong>Disclaimer:</strong> This information is for educational purposes only and should not 
-            replace professional medical advice. Always consult with a healthcare provider before starting 
-            any new supplement regimen, especially if you have underlying health conditions or are taking 
-            medications. The product links are affiliate links that support this educational content.
-          </p>
-        </div>
-      </div>
-    </div>);
-    });
-}

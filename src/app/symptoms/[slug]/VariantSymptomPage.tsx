@@ -25,6 +25,14 @@ export default function VariantSymptomPage({ symptom }: { symptom: Symptom }) {
   const related = relatedSymptomsMap[symptom.title] || [];
   const emergencyNote = symptom.emergencyNote;
 
+  // Function to get user-friendly variant display names
+  const getVariantDisplayName = (variantKey: string) => {
+    if (variantKey === 'Default') {
+      return symptom.name || symptom.title;
+    }
+    return variantKey;
+  };
+
   // Calculate total text length of variant paragraphs
   const totalTextLength = (variant?.paragraphs ?? []).reduce((acc, para) => acc + para.length, 0);
 
@@ -60,7 +68,7 @@ export default function VariantSymptomPage({ symptom }: { symptom: Symptom }) {
                 className={`px-4 py-2 rounded-full font-semibold border transition-colors duration-150 shadow-sm ${selectedVariant === name ? 'bg-blue-300 text-blue-900 border-blue-400' : 'bg-white text-blue-700 border-blue-100 hover:bg-blue-50'}`}
                 style={{ boxShadow: selectedVariant === name ? '0 2px 8px rgba(59, 130, 246, 0.12)' : undefined }}
               >
-                {name}
+                {getVariantDisplayName(name)}
               </button>
             ))}
           </div>

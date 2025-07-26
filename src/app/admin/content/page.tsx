@@ -248,6 +248,7 @@ export default function AdminContentPage() {
     affiliatePercentage?: string;
     customerReviews?: string;
     organic?: boolean;
+    indications?: string[];
     [key: string]: unknown;
   };
   type SymptomForm = {
@@ -574,23 +575,29 @@ export default function AdminContentPage() {
         })}
         <div className="mb-4">
           <label className="block mb-1">Indications (Symptoms)</label>
-          <select
-            multiple
-            className="w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600 h-32"
-            value={herbForm.indications || []}
-            onChange={e => {
-              const selected = Array.from(e.target.selectedOptions).map(opt => Number(opt.value));
-              setFormData({ ...herbForm, indications: selected.map(s => s.toString()) });
-            }}
-          >
+          <div className="max-h-48 overflow-y-auto border border-gray-600 rounded p-2 bg-gray-900">
             {allSymptoms.map(sym => (
-              <option key={sym.id} value={sym.id}>{sym.name}</option>
+              <div key={sym.id} className="flex items-center mb-2">
+                <input
+                  type="checkbox"
+                  checked={(herbForm.indications || []).includes(sym.id.toString())}
+                  onChange={e => {
+                    const currentIndications = herbForm.indications || [];
+                    const isSelected = currentIndications.includes(sym.id.toString());
+                    const newIndications = isSelected
+                      ? currentIndications.filter(id => id !== sym.id.toString())
+                      : [...currentIndications, sym.id.toString()];
+                    setFormData({ ...herbForm, indications: newIndications });
+                  }}
+                />
+                <span className="ml-2 font-bold">{sym.name}</span>
+              </div>
             ))}
-          </select>
+          </div>
           {Array.isArray(herbForm.indications) && herbForm.indications.length > 0 && (
             <div className="flex flex-wrap gap-1 mt-2">
               {herbForm.indications.map((id: string) => {
-                                  const sym = allSymptoms.find(s => s.id === Number(id));
+                const sym = allSymptoms.find(s => s.id === Number(id));
                 return sym ? (
                   <span key={id} className="bg-blue-900 text-blue-200 px-2 py-1 rounded text-xs border border-blue-700">
                     {sym.name}
@@ -749,6 +756,40 @@ export default function AdminContentPage() {
             >+ Add Product Formulation</button>
           </div>
         )}
+        <div className="mb-4">
+          <label className="block mb-1">Indications (Symptoms)</label>
+          <div className="max-h-48 overflow-y-auto border border-gray-600 rounded p-2 bg-gray-900">
+            {allSymptoms.map(sym => (
+              <div key={sym.id} className="flex items-center mb-2">
+                <input
+                  type="checkbox"
+                  checked={(supplementForm.indications || []).includes(sym.id.toString())}
+                  onChange={e => {
+                    const currentIndications = supplementForm.indications || [];
+                    const isSelected = currentIndications.includes(sym.id.toString());
+                    const newIndications = isSelected
+                      ? currentIndications.filter(id => id !== sym.id.toString())
+                      : [...currentIndications, sym.id.toString()];
+                    setFormData({ ...supplementForm, indications: newIndications });
+                  }}
+                />
+                <span className="ml-2 font-bold">{sym.name}</span>
+              </div>
+            ))}
+          </div>
+          {Array.isArray(supplementForm.indications) && supplementForm.indications.length > 0 && (
+            <div className="flex flex-wrap gap-1 mt-2">
+              {supplementForm.indications.map((id: string) => {
+                const sym = allSymptoms.find(s => s.id === Number(id));
+                return sym ? (
+                  <span key={id} className="bg-blue-900 text-blue-200 px-2 py-1 rounded text-xs border border-blue-700">
+                    {sym.name}
+                  </span>
+                ) : null;
+              })}
+            </div>
+          )}
+        </div>
       </>;
     }
     if (tab === "Symptoms") {
