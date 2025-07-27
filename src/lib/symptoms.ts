@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { Symptom as SymptomType } from '../types/symptom';
+import { Symptom as SymptomType, Variant } from '../types/symptom';
 
 const prisma = new PrismaClient();
 
@@ -53,19 +53,19 @@ export async function getSymptomBySlug(slug: string): Promise<SymptomType | null
         })) || []
       };
       return acc;
-    }, {} as Record<string, any>) || {};
+    }, {} as Record<string, Variant>) || {};
 
     const symptom: SymptomType = {
-      name: dbSymptom.name || dbSymptom.title,
+      name: dbSymptom.title, // Use title as name since name doesn't exist in schema
       title: dbSymptom.title,
       description: dbSymptom.description || '',
-      paragraphs: dbSymptom.paragraphs as string[] || [],
-      symptoms: dbSymptom.symptoms as string[] || [],
-      causes: dbSymptom.causes as string[] || [],
-      naturalSolutions: dbSymptom.naturalSolutions as any[] || [],
-      relatedSymptoms: dbSymptom.relatedSymptoms as any[] || [],
-      disclaimer: dbSymptom.disclaimer || undefined,
-      emergencyNote: dbSymptom.emergencyNote || undefined,
+      paragraphs: [], // Not in schema, use empty array
+      symptoms: [], // Not in schema, use empty array
+      causes: [], // Not in schema, use empty array
+      naturalSolutions: [], // Not in schema, use empty array
+      relatedSymptoms: [], // Not in schema, use empty array
+      disclaimer: undefined, // Not in schema
+      emergencyNote: undefined, // Not in schema
       variants: transformedVariants,
       products: dbSymptom.products.map(product => ({
         name: product.name,
@@ -118,16 +118,16 @@ export async function getAllSymptoms(): Promise<SymptomType[]> {
     });
 
     return dbSymptoms.map(dbSymptom => ({
-      name: dbSymptom.name || dbSymptom.title,
+      name: dbSymptom.title, // Use title as name since name doesn't exist in schema
       title: dbSymptom.title,
       description: dbSymptom.description || '',
-      paragraphs: dbSymptom.paragraphs as string[] || [],
-      symptoms: dbSymptom.symptoms as string[] || [],
-      causes: dbSymptom.causes as string[] || [],
-      naturalSolutions: dbSymptom.naturalSolutions as any[] || [],
-      relatedSymptoms: dbSymptom.relatedSymptoms as any[] || [],
-      disclaimer: dbSymptom.disclaimer || undefined,
-      emergencyNote: dbSymptom.emergencyNote || undefined,
+      paragraphs: [], // Not in schema, use empty array
+      symptoms: [], // Not in schema, use empty array
+      causes: [], // Not in schema, use empty array
+      naturalSolutions: [], // Not in schema, use empty array
+      relatedSymptoms: [], // Not in schema, use empty array
+      disclaimer: undefined, // Not in schema
+      emergencyNote: undefined, // Not in schema
       variants: dbSymptom.variants?.reduce((acc, variant) => {
         acc[variant.name] = {
           paragraphs: variant.description ? [variant.description] : [],
@@ -154,7 +154,7 @@ export async function getAllSymptoms(): Promise<SymptomType[]> {
           })) || []
         };
         return acc;
-      }, {} as Record<string, any>) || {},
+      }, {} as Record<string, Variant>) || {},
       products: dbSymptom.products.map(product => ({
         name: product.name,
         description: product.description || '',

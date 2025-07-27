@@ -172,28 +172,66 @@ export class DataProcessingHub {
         return (await this.productAutomation.amazonAPI.searchProducts(
           this.buildSearchQuery(criteria),
           this.buildFilters(criteria)
-        )).map((p: unknown) => ({
-          ...p,
-          commissionRate: (p as unknown as { commissionRate?: number }).commissionRate ?? 0,
-          qualityScore: (p as unknown as { qualityScore?: number }).qualityScore ?? 0,
-          supplier: (p as unknown as { supplier?: string }).supplier ?? '',
-          category: (p as unknown as { category?: string }).category ?? '',
-          processingPriority: (p as unknown as { processingPriority?: number }).processingPriority ?? 0,
-          // add other required fields with defaults as needed
-        })) as ProcessedProduct[];
+        )).map((p: unknown) => {
+          const product = p as Record<string, unknown>;
+          return {
+            id: (product.id as string) || '',
+            name: (product.name as string) || '',
+            brand: (product.brand as string) || '',
+            supplier: (product.supplier as string) || '',
+            category: (product.category as string) || 'traditional',
+            price: (product.price as number) || 0,
+            currency: (product.currency as string) || 'USD',
+            commissionRate: (product.commissionRate as number) ?? 0,
+            qualityScore: (product.qualityScore as number) ?? 0,
+            rating: (product.rating as number) || undefined,
+            reviewCount: (product.reviewCount as number) || undefined,
+            affiliateUrl: (product.affiliateUrl as string) || '',
+            imageUrl: (product.imageUrl as string) || undefined,
+            description: (product.description as string) || undefined,
+            tags: (product.tags as string[]) || [],
+            availability: (product.availability as boolean) !== false,
+            profitMargin: 0, // Will be calculated
+            userValueScore: 0, // Will be calculated
+            compositeScore: 0, // Will be calculated
+            regionalScore: 0, // Will be calculated
+            source: (product.source as string) || 'unknown',
+            lastUpdated: new Date(),
+            processingPriority: (product.processingPriority as number) ?? 0,
+          } as ProcessedProduct;
+        });
       case 'iherb':
         return (await this.productAutomation.iherbAPI.searchProducts(
           this.buildSearchQuery(criteria),
           this.buildFilters(criteria)
-        )).map((p: unknown) => ({
-          ...p,
-          commissionRate: (p as unknown as { commissionRate?: number }).commissionRate ?? 0,
-          qualityScore: (p as unknown as { qualityScore?: number }).qualityScore ?? 0,
-          supplier: (p as unknown as { supplier?: string }).supplier ?? '',
-          category: (p as unknown as { category?: string }).category ?? '',
-          processingPriority: (p as unknown as { processingPriority?: number }).processingPriority ?? 0,
-          // add other required fields with defaults as needed
-        })) as ProcessedProduct[];
+        )).map((p: unknown) => {
+          const product = p as Record<string, unknown>;
+          return {
+            id: (product.id as string) || '',
+            name: (product.name as string) || '',
+            brand: (product.brand as string) || '',
+            supplier: (product.supplier as string) || '',
+            category: (product.category as string) || 'traditional',
+            price: (product.price as number) || 0,
+            currency: (product.currency as string) || 'USD',
+            commissionRate: (product.commissionRate as number) ?? 0,
+            qualityScore: (product.qualityScore as number) ?? 0,
+            rating: (product.rating as number) || undefined,
+            reviewCount: (product.reviewCount as number) || undefined,
+            affiliateUrl: (product.affiliateUrl as string) || '',
+            imageUrl: (product.imageUrl as string) || undefined,
+            description: (product.description as string) || undefined,
+            tags: (product.tags as string[]) || [],
+            availability: (product.availability as boolean) !== false,
+            profitMargin: 0, // Will be calculated
+            userValueScore: 0, // Will be calculated
+            compositeScore: 0, // Will be calculated
+            regionalScore: 0, // Will be calculated
+            source: (product.source as string) || 'unknown',
+            lastUpdated: new Date(),
+            processingPriority: (product.processingPriority as number) ?? 0,
+          } as ProcessedProduct;
+        });
       default:
         // Mock data for other providers
         return this.generateMockProducts(provider);

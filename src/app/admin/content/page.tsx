@@ -65,13 +65,13 @@ interface Symptom {
   description?: string;
   metaTitle?: string;
   metaDescription?: string;
-  articles?: any;
-  associatedSymptoms?: any;
+  articles?: unknown;
+  associatedSymptoms?: unknown;
   cautions?: string;
-  variants?: any;
-  references?: any;
-  variantDescriptions?: any;
-  products?: any[];
+  variants?: unknown;
+  references?: unknown;
+  variantDescriptions?: unknown;
+  products?: unknown[];
 }
 
 // Add interface for SymptomVariant
@@ -84,7 +84,7 @@ interface SymptomVariant {
   metaTitle?: string;
   metaDescription?: string;
   cautions?: string;
-  references?: any;
+  references?: unknown;
   herbs?: Herb[];
   supplements?: Supplement[];
 }
@@ -192,9 +192,6 @@ export default function AdminContentPage() {
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editContent, setEditContent] = useState("");
 
-  // Add article delete state
-  const [deletingIndex, setDeletingIndex] = useState<number | null>(null);
-
   // Add variant management state
   const [showVariantModal, setShowVariantModal] = useState(false);
   const [selectedSymptom, setSelectedSymptom] = useState<Symptom | null>(null);
@@ -202,7 +199,7 @@ export default function AdminContentPage() {
   const [variantFormData, setVariantFormData] = useState<Partial<SymptomVariant>>({});
   const [showVariantForm, setShowVariantForm] = useState(false);
   const [variantFormMode, setVariantFormMode] = useState<"add" | "edit">("add");
-  const [editingVariantId, setEditingVariantId] = useState<number | null>(null);
+
 
   // Handle file upload and/or text entry
   const handleUpload = (e: React.FormEvent<HTMLFormElement>) => {
@@ -253,7 +250,6 @@ export default function AdminContentPage() {
   const handleArticleDelete = (idx: number) => {
     if (!window.confirm("Are you sure you want to delete this article?")) return;
     setArticles((prev) => prev.filter((_, i) => i !== idx));
-    setDeletingIndex(null);
   };
 
   const [tab, setTab] = useState("Herbs");
@@ -393,25 +389,7 @@ export default function AdminContentPage() {
     }
   }
 
-  // Helper function to check if a symptom has variants
-  function hasVariants(symptom: Symptom): boolean {
-    if (!symptom.variants) return false;
-    if (typeof symptom.variants === 'string') {
-      try {
-        const parsed = JSON.parse(symptom.variants);
-        return Array.isArray(parsed) ? parsed.length > 0 : Object.keys(parsed).length > 0;
-      } catch {
-        return false;
-      }
-    }
-    if (Array.isArray(symptom.variants)) {
-      return symptom.variants.length > 0;
-    }
-    if (typeof symptom.variants === 'object') {
-      return Object.keys(symptom.variants).length > 0;
-    }
-    return false;
-  }
+
 
   // Open variant management modal
   async function openVariantModal(symptom: Symptom) {
@@ -438,7 +416,6 @@ export default function AdminContentPage() {
     setVariantFormMode(mode);
     if (mode === "edit" && variant) {
       setVariantFormData(variant);
-      setEditingVariantId(variant.id);
     } else {
       setVariantFormData({
         parentSymptomId: selectedSymptom?.id || 0,
@@ -450,7 +427,6 @@ export default function AdminContentPage() {
         cautions: "",
         references: []
       });
-      setEditingVariantId(null);
     }
     setShowVariantForm(true);
   }
@@ -508,7 +484,7 @@ export default function AdminContentPage() {
     setFormMode("edit");
     
     // Parse JSON fields that come from the database
-    const processedItem = { ...item } as any;
+    const processedItem = { ...item } as Record<string, unknown>;
     
     // Handle indications field - it comes as JSON from database but needs to be an array
     if (processedItem.indications && typeof processedItem.indications === 'string') {
