@@ -60,27 +60,18 @@ interface Supplement {
 
 interface Symptom {
   id: number;
-  title: string;
   slug: string;
+  title: string;
   description?: string;
   metaTitle?: string;
   metaDescription?: string;
-  heroImageUrl?: string;
-  cardImageUrl?: string;
-  galleryImages?: string[];
+  articles?: any;
+  associatedSymptoms?: any;
   cautions?: string;
-  products?: Array<{
-    name: string;
-    description: string;
-    affiliateLink: string;
-    price: string;
-  }>;
-  references?: Array<{
-    type: string;
-    value: string;
-  }>;
-  indications?: string[];
-  traditionalUses?: string[];
+  variants?: any;
+  references?: any;
+  variantDescriptions?: any;
+  products?: any[];
 }
 
 // Define ProductFormulation type for clarity
@@ -141,16 +132,15 @@ const SYMPTOM_FIELDS = [
   { key: "title", label: "Title", required: true },
   { key: "slug", label: "Slug" },
   { key: "description", label: "Description" },
-  { key: "cautions", label: "Cautions" },
-  { key: "heroImageUrl", label: "Hero Image URL" },
-  { key: "cardImageUrl", label: "Card Image URL" },
-  { key: "galleryImages", label: "Gallery Images (JSON)" },
   { key: "metaTitle", label: "Meta Title" },
   { key: "metaDescription", label: "Meta Description" },
-  { key: "products", label: "Products (JSON)" },
+  { key: "cautions", label: "Cautions" },
+  { key: "articles", label: "Articles (JSON)" },
+  { key: "associatedSymptoms", label: "Associated Symptoms (JSON)" },
+  { key: "variants", label: "Variants (JSON)" },
   { key: "references", label: "References (JSON)" },
-  { key: "indications", label: "Indications (JSON)" },
-  { key: "traditionalUses", label: "Traditional Uses (JSON)" },
+  { key: "variantDescriptions", label: "Variant Descriptions (JSON)" },
+  { key: "products", label: "Products" },
 ];
 
 function getFormattedDate() {
@@ -166,6 +156,13 @@ function getHerbFieldValue(herb: Herb, key: string): unknown {
 function getSupplementFieldValue(supp: Supplement, key: string): unknown {
   if (Object.prototype.hasOwnProperty.call(supp, key)) {
     return (supp as unknown as Record<string, unknown>)[key];
+  }
+  return undefined;
+}
+
+function getSymptomFieldValue(symptom: Symptom, key: string): unknown {
+  if (Object.prototype.hasOwnProperty.call(symptom, key)) {
+    return (symptom as unknown as Record<string, unknown>)[key];
   }
   return undefined;
 }
@@ -271,21 +268,14 @@ export default function AdminContentPage() {
     title?: string;
     slug?: string;
     description?: string;
-    cautions?: string;
-    heroImageUrl?: string;
-    cardImageUrl?: string;
-    galleryImages?: string;
     metaTitle?: string;
     metaDescription?: string;
-    products?: Array<{
-      name: string;
-      description: string;
-      affiliateLink: string;
-      price: string;
-    }>;
+    cautions?: string;
+    articles?: string;
+    associatedSymptoms?: string;
+    variants?: string;
     references?: string;
-    indications?: string[];
-    traditionalUses?: string[];
+    variantDescriptions?: string;
     selectedHerbs?: number[];
     selectedSupplements?: number[];
     [key: string]: unknown;
@@ -296,6 +286,7 @@ export default function AdminContentPage() {
   // Add state for allHerbs and allSupplements
   const [allHerbs, setAllHerbs] = useState<Herb[]>([]);
   const [allSupplements, setAllSupplements] = useState<Supplement[]>([]);
+  const [expandedDescriptions, setExpandedDescriptions] = useState<Set<number>>(new Set());
 
   // Fetch all herbs and supplements when Symptoms tab is active
   useEffect(() => {
@@ -483,16 +474,50 @@ export default function AdminContentPage() {
         </tr>
       );
     }
-    // Fallback for other tabs
+    // Fallback for other tabs (Symptoms)
     return (
       <tr>
         <th className="px-2 py-1 text-xs">Actions</th>
         <th className="px-2 py-1 text-xs">ID</th>
-        <th className="px-2 py-1 text-xs">Name</th>
-        <th className="px-2 py-1 text-xs">Description</th>
+        {SYMPTOM_FIELDS.map((f) => (
+          <th key={f.key} className="px-2 py-1 text-xs">{f.label}</th>
+        ))}
       </tr>
     );
   }
+
+  const toggleDescription = (id: number) => {
+    const newExpanded = new Set(expandedDescriptions);
+    if (newExpanded.has(id)) {
+      newExpanded.delete(id);
+    } else {
+      newExpanded.add(id);
+    }
+    setExpandedDescriptions(newExpanded);
+  };
+  
+  const renderDescription = (description: string | undefined, id: number) => {
+    if (!description) return <span className="text-gray-500">(none)</span>;
+    
+    const isExpanded = expandedDescriptions.has(id);
+    const truncatedText = description.length > 100 ? description.substring(0, 100) + '...' : description;
+    
+    return (
+      <div className="text-xs">
+        <span className={isExpanded ? '' : 'line-clamp-2'}>
+          {isExpanded ? description : truncatedText}
+        </span>
+        {description.length > 100 && (
+          <button
+            onClick={() => toggleDescription(id)}
+            className="ml-2 text-blue-400 hover:text-blue-300 text-xs underline"
+          >
+            {isExpanded ? 'Show less' : 'Show more'}
+          </button>
+        )}
+      </div>
+    );
+  };
 
   function renderTableRow(item: Herb | Supplement | Symptom, index: number) {
     let itemAny: unknown;
@@ -500,7 +525,7 @@ export default function AdminContentPage() {
     const rowBgClass = isEven ? "bg-gray-800" : "bg-gray-900";
     
     if (tab === "Herbs") {
-      itemAny = item as Herb;
+      const herbItem = item as Herb;
       return (
         <tr key={item.id} className={`border-t border-gray-700 ${rowBgClass}`}>
           <td className="px-2 py-1">
@@ -521,11 +546,11 @@ export default function AdminContentPage() {
           </td>
           <td className="px-2 py-1 text-xs">{item.id}</td>
           {HERB_FIELDS.map((f) => {
-            const value = getHerbFieldValue(itemAny as Herb, f.key);
+            const value = getHerbFieldValue(herbItem, f.key);
             return (
               <td key={f.key} className="px-2 py-1 text-xs max-w-[180px] truncate">
                 {f.key === "name"
-                  ? (itemAny as Herb).name || '—'
+                  ? herbItem.name || '—'
                   : (typeof value === "string" || typeof value === "number" || typeof value === "boolean")
                     ? value
                     : '—'}
@@ -533,9 +558,9 @@ export default function AdminContentPage() {
             );
           })}
           <td className="px-2 py-1">
-            {item.indications && item.indications.length > 0 ? (
+            {herbItem.indications && herbItem.indications.length > 0 ? (
               <div className="flex gap-1 overflow-x-auto">
-                {item.indications.map((sym: string) => (
+                {herbItem.indications.map((sym: string) => (
                   <span key={sym} className="bg-blue-900 text-blue-200 px-1.5 py-0.5 rounded text-xs border border-blue-700 whitespace-nowrap">
                     {sym}
                   </span>
@@ -584,6 +609,7 @@ export default function AdminContentPage() {
     }
     // Fallback for other tabs (Symptoms)
     const symptomItem = item as Symptom;
+    
     return (
       <tr key={item.id} className={`border-t border-gray-700 ${rowBgClass}`}>
         <td className="px-2 py-1">
@@ -603,8 +629,24 @@ export default function AdminContentPage() {
           </div>
         </td>
         <td className="px-2 py-1 text-xs">{item.id}</td>
-        <td className="px-2 py-1 text-xs">{symptomItem.title}</td>
-        <td className="px-2 py-1 text-xs">{item.description || <span className="text-gray-500">(none)</span>}</td>
+        {SYMPTOM_FIELDS.map((f) => {
+          const value = getSymptomFieldValue(symptomItem, f.key);
+          return (
+            <td key={f.key} className="px-2 py-1 text-xs max-w-[180px] truncate">
+              {f.key === "title"
+                ? symptomItem.title || '—'
+                : f.key === "description"
+                ? renderDescription(symptomItem.description, item.id)
+                : f.key === "products"
+                ? symptomItem.products && symptomItem.products.length > 0
+                  ? `${symptomItem.products.length} product(s)`
+                  : '—'
+                : (typeof value === "string" || typeof value === "number" || typeof value === "boolean")
+                  ? value
+                  : value === true ? 'Yes' : value === false ? 'No' : '—'}
+            </td>
+          );
+        })}
       </tr>
     );
   }
@@ -1109,21 +1151,27 @@ export default function AdminContentPage() {
             >
               + Add New {tab.slice(0, -1)}
             </button>
-            <table className="w-full text-left border border-gray-700 rounded bg-gray-800">
-              <thead>{renderTableHeaders()}</thead>
-              <tbody>
-                {[...data].sort((a, b) => {
-                  const aName = 'name' in a ? a.name : 'title' in a ? a.title : '';
-                  const bName = 'name' in b ? b.name : 'title' in b ? b.title : '';
-                  return aName.localeCompare(bName);
-                }).map((item, index) => renderTableRow(item, index))}
-                {data.length === 0 && (
-                  <tr>
-                    <td colSpan={tab === "Herbs" ? HERB_FIELDS.length + 2 : tab === "Supplements" ? SUPPLEMENT_FIELDS.length + 1 : 4} className="p-4 text-center text-gray-400">No {tab.toLowerCase()} found.</td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+            <div className="border border-gray-700 rounded bg-gray-800">
+              <div className="overflow-x-auto">
+                <div className="max-h-[60vh] overflow-y-auto">
+                  <table className="w-full text-left min-w-full">
+                    <thead className="sticky top-0 bg-gray-800 z-10">{renderTableHeaders()}</thead>
+                    <tbody>
+                      {[...data].sort((a, b) => {
+                        const aName = 'name' in a ? a.name : 'title' in a ? a.title : '';
+                        const bName = 'name' in b ? b.name : 'title' in b ? b.title : '';
+                        return aName.localeCompare(bName);
+                      }).map((item, index) => renderTableRow(item, index))}
+                      {data.length === 0 && (
+                        <tr>
+                          <td colSpan={tab === "Herbs" ? HERB_FIELDS.length + 2 : tab === "Supplements" ? SUPPLEMENT_FIELDS.length + 1 : SYMPTOM_FIELDS.length + 1} className="p-4 text-center text-gray-400">No {tab.toLowerCase()} found.</td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </div>

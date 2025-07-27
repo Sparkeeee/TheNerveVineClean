@@ -32,6 +32,8 @@ model Symptom {
   slug                String    @unique
   title               String
   description         String?
+  metaTitle           String?
+  metaDescription     String?
   articles            Json?
   associatedSymptoms  Json?
   cautions            String?

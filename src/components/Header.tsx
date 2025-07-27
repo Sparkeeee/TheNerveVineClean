@@ -49,18 +49,26 @@ export default function Header() {
               <div className="ml-8 w-80 max-w-xs">
                 <SearchComponent />
               </div>
-              {/* Login/Logout Button */}
-              <div className="flex-shrink-0 ml-4">
+              {/* Admin and Login/Logout Buttons */}
+              <div className="flex-shrink-0 ml-4 flex gap-2">
                 {status === 'loading' ? null : session ? (
-                  <button
-                    onClick={async () => {
-                      await signOut({ redirect: false });
-                      router.push('/login');
-                    }}
-                    className="bg-gray-200 text-black px-4 py-2 rounded hover:bg-gray-300 font-semibold transition-colors duration-200"
-                  >
-                    Logout
-                  </button>
+                  <>
+                    <Link
+                      href="/admin"
+                      className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 font-semibold transition-colors duration-200"
+                    >
+                      Admin
+                    </Link>
+                    <button
+                      onClick={async () => {
+                        await signOut({ redirect: false });
+                        router.push('/login');
+                      }}
+                      className="bg-gray-200 text-black px-4 py-2 rounded hover:bg-gray-300 font-semibold transition-colors duration-200"
+                    >
+                      Logout
+                    </button>
+                  </>
                 ) : (
                   <Link
                     href="/login"
@@ -110,18 +118,27 @@ export default function Header() {
                     {item.name}
                   </Link>
                 ))}
-                {/* Mobile Login/Logout Button */}
-                <div className="mt-2">
+                {/* Mobile Admin and Login/Logout Buttons */}
+                <div className="mt-2 space-y-2">
                   {status === 'loading' ? null : session ? (
-                    <button
-                      onClick={async () => {
-                        await signOut({ redirect: false });
-                        router.push('/login');
-                      }}
-                      className="w-full bg-gray-200 text-black px-4 py-2 rounded hover:bg-gray-300 font-semibold transition-colors duration-200"
-                    >
-                      Logout
-                    </button>
+                    <>
+                      <Link
+                        href="/admin"
+                        className="w-full block bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 font-semibold transition-colors duration-200 text-center"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        Admin
+                      </Link>
+                      <button
+                        onClick={async () => {
+                          await signOut({ redirect: false });
+                          router.push('/login');
+                        }}
+                        className="w-full bg-gray-200 text-black px-4 py-2 rounded hover:bg-gray-300 font-semibold transition-colors duration-200"
+                      >
+                        Logout
+                      </button>
+                    </>
                   ) : (
                     <Link
                       href="/login"

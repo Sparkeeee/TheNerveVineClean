@@ -8,11 +8,16 @@ export async function GET(req: NextRequest) {
   const id = searchParams.get('id');
   try {
     if (id) {
-      const symptom = await prisma.symptom.findUnique({ where: { id: Number(id) } });
+      const symptom = await prisma.symptom.findUnique({ 
+        where: { id: Number(id) },
+        include: { products: true }
+      });
       if (!symptom) return NextResponse.json({ error: 'Not found' }, { status: 404 });
       return NextResponse.json(symptom);
     } else {
-      const symptoms = await prisma.symptom.findMany();
+      const symptoms = await prisma.symptom.findMany({
+        include: { products: true }
+      });
       return NextResponse.json(symptoms);
     }
   } catch (error) {
