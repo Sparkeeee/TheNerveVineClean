@@ -1,6 +1,7 @@
 import Link from "next/link";
 import BodyMap from "@/components/BodyMap";
 import Image from "next/image";
+import { Suspense } from "react";
 
 export default function Home() {
   return (
@@ -47,7 +48,9 @@ export default function Home() {
 
           {/* BodyMap and Navigation */}
           <div className="w-full flex flex-col items-center px-0">
-            <BodyMap />
+            <Suspense fallback={<div className="text-center py-8">Loading interactive body map...</div>}>
+              <BodyMap />
+            </Suspense>
             <div className="text-center mt-8">
               <Link 
                 href="/systems/nervous" 
