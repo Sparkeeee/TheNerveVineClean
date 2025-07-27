@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import VariantSymptomPage from './VariantSymptomPage';
-import { Symptom, Product } from '../../../types/symptom';
+import { Product } from '../../../types/symptom';
 import { getSymptomBySlug } from '../../../lib/symptoms';
 
 export default async function SymptomPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -15,7 +15,7 @@ export default async function SymptomPage({ params }: { params: Promise<{ slug: 
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-800 mb-4">Symptom Not Found</h1>
-          <p className="text-gray-600 mb-4">The symptom "{slug}" could not be found.</p>
+          <p className="text-gray-600 mb-4">The symptom &quot;{slug}&quot; could not be found.</p>
           <Link 
             href="/symptoms" 
             className="text-blue-600 hover:text-blue-800 transition-colors"

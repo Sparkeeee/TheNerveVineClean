@@ -21,8 +21,8 @@ async function getHerbWithProducts(slug: string) {
   }
 }
 
-export default async function HerbPage({ params }: { params: { slug: string } }) {
-  const { slug } = params;
+export default async function HerbPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   const herb = await getHerbWithProducts(slug);
 
   if (!herb) {
@@ -37,11 +37,6 @@ export default async function HerbPage({ params }: { params: { slug: string } })
         <h3 className="font-semibold text-green-900 mb-2">{product.name || 'Product'}</h3>
         {product.description && <p className="text-gray-600 text-sm mb-2 text-left">{product.description}</p>}
         <Image src={product.imageUrl || "/images/closed-medical-brown-glass-bottle-yellow-vitamins.png"} alt="Product" width={96} height={96} className="w-24 h-24 object-contain mb-2" />
-        <div className="flex flex-wrap gap-2 mb-2">
-          {product.tags && Array.isArray(product.tags) && product.tags.map((tag: string, i: number) => (
-            <span key={i} className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs border border-green-300">{tag}</span>
-          ))}
-        </div>
         <div className="flex items-center justify-between">
           <span className="text-lg font-bold text-green-900">{product.price ? `$${product.price}` : ''}</span>
           {product.affiliateLink && (
@@ -57,15 +52,17 @@ export default async function HerbPage({ params }: { params: { slug: string } })
   // Indications (symptoms)
   let indicationLinks: JSX.Element[] = [];
   if (herb.indications && Array.isArray(herb.indications) && herb.indications.length > 0) {
-    indicationLinks = herb.indications.map((indication: string, idx: number) => (
-      <Link
-        key={idx}
-        href={`/symptoms/${indication}`}
-        className="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-semibold hover:bg-blue-200 transition"
-      >
-        {indication}
-      </Link>
-    ));
+    indicationLinks = herb.indications
+      .filter((indication): indication is string => typeof indication === 'string')
+      .map((indication: string, idx: number) => (
+        <Link
+          key={idx}
+          href={`/symptoms/${indication}`}
+          className="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-semibold hover:bg-blue-200 transition"
+        >
+          {indication}
+        </Link>
+      ));
   }
 
   return (
@@ -109,12 +106,14 @@ export default async function HerbPage({ params }: { params: { slug: string } })
           <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-4 my-4">
             <h3 className="font-semibold text-green-800 mb-2">Traditional Wisdom</h3>
             <ul className="space-y-1">
-              {herb.traditionalUses.map((use: string, index: number) => (
-                <li key={index} className="flex items-start">
-                  <span className="text-green-500 mr-2">•</span>
-                  <span className="text-gray-700 text-sm">{use}</span>
-                </li>
-              ))}
+              {herb.traditionalUses
+                .filter((use): use is string => typeof use === 'string')
+                .map((use: string, index: number) => (
+                  <li key={index} className="flex items-start">
+                    <span className="text-green-500 mr-2">•</span>
+                    <span className="text-gray-700 text-sm">{use}</span>
+                  </li>
+                ))}
             </ul>
           </div>
         )}

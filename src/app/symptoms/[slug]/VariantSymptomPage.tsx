@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Symptom, Product } from '../../../types/symptom';
+import { Symptom } from '../../../types/symptom';
 
 export default function VariantSymptomPage({ symptom }: { symptom: Symptom }) {
   const variantNames = Object.keys(symptom.variants ?? {});
@@ -177,7 +177,7 @@ export default function VariantSymptomPage({ symptom }: { symptom: Symptom }) {
                   </div>
                 )}
 
-                {(variant?.topSupplements ?? []).length > 0 && variant.topSupplements.map((supplement, index) => (
+                {Array.isArray(variant?.topSupplements) && variant.topSupplements.length > 0 && variant.topSupplements.map((supplement, index) => (
                   <div key={index} className="border border-gray-200 rounded-lg p-4">
                     <div className="flex items-start gap-3">
                       <Image 
@@ -221,7 +221,7 @@ export default function VariantSymptomPage({ symptom }: { symptom: Symptom }) {
                 <div className="space-y-4">
                   {symptom.naturalSolutions.map((solution, index) => (
                     <div key={index} className="border border-gray-200 rounded-lg p-3 flex items-start gap-3">
-                      <img
+                      <Image
                         src={"/images/closed-medical-brown-glass-bottle-yellow-vitamins.png"}
                         alt={solution.name}
                         width={40}

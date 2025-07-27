@@ -12,6 +12,12 @@ export async function getSymptomBySlug(slug: string): Promise<SymptomType | null
           include: {
             merchant: true
           }
+        },
+        variants: {
+          include: {
+            herbs: true,
+            supplements: true
+          }
         }
       }
     });
@@ -21,6 +27,34 @@ export async function getSymptomBySlug(slug: string): Promise<SymptomType | null
     }
 
     // Transform database data to match the Symptom type
+    const transformedVariants = dbSymptom.variants?.reduce((acc, variant) => {
+      acc[variant.name] = {
+        paragraphs: variant.description ? [variant.description] : [],
+        bestHerb: variant.herbs?.[0] ? {
+          name: variant.herbs[0].name || '',
+          description: variant.herbs[0].description || '',
+          price: '$24.99', // Placeholder - would come from product data
+          affiliateLink: '#', // Placeholder - would come from product data
+          image: '/images/closed-medical-brown-glass-bottle-yellow-vitamins.png'
+        } : undefined,
+        bestStandardized: variant.supplements?.[0] ? {
+          name: variant.supplements[0].name || '',
+          description: variant.supplements[0].description || '',
+          price: '$19.99', // Placeholder - would come from product data
+          affiliateLink: '#', // Placeholder - would come from product data
+          image: '/images/closed-medical-brown-glass-bottle-yellow-vitamins.png'
+        } : undefined,
+        topSupplements: variant.supplements?.slice(1).map(supp => ({
+          name: supp.name || '',
+          description: supp.description || '',
+          price: '$15.99', // Placeholder - would come from product data
+          affiliateLink: '#', // Placeholder - would come from product data
+          image: '/images/closed-medical-brown-glass-bottle-yellow-vitamins.png'
+        })) || []
+      };
+      return acc;
+    }, {} as Record<string, any>) || {};
+
     const symptom: SymptomType = {
       name: dbSymptom.name || dbSymptom.title,
       title: dbSymptom.title,
@@ -32,7 +66,7 @@ export async function getSymptomBySlug(slug: string): Promise<SymptomType | null
       relatedSymptoms: dbSymptom.relatedSymptoms as any[] || [],
       disclaimer: dbSymptom.disclaimer || undefined,
       emergencyNote: dbSymptom.emergencyNote || undefined,
-      variants: dbSymptom.variants as Record<string, any> || {},
+      variants: transformedVariants,
       products: dbSymptom.products.map(product => ({
         name: product.name,
         description: product.description || '',
@@ -73,6 +107,12 @@ export async function getAllSymptoms(): Promise<SymptomType[]> {
           include: {
             merchant: true
           }
+        },
+        variants: {
+          include: {
+            herbs: true,
+            supplements: true
+          }
         }
       }
     });
@@ -88,7 +128,33 @@ export async function getAllSymptoms(): Promise<SymptomType[]> {
       relatedSymptoms: dbSymptom.relatedSymptoms as any[] || [],
       disclaimer: dbSymptom.disclaimer || undefined,
       emergencyNote: dbSymptom.emergencyNote || undefined,
-      variants: dbSymptom.variants as Record<string, any> || {},
+      variants: dbSymptom.variants?.reduce((acc, variant) => {
+        acc[variant.name] = {
+          paragraphs: variant.description ? [variant.description] : [],
+          bestHerb: variant.herbs?.[0] ? {
+            name: variant.herbs[0].name || '',
+            description: variant.herbs[0].description || '',
+            price: '$24.99', // Placeholder - would come from product data
+            affiliateLink: '#', // Placeholder - would come from product data
+            image: '/images/closed-medical-brown-glass-bottle-yellow-vitamins.png'
+          } : undefined,
+          bestStandardized: variant.supplements?.[0] ? {
+            name: variant.supplements[0].name || '',
+            description: variant.supplements[0].description || '',
+            price: '$19.99', // Placeholder - would come from product data
+            affiliateLink: '#', // Placeholder - would come from product data
+            image: '/images/closed-medical-brown-glass-bottle-yellow-vitamins.png'
+          } : undefined,
+          topSupplements: variant.supplements?.slice(1).map(supp => ({
+            name: supp.name || '',
+            description: supp.description || '',
+            price: '$15.99', // Placeholder - would come from product data
+            affiliateLink: '#', // Placeholder - would come from product data
+            image: '/images/closed-medical-brown-glass-bottle-yellow-vitamins.png'
+          })) || []
+        };
+        return acc;
+      }, {} as Record<string, any>) || {},
       products: dbSymptom.products.map(product => ({
         name: product.name,
         description: product.description || '',

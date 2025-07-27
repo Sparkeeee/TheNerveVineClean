@@ -20,8 +20,8 @@ async function getSupplementWithProducts(slug: string) {
   }
 }
 
-export default async function SupplementPage({ params }: { params: { slug: string } }) {
-  const { slug } = params;
+export default async function SupplementPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   const supplement = await getSupplementWithProducts(slug);
 
   if (!supplement) {
@@ -48,11 +48,7 @@ export default async function SupplementPage({ params }: { params: { slug: strin
         <h3 className="font-semibold text-green-900 mb-2">{product.name || 'Product'}</h3>
         {product.description && <p className="text-gray-600 text-sm mb-2 text-left">{product.description}</p>}
         <Image src={product.imageUrl || "/images/closed-medical-brown-glass-bottle-yellow-vitamins.png"} alt="Product" width={96} height={96} className="w-24 h-24 object-contain mb-2" />
-        <div className="flex flex-wrap gap-2 mb-2">
-          {product.tags && Array.isArray(product.tags) && product.tags.map((tag: string, i: number) => (
-            <span key={i} className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs border border-green-300">{tag}</span>
-          ))}
-        </div>
+        {/* Removed tags display as Product does not have tags property */}
         <div className="flex items-center justify-between">
           <span className="text-lg font-bold text-green-900">{product.price ? `$${product.price}` : ''}</span>
           {product.affiliateLink && (

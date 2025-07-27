@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 
 interface MerchantApi {
   id: string;
@@ -90,7 +91,7 @@ export default function ApiManagerPage() {
     <div className="min-h-screen p-8 bg-gray-50">
       <h1 className="text-3xl font-extrabold text-black mb-6">API Manager</h1>
       <div className="mb-4 flex gap-4">
-        <a href="/admin" className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-900 font-semibold transition">Back to Admin</a>
+        <Link href="/admin" className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-900 font-semibold transition">Back to Admin</Link>
       </div>
       <div className="bg-white rounded-lg shadow-md p-6">
         <table className="min-w-full divide-y divide-gray-200">

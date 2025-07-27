@@ -25,11 +25,14 @@ model Herb {
   indications         Json?
   traditionalUses     Json?
   products            Product[] @relation("HerbProducts")
+  
+  // Add variant relationships
+  symptomVariants     SymptomVariant[] @relation("VariantHerbs")
 }
 
 model Symptom {
-  id                  Int       @id @default(autoincrement())
-  slug                String    @unique
+  id                  Int               @id @default(autoincrement())
+  slug                String            @unique
   title               String
   description         String?
   metaTitle           String?
@@ -37,10 +40,32 @@ model Symptom {
   articles            Json?
   associatedSymptoms  Json?
   cautions            String?
-  variants            Json?
   references          Json?
-  variantDescriptions Json?
-  products            Product[] @relation("SymptomProducts")
+  products            Product[]         @relation("SymptomProducts")
+  
+  // Add proper variant relationship
+  variants            SymptomVariant[]
+}
+
+model SymptomVariant {
+  id              Int      @id @default(autoincrement())
+  parentSymptomId Int
+  name            String   // e.g., "SAD", "Seasonal Affective Disorder"
+  slug            String   @unique
+  description     String?
+  metaTitle       String?
+  metaDescription String?
+  cautions        String?
+  references      Json?
+  
+  // Product relationships
+  herbs           Herb[]       @relation("VariantHerbs")
+  supplements     Supplement[] @relation("VariantSupplements")
+  
+  // Parent relationship
+  parentSymptom   Symptom      @relation(fields: [parentSymptomId], references: [id])
+  
+  @@index([parentSymptomId])
 }
 
 model Supplement {
@@ -59,6 +84,9 @@ model Supplement {
   tags                Json?
   indications         Json?
   products            Product[] @relation("SupplementProducts")
+  
+  // Add variant relationships
+  symptomVariants     SymptomVariant[] @relation("VariantSupplements")
 }
 
 model BlogPage {

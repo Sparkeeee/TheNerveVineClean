@@ -74,6 +74,21 @@ interface Symptom {
   products?: any[];
 }
 
+// Add interface for SymptomVariant
+interface SymptomVariant {
+  id: number;
+  parentSymptomId: number;
+  name: string;
+  slug: string;
+  description?: string;
+  metaTitle?: string;
+  metaDescription?: string;
+  cautions?: string;
+  references?: any;
+  herbs?: Herb[];
+  supplements?: Supplement[];
+}
+
 // Define ProductFormulation type for clarity
 interface ProductFormulation {
   name?: string;
@@ -92,7 +107,7 @@ type Article = {
   fileName: string | null;
 };
 
-const TABS = ["Herbs", "Supplements", "Symptoms"];
+const TABS = ["Herbs", "Supplements", "Symptoms", "Blog"];
 
 const HERB_FIELDS = [
   { key: "name", label: "Name", required: true },
@@ -177,6 +192,18 @@ export default function AdminContentPage() {
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editContent, setEditContent] = useState("");
 
+  // Add article delete state
+  const [deletingIndex, setDeletingIndex] = useState<number | null>(null);
+
+  // Add variant management state
+  const [showVariantModal, setShowVariantModal] = useState(false);
+  const [selectedSymptom, setSelectedSymptom] = useState<Symptom | null>(null);
+  const [variants, setVariants] = useState<SymptomVariant[]>([]);
+  const [variantFormData, setVariantFormData] = useState<Partial<SymptomVariant>>({});
+  const [showVariantForm, setShowVariantForm] = useState(false);
+  const [variantFormMode, setVariantFormMode] = useState<"add" | "edit">("add");
+  const [editingVariantId, setEditingVariantId] = useState<number | null>(null);
+
   // Handle file upload and/or text entry
   const handleUpload = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -220,6 +247,13 @@ export default function AdminContentPage() {
     );
     setEditingIndex(null);
     setEditContent("");
+  };
+
+  // Handle article delete
+  const handleArticleDelete = (idx: number) => {
+    if (!window.confirm("Are you sure you want to delete this article?")) return;
+    setArticles((prev) => prev.filter((_, i) => i !== idx));
+    setDeletingIndex(null);
   };
 
   const [tab, setTab] = useState("Herbs");
@@ -356,6 +390,111 @@ export default function AdminContentPage() {
       setData([]);
     } finally {
       setLoading(false);
+    }
+  }
+
+  // Helper function to check if a symptom has variants
+  function hasVariants(symptom: Symptom): boolean {
+    if (!symptom.variants) return false;
+    if (typeof symptom.variants === 'string') {
+      try {
+        const parsed = JSON.parse(symptom.variants);
+        return Array.isArray(parsed) ? parsed.length > 0 : Object.keys(parsed).length > 0;
+      } catch {
+        return false;
+      }
+    }
+    if (Array.isArray(symptom.variants)) {
+      return symptom.variants.length > 0;
+    }
+    if (typeof symptom.variants === 'object') {
+      return Object.keys(symptom.variants).length > 0;
+    }
+    return false;
+  }
+
+  // Open variant management modal
+  async function openVariantModal(symptom: Symptom) {
+    setSelectedSymptom(symptom);
+    setShowVariantModal(true);
+    await fetchVariants(symptom.id);
+  }
+
+  // Fetch variants for a symptom
+  async function fetchVariants(symptomId: number) {
+    try {
+      const res = await fetch(`/api/symptoms/${symptomId}/variants`);
+      if (!res.ok) throw new Error("Failed to fetch variants");
+      const variantsData: SymptomVariant[] = await res.json();
+      setVariants(variantsData);
+    } catch (error) {
+      console.error('Error fetching variants:', error);
+      setVariants([]);
+    }
+  }
+
+  // Open variant form (add or edit)
+  function openVariantForm(mode: "add" | "edit", variant?: SymptomVariant) {
+    setVariantFormMode(mode);
+    if (mode === "edit" && variant) {
+      setVariantFormData(variant);
+      setEditingVariantId(variant.id);
+    } else {
+      setVariantFormData({
+        parentSymptomId: selectedSymptom?.id || 0,
+        name: "",
+        slug: "",
+        description: "",
+        metaTitle: "",
+        metaDescription: "",
+        cautions: "",
+        references: []
+      });
+      setEditingVariantId(null);
+    }
+    setShowVariantForm(true);
+  }
+
+  // Handle variant form submission
+  async function handleVariantFormSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (!selectedSymptom) return;
+
+    try {
+      const url = `/api/symptoms/${selectedSymptom.id}/variants`;
+      const method = variantFormMode === "add" ? "POST" : "PUT";
+      
+      const res = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(variantFormData),
+      });
+
+      if (!res.ok) throw new Error("Failed to save variant");
+      
+      setShowVariantForm(false);
+      await fetchVariants(selectedSymptom.id);
+    } catch (error) {
+      console.error('Error saving variant:', error);
+      setError('Failed to save variant');
+    }
+  }
+
+  // Handle variant deletion
+  async function handleVariantDelete(variantId: number) {
+    if (!selectedSymptom || !window.confirm("Are you sure you want to delete this variant?")) return;
+
+    try {
+      const res = await fetch(`/api/symptoms/${selectedSymptom.id}/variants/${variantId}`, {
+        method: "DELETE",
+      });
+
+      if (!res.ok) throw new Error("Failed to delete variant");
+      
+      await fetchVariants(selectedSymptom.id);
+    } catch (error) {
+      console.error('Error deleting variant:', error);
+      setError('Failed to delete variant');
     }
   }
 
@@ -559,9 +698,9 @@ export default function AdminContentPage() {
           })}
           <td className="px-2 py-1">
             {herbItem.indications && herbItem.indications.length > 0 ? (
-              <div className="flex gap-1 overflow-x-auto">
+              <div className="flex gap-1 overflow-x-auto max-w-[200px]">
                 {herbItem.indications.map((sym: string) => (
-                  <span key={sym} className="bg-blue-900 text-blue-200 px-1.5 py-0.5 rounded text-xs border border-blue-700 whitespace-nowrap">
+                  <span key={sym} className="bg-blue-900 text-blue-200 px-1.5 py-0.5 rounded text-xs border border-blue-700 whitespace-nowrap flex-shrink-0">
                     {sym}
                   </span>
                 ))}
@@ -620,12 +759,18 @@ export default function AdminContentPage() {
             >
               Edit
             </button>
-            <button
-              className="px-1.5 py-0.5 bg-red-500 rounded text-xs hover:bg-red-600 transition-colors"
-              onClick={() => handleDelete(item.id)}
-            >
-              Delete
-            </button>
+                    <button
+          className="px-1.5 py-0.5 bg-red-500 rounded text-xs hover:bg-red-600 transition-colors"
+          onClick={() => handleDelete(item.id)}
+        >
+          Delete
+        </button>
+        <button
+          className="px-1.5 py-0.5 bg-green-500 rounded text-xs hover:bg-green-600 transition-colors"
+          onClick={() => openVariantModal(symptomItem)}
+        >
+          Variants
+        </button>
           </div>
         </td>
         <td className="px-2 py-1 text-xs">{item.id}</td>
@@ -700,7 +845,7 @@ export default function AdminContentPage() {
                 <input
                   type="checkbox"
                   checked={(herbForm.indications || []).includes(sym.id.toString())}
-                  onChange={e => {
+                  onChange={() => {
                     const currentIndications = herbForm.indications || [];
                     const isSelected = currentIndications.includes(sym.id.toString());
                     const newIndications = isSelected
@@ -883,7 +1028,7 @@ export default function AdminContentPage() {
                 <input
                   type="checkbox"
                   checked={(supplementForm.indications || []).includes(sym.id.toString())}
-                  onChange={e => {
+                  onChange={() => {
                     const currentIndications = supplementForm.indications || [];
                     const isSelected = currentIndications.includes(sym.id.toString());
                     const newIndications = isSelected
@@ -1031,100 +1176,7 @@ export default function AdminContentPage() {
         <Link href="/admin" className="bg-blue-700 text-white px-4 py-2 rounded shadow hover:bg-blue-800 transition font-bold">&larr; Admin Home</Link>
       </div>
 
-      {/* Blog/Article Upload Section */}
-      <section className="bg-gray-800 rounded shadow p-6 mb-8">
-        <h2 className="text-2xl font-bold text-white mb-4">Upload Blog/Article</h2>
-        <form className="flex flex-col gap-4" onSubmit={handleUpload}>
-          <input
-            type="text"
-            placeholder="Title"
-            className="border border-white px-3 py-2 rounded text-white bg-transparent placeholder-white"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-          />
-          <textarea
-            placeholder="Admin Note (optional)"
-            className="border border-white px-3 py-2 rounded text-white bg-transparent placeholder-white"
-            value={adminNote}
-            onChange={(e) => setAdminNote(e.target.value)}
-          />
-          <div className="flex flex-col md:flex-row gap-4 items-center">
-            <input
-              type="file"
-              accept=".pdf,.docx,.md,.txt"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFile(e.target && e.target.files ? e.target.files[0] : null)}
-              className="border border-white px-3 py-2 rounded text-white bg-transparent"
-            />
-            <span className="text-white">or</span>
-            <textarea
-              placeholder="Paste or write article content here (Markdown or plain text)"
-              className="border border-white px-3 py-2 rounded text-white bg-transparent placeholder-white w-full"
-              value={textContent}
-              onChange={(e) => setTextContent(e.target.value)}
-              rows={4}
-            />
-          </div>
-          <button type="submit" className="bg-green-700 text-white px-6 py-2 rounded shadow hover:bg-green-800 transition font-bold w-40">Upload</button>
-        </form>
-      </section>
 
-      {/* Uploaded Articles List */}
-      {articles.length > 0 && (
-        <section className="bg-gray-800 rounded shadow p-6 mb-8">
-          <h2 className="text-xl font-bold text-white mb-4">Uploaded Articles</h2>
-          <ul className="divide-y divide-white">
-            {articles.map((article, index) => (
-              <li key={index} className="py-4">
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
-                  <div>
-                    <div className="font-bold text-lg text-white">{article.title}</div>
-                    <div className="text-white text-sm">Uploaded: {article.uploadDate}</div>
-                    {article.adminNote && <div className="text-white text-sm italic">Note: {article.adminNote}</div>}
-                    {article.fileName && <div className="text-white text-xs">File: {article.fileName}</div>}
-                  </div>
-                  <div className="flex gap-2 mt-2 md:mt-0">
-                    <button
-                      className="bg-blue-700 text-white px-3 py-1 rounded shadow hover:bg-blue-800 transition font-bold"
-                      onClick={() => {
-                        setEditingIndex(index);
-                        setEditContent(article.content as string);
-                      }}
-                    >
-                      Edit
-                    </button>
-                  </div>
-                </div>
-                {/* Article Content Editor */}
-                {editingIndex === index ? (
-                  <div className="mt-4">
-                    <textarea
-                      className="border border-white px-3 py-2 rounded text-white bg-transparent w-full"
-                      value={editContent}
-                      onChange={(e) => setEditContent(e.target.value)}
-                      rows={8}
-                    />
-                    <div className="flex gap-2 mt-2">
-                      <button
-                        className="bg-green-700 text-white px-4 py-1 rounded shadow hover:bg-green-800 transition font-bold"
-                        onClick={() => handleEditSave(index)}
-                      >
-                        Save
-                      </button>
-                      <button
-                        className="bg-gray-300 text-gray-800 px-4 py-1 rounded shadow hover:bg-gray-400 transition font-bold"
-                        onClick={() => setEditingIndex(null)}
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                ) : null}
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
 
       {/* Tabs for Herbs, Supplements, Symptoms */}
       <div className="flex space-x-4 mb-6">
@@ -1139,40 +1191,147 @@ export default function AdminContentPage() {
         ))}
       </div>
       <div className="bg-gray-800 rounded-b shadow p-6 mb-8">
-        {loading ? (
-          <div>Loading {tab}...</div>
-        ) : error ? (
-          <div className="text-red-400">{error}</div>
-        ) : (
+        {tab === "Blog" ? (
           <div>
-            <button
-              className="mb-4 px-4 py-2 bg-green-600 rounded hover:bg-green-700"
-              onClick={openAddForm}
-            >
-              + Add New {tab.slice(0, -1)}
-            </button>
-            <div className="border border-gray-700 rounded bg-gray-800">
-              <div className="overflow-x-auto">
-                <div className="max-h-[60vh] overflow-y-auto">
-                  <table className="w-full text-left min-w-full">
-                    <thead className="sticky top-0 bg-gray-800 z-10">{renderTableHeaders()}</thead>
-                    <tbody>
-                      {[...data].sort((a, b) => {
-                        const aName = 'name' in a ? a.name : 'title' in a ? a.title : '';
-                        const bName = 'name' in b ? b.name : 'title' in b ? b.title : '';
-                        return aName.localeCompare(bName);
-                      }).map((item, index) => renderTableRow(item, index))}
-                      {data.length === 0 && (
-                        <tr>
-                          <td colSpan={tab === "Herbs" ? HERB_FIELDS.length + 2 : tab === "Supplements" ? SUPPLEMENT_FIELDS.length + 1 : SYMPTOM_FIELDS.length + 1} className="p-4 text-center text-gray-400">No {tab.toLowerCase()} found.</td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
+            {/* Blog/Article Upload Section */}
+            <section className="mb-8">
+              <h2 className="text-2xl font-bold text-white mb-4">Upload Blog/Article</h2>
+              <form className="flex flex-col gap-4" onSubmit={handleUpload}>
+                <input
+                  type="text"
+                  placeholder="Title"
+                  className="border border-white px-3 py-2 rounded text-white bg-transparent placeholder-white"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  required
+                />
+                <textarea
+                  placeholder="Admin Note (optional)"
+                  className="border border-white px-3 py-2 rounded text-white bg-transparent placeholder-white"
+                  value={adminNote}
+                  onChange={(e) => setAdminNote(e.target.value)}
+                />
+                <div className="flex flex-col md:flex-row gap-4 items-center">
+                  <input
+                    type="file"
+                    accept=".pdf,.docx,.md,.txt"
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFile(e.target && e.target.files ? e.target.files[0] : null)}
+                    className="border border-white px-3 py-2 rounded text-white bg-transparent"
+                  />
+                  <span className="text-white">or</span>
+                  <textarea
+                    placeholder="Paste or write article content here (Markdown or plain text)"
+                    className="border border-white px-3 py-2 rounded text-white bg-transparent placeholder-white w-full"
+                    value={textContent}
+                    onChange={(e) => setTextContent(e.target.value)}
+                    rows={4}
+                  />
+                </div>
+                <button type="submit" className="bg-green-700 text-white px-6 py-2 rounded shadow hover:bg-green-800 transition font-bold w-40">Upload</button>
+              </form>
+            </section>
+
+            {/* Uploaded Articles List */}
+            {articles.length > 0 && (
+              <section>
+                <h2 className="text-xl font-bold text-white mb-4">Uploaded Articles</h2>
+                <ul className="divide-y divide-white">
+                  {articles.map((article, index) => (
+                    <li key={index} className="py-4">
+                      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+                        <div>
+                          <div className="font-bold text-lg text-white">{article.title}</div>
+                          <div className="text-white text-sm">Uploaded: {article.uploadDate}</div>
+                          {article.adminNote && <div className="text-white text-sm italic">Note: {article.adminNote}</div>}
+                          {article.fileName && <div className="text-white text-xs">File: {article.fileName}</div>}
+                        </div>
+                        <div className="flex gap-2 mt-2 md:mt-0">
+                          <button
+                            className="bg-blue-700 text-white px-3 py-1 rounded shadow hover:bg-blue-800 transition font-bold"
+                            onClick={() => {
+                              setEditingIndex(index);
+                              setEditContent(article.content as string);
+                            }}
+                          >
+                            Edit
+                          </button>
+                          <button
+                            className="bg-red-700 text-white px-3 py-1 rounded shadow hover:bg-red-800 transition font-bold"
+                            onClick={() => handleArticleDelete(index)}
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                      {/* Article Content Editor */}
+                      {editingIndex === index ? (
+                        <div className="mt-4">
+                          <textarea
+                            className="border border-white px-3 py-2 rounded text-white bg-transparent w-full"
+                            value={editContent}
+                            onChange={(e) => setEditContent(e.target.value)}
+                            rows={8}
+                          />
+                          <div className="flex gap-2 mt-2">
+                            <button
+                              className="bg-green-700 text-white px-4 py-1 rounded shadow hover:bg-green-800 transition font-bold"
+                              onClick={() => handleEditSave(index)}
+                            >
+                              Save
+                            </button>
+                            <button
+                              className="bg-gray-300 text-gray-800 px-4 py-1 rounded shadow hover:bg-gray-400 transition font-bold"
+                              onClick={() => setEditingIndex(null)}
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      ) : null}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+          </div>
+        ) : (
+          <>
+            {loading ? (
+              <div>Loading {tab}...</div>
+            ) : error ? (
+              <div className="text-red-400">{error}</div>
+            ) : (
+              <div>
+                <button
+                  className="mb-4 px-4 py-2 bg-green-600 rounded hover:bg-green-700"
+                  onClick={openAddForm}
+                >
+                  + Add New {tab.slice(0, -1)}
+                </button>
+                <div className="border border-gray-700 rounded bg-gray-800">
+                  <div className="overflow-x-auto">
+                    <div className="max-h-[60vh] overflow-y-auto">
+                      <table className="w-full text-left min-w-full">
+                        <thead className="sticky top-0 bg-gray-800 z-10">{renderTableHeaders()}</thead>
+                        <tbody>
+                          {[...data].sort((a, b) => {
+                            const aName = 'name' in a ? a.name : 'title' in a ? a.title : '';
+                            const bName = 'name' in b ? b.name : 'title' in b ? b.title : '';
+                            return aName.localeCompare(bName);
+                          }).map((item, index) => renderTableRow(item, index))}
+                          {data.length === 0 && (
+                            <tr>
+                              <td colSpan={tab === "Herbs" ? HERB_FIELDS.length + 2 : tab === "Supplements" ? SUPPLEMENT_FIELDS.length + 1 : SYMPTOM_FIELDS.length + 1} className="p-4 text-center text-gray-400">No {tab.toLowerCase()} found.</td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
+            )}
+          </>
         )}
       </div>
       {showForm && (
@@ -1186,6 +1345,196 @@ export default function AdminContentPage() {
               <div className="flex gap-4">
                 <button type="submit" form="add-edit-form" className="bg-green-700 text-white px-6 py-2 rounded font-bold">Save</button>
                 <button type="button" className="bg-gray-500 text-white px-6 py-2 rounded font-bold" onClick={() => setShowForm(false)}>Cancel</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Variant Management Modal */}
+      {showVariantModal && selectedSymptom && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
+          <div className="bg-gray-900 rounded shadow-lg w-full max-w-6xl max-h-[90vh] overflow-hidden flex flex-col">
+            <div className="p-6 border-b border-gray-700">
+              <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-bold text-white">
+                  Manage Variants for: {selectedSymptom.title}
+                </h2>
+                <button
+                  className="text-gray-400 hover:text-white"
+                  onClick={() => setShowVariantModal(false)}
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+            
+            <div className="p-6 overflow-y-auto flex-1">
+              <div className="mb-4 flex justify-between items-center">
+                <button
+                  className="px-4 py-2 bg-green-600 rounded hover:bg-green-700 text-white font-bold"
+                  onClick={() => openVariantForm("add")}
+                >
+                  + Add New Variant
+                </button>
+              </div>
+
+              {/* Variants Table */}
+              <div className="border border-gray-700 rounded bg-gray-800">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left">
+                    <thead className="bg-gray-800">
+                      <tr>
+                        <th className="px-4 py-2 text-white">Actions</th>
+                        <th className="px-4 py-2 text-white">ID</th>
+                        <th className="px-4 py-2 text-white">Name</th>
+                        <th className="px-4 py-2 text-white">Slug</th>
+                        <th className="px-4 py-2 text-white">Description</th>
+                        <th className="px-4 py-2 text-white">Meta Title</th>
+                        <th className="px-4 py-2 text-white">Cautions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {variants.map((variant) => (
+                        <tr key={variant.id} className="border-t border-gray-700">
+                          <td className="px-4 py-2">
+                            <div className="flex gap-1">
+                              <button
+                                className="px-2 py-1 bg-blue-500 rounded text-xs hover:bg-blue-600 transition-colors"
+                                onClick={() => openVariantForm("edit", variant)}
+                              >
+                                Edit
+                              </button>
+                              <button
+                                className="px-2 py-1 bg-red-500 rounded text-xs hover:bg-red-600 transition-colors"
+                                onClick={() => handleVariantDelete(variant.id)}
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          </td>
+                          <td className="px-4 py-2 text-white text-sm">{variant.id}</td>
+                          <td className="px-4 py-2 text-white text-sm">{variant.name}</td>
+                          <td className="px-4 py-2 text-white text-sm">{variant.slug}</td>
+                          <td className="px-4 py-2 text-white text-sm max-w-[200px] truncate">
+                            {variant.description || '—'}
+                          </td>
+                          <td className="px-4 py-2 text-white text-sm max-w-[200px] truncate">
+                            {variant.metaTitle || '—'}
+                          </td>
+                          <td className="px-4 py-2 text-white text-sm max-w-[200px] truncate">
+                            {variant.cautions || '—'}
+                          </td>
+                        </tr>
+                      ))}
+                      {variants.length === 0 && (
+                        <tr>
+                          <td colSpan={7} className="p-4 text-center text-gray-400">
+                            No variants found for this symptom.
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Variant Form Modal */}
+      {showVariantForm && selectedSymptom && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
+          <div className="bg-gray-900 rounded shadow-lg w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
+            <div className="p-6 border-b border-gray-700">
+              <h2 className="text-2xl font-bold text-white">
+                {variantFormMode === "add" ? "Add New Variant" : "Edit Variant"}
+              </h2>
+            </div>
+            
+            <form id="variant-form" onSubmit={handleVariantFormSubmit} className="p-6 overflow-y-auto flex-1">
+              <div className="space-y-4">
+                <div>
+                  <label className="block mb-1 text-white">Name *</label>
+                  <input
+                    type="text"
+                    className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600"
+                    value={variantFormData.name || ""}
+                    onChange={(e) => setVariantFormData({ ...variantFormData, name: e.target.value })}
+                    required
+                  />
+                </div>
+                
+                <div>
+                  <label className="block mb-1 text-white">Slug *</label>
+                  <input
+                    type="text"
+                    className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600"
+                    value={variantFormData.slug || ""}
+                    onChange={(e) => setVariantFormData({ ...variantFormData, slug: e.target.value })}
+                    required
+                  />
+                </div>
+                
+                <div>
+                  <label className="block mb-1 text-white">Description</label>
+                  <textarea
+                    className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600"
+                    rows={4}
+                    value={variantFormData.description || ""}
+                    onChange={(e) => setVariantFormData({ ...variantFormData, description: e.target.value })}
+                  />
+                </div>
+                
+                <div>
+                  <label className="block mb-1 text-white">Meta Title</label>
+                  <input
+                    type="text"
+                    className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600"
+                    value={variantFormData.metaTitle || ""}
+                    onChange={(e) => setVariantFormData({ ...variantFormData, metaTitle: e.target.value })}
+                  />
+                </div>
+                
+                <div>
+                  <label className="block mb-1 text-white">Meta Description</label>
+                  <textarea
+                    className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600"
+                    rows={2}
+                    value={variantFormData.metaDescription || ""}
+                    onChange={(e) => setVariantFormData({ ...variantFormData, metaDescription: e.target.value })}
+                  />
+                </div>
+                
+                <div>
+                  <label className="block mb-1 text-white">Cautions</label>
+                  <textarea
+                    className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600"
+                    rows={3}
+                    value={variantFormData.cautions || ""}
+                    onChange={(e) => setVariantFormData({ ...variantFormData, cautions: e.target.value })}
+                  />
+                </div>
+              </div>
+            </form>
+            
+            <div className="p-6 border-t border-gray-700">
+              <div className="flex gap-4">
+                <button
+                  type="submit"
+                  form="variant-form"
+                  className="bg-green-700 text-white px-6 py-2 rounded font-bold"
+                >
+                  Save
+                </button>
+                <button
+                  type="button"
+                  className="bg-gray-500 text-white px-6 py-2 rounded font-bold"
+                  onClick={() => setShowVariantForm(false)}
+                >
+                  Cancel
+                </button>
               </div>
             </div>
           </div>

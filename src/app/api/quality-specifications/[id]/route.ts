@@ -6,10 +6,11 @@ const prisma = new PrismaClient();
 // PUT - Update quality specification
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
+    const { id } = await params;
+    const parsedId = parseInt(id);
     const body = await request.json();
     
     // Validate required fields
@@ -44,7 +45,7 @@ export async function PUT(
     };
 
     const updatedSpecification = await prisma.qualitySpecification.update({
-      where: { id },
+      where: { id: parsedId },
       data: {
         ...specification,
         standardization: specification.standardization ? JSON.parse(specification.standardization) : undefined,
@@ -69,13 +70,14 @@ export async function PUT(
 // DELETE - Delete quality specification
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
+    const { id } = await params;
+    const parsedId = parseInt(id);
     
     await prisma.qualitySpecification.delete({
-      where: { id }
+      where: { id: parsedId }
     });
 
     return NextResponse.json({ message: 'Quality specification deleted successfully' });
