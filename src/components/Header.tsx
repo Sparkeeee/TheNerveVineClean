@@ -14,6 +14,9 @@ export default function Header() {
   const { data: session, status } = useSession();
   const router = useRouter();
 
+  // Debug session
+  console.log('Header - Session status:', status, 'Session:', session);
+
   const navigation = [
     { name: 'Home', href: '/' },
     { name: 'Herbs', href: '/herbs' },
@@ -23,12 +26,7 @@ export default function Header() {
     { name: 'About', href: '/about' },
   ];
 
-  const productCategories = [
-    { name: 'Specified Herbs', href: '/herbs', description: 'Pure botanical extracts' },
-    { name: 'Targeted Supplements', href: '/supplements', description: 'Expert-formulated combinations' },
-    { name: 'Symptom Relief', href: '/symptoms', description: 'Targeted natural solutions' },
-    { name: 'Quality Products', href: '/search', description: 'Curated wellness solutions' },
-  ];
+
 
   return (
     <>
@@ -55,12 +53,15 @@ export default function Header() {
             <div className="w-16 sm:w-20 h-6 bg-green-500 animate-pulse rounded"></div>
           ) : session ? (
             <div className="flex items-center gap-2">
-              <Link
-                href="/admin"
-                className="px-3 py-1 text-xs sm:text-sm bg-white text-lime-700 font-semibold rounded hover:bg-gray-100 transition-colors"
+              <button
+                onClick={() => {
+                  console.log('Admin button clicked!');
+                  window.location.href = '/admin';
+                }}
+                className="px-3 py-1 text-xs sm:text-sm bg-white text-lime-700 font-semibold rounded hover:bg-gray-100 transition-colors cursor-pointer"
               >
                 Admin
-              </Link>
+              </button>
               <button
                 onClick={async () => {
                   try {

@@ -7,6 +7,13 @@
 - **Batch Operations:** Group file operations and changes to minimize interruptions and approval requests.
 - **Automation:** Use scripts and automation for routine tasks to reduce manual steps and prevent confirmation fatigue.
 
+## Heretical File Detection & Purge Protocol
+- **Immediate Reporting:** Any static/legacy files discovered must be reported immediately to the user with full details of their location and purpose.
+- **Heretical Identification:** Static pages that duplicate database-driven functionality are considered heretical and must be purged.
+- **Purge Authorization:** Before deleting any files, confirm they are truly redundant and safe to remove.
+- **Vigilance:** Always scan for static pages in `/src/app/` that might conflict with dynamic routes.
+- **Documentation:** Report all purged heretical files in commit messages and project logs.
+
 ## Communication & Workflow
 - **Manual Operations:** Provide step-by-step instructions with examples when user action is required.
 - **AI Tasks:** Summarize high-level plans, risks, and options. Default to action when only one viable path is present.

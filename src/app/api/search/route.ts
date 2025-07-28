@@ -1,109 +1,99 @@
-import { NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
+import { NextRequest, NextResponse } from 'next/server';
+import { getCachedHerbs, getCachedSymptoms, getCachedSupplements } from '@/lib/database';
 
-const prisma = new PrismaClient();
+interface SearchResult {
+  id: string;
+  title: string;
+  description: string;
+  type: 'herb' | 'supplement' | 'symptom';
+  url: string;
+  tags: string[];
+}
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    // Fetch herbs, supplements, and symptoms from database
-    const [herbs, supplements, symptoms] = await Promise.all([
-      prisma.herb.findMany({
-        select: {
-          id: true,
-          name: true,
-          slug: true,
-          description: true,
-          indications: true,
-          traditionalUses: true,
-        }
-      }).catch(() => []), // Return empty array if database connection fails
-      prisma.supplement.findMany({
-        select: {
-          id: true,
-          name: true,
-          slug: true,
-          description: true,
-          tags: true,
-        }
-      }).catch(() => []), // Return empty array if database connection fails
-      prisma.symptom.findMany({
-        select: {
-          id: true,
-          slug: true,
-          title: true,
-          description: true,
-          associatedSymptoms: true,
-        }
-      }).catch(() => []) // Return empty array if database connection fails
+    const { searchParams } = new URL(request.url);
+    const query = searchParams.get('q') || '';
+
+    if (!query.trim()) {
+      return NextResponse.json({ success: true, data: [] });
+    }
+
+    const searchTerm = query.toLowerCase();
+
+    // Use cached functions to reduce database calls
+    const [herbs, symptoms, supplements] = await Promise.all([
+      getCachedHerbs(),
+      getCachedSymptoms(),
+      getCachedSupplements()
     ]);
 
-    // Transform herbs into search items
-    const herbSearchItems = herbs.map(herb => ({
-      id: `herb-${herb.id}`,
-      title: herb.name || 'Unknown Herb',
-      description: herb.description || '',
-      type: 'herb' as const,
-      slug: `/herbs/${herb.slug}`,
-      tags: [
-        ...(herb.indications ? (Array.isArray(herb.indications) ? herb.indications : []) : []),
-        ...(herb.traditionalUses ? (Array.isArray(herb.traditionalUses) ? herb.traditionalUses : []) : [])
-      ].filter(Boolean),
-      benefits: herb.traditionalUses ? (Array.isArray(herb.traditionalUses) ? herb.traditionalUses : []) : []
-    }));
+    const results: SearchResult[] = [];
 
-    // Transform supplements into search items
-    const supplementSearchItems = supplements.map(supplement => ({
-      id: `supplement-${supplement.id}`,
-      title: supplement.name,
-      description: supplement.description || '',
-      type: 'supplement' as const,
-      slug: `/supplements/${supplement.slug}`,
-      tags: supplement.tags ? (Array.isArray(supplement.tags) ? supplement.tags : []) : [],
-      benefits: [] // Could be derived from description or tags
-    }));
+    // Search herbs
+    const herbMatches = herbs.filter((herb: any) => 
+      herb.name?.toLowerCase().includes(searchTerm) ||
+      herb.description?.toLowerCase().includes(searchTerm) ||
+      herb.tags?.some((tag: string) => tag.toLowerCase().includes(searchTerm))
+    );
 
-    // Transform symptoms into search items
-    const symptomSearchItems = symptoms.map(symptom => ({
-      id: `symptom-${symptom.id}`,
-      title: symptom.title,
-      description: symptom.description || '',
-      type: 'symptom' as const,
-      slug: `/symptoms/${symptom.slug}`,
-      tags: symptom.associatedSymptoms ? (Array.isArray(symptom.associatedSymptoms) ? symptom.associatedSymptoms : []) : [],
-      symptoms: symptom.associatedSymptoms ? (Array.isArray(symptom.associatedSymptoms) ? symptom.associatedSymptoms : []) : []
-    }));
+    herbMatches.forEach((herb: any) => {
+      results.push({
+        id: herb.id,
+        title: herb.name,
+        description: herb.description,
+        type: 'herb',
+        url: `/herbs/${herb.slug}`,
+        tags: herb.tags || []
+      });
+    });
 
-    const searchData = [
-      ...herbSearchItems,
-      ...supplementSearchItems,
-      ...symptomSearchItems
-    ];
+    // Search symptoms
+    const symptomMatches = symptoms.filter((symptom: any) => 
+      symptom.name?.toLowerCase().includes(searchTerm) ||
+      symptom.description?.toLowerCase().includes(searchTerm) ||
+      symptom.tags?.some((tag: string) => tag.toLowerCase().includes(searchTerm))
+    );
 
-    return NextResponse.json({
-      success: true,
-      data: searchData,
-      counts: {
-        herbs: herbSearchItems.length,
-        supplements: supplementSearchItems.length,
-        symptoms: symptomSearchItems.length,
-        total: searchData.length
-      }
+    symptomMatches.forEach((symptom: any) => {
+      results.push({
+        id: symptom.id,
+        title: symptom.name,
+        description: symptom.description,
+        type: 'symptom',
+        url: `/symptoms/${symptom.slug}`,
+        tags: symptom.tags || []
+      });
+    });
+
+    // Search supplements
+    const supplementMatches = supplements.filter((supplement: any) => 
+      supplement.name?.toLowerCase().includes(searchTerm) ||
+      supplement.description?.toLowerCase().includes(searchTerm) ||
+      supplement.tags?.some((tag: string) => tag.toLowerCase().includes(searchTerm))
+    );
+
+    supplementMatches.forEach((supplement: any) => {
+      results.push({
+        id: supplement.id,
+        title: supplement.name,
+        description: supplement.description,
+        type: 'supplement',
+        url: `/supplements/${supplement.slug}`,
+        tags: supplement.tags || []
+      });
+    });
+
+    return NextResponse.json({ 
+      success: true, 
+      data: results.slice(0, 10) // Limit to 10 results
     });
 
   } catch (error) {
-    console.error('Error fetching search data:', error);
-    // Return empty data instead of error to prevent continuous loading
-    return NextResponse.json({
-      success: true,
-      data: [],
-      counts: {
-        herbs: 0,
-        supplements: 0,
-        symptoms: 0,
-        total: 0
-      }
+    console.error('Search error:', error);
+    return NextResponse.json({ 
+      success: true, 
+      data: [] 
     });
-  } finally {
-    await prisma.$disconnect();
   }
 } 

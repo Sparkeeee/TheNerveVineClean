@@ -35,7 +35,7 @@ export default function SearchComponent() {
         } else {
           setSearchData([]);
         }
-      } catch (error) {
+      } catch {
         setSearchData([]);
       } finally {
         setIsLoading(false);
