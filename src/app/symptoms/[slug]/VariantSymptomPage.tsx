@@ -88,7 +88,7 @@ export default function VariantSymptomPage({ symptom }: { symptom: Symptom }) {
                 <ul className="space-y-3">
                   {symptom.symptoms.map((symptomItem, index) => (
                     <li key={index} className="flex items-start gap-3 text-gray-700">
-                      <span className="text-green-500 font-semibold mt-1">•</span>
+                      <span className="text-lime-500 font-semibold mt-1">•</span>
                       <span className="text-lg">{symptomItem}</span>
                     </li>
                   ))}
@@ -232,7 +232,7 @@ export default function VariantSymptomPage({ symptom }: { symptom: Symptom }) {
                         <div className="flex items-center justify-between mb-1">
                           <h4 className="font-semibold text-gray-900 text-sm truncate" title={solution.name}>{solution.name}</h4>
                           {solution.price && (
-                            <span className="text-green-600 font-bold text-base ml-2 whitespace-nowrap">{solution.price}</span>
+                            <span className="text-lime-600 font-bold text-base ml-2 whitespace-nowrap">{solution.price}</span>
                           )}
                         </div>
                         <p className="text-gray-600 text-xs leading-snug line-clamp-2" style={{display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden'}}>
@@ -243,7 +243,7 @@ export default function VariantSymptomPage({ symptom }: { symptom: Symptom }) {
                             href={solution.affiliateLink}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-block bg-green-600 text-white px-2 py-1 rounded mt-2 text-xs hover:bg-green-700 transition-colors font-medium"
+                            className="inline-block bg-lime-600 text-white px-2 py-1 rounded mt-2 text-xs hover:bg-lime-700 transition-colors font-medium"
                           >
                             View Product →
                           </a>

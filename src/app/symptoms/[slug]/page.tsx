@@ -191,7 +191,7 @@ export default async function SymptomPage({ params }: { params: Promise<{ slug: 
                       <p className="text-gray-600 text-sm mb-2">{product.description}</p>
                       <div className="flex items-center gap-2 mb-2 flex-wrap">
                         <span className="text-blue-700 font-bold">{product.price}</span>
-                        <span className="text-xs text-green-700 bg-green-100 rounded px-2 py-0.5">Quality: {product.qualityScore}</span>
+                        <span className="text-xs text-lime-700 bg-lime-100 rounded px-2 py-0.5">Quality: {product.qualityScore}</span>
                         <span className="text-xs text-purple-700 bg-purple-100 rounded px-2 py-0.5">Affiliate: {Math.round((product.affiliateRevenue ?? 0) * 100)}%</span>
                         {product.supplier && (
                           <span className="text-xs text-gray-500 ml-2">{product.supplier}</span>

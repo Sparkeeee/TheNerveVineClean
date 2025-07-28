@@ -51,7 +51,7 @@ export default function SearchPage() {
               <Link href="/symptoms/insomnia" className="text-blue-600 hover:text-blue-800 text-sm p-2 rounded bg-blue-50 hover:bg-blue-100 transition-colors">
                 Insomnia
               </Link>
-              <Link href="/herbs/lemon-balm" className="text-green-600 hover:text-green-800 text-sm p-2 rounded bg-green-50 hover:bg-green-100 transition-colors">
+                              <Link href="/herbs/lemon-balm" className="text-lime-600 hover:text-lime-800 text-sm p-2 rounded bg-lime-50 hover:bg-lime-100 transition-colors">
                 Lemon Balm
               </Link>
               <Link href="/supplements/magnesium" className="text-purple-600 hover:text-purple-800 text-sm p-2 rounded bg-purple-50 hover:bg-purple-100 transition-colors">
@@ -60,7 +60,7 @@ export default function SearchPage() {
               <Link href="/symptoms/stress" className="text-red-600 hover:text-red-800 text-sm p-2 rounded bg-red-50 hover:bg-red-100 transition-colors">
                 Stress
               </Link>
-              <Link href="/herbs/ashwagandha" className="text-green-600 hover:text-green-800 text-sm p-2 rounded bg-green-50 hover:bg-green-100 transition-colors">
+                              <Link href="/herbs/ashwagandha" className="text-lime-600 hover:text-lime-800 text-sm p-2 rounded bg-lime-50 hover:bg-lime-100 transition-colors">
                 Ashwagandha
               </Link>
               <Link href="/supplements/omega-3" className="text-purple-600 hover:text-purple-800 text-sm p-2 rounded bg-purple-50 hover:bg-purple-100 transition-colors">
@@ -81,7 +81,7 @@ export default function SearchPage() {
               <div className="text-4xl mb-4">🌿</div>
               <h3 className="text-xl font-semibold text-green-800 mb-2">Herbs</h3>
               <p className="text-gray-600 mb-4">Traditional herbal medicines for natural healing</p>
-              <Link href="/herbs" className="inline-block bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                              <Link href="/herbs" className="inline-block bg-lime-600 text-white px-4 py-2 rounded-lg hover:bg-lime-700 transition-colors">
                 Browse Herbs
               </Link>
             </div>

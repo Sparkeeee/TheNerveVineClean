@@ -88,10 +88,10 @@ export default function Home() {
             <div className="hero-section p-8 md:p-12">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div className="text-center lg:text-left">
-                  <h1 className="text-hero text-green-800 mb-6">
-                    Your Trusted Guide to
-                    <span className="block text-green-600">Natural Wellness</span>
-                  </h1>
+                                     <h1 className="text-hero text-green-800 mb-6">
+                     Your Trusted Guide to
+                     <span className="block text-lime-600">Natural Wellness</span>
+                   </h1>
                   <p className="text-subtitle text-gray-700 mb-8 max-w-2xl">
                     Discover premium herbal supplements for nervous system support, stress relief, and natural wellness. 
                     Expert-curated products with quality filtering for optimal health outcomes.
@@ -262,7 +262,7 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
+      <footer className="bg-blue-950 text-white py-12">
         <div className="container-max">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>

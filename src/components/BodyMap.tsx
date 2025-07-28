@@ -400,7 +400,7 @@ export default function BodyMap() {
                         onMouseLeave={() => setHoveredArea(null)}
                       >
                         <Link href={link.href}>
-                          <div className="bg-white/98 border-2 border-green-600 rounded-full px-3 py-1.5 sm:px-4 sm:py-2 shadow-lg hover:shadow-xl transition-shadow cursor-pointer">
+                          <div className="bg-white/98 border-2 border-lime-600 rounded-full px-3 py-1.5 sm:px-4 sm:py-2 shadow-lg hover:shadow-xl transition-shadow cursor-pointer">
                             <div className="text-green-800 font-semibold text-sm sm:text-base whitespace-nowrap">
                               {link.label}
                             </div>
@@ -417,7 +417,7 @@ export default function BodyMap() {
             <div className="absolute inset-0 flex items-center justify-center">
               <button
                 onClick={openModal}
-                className="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-8 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+                className="bg-lime-600 hover:bg-lime-700 text-white font-semibold py-3 px-8 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
               >
                 🩺 Explore by Anatomy
               </button>

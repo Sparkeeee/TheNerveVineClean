@@ -33,14 +33,14 @@ export default async function HerbPage({ params }: { params: Promise<{ slug: str
   let productCards: JSX.Element[] = [];
   if (Array.isArray(herb.products) && herb.products.length > 0) {
     productCards = herb.products.map((product, idx) => (
-      <div key={idx} className="border border-green-200 rounded-lg p-4 hover:shadow-md transition-shadow mb-4 bg-white">
-        <h3 className="font-semibold text-green-900 mb-2">{product.name || 'Product'}</h3>
+      <div key={idx} className="border border-lime-200 rounded-lg p-4 hover:shadow-md transition-shadow mb-4 bg-white">
+        <h3 className="font-semibold text-lime-900 mb-2">{product.name || 'Product'}</h3>
         {product.description && <p className="text-gray-600 text-sm mb-2 text-left">{product.description}</p>}
         <Image src={product.imageUrl || "/images/closed-medical-brown-glass-bottle-yellow-vitamins.png"} alt="Product" width={96} height={96} className="w-24 h-24 object-contain mb-2" />
         <div className="flex items-center justify-between">
-          <span className="text-lg font-bold text-green-900">{product.price ? `$${product.price}` : ''}</span>
+          <span className="text-lg font-bold text-lime-900">{product.price ? `$${product.price}` : ''}</span>
           {product.affiliateLink && (
-            <a href={product.affiliateLink} target="_blank" rel="noopener noreferrer" className="ml-2 px-3 py-1 bg-green-700 text-white rounded hover:bg-green-800 text-xs">Buy</a>
+            <a href={product.affiliateLink} target="_blank" rel="noopener noreferrer" className="ml-2 px-3 py-1 bg-lime-700 text-white rounded hover:bg-lime-800 text-xs">Buy</a>
           )}
         </div>
       </div>
@@ -103,14 +103,14 @@ export default async function HerbPage({ params }: { params: Promise<{ slug: str
 
         {/* Traditional Uses Section */}
         {herb.traditionalUses && Array.isArray(herb.traditionalUses) && (
-          <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-4 my-4">
-            <h3 className="font-semibold text-green-800 mb-2">Traditional Wisdom</h3>
+          <div className="bg-gradient-to-r from-lime-50 to-blue-50 rounded-lg p-4 my-4">
+            <h3 className="font-semibold text-lime-800 mb-2">Traditional Wisdom</h3>
             <ul className="space-y-1">
               {herb.traditionalUses
                 .filter((use): use is string => typeof use === 'string')
                 .map((use: string, index: number) => (
                   <li key={index} className="flex items-start">
-                    <span className="text-green-500 mr-2">•</span>
+                    <span className="text-lime-500 mr-2">•</span>
                     <span className="text-gray-700 text-sm">{use}</span>
                   </li>
                 ))}
@@ -133,7 +133,7 @@ export default async function HerbPage({ params }: { params: Promise<{ slug: str
 
         {/* Top Products */}
         <div className="bg-white rounded-lg p-6 shadow-lg h-fit">
-          <h2 className="text-2xl font-semibold text-green-800 mb-6">Top Products</h2>
+          <h2 className="text-2xl font-semibold text-lime-800 mb-6">Top Products</h2>
           <div className="space-y-4">{productCards}</div>
         </div>
 

@@ -207,97 +207,97 @@ export default function StressPage() {
               <div className="space-y-2">
                 <Link 
                   href="/herbs/ashwagandha" 
-                  className="block text-green-600 hover:text-green-800 transition-colors"
+                  className="block text-lime-600 hover:text-lime-800 transition-colors"
                 >
                   → Ashwagandha (Adaptogen)
                 </Link>
                 <Link 
                   href="/herbs/reishi" 
-                  className="block text-green-600 hover:text-green-800 transition-colors"
+                  className="block text-lime-600 hover:text-lime-800 transition-colors"
                 >
                   → Reishi (Immune Support)
                 </Link>
                 <Link 
                   href="/herbs/holy-basil" 
-                  className="block text-green-600 hover:text-green-800 transition-colors"
+                  className="block text-lime-600 hover:text-lime-800 transition-colors"
                 >
                   → Holy Basil (Mental Clarity)
                 </Link>
                 <Link 
                   href="/herbs/siberian-ginseng" 
-                  className="block text-green-600 hover:text-green-800 transition-colors"
+                  className="block text-lime-600 hover:text-lime-800 transition-colors"
                 >
                   → Siberian Ginseng (Stress Resistance)
                 </Link>
                 <Link 
                   href="/herbs/lemon-balm" 
-                  className="block text-green-600 hover:text-green-800 transition-colors"
+                  className="block text-lime-600 hover:text-lime-800 transition-colors"
                 >
                   → Lemon Balm (Calming)
                 </Link>
                 <Link 
                   href="/herbs/skullcap" 
-                  className="block text-green-600 hover:text-green-800 transition-colors"
+                  className="block text-lime-600 hover:text-lime-800 transition-colors"
                 >
                   → Skullcap (Nervine)
                 </Link>
                 <Link 
                   href="/herbs/kava-kava" 
-                  className="block text-green-600 hover:text-green-800 transition-colors"
+                  className="block text-lime-600 hover:text-lime-800 transition-colors"
                 >
                   → Kava Kava (Anxiety Relief)
                 </Link>
                 <Link 
                   href="/herbs/passionflower" 
-                  className="block text-green-600 hover:text-green-800 transition-colors"
+                  className="block text-lime-600 hover:text-lime-800 transition-colors"
                 >
                   → Passionflower (GABA Enhancement)
                 </Link>
                 <Link 
                   href="/herbs/california-poppy" 
-                  className="block text-green-600 hover:text-green-800 transition-colors"
+                  className="block text-lime-600 hover:text-lime-800 transition-colors"
                 >
                   → California Poppy (Gentle Sedative)
                 </Link>
                 <Link 
                   href="/herbs/blue-vervain" 
-                  className="block text-green-600 hover:text-green-800 transition-colors"
+                  className="block text-lime-600 hover:text-lime-800 transition-colors"
                 >
                   → Blue Vervain (Nervous Tonic)
                 </Link>
                 <Link 
                   href="/herbs/wood-betony" 
-                  className="block text-green-600 hover:text-green-800 transition-colors"
+                  className="block text-lime-600 hover:text-lime-800 transition-colors"
                 >
                   → Wood Betony (Headache Relief)
                 </Link>
                 <Link 
                   href="/herbs/hops" 
-                  className="block text-green-600 hover:text-green-800 transition-colors"
+                  className="block text-lime-600 hover:text-lime-800 transition-colors"
                 >
                   → Hops (Sleep Support)
                 </Link>
                 <Link 
                   href="/herbs/magnolia-bark" 
-                  className="block text-green-600 hover:text-green-800 transition-colors"
+                  className="block text-lime-600 hover:text-lime-800 transition-colors"
                 >
                   → Magnolia Bark (Ancient Calm)
                 </Link>
                 <Link 
                   href="/herbs/schisandra" 
-                  className="block text-green-600 hover:text-green-800 transition-colors"
+                  className="block text-lime-600 hover:text-lime-800 transition-colors"
                 >
                   → Schisandra (Stress Resilience)
                 </Link>
                 <Link 
                   href="/herbs/gotu-kola" 
-                  className="block text-green-600 hover:text-green-800 transition-colors"
+                  className="block text-lime-600 hover:text-lime-800 transition-colors"
                 >
                   → Gotu Kola (Brain Tonic)
                 </Link>
                 <Link 
                   href="/herbs/bacopa" 
-                  className="block text-green-600 hover:text-green-800 transition-colors"
+                  className="block text-lime-600 hover:text-lime-800 transition-colors"
                 >
                   → Bacopa (Memory Enhancement)
                 </Link>

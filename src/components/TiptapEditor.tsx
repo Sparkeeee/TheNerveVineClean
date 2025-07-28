@@ -98,7 +98,7 @@ export default function TiptapEditor({ value, onChange }: { value: string, onCha
         />
         <button
           type="button"
-          className="ml-4 px-3 py-1 rounded bg-green-600 text-white hover:bg-green-700"
+                        className="ml-4 px-3 py-1 rounded bg-lime-600 text-white hover:bg-lime-700"
           onClick={() => fileInputRef.current?.click()}
         >
           Import from File

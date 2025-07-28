@@ -24,25 +24,25 @@ export default function MoodSwingsPage() {
               <h2 className="text-xl font-semibold text-blue-800 mb-4">Mood-Stabilizing Herbs</h2>
               <ul className="space-y-3">
                 <li className="flex items-center">
-                  <span className="text-green-600 mr-2">✓</span>
+                  <span className="text-lime-600 mr-2">✓</span>
                   <Link href="/herbs/st-johns-wort" className="text-blue-600 hover:text-blue-800">
                     St. John&apos;s Wort
                   </Link>
                 </li>
                 <li className="flex items-center">
-                  <span className="text-green-600 mr-2">✓</span>
+                  <span className="text-lime-600 mr-2">✓</span>
                   <Link href="/herbs/ashwagandha" className="text-blue-600 hover:text-blue-800">
                     Ashwagandha
                   </Link>
                 </li>
                 <li className="flex items-center">
-                  <span className="text-green-600 mr-2">✓</span>
+                  <span className="text-lime-600 mr-2">✓</span>
                   <Link href="/herbs/lemon-balm" className="text-blue-600 hover:text-blue-800">
                     Lemon Balm
                   </Link>
                 </li>
                 <li className="flex items-center">
-                  <span className="text-green-600 mr-2">✓</span>
+                  <span className="text-lime-600 mr-2">✓</span>
                   <Link href="/herbs/holy-basil" className="text-blue-600 hover:text-blue-800">
                     Holy Basil
                   </Link>
@@ -54,25 +54,25 @@ export default function MoodSwingsPage() {
               <h2 className="text-xl font-semibold text-green-800 mb-4">Supportive Supplements</h2>
               <ul className="space-y-3">
                 <li className="flex items-center">
-                  <span className="text-green-600 mr-2">✓</span>
+                  <span className="text-lime-600 mr-2">✓</span>
                   <Link href="/supplements/omega-3" className="text-blue-600 hover:text-blue-800">
                     Omega-3 Fatty Acids
                   </Link>
                 </li>
                 <li className="flex items-center">
-                  <span className="text-green-600 mr-2">✓</span>
+                  <span className="text-lime-600 mr-2">✓</span>
                   <Link href="/supplements/b-complex" className="text-blue-600 hover:text-blue-800">
                     B-Complex Vitamins
                   </Link>
                 </li>
                 <li className="flex items-center">
-                  <span className="text-green-600 mr-2">✓</span>
+                  <span className="text-lime-600 mr-2">✓</span>
                   <Link href="/supplements/magnesium" className="text-blue-600 hover:text-blue-800">
                     Magnesium
                   </Link>
                 </li>
                 <li className="flex items-center">
-                  <span className="text-green-600 mr-2">✓</span>
+                  <span className="text-lime-600 mr-2">✓</span>
                   <Link href="/supplements/vitamin-d" className="text-blue-600 hover:text-blue-800">
                     Vitamin D
                   </Link>

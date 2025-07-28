@@ -101,7 +101,7 @@ export default function SearchComponent() {
 
   const getTypeColor = (type: string) => {
     switch (type) {
-      case 'herb': return 'text-green-600 bg-green-50';
+      case 'herb': return 'text-lime-600 bg-lime-50';
       case 'supplement': return 'text-blue-600 bg-blue-50';
       case 'symptom': return 'text-red-600 bg-red-50';
       default: return 'text-gray-600 bg-gray-50';
