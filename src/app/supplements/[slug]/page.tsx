@@ -57,7 +57,7 @@ export default async function SupplementPage({ params }: { params: Promise<{ slu
             if (Array.isArray(supplement.galleryImages)) {
               imageUrls = supplement.galleryImages;
             } else if (typeof supplement.galleryImages === 'string' && supplement.galleryImages.trim()) {
-              imageUrls = supplement.galleryImages.split(',').map(url => url.trim()).filter(url => url);
+              imageUrls = supplement.galleryImages.split(',').map((url: string) => url.trim()).filter((url: string) => url);
             }
             
             // Only render if we have actual image URLs
