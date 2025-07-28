@@ -49,19 +49,70 @@ export default async function SupplementPage({ params }: { params: Promise<{ slu
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-lime-900 mb-2">{supplement.name}</h1>
-          {/* Molecular Structure Image - Database-driven */}
-          {supplement.heroImageUrl && (
+          
+          {/* Multiple Molecular Structure Images - Database-driven */}
+          {supplement.galleryImages && (() => {
+            // Handle both JSON array and comma-separated string
+            let imageUrls: string[] = [];
+            if (Array.isArray(supplement.galleryImages)) {
+              imageUrls = supplement.galleryImages;
+            } else if (typeof supplement.galleryImages === 'string' && supplement.galleryImages.trim()) {
+              imageUrls = supplement.galleryImages.split(',').map(url => url.trim()).filter(url => url);
+            }
+            
+            // Only render if we have actual image URLs
+            if (imageUrls.length > 0) {
+              return (
+                <div className="flex justify-center mb-6">
+                  <div className="flex gap-4 flex-wrap justify-center">
+                    {imageUrls.map((imageUrl: string, index: number) => (
+                      <Image 
+                        key={index}
+                        src={imageUrl} 
+                        alt={`${supplement.name} molecular structure ${index + 1}`} 
+                        width={400} 
+                        height={300} 
+                        className={`rounded-lg shadow-md w-auto h-auto object-contain ${
+                          supplement.name?.toLowerCase().includes('l-tryptophan') 
+                            ? 'max-w-xs max-h-48' 
+                            : 'max-w-md max-h-80'
+                        }`}
+                        priority
+                      />
+                    ))}
+                  </div>
+                </div>
+              );
+            }
+            return null;
+          })()}
+          
+          {/* Single Molecular Structure Image - Fallback */}
+          {supplement.heroImageUrl && (!supplement.galleryImages || (() => {
+            // Check if galleryImages is empty
+            if (Array.isArray(supplement.galleryImages)) {
+              return supplement.galleryImages.length === 0;
+            } else if (typeof supplement.galleryImages === 'string') {
+              return !supplement.galleryImages.trim();
+            }
+            return true; // If galleryImages is null/undefined, show heroImageUrl
+          })()) && (
             <div className="flex justify-center mb-6">
               <Image 
                 src={supplement.heroImageUrl} 
                 alt={`${supplement.name} molecular structure`} 
-                width={300} 
-                height={200} 
-                className="rounded-lg shadow-md"
+                width={400} 
+                height={300} 
+                className={`rounded-lg shadow-md w-auto h-auto object-contain ${
+                  supplement.name?.toLowerCase().includes('l-tryptophan') 
+                    ? 'max-w-xs max-h-48' 
+                    : 'max-w-md max-h-80'
+                }`}
                 priority
               />
             </div>
           )}
+          
           {paragraphs}
         </div>
         <div className="grid lg:grid-cols-3 gap-8">

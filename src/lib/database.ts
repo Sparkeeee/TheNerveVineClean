@@ -40,7 +40,27 @@ export async function getCachedSupplement(slug: string) {
   
   const data = await prisma.supplement.findFirst({
     where: { slug },
-    include: { products: true }
+    select: { 
+      id: true, 
+      name: true, 
+      slug: true, 
+      description: true, 
+      heroImageUrl: true, 
+      galleryImages: true, 
+      cautions: true,
+      products: {
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          imageUrl: true,
+          price: true,
+          affiliateLink: true,
+          qualityScore: true,
+          affiliateRate: true
+        }
+      }
+    }
   });
   
   cache.set(cacheKey, { data, timestamp: Date.now() });
