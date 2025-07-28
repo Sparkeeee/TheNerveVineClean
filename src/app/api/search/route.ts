@@ -16,7 +16,7 @@ export async function GET() {
           indications: true,
           traditionalUses: true,
         }
-      }),
+      }).catch(() => []), // Return empty array if database connection fails
       prisma.supplement.findMany({
         select: {
           id: true,
@@ -25,7 +25,7 @@ export async function GET() {
           description: true,
           tags: true,
         }
-      }),
+      }).catch(() => []), // Return empty array if database connection fails
       prisma.symptom.findMany({
         select: {
           id: true,
@@ -34,7 +34,7 @@ export async function GET() {
           description: true,
           associatedSymptoms: true,
         }
-      })
+      }).catch(() => []) // Return empty array if database connection fails
     ]);
 
     // Transform herbs into search items
@@ -92,10 +92,17 @@ export async function GET() {
 
   } catch (error) {
     console.error('Error fetching search data:', error);
-    return NextResponse.json({ 
-      success: false, 
-      error: 'Failed to fetch search data' 
-    }, { status: 500 });
+    // Return empty data instead of error to prevent continuous loading
+    return NextResponse.json({
+      success: true,
+      data: [],
+      counts: {
+        herbs: 0,
+        supplements: 0,
+        symptoms: 0,
+        total: 0
+      }
+    });
   } finally {
     await prisma.$disconnect();
   }

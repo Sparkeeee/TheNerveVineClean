@@ -107,11 +107,11 @@ export default function ProductHuntDashboard() {
             </button>
             <label className="font-semibold text-gray-800 flex items-center gap-2">
               Minimum Yield ($):
-              <input type="number" min="0" defaultValue={1} className="border border-gray-300 rounded px-2 py-1 w-20" />
+              <input type="number" id="min-yield" name="minYield" min="0" defaultValue={1} className="border border-gray-300 rounded px-2 py-1 w-20" />
             </label>
             <label className="font-semibold text-gray-800 flex items-center gap-2">
               Auto-Hunt Scheduler:
-              <select className="border border-gray-300 rounded px-2 py-1">
+              <select id="scheduler" name="scheduler" className="border border-gray-300 rounded px-2 py-1">
                 <option>Every day</option>
                 <option>Every week</option>
                 <option>Fortnightly</option>
@@ -120,7 +120,7 @@ export default function ProductHuntDashboard() {
             </label>
             <label className="font-semibold text-gray-800 flex items-center gap-2">
               Start Date:
-              <input type="date" className="border border-gray-300 rounded px-2 py-1" defaultValue={today} />
+              <input type="date" id="start-date" name="startDate" className="border border-gray-300 rounded px-2 py-1" defaultValue={today} />
             </label>
             <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-6 rounded shadow">
               Save
@@ -136,14 +136,14 @@ export default function ProductHuntDashboard() {
         </div>
         {/* Search and Filter Controls */}
         <div className="flex flex-wrap gap-4 mb-8">
-          <input type="text" placeholder="Search by product name..." className="border border-gray-400 rounded px-4 py-2 bg-white/80 text-gray-900 placeholder-gray-500 shadow" />
-          <select className="border border-gray-400 rounded px-4 py-2 bg-white/80 text-gray-900 shadow">
+          <input type="text" id="product-search" name="productSearch" placeholder="Search by product name..." className="border border-gray-400 rounded px-4 py-2 bg-white/80 text-gray-900 placeholder-gray-500 shadow" />
+          <select id="merchant-filter" name="merchantFilter" className="border border-gray-400 rounded px-4 py-2 bg-white/80 text-gray-900 shadow">
             <option>All Merchants</option>
           </select>
-          <select className="border border-gray-400 rounded px-4 py-2 bg-white/80 text-gray-900 shadow">
+          <select id="region-filter" name="regionFilter" className="border border-gray-400 rounded px-4 py-2 bg-white/80 text-gray-900 shadow">
             <option>All Regions</option>
           </select>
-          <select className="border border-gray-400 rounded px-4 py-2 bg-white/80 text-gray-900 shadow">
+          <select id="quality-filter" name="qualityFilter" className="border border-gray-400 rounded px-4 py-2 bg-white/80 text-gray-900 shadow">
             <option>All Quality Scores</option>
           </select>
         </div>

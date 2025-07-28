@@ -1139,51 +1139,43 @@ export default function AdminContentPage() {
   }
 
   return (
-    <div
-      className="min-h-screen text-gray-100 p-8 relative"
-      style={{
-        backgroundImage: "linear-gradient(rgba(20,20,20,0.85), rgba(20,20,20,0.85)), url('/images/Ancient_Apothecary_Organized_Shelves_(10157050846).jpg')",
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-      }}
-    >
-      <div className="mb-6">
-        <Link href="/admin" className="bg-blue-700 text-white px-4 py-2 rounded shadow hover:bg-blue-800 transition font-bold">&larr; Admin Home</Link>
-      </div>
-
-
+    <div className="min-h-screen bg-gray-50">
+      <div className="container-max py-8">
+        <div className="mb-6">
+          <Link href="/admin" className="cta-button px-4 py-2 rounded shadow hover:bg-green-700 transition font-bold">&larr; Admin Home</Link>
+        </div>
 
       {/* Tabs for Herbs, Supplements, Symptoms */}
-      <div className="flex space-x-4 mb-6">
-        {TABS.map((t) => (
-          <button
-            key={t}
-            className={`px-4 py-2 rounded-t font-bold text-white ${tab === t ? 'bg-gray-800' : 'bg-gray-600 hover:bg-gray-700'}`}
-            onClick={() => setTab(t)}
-          >
-            {t}
-          </button>
-        ))}
-      </div>
-      <div className="bg-gray-800 rounded-b shadow p-6 mb-8">
-        {tab === "Blog" ? (
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 mb-8">
+        <div className="flex border-b border-gray-200">
+          {TABS.map((t) => (
+            <button
+              key={t}
+              className={`px-6 py-4 font-semibold text-gray-700 border-b-2 transition-colors ${tab === t ? 'border-green-600 text-green-700 bg-green-50' : 'border-transparent hover:text-green-700 hover:bg-gray-50'}`}
+              onClick={() => setTab(t)}
+            >
+              {t}
+            </button>
+          ))}
+        </div>
+        <div className="p-6">
+          {tab === "Blog" ? (
           <div>
             {/* Blog/Article Upload Section */}
             <section className="mb-8">
-              <h2 className="text-2xl font-bold text-white mb-4">Upload Blog/Article</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">Upload Blog/Article</h2>
               <form className="flex flex-col gap-4" onSubmit={handleUpload}>
                 <input
                   type="text"
                   placeholder="Title"
-                  className="border border-white px-3 py-2 rounded text-white bg-transparent placeholder-white"
+                  className="border border-gray-300 px-3 py-2 rounded text-gray-900 bg-white placeholder-gray-500"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   required
                 />
                 <textarea
                   placeholder="Admin Note (optional)"
-                  className="border border-white px-3 py-2 rounded text-white bg-transparent placeholder-white"
+                  className="border border-gray-300 px-3 py-2 rounded text-gray-900 bg-white placeholder-gray-500"
                   value={adminNote}
                   onChange={(e) => setAdminNote(e.target.value)}
                 />
@@ -1192,38 +1184,38 @@ export default function AdminContentPage() {
                     type="file"
                     accept=".pdf,.docx,.md,.txt"
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFile(e.target && e.target.files ? e.target.files[0] : null)}
-                    className="border border-white px-3 py-2 rounded text-white bg-transparent"
+                    className="border border-gray-300 px-3 py-2 rounded text-gray-900 bg-white"
                   />
-                  <span className="text-white">or</span>
+                  <span className="text-gray-600">or</span>
                   <textarea
                     placeholder="Paste or write article content here (Markdown or plain text)"
-                    className="border border-white px-3 py-2 rounded text-white bg-transparent placeholder-white w-full"
+                    className="border border-gray-300 px-3 py-2 rounded text-gray-900 bg-white placeholder-gray-500 w-full"
                     value={textContent}
                     onChange={(e) => setTextContent(e.target.value)}
                     rows={4}
                   />
                 </div>
-                <button type="submit" className="bg-green-700 text-white px-6 py-2 rounded shadow hover:bg-green-800 transition font-bold w-40">Upload</button>
+                <button type="submit" className="cta-button px-6 py-2 rounded shadow hover:bg-green-700 transition font-bold w-40">Upload</button>
               </form>
             </section>
 
             {/* Uploaded Articles List */}
             {articles.length > 0 && (
               <section>
-                <h2 className="text-xl font-bold text-white mb-4">Uploaded Articles</h2>
-                <ul className="divide-y divide-white">
+                <h2 className="text-xl font-bold text-gray-900 mb-4">Uploaded Articles</h2>
+                <ul className="divide-y divide-gray-200">
                   {articles.map((article, index) => (
                     <li key={index} className="py-4">
                       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
                         <div>
-                          <div className="font-bold text-lg text-white">{article.title}</div>
-                          <div className="text-white text-sm">Uploaded: {article.uploadDate}</div>
-                          {article.adminNote && <div className="text-white text-sm italic">Note: {article.adminNote}</div>}
-                          {article.fileName && <div className="text-white text-xs">File: {article.fileName}</div>}
+                          <div className="font-bold text-lg text-gray-900">{article.title}</div>
+                          <div className="text-gray-600 text-sm">Uploaded: {article.uploadDate}</div>
+                          {article.adminNote && <div className="text-gray-600 text-sm italic">Note: {article.adminNote}</div>}
+                          {article.fileName && <div className="text-gray-500 text-xs">File: {article.fileName}</div>}
                         </div>
                         <div className="flex gap-2 mt-2 md:mt-0">
                           <button
-                            className="bg-blue-700 text-white px-3 py-1 rounded shadow hover:bg-blue-800 transition font-bold"
+                            className="bg-blue-600 text-white px-3 py-1 rounded shadow hover:bg-blue-700 transition font-bold"
                             onClick={() => {
                               setEditingIndex(index);
                               setEditContent(article.content as string);
@@ -1232,7 +1224,7 @@ export default function AdminContentPage() {
                             Edit
                           </button>
                           <button
-                            className="bg-red-700 text-white px-3 py-1 rounded shadow hover:bg-red-800 transition font-bold"
+                            className="bg-red-600 text-white px-3 py-1 rounded shadow hover:bg-red-700 transition font-bold"
                             onClick={() => handleArticleDelete(index)}
                           >
                             Delete
@@ -1243,14 +1235,14 @@ export default function AdminContentPage() {
                       {editingIndex === index ? (
                         <div className="mt-4">
                           <textarea
-                            className="border border-white px-3 py-2 rounded text-white bg-transparent w-full"
+                            className="border border-gray-300 px-3 py-2 rounded text-gray-900 bg-white w-full"
                             value={editContent}
                             onChange={(e) => setEditContent(e.target.value)}
                             rows={8}
                           />
                           <div className="flex gap-2 mt-2">
                             <button
-                              className="bg-green-700 text-white px-4 py-1 rounded shadow hover:bg-green-800 transition font-bold"
+                              className="cta-button px-4 py-1 rounded shadow hover:bg-green-700 transition font-bold"
                               onClick={() => handleEditSave(index)}
                             >
                               Save
@@ -1517,5 +1509,7 @@ export default function AdminContentPage() {
         </div>
       )}
     </div>
+    </div>
+    </div>
   );
-} 
+}

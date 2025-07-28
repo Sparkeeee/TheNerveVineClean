@@ -332,134 +332,95 @@ export default function BodyMap() {
 
   return (
     <>
-      {/* Preview with Call-to-Action */}
-      <div className="w-full max-w-6xl mx-auto mb-10">
-        <div className="flex flex-col lg:flex-row gap-6 items-center">
+      {/* Clean Interactive Body Map */}
+      <div className="w-full max-w-4xl mx-auto">
+        <div className="bg-white rounded-xl p-8 shadow-lg border border-gray-200">
+          <div className="text-center mb-6">
+            <h3 className="text-2xl font-semibold text-gray-900 mb-2">Interactive Body Map</h3>
+            <p className="text-gray-600">Click to explore symptoms and conditions by body area</p>
+          </div>
           
-          {/* Left Column - Featured Topics & Health Tips */}
-          <div className="w-full lg:w-1/4 space-y-4">
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-xl p-6 shadow-lg border border-blue-200">
-              <h3 className="text-lg font-semibold text-blue-800 mb-4">🌟 Featured Topics</h3>
-              <div className="space-y-3 text-sm text-gray-700">
-                <div className="mb-2">
-                  <span className="font-semibold">All About Balance</span>
-                  <div>Explore the natural pendulum swing and rhythm between the PNS and SNS. Learn how stress and stimulants can overload the SNS and weaken the PNS, and how to restore balance.</div>
-                </div>
-                <div className="mb-2">
-                  <span className="font-semibold">Relaxation is Powerful</span>
-                  <div>Discover why true relaxation is a cornerstone of healing and resilience, and how calming herbs and techniques can reset your nervous system.</div>
-                </div>
-                <div className="mb-2">
-                  <span className="font-semibold">Peak Performance</span>
-                  <div>Herbs and supplements for optimum nervous system performance—nootropics, adaptogens, and tonics for focus, energy, and stress resilience.</div>
-                </div>
-                <div>
-                  <span className="font-semibold">Pain Management</span>
-                  <div>Evidence-based natural strategies for managing pain—herbs, supplements, and lifestyle tips to support comfort and healing.</div>
-                </div>
-              </div>
-            </div>
-            <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-blue-200">
-              <h3 className="text-lg font-semibold text-blue-800 mb-4">💡 Health Tips</h3>
-              <div className="space-y-3 text-sm text-gray-700">
-                <div className="flex items-start">
-                  <span className="text-blue-500 mr-2">•</span>
-                  <span>Start with one herb at a time to monitor effects</span>
-                </div>
-                <div className="flex items-start">
-                  <span className="text-blue-500 mr-2">•</span>
-                  <span>Consult your healthcare provider before starting new supplements</span>
-                </div>
-                <div className="flex items-start">
-                  <span className="text-blue-500 mr-2">•</span>
-                  <span>Quality matters - choose reputable brands</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Center Column - Preview Body Map */}
-          <div className="w-full lg:w-2/4">
-            <div className="bg-white/60 backdrop-blur-sm rounded-xl p-6 shadow-inner border border-blue-200 relative">
-              <div className="text-center mb-4">
-                <h3 className="text-xl font-semibold text-blue-800 mb-2">Interactive Body Map</h3>
-                <p className="text-gray-600 mb-4">Click to explore symptoms and conditions by body area</p>
-              </div>
+          {/* Interactive SVG */}
+          <div className="relative">
+            <svg
+              viewBox="0 0 1024 1024"
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-full h-auto min-h-[300px] sm:min-h-[400px] md:min-h-[500px]"
+              preserveAspectRatio="xMidYMid meet"
+            >
+              {/* Anatomical body map */}
+              <image
+                href="/images/NerveVine body nav image2.svg"
+                width="1024"
+                height="1024"
+                preserveAspectRatio="xMidYMid meet"
+              />
               
-              {/* Preview SVG - smaller size */}
-              <div className="relative">
-                <svg
-                  viewBox="0 0 1024 1024"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-full h-auto min-h-[200px] sm:min-h-[250px] md:min-h-[300px] lg:min-h-[350px]"
-                  preserveAspectRatio="xMidYMid meet"
-                >
-                  {/* Anatomical body map */}
-                  <image
-                    href="/images/NerveVine body nav image2.svg"
-                    width="1024"
-                    height="1024"
-                    preserveAspectRatio="xMidYMid meet"
-                  />
-                </svg>
-                
-                {/* Overlay button */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <button
-                    onClick={openModal}
-                    className="font-sans bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
-                  >
-                    🩺 Explore by Anatomy
-                  </button>
+              {/* Interactive clickable areas */}
+              {shouldShowLinks && (
+                <div>
+                  {getLinkPositions().map((link, index) => {
+                    // Use custom center points for neck links, default to head center for others
+                    const centerX = link.centerX || 510;
+                    const centerY = link.centerY || 150;
+                    
+                    // Only show head links when hovering head, neck links when hovering neck, heart links when hovering heart, liver links when hovering liver, adrenal links when hovering adrenals, digestive links when hovering digestive
+                    const isNeckLink = link.centerY === 300 && link.centerX === 510;
+                    const isHeartLink = link.centerY === 450 && link.centerX === 580;
+                    const isLiverLink = link.centerY === 550 && link.centerX === 350;
+                    const isAdrenalLink = link.href.includes('adrenal') || link.href.includes('circadian');
+                    const isDigestiveLink = link.centerY === 715 && link.centerX === 530;
+                    const shouldShowThisLink = (hoveredArea === "head" && !isNeckLink && !isHeartLink && !isLiverLink && !isAdrenalLink && !isDigestiveLink) || 
+                                           (hoveredArea === "neck" && isNeckLink) || 
+                                           (hoveredArea === "heart" && isHeartLink) || 
+                                           (hoveredArea === "liver" && isLiverLink) ||
+                                           (hoveredArea === "adrenals" && isAdrenalLink) ||
+                                           (hoveredArea === "digestive" && isDigestiveLink);
+                    
+                    if (!shouldShowThisLink) return null;
+                    
+                    const x = centerX + Math.cos((link.angle * Math.PI) / 180) * link.radius - 20;
+                    const y = centerY + Math.sin((link.angle * Math.PI) / 180) * link.radius;
+                    
+                    // Convert SVG coordinates to percentage for absolute positioning
+                    const xPercent = (x / 1024) * 100;
+                    const yPercent = (y / 1024) * 100;
+                    
+                    return (
+                      <div
+                        key={index}
+                        className="absolute pointer-events-auto"
+                        style={{
+                          left: `${xPercent}%`,
+                          top: `${yPercent}%`,
+                          transform: 'translate(-50%, -50%)',
+                          zIndex: 1000
+                        }}
+                        onMouseEnter={() => setHoveredArea(hoveredArea)}
+                        onMouseLeave={() => setHoveredArea(null)}
+                      >
+                        <Link href={link.href}>
+                          <div className="bg-white/98 border-2 border-green-600 rounded-full px-3 py-1.5 sm:px-4 sm:py-2 shadow-lg hover:shadow-xl transition-shadow cursor-pointer">
+                            <div className="text-green-800 font-semibold text-sm sm:text-base whitespace-nowrap">
+                              {link.label}
+                            </div>
+                          </div>
+                        </Link>
+                      </div>
+                    );
+                  })}
                 </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Column - Natural Approach, Quick Links & Featured */}
-          <div className="w-full lg:w-1/4 space-y-4">
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-xl p-6 shadow-lg border border-blue-200">
-              <h3 className="text-lg font-semibold text-blue-800 mb-4">🌿 Natural Approach</h3>
-              <p className="text-sm text-gray-700 leading-relaxed">
-                Our body map helps you identify which systems need support and find the right natural solutions for your specific health concerns.
-              </p>
-            </div>
-            <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-blue-200">
-              <h3 className="text-lg font-semibold text-blue-800 mb-4">⚡ Quick Access</h3>
-              <div className="space-y-3">
-                <Link href="/systems/nervous" className="block">
-                  <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-3 hover:from-blue-100 hover:to-indigo-100 transition-colors cursor-pointer">
-                    <div className="text-blue-800 font-medium text-sm">Nervous System Herbs</div>
-                  </div>
-                </Link>
-                <Link href="/blog" className="block">
-                  <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-3 hover:from-green-100 hover:to-emerald-100 transition-colors cursor-pointer">
-                    <div className="text-green-800 font-medium text-sm">Health Articles</div>
-                  </div>
-                </Link>
-                <Link href="/about" className="block">
-                  <div className="bg-gradient-to-r from-purple-50 to-violet-50 rounded-lg p-3 hover:from-purple-100 hover:to-violet-100 transition-colors cursor-pointer">
-                    <div className="text-purple-800 font-medium text-sm">About NerveVine</div>
-                  </div>
-                </Link>
-              </div>
-            </div>
-            <div className="bg-gradient-to-br from-indigo-50 to-blue-100 rounded-xl p-6 shadow-lg border border-blue-200">
-              <h3 className="text-lg font-semibold text-blue-800 mb-4">🌟 Featured</h3>
-              <div className="space-y-3 text-sm text-gray-700">
-                <div className="flex items-center">
-                  <span className="text-yellow-500 mr-2">⭐</span>
-                  <span>Quality-tested supplements</span>
-                </div>
-                <div className="flex items-center">
-                  <span className="text-green-500 mr-2">🌱</span>
-                  <span>Natural herbal solutions</span>
-                </div>
-                <div className="flex items-center">
-                  <span className="text-blue-500 mr-2">💚</span>
-                  <span>Evidence-based recommendations</span>
-                </div>
-              </div>
+              )}
+            </svg>
+            
+            {/* Call to Action Button */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <button
+                onClick={openModal}
+                className="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-8 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+              >
+                🩺 Explore by Anatomy
+              </button>
             </div>
           </div>
         </div>

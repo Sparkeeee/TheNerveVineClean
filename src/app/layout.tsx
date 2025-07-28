@@ -22,6 +22,11 @@ export const metadata: Metadata = {
     template: "%s | The NerveVine"
   },
   description: "Discover premium herbal supplements for nervous system support, stress relief, and natural wellness. Expert-curated products with quality filtering for optimal health outcomes.",
+  icons: {
+    icon: '/images/favfavicon.png',
+    shortcut: '/images/favfavicon.png',
+    apple: '/images/favfavicon.png',
+  },
   keywords: [
     "herbal supplements",
     "nervous system health",
@@ -108,7 +113,7 @@ export default function RootLayout({
               "@type": "Organization",
               "name": "The NerveVine",
               "url": "https://thenervevine.com",
-              "logo": "https://thenervevine.com/images/logo.png",
+              "logo": "https://thenervevine.com/images/nervevine smalllogo1.svg",
               "description": "Natural herbal supplements for nervous system health and wellness",
               "address": {
                 "@type": "PostalAddress",

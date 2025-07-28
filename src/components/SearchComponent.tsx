@@ -33,16 +33,16 @@ export default function SearchComponent() {
         if (data.success) {
           setSearchData(data.data);
         } else {
-          console.error('Failed to fetch search data:', data.error);
+          setSearchData([]);
         }
       } catch (error) {
-        console.error('Error fetching search data:', error);
+        setSearchData([]);
       } finally {
         setIsLoading(false);
       }
     };
 
-      fetchSearchData();
+    fetchSearchData();
   }, []);
 
   // Close search when clicking outside
@@ -67,24 +67,24 @@ export default function SearchComponent() {
     const searchTerm = query.toLowerCase();
     const filteredResults = searchData.filter(item => {
       const matchesQuery = 
-        item.title.toLowerCase().includes(searchTerm) ||
-        item.description.toLowerCase().includes(searchTerm) ||
-        item.tags.some(tag => tag.toLowerCase().includes(searchTerm)) ||
-        (item.benefits && item.benefits.some(benefit => benefit.toLowerCase().includes(searchTerm))) ||
-        (item.symptoms && item.symptoms.some(symptom => symptom.toLowerCase().includes(searchTerm)));
+        (item.title && typeof item.title === 'string' && item.title.toLowerCase().includes(searchTerm)) ||
+        (item.description && typeof item.description === 'string' && item.description.toLowerCase().includes(searchTerm)) ||
+        (item.tags && Array.isArray(item.tags) && item.tags.some(tag => typeof tag === 'string' && tag.toLowerCase().includes(searchTerm))) ||
+        (item.benefits && Array.isArray(item.benefits) && item.benefits.some(benefit => typeof benefit === 'string' && benefit.toLowerCase().includes(searchTerm))) ||
+        (item.symptoms && Array.isArray(item.symptoms) && item.symptoms.some(symptom => typeof symptom === 'string' && symptom.toLowerCase().includes(searchTerm)));
 
       return matchesQuery;
     });
 
     // Sort by relevance (exact title matches first, then description, then tags)
     filteredResults.sort((a, b) => {
-      const aTitleMatch = a.title.toLowerCase().includes(searchTerm);
-      const bTitleMatch = b.title.toLowerCase().includes(searchTerm);
+      const aTitleMatch = a.title && typeof a.title === 'string' && a.title.toLowerCase().includes(searchTerm);
+      const bTitleMatch = b.title && typeof b.title === 'string' && b.title.toLowerCase().includes(searchTerm);
       
       if (aTitleMatch && !bTitleMatch) return -1;
       if (!aTitleMatch && bTitleMatch) return 1;
       
-      return a.title.localeCompare(b.title);
+      return (a.title || '').localeCompare(b.title || '');
     });
 
     setResults(filteredResults.slice(0, 8)); // Limit to 8 results
@@ -114,6 +114,8 @@ export default function SearchComponent() {
       <div className="relative">
         <input
           type="text"
+          id="search-input"
+          name="search"
           placeholder={isLoading ? "Loading search data..." : "Search herbs, supplements, symptoms..."}
           value={query}
           onChange={(e) => {
