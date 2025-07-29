@@ -1,29 +1,18 @@
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
-import { PrismaClient } from '@prisma/client';
 import Link from "next/link";
-
-async function getHerbWithProducts(slug: string) {
-  const prisma = new PrismaClient();
-  try {
-    const herb = await prisma.herb.findFirst({
-      where: { slug: slug },
-      include: {
-        products: true
-      }
-    });
-    return herb;
-  } catch (error) {
-    console.error('Error fetching herb:', error);
-    return null;
-  } finally {
-    await prisma.$disconnect();
-  }
-}
+import { getCachedHerb } from '@/lib/database';
 
 export default async function HerbPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const herb = await getHerbWithProducts(slug);
+  
+  let herb;
+  try {
+    herb = await getCachedHerb(slug);
+  } catch (error) {
+    console.error('Error fetching herb:', error);
+    notFound();
+  }
 
   if (!herb) {
     notFound();
@@ -32,7 +21,7 @@ export default async function HerbPage({ params }: { params: Promise<{ slug: str
   // Prepare product cards from DB
   let productCards: JSX.Element[] = [];
   if (Array.isArray(herb.products) && herb.products.length > 0) {
-    productCards = herb.products.map((product, idx) => (
+    productCards = herb.products.map((product: any, idx: number) => (
       <div key={idx} className="border border-lime-200 rounded-lg p-4 hover:shadow-md transition-shadow mb-4 bg-white">
         <h3 className="font-semibold text-lime-900 mb-2">{product.name || 'Product'}</h3>
         {product.description && <p className="text-gray-600 text-sm mb-2 text-left">{product.description}</p>}
@@ -53,7 +42,7 @@ export default async function HerbPage({ params }: { params: Promise<{ slug: str
   let indicationLinks: JSX.Element[] = [];
   if (herb.indications && Array.isArray(herb.indications) && herb.indications.length > 0) {
     indicationLinks = herb.indications
-      .filter((indication): indication is string => typeof indication === 'string')
+      .filter((indication: any): indication is string => typeof indication === 'string')
       .map((indication: string, idx: number) => (
         <Link
           key={idx}
@@ -85,7 +74,7 @@ export default async function HerbPage({ params }: { params: Promise<{ slug: str
               <p className="text-xl text-gray-600 italic mb-4">{herb.latinName}</p>
             )}
             <div className="text-lg text-gray-600 max-w-3xl space-y-4">
-              {herb.description && herb.description.split('\n\n').map((paragraph, index) => (
+              {herb.description && herb.description.split('\n\n').map((paragraph: string, index: number) => (
                 <p key={index}>{paragraph}</p>
               ))}
             </div>
@@ -107,7 +96,7 @@ export default async function HerbPage({ params }: { params: Promise<{ slug: str
             <h3 className="font-semibold text-lime-800 mb-2">Traditional Wisdom</h3>
             <ul className="space-y-1">
               {herb.traditionalUses
-                .filter((use): use is string => typeof use === 'string')
+                .filter((use: any): use is string => typeof use === 'string')
                 .map((use: string, index: number) => (
                   <li key={index} className="flex items-start">
                     <span className="text-lime-500 mr-2">•</span>
