@@ -4,7 +4,14 @@ import { getCachedSupplement } from '@/lib/database';
 
 export default async function SupplementPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const supplement = await getCachedSupplement(slug);
+  
+  let supplement;
+  try {
+    supplement = await getCachedSupplement(slug);
+  } catch (error) {
+    console.error('Error fetching supplement:', error);
+    notFound();
+  }
 
   if (!supplement) {
     notFound();
@@ -52,50 +59,59 @@ export default async function SupplementPage({ params }: { params: Promise<{ slu
           
           {/* Multiple Molecular Structure Images - Database-driven */}
           {supplement.galleryImages && (() => {
-            // Handle both JSON array and comma-separated string
-            let imageUrls: string[] = [];
-            if (Array.isArray(supplement.galleryImages)) {
-              imageUrls = supplement.galleryImages;
-            } else if (typeof supplement.galleryImages === 'string' && supplement.galleryImages.trim()) {
-              imageUrls = supplement.galleryImages.split(',').map((url: string) => url.trim()).filter((url: string) => url);
-            }
-            
-            // Only render if we have actual image URLs
-            if (imageUrls.length > 0) {
-              return (
-                <div className="flex justify-center mb-6">
-                  <div className="flex gap-4 flex-wrap justify-center">
-                    {imageUrls.map((imageUrl: string, index: number) => (
-                      <Image 
-                        key={index}
-                        src={imageUrl} 
-                        alt={`${supplement.name} molecular structure ${index + 1}`} 
-                        width={400} 
-                        height={300} 
-                        className={`rounded-lg shadow-md w-auto h-auto object-contain ${
-                          supplement.name?.toLowerCase().includes('l-tryptophan') 
-                            ? 'max-w-xs max-h-48' 
-                            : 'max-w-md max-h-80'
-                        }`}
-                        priority
-                      />
-                    ))}
+            try {
+              // Handle both JSON array and comma-separated string
+              let imageUrls: string[] = [];
+              if (Array.isArray(supplement.galleryImages)) {
+                imageUrls = supplement.galleryImages;
+              } else if (typeof supplement.galleryImages === 'string' && supplement.galleryImages.trim()) {
+                imageUrls = supplement.galleryImages.split(',').map((url: string) => url.trim()).filter((url: string) => url);
+              }
+              
+              // Only render if we have actual image URLs
+              if (imageUrls.length > 0) {
+                return (
+                  <div className="flex justify-center mb-6">
+                    <div className="flex gap-4 flex-wrap justify-center">
+                      {imageUrls.map((imageUrl: string, index: number) => (
+                        <Image 
+                          key={index}
+                          src={imageUrl} 
+                          alt={`${supplement.name} molecular structure ${index + 1}`} 
+                          width={400} 
+                          height={300} 
+                          className={`rounded-lg shadow-md w-auto h-auto object-contain ${
+                            supplement.name?.toLowerCase().includes('l-tryptophan') 
+                              ? 'max-w-xs max-h-48' 
+                              : 'max-w-md max-h-80'
+                          }`}
+                          priority
+                        />
+                      ))}
+                    </div>
                   </div>
-                </div>
-              );
+                );
+              }
+            } catch (error) {
+              console.error('Error processing gallery images:', error);
             }
             return null;
           })()}
           
           {/* Single Molecular Structure Image - Fallback */}
           {supplement.heroImageUrl && (!supplement.galleryImages || (() => {
-            // Check if galleryImages is empty
-            if (Array.isArray(supplement.galleryImages)) {
-              return supplement.galleryImages.length === 0;
-            } else if (typeof supplement.galleryImages === 'string') {
-              return !supplement.galleryImages.trim();
+            try {
+              // Check if galleryImages is empty
+              if (Array.isArray(supplement.galleryImages)) {
+                return supplement.galleryImages.length === 0;
+              } else if (typeof supplement.galleryImages === 'string') {
+                return !supplement.galleryImages.trim();
+              }
+              return true; // If galleryImages is null/undefined, show heroImageUrl
+            } catch (error) {
+              console.error('Error checking gallery images:', error);
+              return true; // Fallback to showing heroImageUrl
             }
-            return true; // If galleryImages is null/undefined, show heroImageUrl
           })()) && (
             <div className="flex justify-center mb-6">
               <Image 
