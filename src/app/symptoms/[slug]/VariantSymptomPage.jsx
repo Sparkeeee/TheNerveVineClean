@@ -2,6 +2,9 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+
+// TODO: Replace this hardcoded map with database-driven related symptoms
+// This should be sourced from symptom.relatedSymptoms or similar database field
 const relatedSymptomsMap = {
     'Insomnia': [
         { name: 'Anxiety', href: '/symptoms/anxiety', color: 'purple' },
