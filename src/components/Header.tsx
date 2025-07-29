@@ -43,7 +43,7 @@ export default function Header() {
               <span className="xs:hidden">Natural Support</span>
             </span>
             <span className="hidden sm:inline">•</span>
-            <span className="hidden sm:inline">Premium Quality Assured</span>
+            <span className="hidden sm:inline">Premium Quality Assurance</span>
             <span className="hidden lg:inline">•</span>
             <span className="hidden lg:inline">Scientifically Backed</span>
           </div>
