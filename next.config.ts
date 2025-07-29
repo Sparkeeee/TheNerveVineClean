@@ -48,7 +48,7 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: 'Cache-Control',
-            value: 'no-cache', // No caching for API routes during debugging
+            value: 'public, max-age=300, s-maxage=900', // 5min browser, 15min CDN for API routes
           },
         ],
       },

@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { getCachedSupplements } from '@/lib/database';
 
-// Force dynamic rendering - don't pre-render this page
-export const dynamic = 'force-dynamic';
+// Use ISR for optimal caching with database updates  
+export const revalidate = 900; // 15 minutes - matches cache TTL
 
 export default async function SupplementsPage() {
   // Fetch supplements from database and sort alphabetically by name

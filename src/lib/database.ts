@@ -28,23 +28,44 @@ if (process.env.NODE_ENV === 'production') {
   prisma = global.prisma;
 }
 
-// Simple cache with shorter TTL for Vercel
+// Simple cache with optimized TTL for maximum efficiency
 const cache = new Map();
-const CACHE_TTL = 2 * 60 * 1000; // 2 minutes for Vercel
+const CACHE_TTL = process.env.NODE_ENV === 'production' 
+  ? 15 * 60 * 1000  // 15 minutes in production (herbs/supplements rarely change)
+  : 2 * 60 * 1000;  // 2 minutes in development for testing
+
+// Cache cleanup to prevent memory leaks
+const CLEANUP_INTERVAL = 30 * 60 * 1000; // 30 minutes
+setInterval(() => {
+  const now = Date.now();
+  for (const [key, value] of cache.entries()) {
+    if (now - value.timestamp > CACHE_TTL * 2) { // Clean expired + buffer
+      cache.delete(key);
+    }
+  }
+}, CLEANUP_INTERVAL);
 
 // Simplified cached functions without complex connection management
 export async function getCachedSupplement(slug: string) {
-  console.log(`[DEBUG] getCachedSupplement called with slug: ${slug}`);
+  // Production optimization: Remove debug logging for performance
+  if (process.env.NODE_ENV === 'development') {
+    console.log(`[DEBUG] getCachedSupplement called with slug: ${slug}`);
+  }
+  
   const cacheKey = `supplement:${slug}`;
   const cached = cache.get(cacheKey);
   
   if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
-    console.log(`[DEBUG] Returning cached supplement for: ${slug}`);
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`[DEBUG] Returning cached supplement for: ${slug}`);
+    }
     return cached.data;
   }
   
   try {
-    console.log(`[DEBUG] Fetching supplement from database: ${slug}`);
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`[DEBUG] Fetching supplement from database: ${slug}`);
+    }
     const data = await prisma.supplement.findFirst({
       where: { slug },
       select: { 

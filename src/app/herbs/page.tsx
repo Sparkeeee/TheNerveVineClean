@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { getCachedHerbs, getCachedSymptoms } from '@/lib/database';
 
-// Force dynamic rendering - don't pre-render this page
-export const dynamic = 'force-dynamic';
+// Use ISR for optimal caching with database updates
+export const revalidate = 900; // 15 minutes - matches cache TTL
 
 // Helper to extract latin name from description if subtitle is missing
 function getLatinName(description: string): string {

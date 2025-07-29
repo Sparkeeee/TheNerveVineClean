@@ -34,6 +34,75 @@ TheNerveVine is a comprehensive herbal wellness platform that combines evidence-
 - **Data Import/Export**: Automated systems for bulk content updates
 - **Quality Control**: Admin-curated quality criteria for product selection
 
+## 🌊 THE DOMINO RALLY CASCADE SYSTEM
+
+### **The Revolutionary Content Network**
+
+TheNerveVine features a sophisticated **cascade automation system** where one product approval creates a ripple effect across the entire content network. This is the heart of our automated affiliate marketplace.
+
+### **🎯 Quality ↔ Revenue Spectrum Control**
+
+Admins can adjust the system from "Quality over Revenue" to "Revenue at All Costs" using dynamic scoring weights:
+
+```typescript
+// Quality-focused (ethical sweet spot)
+const scoringWeights = {
+  qualityScore: 0.7,        // Prioritize product quality
+  commissionRate: 0.2,      // Secondary consideration
+  userReviews: 0.1         // User satisfaction
+};
+
+// Revenue-focused (maximum profit)
+const scoringWeights = {
+  qualityScore: 0.2,        // Minimum quality threshold
+  commissionRate: 0.7,      // Maximize commissions
+  availability: 0.1         // Stock considerations
+};
+```
+
+### **🔄 The Cascade Flow**
+
+```mermaid
+flowchart TD
+    A["Weekly Product Hunt"] --> B["JSON Juggler & Translator"]
+    B --> C["Admin Review Dashboard"]
+    C --> D["Approve Ginkgo Tincture"]
+    D --> E["Auto-update /herbs/ginkgo-biloba"]
+    E --> F["CASCADE TO SYMPTOMS"]
+    F --> G["Update /symptoms/memory-issues"]
+    F --> H["Update /symptoms/focus-problems"] 
+    F --> I["Update /symptoms/cognitive-decline"]
+    G --> J["Live Product Sections Updated"]
+    H --> J
+    I --> J
+    J --> K["Entire Network Refreshed"]
+```
+
+### **📊 Content Hierarchy & Product Flow**
+
+#### **For Each Herb:**
+- **Traditional Formulations**: Tinctures, teas, powders
+- **Phytoceuticals**: Standardized extracts, capsules
+- **Quality Specifications**: Admin-defined criteria per formulation type
+
+#### **For Each Symptom:**
+- **Top 1-2 Recommended Herbs**: Primary therapeutic focus
+- **Supporting Supplements**: Vitamins, minerals, oils (non-herbal)
+- **Dynamic Product Population**: Automatically inherits from approved herb/supplement products
+
+### **⚡ The Ripple Effect in Action**
+
+When an admin approves a **Ginkgo Biloba standardized extract**:
+
+1. **Primary Update**: `/herbs/ginkgo-biloba` page gets new product
+2. **Cascade Triggers**: System identifies all symptoms where Ginkgo is recommended
+3. **Automatic Updates**: 
+   - `/symptoms/memory-issues` - new Ginkgo product appears
+   - `/symptoms/focus-problems` - new Ginkgo product appears  
+   - `/symptoms/cognitive-decline` - new Ginkgo product appears
+4. **Cache Invalidation**: All affected pages refresh with new content
+5. **Network Effect**: One approval updates 10+ pages simultaneously
+
 ## 🔄 Automated Product Sourcing System
 
 ### API Integration Framework
@@ -53,7 +122,8 @@ TheNerveVine is a comprehensive herbal wellness platform that combines evidence-
 1. **Criteria Definition**: Admins set quality thresholds and requirements
 2. **Automated Filtering**: APIs automatically filter products based on criteria
 3. **Manual Review**: Final approval of automated selections
-4. **Performance Tracking**: Monitor conversion rates and user satisfaction
+4. **CASCADE ACTIVATION**: Approved products ripple through the entire network
+5. **Performance Tracking**: Monitor conversion rates and user satisfaction
 
 ## 📊 Revenue Model
 
@@ -173,40 +243,3 @@ This project is proprietary and confidential. All rights reserved.
 ---
 
 *TheNerveVine: Where evidence-based wellness meets ethical automation.*
-
-## 🔍 Automated Product Hunt Workflow
-
-TheNerveVine features a scheduled, admin-curated product hunt system that automates the discovery and curation of high-quality affiliate products from multiple merchant APIs. This process ensures only the best products, as defined by admin-set quality criteria, are considered for inclusion on the site.
-
-### Workflow Overview
-
-```mermaid
-flowchart TD
-    A["Start Product Hunt (Scheduled)"] --> B["API Calls to Merchants"]
-    B --> C["Parse API JSON Responses"]
-    C --> D["Filter by Quality Criteria"]
-    D --> E["Store Top 5 per Herb/Supplement in PendingProduct Table"]
-    E --> F["Render Product Cards in Admin Dashboard"]
-    F --> G{"Admin Review"}
-    G -- "Approve" --> H["Move to Product Table & Link to Herb/Supplement/Symptom"]
-    G -- "Reject" --> I["Delete or Archive Pending Product"]
-    H --> J["Auto-Populate Public Site"]
-    I --> K["Cleanup Old Pending Products"]
-    J --> L["End"]
-    K --> L
-```
-
-### Step-by-Step Explanation
-1. **Start Product Hunt (Scheduled):** Every 1–2 weeks, the system initiates API calls to selected merchants.
-2. **API Calls to Merchants:** Each merchant API returns a list of products in JSON format.
-3. **Parse API JSON Responses:** The system parses and normalizes the product data.
-4. **Filter by Quality Criteria:** Only products meeting or exceeding admin-defined quality standards are considered.
-5. **Store Top 5 per Herb/Supplement:** The best 5 products per herb/supplement are stored in a temporary pending table for admin review.
-6. **Render Product Cards in Admin Dashboard:** Admins see product cards for easy review and selection.
-7. **Admin Review:** Admins approve or reject each product.
-    - **Approve:** Product is moved to the main Product table and linked to the relevant herb, supplement, or symptom.
-    - **Reject:** Product is deleted or archived.
-8. **Auto-Populate Public Site:** Approved products automatically appear in the correct areas of the website.
-9. **Cleanup Old Pending Products:** Unreviewed products are periodically cleaned up to minimize storage and compute costs.
-
-This workflow ensures that only high-quality, admin-approved products are featured, while keeping the process efficient and scalable.

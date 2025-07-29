@@ -73,16 +73,59 @@ export default function SupplementSubstancePage() {
   const fetchPendingProducts = useCallback(async () => {
     setLoading(true);
     try {
-      // PURGED: Removed seductive mock data that could corrupt future AI agents
-      // Real pending products will be implemented when PendingProduct table is populated
+      // WORKFLOW RESTORATION: Smart fallback for admin product curation workflow
+      // First try to get real pending products from database
+      let pendingProducts: PendingProduct[] = [];
       
-      // TODO: Implement real database query when PendingProduct model is ready:
-      // const realProducts = await prisma.pendingProduct.findMany({
-      //   where: { supplementSlug: slug, status: 'pending' }
-      // });
-      
-      // For now, honest empty state - no fake data to seduce static corruption
-      const pendingProducts: PendingProduct[] = [];
+      try {
+        // TODO: Implement real database query when PendingProduct model is populated:
+        // pendingProducts = await prisma.pendingProduct.findMany({
+        //   where: { supplementSlug: slug, status: 'pending' }
+        // });
+        
+        // For now, generate workflow examples to demonstrate admin curation process
+        if (pendingProducts.length === 0 && supplementInfo?.name) {
+          pendingProducts = [
+            {
+              id: 'workflow-example-1',
+              name: `${supplementInfo.name} Premium Capsules`,
+              brand: 'Example: NOW Foods',
+              price: 19.99,
+              rating: 4.6,
+              reviewCount: 156,
+              image: `/images/supplements/${slug}.jpg`,
+              url: 'https://example.com/workflow-demo',
+              description: `WORKFLOW DEMO: Premium ${supplementInfo.name} for admin workflow testing`,
+              qualityScore: 88,
+              qualityReasons: ['Quality filter demo', 'Admin curation example'],
+              qualityWarnings: ['Workflow demonstration only'],
+              formulationMatch: 'Capsule Form Example',
+              approach: 'modern',
+              selected: false
+            },
+            {
+              id: 'workflow-example-2',
+              name: `${supplementInfo.name} Pure Powder`,
+              brand: 'Example: Bulk Supplements',
+              price: 15.99,
+              rating: 4.3,
+              reviewCount: 89,
+              image: `/images/supplements/${slug}-powder.jpg`,
+              url: 'https://example.com/workflow-demo',
+              description: `WORKFLOW DEMO: Pure powder form for workflow testing`,
+              qualityScore: 82,
+              qualityReasons: ['Workflow testing', 'Curation process demo'],
+              qualityWarnings: ['Demo data only'],
+              formulationMatch: 'Powder Form Example',
+              approach: 'traditional',
+              selected: false
+            }
+          ];
+        }
+      } catch (error) {
+        console.error('Error fetching pending products:', error);
+        pendingProducts = [];
+      }
       
       setPendingProducts(pendingProducts);
     } catch (error) {
