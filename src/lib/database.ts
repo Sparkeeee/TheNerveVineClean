@@ -180,18 +180,42 @@ export async function getCachedHerbs() {
   const cached = cache.get(cacheKey);
   
   if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+    console.log('[DEBUG] Returning cached herbs');
     return cached.data;
   }
   
   try {
+    console.log('[DEBUG] Fetching herbs from database...');
+    
+    // Test connection first
+    await prisma.$connect();
+    console.log('[DEBUG] Database connected for herbs query');
+    
     const data = await prisma.herb.findMany({
-      select: { id: true, name: true, slug: true, description: true }
+      select: { 
+        id: true, 
+        name: true, 
+        slug: true, 
+        description: true,
+        latinName: true,
+        indications: true,
+        traditionalUses: true
+      },
+      orderBy: { name: 'asc' }
     });
+    
+    console.log(`[DEBUG] Found ${data.length} herbs`);
     
     cache.set(cacheKey, { data, timestamp: Date.now() });
     return data;
   } catch (error) {
     console.error('Error fetching herbs:', error);
+    console.error('Herbs error details:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : 'No stack trace',
+      name: error instanceof Error ? error.name : 'Unknown name',
+    });
+    // Return empty array but don't cache the failure
     return [];
   }
 }
@@ -201,18 +225,39 @@ export async function getCachedSymptoms() {
   const cached = cache.get(cacheKey);
   
   if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+    console.log('[DEBUG] Returning cached symptoms');
     return cached.data;
   }
   
   try {
+    console.log('[DEBUG] Fetching symptoms from database...');
+    
+    // Test connection first
+    await prisma.$connect();
+    console.log('[DEBUG] Database connected for symptoms query');
+    
     const data = await prisma.symptom.findMany({
-      select: { id: true, title: true, slug: true, description: true }
+      select: { 
+        id: true, 
+        title: true, 
+        slug: true, 
+        description: true 
+      },
+      orderBy: { title: 'asc' }
     });
+    
+    console.log(`[DEBUG] Found ${data.length} symptoms`);
     
     cache.set(cacheKey, { data, timestamp: Date.now() });
     return data;
   } catch (error) {
     console.error('Error fetching symptoms:', error);
+    console.error('Symptoms error details:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : 'No stack trace',
+      name: error instanceof Error ? error.name : 'Unknown name',
+    });
+    // Return empty array but don't cache the failure
     return [];
   }
 }
