@@ -14,8 +14,8 @@ export default function Header() {
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  // Debug session
-  console.log('Header - Session status:', status, 'Session:', session);
+  // Debug session - removed console.log to prevent hydration issues
+  // console.log('Header - Session status:', status, 'Session:', session);
 
   const navigation = [
     { name: 'Home', href: '/' },
@@ -49,43 +49,45 @@ export default function Header() {
           </div>
           
           {/* Admin and Logout Buttons in Trust Banner */}
-          {status === 'loading' ? (
-            <div className="w-16 sm:w-20 h-6 bg-green-500 animate-pulse rounded"></div>
-          ) : session ? (
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => {
-                  console.log('Admin button clicked!');
-                  window.location.href = '/admin';
-                }}
-                className="px-3 py-1 text-xs sm:text-sm bg-white text-lime-700 font-semibold rounded hover:bg-gray-100 transition-colors cursor-pointer"
-              >
-                Admin
-              </button>
-              <button
-                onClick={async () => {
-                  try {
-                    await signOut({ redirect: false });
-                    router.push('/login');
-                  } catch (error) {
-                    console.error('Logout error:', error);
-                    // Fallback to direct navigation
-                    router.push('/login');
-                  }
-                }}
+          <div suppressHydrationWarning>
+            {status === 'loading' ? (
+              <div className="w-16 sm:w-20 h-6 bg-green-500 animate-pulse rounded"></div>
+            ) : session ? (
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    console.log('Admin button clicked!');
+                    window.location.href = '/admin';
+                  }}
+                  className="px-3 py-1 text-xs sm:text-sm bg-white text-lime-700 font-semibold rounded hover:bg-gray-100 transition-colors cursor-pointer"
+                >
+                  Admin
+                </button>
+                <button
+                  onClick={async () => {
+                    try {
+                      await signOut({ redirect: false });
+                      router.push('/login');
+                    } catch (error) {
+                      console.error('Logout error:', error);
+                      // Fallback to direct navigation
+                      router.push('/login');
+                    }
+                  }}
+                  className="px-3 py-1 text-xs sm:text-sm bg-white text-lime-700 font-semibold rounded hover:bg-gray-100 transition-colors"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <Link
+                href="/login"
                 className="px-3 py-1 text-xs sm:text-sm bg-white text-lime-700 font-semibold rounded hover:bg-gray-100 transition-colors"
               >
-                Logout
-              </button>
-            </div>
-          ) : (
-            <Link
-              href="/login"
-              className="px-3 py-1 text-xs sm:text-sm bg-white text-lime-700 font-semibold rounded hover:bg-gray-100 transition-colors"
-            >
-              Admin Login
-            </Link>
-          )}
+                Admin Login
+              </Link>
+            )}
+          </div>
         </div>
       </div>
 

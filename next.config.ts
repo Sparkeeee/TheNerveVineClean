@@ -17,8 +17,8 @@ const nextConfig: NextConfig = {
   // Static generation optimization
   trailingSlash: false,
   
-  // Vercel optimizations
-  output: 'standalone',
+  // Remove problematic output setting
+  // output: 'standalone', // THIS BREAKS PRISMA
   
   // Ensure public access
   publicRuntimeConfig: {
@@ -29,21 +29,18 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizeCss: true,
     optimizePackageImports: ['@prisma/client'],
+    serverComponentsExternalPackages: ['@prisma/client'], // Fix Prisma in production
   },
   
-  // Headers for aggressive caching
+  // Fixed headers - remove aggressive API caching
   async headers() {
     return [
       {
-        source: '/(.*)',
+        source: '/images/(.*)',
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable', // 1 year
-          },
-          {
-            key: 'X-Robots-Tag',
-            value: 'public',
+            value: 'public, max-age=31536000, immutable', // 1 year for images only
           },
         ],
       },
@@ -52,20 +49,7 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=3600, stale-while-revalidate=86400', // 1 hour + 1 day stale
-          },
-          {
-            key: 'X-Robots-Tag',
-            value: 'public',
-          },
-        ],
-      },
-      {
-        source: '/images/(.*)',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable', // 1 year
+            value: 'no-cache', // No caching for API routes during debugging
           },
         ],
       },
