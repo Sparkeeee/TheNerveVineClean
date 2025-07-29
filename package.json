@@ -5,10 +5,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && next build",
+    "build": "npx prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "prisma generate",
+    "postinstall": "npx prisma generate",
     "migrate:prepare": "tsx src/scripts/prepareMigration.ts",
     "migrate:execute": "tsx src/scripts/executeMigration.ts",
     "migrate:dry-run": "tsx src/scripts/dryRunMigration.ts",
