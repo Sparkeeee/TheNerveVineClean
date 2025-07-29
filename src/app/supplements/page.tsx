@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getCachedSupplements, getCachedSymptoms } from '@/lib/database';
+import { getCachedSupplements } from '@/lib/database';
 
 // Force dynamic rendering - don't pre-render this page
 export const dynamic = 'force-dynamic';
