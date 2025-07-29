@@ -14,6 +14,10 @@ if (process.env.NODE_ENV === 'production') {
       },
     },
     log: ['error', 'warn'],
+    // Optimized for Vercel serverless
+    transactionOptions: {
+      timeout: 5000, // 5 seconds
+    },
   });
 } else {
   if (!global.prisma) {

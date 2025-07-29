@@ -9,6 +9,11 @@ export async function GET(req: NextRequest) {
   const offset = parseInt(searchParams.get('offset') || '0');
   
   try {
+    // Test database connection first
+    console.log('Testing database connection...');
+    await prisma.$connect();
+    console.log('Database connected successfully');
+    
     if (id) {
       const herb = await prisma.herb.findUnique({
         where: { id: Number(id) },
@@ -56,7 +61,13 @@ export async function GET(req: NextRequest) {
     }
   } catch (error) {
     console.error('Herbs API error:', error);
-    return createErrorResponse('Failed to fetch herbs');
+    console.error('Error details:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : 'No stack trace',
+      name: error instanceof Error ? error.name : 'Unknown name',
+      cause: error instanceof Error ? error.cause : 'No cause'
+    });
+    return createErrorResponse(`Failed to fetch herbs: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 }
 
