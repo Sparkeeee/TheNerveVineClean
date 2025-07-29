@@ -19,7 +19,7 @@ export async function GET() {
           pathname: url.pathname,
           search: url.search
         };
-      } catch (e) {
+      } catch {
         urlParts = { error: 'Invalid URL format' };
       }
     }
