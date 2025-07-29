@@ -17,19 +17,18 @@ const nextConfig: NextConfig = {
   // Static generation optimization
   trailingSlash: false,
   
-  // Remove problematic output setting
-  // output: 'standalone', // THIS BREAKS PRISMA
-  
   // Ensure public access
   publicRuntimeConfig: {
     publicAccess: true,
   },
   
+  // Fix for Next.js 15 - moved from experimental
+  serverExternalPackages: ['@prisma/client'],
+  
   // Experimental features for performance
   experimental: {
     optimizeCss: true,
-    optimizePackageImports: ['@prisma/client'],
-    serverComponentsExternalPackages: ['@prisma/client'], // Fix Prisma in production
+    // Removed conflicting optimizePackageImports
   },
   
   // Fixed headers - remove aggressive API caching
