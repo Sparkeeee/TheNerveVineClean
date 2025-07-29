@@ -252,9 +252,6 @@ export default function SupplementSubstancePage() {
               <h1 className="text-3xl font-bold text-gray-900 mb-2">
                 {supplementInfo?.name}
               </h1>
-              {supplementInfo?.category && (
-                <p className="text-lg text-blue-600 font-medium">{supplementInfo.category}</p>
-              )}
               <p className="text-gray-600 mt-2">{supplementInfo?.description}</p>
             </div>
             
