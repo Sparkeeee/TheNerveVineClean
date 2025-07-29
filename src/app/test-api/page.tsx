@@ -74,7 +74,7 @@ export default function TestApi() {
             <div className="bg-gray-50 p-4 rounded space-y-4">
               {Object.entries(data.individualQueries).map(([slug, result]: [string, any]) => (
                 <div key={slug}>
-                  <h3 className="font-semibold">Query: '{slug}'</h3>
+                  <h3 className="font-semibold">Query: &apos;{slug}&apos;</h3>
                   {result.found ? (
                     <div className="bg-green-50 p-2 rounded">
                       <p><strong>Found:</strong> {result.name}</p>

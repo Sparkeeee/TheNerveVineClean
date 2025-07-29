@@ -70,27 +70,6 @@ export default function SupplementSubstancePage() {
     }
   }, [slug]);
 
-  const getSupplementCategory = (slug: string): string => {
-    const categories: { [key: string]: string } = {
-      'l-theanine': 'Amino Acids',
-      'magnesium': 'Minerals',
-      'vitamin-d3': 'Vitamins',
-      'omega-3': 'Essential Fatty Acids',
-      'b-complex': 'Vitamins',
-      'zinc': 'Minerals',
-      'probiotics': 'Gut Health',
-      'melatonin': 'Sleep Support',
-      '5-htp': 'Amino Acids',
-      'gaba': 'Amino Acids',
-      'creatine': 'Performance',
-      'coq10': 'Antioxidants',
-      'nac': 'Amino Acids',
-      'alpha-gpc': 'Cognitive Support',
-      'phosphatidylserine': 'Brain Health'
-    };
-    return categories[slug] || 'Supplements';
-  };
-
   const fetchPendingProducts = useCallback(async () => {
     setLoading(true);
     try {
