@@ -16,22 +16,25 @@ export async function getSymptomBySlug(slug: string): Promise<SymptomType | null
         bestHerb: variant.herbs?.[0] ? {
           name: variant.herbs[0].name || '',
           description: variant.herbs[0].description || '',
-          price: '$24.99', // Placeholder - would come from product data
-          affiliateLink: '#', // Placeholder - would come from product data
+          // PURGED: Removed static price/affiliate corruption - real data from Product table when available
+          price: 'Price TBD', // Will be sourced from real product data when Product table is populated
+          affiliateLink: '#', // Will be sourced from real affiliate data when available
           image: '/images/closed-medical-brown-glass-bottle-yellow-vitamins.png'
         } : undefined,
         bestStandardized: variant.supplements?.[0] ? {
           name: variant.supplements[0].name || '',
           description: variant.supplements[0].description || '',
-          price: '$19.99', // Placeholder - would come from product data
-          affiliateLink: '#', // Placeholder - would come from product data
+          // PURGED: Removed static price/affiliate corruption - real data from Product table when available
+          price: 'Price TBD', // Will be sourced from real product data when Product table is populated
+          affiliateLink: '#', // Will be sourced from real affiliate data when available
           image: '/images/closed-medical-brown-glass-bottle-yellow-vitamins.png'
         } : undefined,
         topSupplements: variant.supplements?.slice(1).map((supp: any) => ({
           name: supp.name || '',
           description: supp.description || '',
-          price: '$15.99', // Placeholder - would come from product data
-          affiliateLink: '#', // Placeholder - would come from product data
+          // PURGED: Removed static price/affiliate corruption - real data from Product table when available
+          price: 'Price TBD', // Will be sourced from real product data when Product table is populated
+          affiliateLink: '#', // Will be sourced from real affiliate data when available
           image: '/images/closed-medical-brown-glass-bottle-yellow-vitamins.png'
         })) || []
       };

@@ -73,69 +73,25 @@ export default function HerbSubstancePage() {
   const fetchPendingProducts = useCallback(async () => {
     setLoading(true);
     try {
-      // TODO: Replace with real pending products from database
-      // For now, using mock data structure but will be replaced with database query
-      const mockProducts: PendingProduct[] = [
-        {
-          id: '1',
-          name: `${herbInfo?.name || 'Herb'} Tincture`,
-          brand: 'Gaia Herbs',
-          price: 24.99,
-          rating: 4.5,
-          reviewCount: 127,
-          image: `/images/herbs/${slug}.jpg`,
-          url: 'https://example.com/product1',
-          description: `Organic ${herbInfo?.name || 'herb'} tincture, 1:2 ratio, organic alcohol`,
-          qualityScore: 85,
-          qualityReasons: ['Organic alcohol', '1:2 ratio', 'Wildcrafted herbs'],
-          qualityWarnings: [],
-          formulationMatch: 'Strong Traditional Tincture',
-          approach: 'traditional',
-          selected: false
-        },
-        {
-          id: '2',
-          name: `${herbInfo?.name || 'Herb'} Extract Capsules`,
-          brand: 'Nature\'s Way',
-          price: 18.99,
-          rating: 4.2,
-          reviewCount: 89,
-          image: `/images/herbs/${slug}-capsules.jpg`,
-          url: 'https://example.com/product2',
-          description: `Standardized extract, 60 capsules`,
-          qualityScore: 78,
-          qualityReasons: ['Standardized extract', 'Good bioavailability'],
-          qualityWarnings: ['Lower than 5% target'],
-          formulationMatch: 'Modern Standardized Extract',
-          approach: 'modern',
-          selected: false
-        },
-        {
-          id: '3',
-          name: `${herbInfo?.name || 'Herb'} Root Powder`,
-          brand: 'NOW Foods',
-          price: 12.99,
-          rating: 4.7,
-          reviewCount: 234,
-          image: `/images/herbs/${slug}-powder.jpg`,
-          url: 'https://example.com/product3',
-          description: `Organic ${herbInfo?.name || 'herb'} root powder, 8oz`,
-          qualityScore: 72,
-          qualityReasons: ['Organic', 'Good price point'],
-          qualityWarnings: ['No standardization'],
-          formulationMatch: 'Traditional Powder',
-          approach: 'traditional',
-          selected: false
-        }
-      ];
+      // PURGED: Removed seductive mock data that could corrupt future AI agents
+      // Real pending products will be implemented when PendingProduct table is populated
       
-      setPendingProducts(mockProducts);
+      // TODO: Implement real database query when PendingProduct model is ready:
+      // const realProducts = await prisma.pendingProduct.findMany({
+      //   where: { herbSlug: slug, status: 'pending' }
+      // });
+      
+      // For now, honest empty state - no fake data to seduce static corruption
+      const pendingProducts: PendingProduct[] = [];
+      
+      setPendingProducts(pendingProducts);
     } catch (error) {
       console.error('Error fetching pending products:', error);
+      setPendingProducts([]);
     } finally {
       setLoading(false);
     }
-  }, [slug, herbInfo]);
+  }, [slug]);
 
   useEffect(() => {
     fetchHerbInfo();

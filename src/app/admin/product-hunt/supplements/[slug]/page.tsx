@@ -73,69 +73,25 @@ export default function SupplementSubstancePage() {
   const fetchPendingProducts = useCallback(async () => {
     setLoading(true);
     try {
-      // TODO: Replace with real pending products from database
-      // For now, using mock data structure but will be replaced with database query
-      const mockProducts: PendingProduct[] = [
-        {
-          id: '1',
-          name: `${supplementInfo?.name || 'Supplement'} Capsules`,
-          brand: 'NOW Foods',
-          price: 19.99,
-          rating: 4.6,
-          reviewCount: 156,
-          image: `/images/supplements/${slug}.jpg`,
-          url: 'https://example.com/product1',
-          description: `High-quality ${supplementInfo?.name || 'supplement'} capsules, 60 count`,
-          qualityScore: 88,
-          qualityReasons: ['Third-party tested', 'GMP certified', 'High bioavailability'],
-          qualityWarnings: [],
-          formulationMatch: 'Modern Standardized Form',
-          approach: 'modern',
-          selected: false
-        },
-        {
-          id: '2',
-          name: `${supplementInfo?.name || 'Supplement'} Powder`,
-          brand: 'Bulk Supplements',
-          price: 15.99,
-          rating: 4.3,
-          reviewCount: 89,
-          image: `/images/supplements/${slug}-powder.jpg`,
-          url: 'https://example.com/product2',
-          description: `Pure ${supplementInfo?.name || 'supplement'} powder, 100g`,
-          qualityScore: 82,
-          qualityReasons: ['Pure powder form', 'Good value'],
-          qualityWarnings: ['No added ingredients'],
-          formulationMatch: 'Pure Powder Form',
-          approach: 'traditional',
-          selected: false
-        },
-        {
-          id: '3',
-          name: `${supplementInfo?.name || 'Supplement'} Liquid`,
-          brand: 'Nature\'s Answer',
-          price: 22.99,
-          rating: 4.4,
-          reviewCount: 67,
-          image: `/images/supplements/${slug}-liquid.jpg`,
-          url: 'https://example.com/product3',
-          description: `Liquid ${supplementInfo?.name || 'supplement'}, alcohol-free`,
-          qualityScore: 79,
-          qualityReasons: ['Liquid form', 'Alcohol-free'],
-          qualityWarnings: ['Lower concentration'],
-          formulationMatch: 'Liquid Extract',
-          approach: 'traditional',
-          selected: false
-        }
-      ];
+      // PURGED: Removed seductive mock data that could corrupt future AI agents
+      // Real pending products will be implemented when PendingProduct table is populated
       
-      setPendingProducts(mockProducts);
+      // TODO: Implement real database query when PendingProduct model is ready:
+      // const realProducts = await prisma.pendingProduct.findMany({
+      //   where: { supplementSlug: slug, status: 'pending' }
+      // });
+      
+      // For now, honest empty state - no fake data to seduce static corruption
+      const pendingProducts: PendingProduct[] = [];
+      
+      setPendingProducts(pendingProducts);
     } catch (error) {
       console.error('Error fetching pending products:', error);
+      setPendingProducts([]);
     } finally {
       setLoading(false);
     }
-  }, [slug, supplementInfo]);
+  }, [slug]);
 
   useEffect(() => {
     fetchSupplementInfo();
