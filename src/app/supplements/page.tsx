@@ -1,5 +1,8 @@
 import Link from "next/link";
-import { getCachedSupplements } from '@/lib/database';
+import { getCachedSupplements, getCachedSymptoms } from '@/lib/database';
+
+// Force dynamic rendering - don't pre-render this page
+export const dynamic = 'force-dynamic';
 
 export default async function SupplementsPage() {
   // Fetch supplements from database and sort alphabetically by name

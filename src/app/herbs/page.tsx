@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { getCachedHerbs, getCachedSymptoms } from '@/lib/database';
 
+// Force dynamic rendering - don't pre-render this page
+export const dynamic = 'force-dynamic';
+
 // Helper to extract latin name from description if subtitle is missing
 function getLatinName(description: string): string {
   const match = description.match(/\(([^)]+)\)/);

@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { getCachedSymptoms } from '@/lib/database';
 
+// Force dynamic rendering - don't pre-render this page
+export const dynamic = 'force-dynamic';
+
 interface Symptom {
   name: string;
   href: string;
