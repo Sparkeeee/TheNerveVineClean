@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { getCachedHerbs, getCachedSupplements } from '@/lib/database';
 
 interface Herb {
   id: number;
@@ -32,45 +33,27 @@ export default function ProductHuntDashboard() {
   const fetchSubstances = async () => {
     setLoading(true);
     try {
-      // Mock data - in real implementation, this would come from your API
-      const mockHerbs: Herb[] = [
-        { id: 1, name: 'Ashwagandha', slug: 'ashwagandha', pendingCount: 3 },
-        { id: 2, name: 'St. John\'s Wort', slug: 'st-johns-wort', pendingCount: 2 },
-        { id: 3, name: 'Rhodiola Rosea', slug: 'rhodiola-rosea', pendingCount: 1 },
-        { id: 4, name: 'Ginseng', slug: 'ginseng', pendingCount: 4 },
-        { id: 5, name: 'Lemon Balm', slug: 'lemon-balm', pendingCount: 2 },
-        { id: 6, name: 'Valerian Root', slug: 'valerian-root', pendingCount: 3 },
-        { id: 7, name: 'Chamomile', slug: 'chamomile', pendingCount: 1 },
-        { id: 8, name: 'Passionflower', slug: 'passionflower', pendingCount: 2 },
-        { id: 9, name: 'Lavender', slug: 'lavender', pendingCount: 1 },
-        { id: 10, name: 'Skullcap', slug: 'skullcap', pendingCount: 2 },
-        { id: 11, name: 'Oat Straw', slug: 'oat-straw', pendingCount: 1 },
-        { id: 12, name: 'Holy Basil', slug: 'holy-basil', pendingCount: 3 },
-        { id: 13, name: 'Maca Root', slug: 'maca-root', pendingCount: 2 },
-        { id: 14, name: 'Schisandra', slug: 'schisandra', pendingCount: 1 },
-        { id: 15, name: 'Reishi Mushroom', slug: 'reishi-mushroom', pendingCount: 2 }
-      ];
+      // Fetch real data from database
+      const dbHerbs = await getCachedHerbs();
+      const dbSupplements = await getCachedSupplements();
 
-      const mockSupplements: Supplement[] = [
-        { id: 1, name: 'L-Theanine', slug: 'l-theanine', pendingCount: 2 },
-        { id: 2, name: 'Magnesium', slug: 'magnesium', pendingCount: 4 },
-        { id: 3, name: 'Vitamin D3', slug: 'vitamin-d3', pendingCount: 3 },
-        { id: 4, name: 'Omega-3', slug: 'omega-3', pendingCount: 2 },
-        { id: 5, name: 'B-Complex', slug: 'b-complex', pendingCount: 1 },
-        { id: 6, name: 'Zinc', slug: 'zinc', pendingCount: 2 },
-        { id: 7, name: 'Probiotics', slug: 'probiotics', pendingCount: 3 },
-        { id: 8, name: 'Melatonin', slug: 'melatonin', pendingCount: 2 },
-        { id: 9, name: '5-HTP', slug: '5-htp', pendingCount: 1 },
-        { id: 10, name: 'GABA', slug: 'gaba', pendingCount: 2 },
-        { id: 11, name: 'Creatine', slug: 'creatine', pendingCount: 1 },
-        { id: 12, name: 'CoQ10', slug: 'coq10', pendingCount: 2 },
-        { id: 13, name: 'NAC', slug: 'nac', pendingCount: 1 },
-        { id: 14, name: 'Alpha-GPC', slug: 'alpha-gpc', pendingCount: 2 },
-        { id: 15, name: 'Phosphatidylserine', slug: 'phosphatidylserine', pendingCount: 1 }
-      ];
+      // Transform database data to match interface
+      const transformedHerbs: Herb[] = dbHerbs.map((herb: any) => ({
+        id: herb.id,
+        name: herb.name,
+        slug: herb.slug,
+        pendingCount: 0 // TODO: Implement pending count from PendingProduct table
+      }));
 
-      setHerbs(mockHerbs);
-      setSupplements(mockSupplements);
+      const transformedSupplements: Supplement[] = dbSupplements.map((supplement: any) => ({
+        id: supplement.id,
+        name: supplement.name,
+        slug: supplement.slug,
+        pendingCount: 0 // TODO: Implement pending count from PendingProduct table
+      }));
+
+      setHerbs(transformedHerbs);
+      setSupplements(transformedSupplements);
     } catch (error) {
       console.error('Error fetching substances:', error);
     } finally {

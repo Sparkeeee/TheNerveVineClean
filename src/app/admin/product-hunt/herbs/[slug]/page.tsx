@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
+import { getCachedHerb } from '@/lib/database';
 
 interface PendingProduct {
   id: string;
@@ -43,14 +44,27 @@ export default function HerbSubstancePage() {
 
   const fetchHerbInfo = useCallback(async () => {
     try {
-      // Mock data - in real implementation, this would come from your API
-      const mockHerbInfo: HerbInfo = {
-        name: slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
-        slug: slug,
-        description: `Quality specifications and pending products for ${slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}.`,
-        latinName: slug === 'st-johns-wort' ? 'Hypericum perforatum' : undefined
-      };
-      setHerbInfo(mockHerbInfo);
+      // Fetch real herb data from database
+      const dbHerb = await getCachedHerb(slug);
+      
+      if (dbHerb) {
+        const herbInfo: HerbInfo = {
+          name: dbHerb.name,
+          slug: dbHerb.slug,
+          description: dbHerb.description || `Quality specifications and pending products for ${dbHerb.name}.`,
+          latinName: dbHerb.latinName
+        };
+        setHerbInfo(herbInfo);
+      } else {
+        // Fallback if herb not found
+        const herbInfo: HerbInfo = {
+          name: slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
+          slug: slug,
+          description: `Quality specifications and pending products for ${slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}.`,
+          latinName: slug === 'st-johns-wort' ? 'Hypericum perforatum' : undefined
+        };
+        setHerbInfo(herbInfo);
+      }
     } catch (error) {
       console.error('Error fetching herb info:', error);
     }
@@ -59,7 +73,8 @@ export default function HerbSubstancePage() {
   const fetchPendingProducts = useCallback(async () => {
     setLoading(true);
     try {
-      // Mock data - in real implementation, this would come from your API
+      // TODO: Replace with real pending products from database
+      // For now, using mock data structure but will be replaced with database query
       const mockProducts: PendingProduct[] = [
         {
           id: '1',

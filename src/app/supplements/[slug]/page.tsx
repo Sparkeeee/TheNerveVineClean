@@ -96,12 +96,36 @@ export default async function SupplementPage({ params }: { params: Promise<{ slu
           {/* Multiple Molecular Structure Images - Database-driven with error handling */}
           {supplement.galleryImages && (() => {
             try {
-              // Handle both JSON array and comma-separated string
+              // Handle JSON data from database
               let imageUrls: string[] = [];
-              if (Array.isArray(supplement.galleryImages)) {
+              
+              if (typeof supplement.galleryImages === 'string') {
+                // Try to parse JSON string
+                try {
+                  const parsed = JSON.parse(supplement.galleryImages);
+                  if (Array.isArray(parsed)) {
+                    imageUrls = parsed;
+                  } else if (typeof parsed === 'string') {
+                    imageUrls = parsed.split(',').map((url: string) => url.trim()).filter((url: string) => url);
+                  }
+                } catch {
+                  // If JSON parsing fails, treat as comma-separated string
+                  imageUrls = supplement.galleryImages.split(',').map((url: string) => url.trim()).filter((url: string) => url);
+                }
+              } else if (Array.isArray(supplement.galleryImages)) {
+                // Already an array
                 imageUrls = supplement.galleryImages;
-              } else if (typeof supplement.galleryImages === 'string' && supplement.galleryImages.trim()) {
-                imageUrls = supplement.galleryImages.split(',').map((url: string) => url.trim()).filter((url: string) => url);
+              } else if (typeof supplement.galleryImages === 'object' && supplement.galleryImages !== null) {
+                // JSON object - try to extract URLs
+                const obj = supplement.galleryImages as any;
+                if (obj.urls && Array.isArray(obj.urls)) {
+                  imageUrls = obj.urls;
+                } else if (obj.images && Array.isArray(obj.images)) {
+                  imageUrls = obj.images;
+                } else {
+                  // Try to convert object values to array
+                  imageUrls = Object.values(obj).filter((val: any) => typeof val === 'string');
+                }
               }
               
               // Only render if we have actual image URLs

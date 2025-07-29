@@ -123,7 +123,7 @@ export default async function SymptomPage({ params }: { params: Promise<{ slug: 
               </h2>
               <div className="prose prose-gray max-w-none">
                 <p className="text-gray-700 mb-4">
-                  {transformedSymptom.description} Understanding the underlying causes and symptoms can help you 
+                  Understanding the underlying causes and symptoms can help you 
                   make informed decisions about natural support options.
                 </p>
                 <p className="text-gray-700 mb-4">

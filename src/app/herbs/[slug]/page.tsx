@@ -138,6 +138,67 @@ export default async function HerbPage({ params }: { params: Promise<{ slug: str
           </div>
         </div>
 
+        {/* Gallery Images - Database-driven with error handling */}
+        {herb.galleryImages && (() => {
+          try {
+            // Handle JSON data from database
+            let imageUrls: string[] = [];
+            
+            if (typeof herb.galleryImages === 'string') {
+              // Try to parse JSON string
+              try {
+                const parsed = JSON.parse(herb.galleryImages);
+                if (Array.isArray(parsed)) {
+                  imageUrls = parsed;
+                } else if (typeof parsed === 'string') {
+                  imageUrls = parsed.split(',').map((url: string) => url.trim()).filter((url: string) => url);
+                }
+              } catch {
+                // If JSON parsing fails, treat as comma-separated string
+                imageUrls = herb.galleryImages.split(',').map((url: string) => url.trim()).filter((url: string) => url);
+              }
+            } else if (Array.isArray(herb.galleryImages)) {
+              // Already an array
+              imageUrls = herb.galleryImages;
+            } else if (typeof herb.galleryImages === 'object' && herb.galleryImages !== null) {
+              // JSON object - try to extract URLs
+              const obj = herb.galleryImages as any;
+              if (obj.urls && Array.isArray(obj.urls)) {
+                imageUrls = obj.urls;
+              } else if (obj.images && Array.isArray(obj.images)) {
+                imageUrls = obj.images;
+              } else {
+                // Try to convert object values to array
+                imageUrls = Object.values(obj).filter((val: any) => typeof val === 'string');
+              }
+            }
+            
+            // Only render if we have actual image URLs
+            if (imageUrls.length > 0) {
+              return (
+                <div className="flex justify-center mb-6">
+                  <div className="flex gap-4 flex-wrap justify-center">
+                    {imageUrls.map((imageUrl: string, index: number) => (
+                      <Image 
+                        key={index}
+                        src={imageUrl} 
+                        alt={`${herb.name} herb image ${index + 1}`} 
+                        width={400} 
+                        height={300} 
+                        className="rounded-lg shadow-md w-auto h-auto object-contain max-w-md max-h-80"
+                        priority
+                      />
+                    ))}
+                  </div>
+                </div>
+              );
+            }
+          } catch (error) {
+            console.error('Error processing herb gallery images:', error);
+          }
+          return null;
+        })()}
+
         {indicationLinks.length > 0 && (
           <div className="my-4">
             <h3 className="text-lg font-semibold text-purple-800 mb-2">Common Uses</h3>

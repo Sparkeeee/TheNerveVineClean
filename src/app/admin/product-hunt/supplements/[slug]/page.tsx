@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
+import { getCachedSupplement } from '@/lib/database';
 
 interface PendingProduct {
   id: string;
@@ -27,7 +28,7 @@ interface SupplementInfo {
   name: string;
   slug: string;
   description: string;
-  category?: string;
+  dosage?: string;
 }
 
 export default function SupplementSubstancePage() {
@@ -43,14 +44,27 @@ export default function SupplementSubstancePage() {
 
   const fetchSupplementInfo = useCallback(async () => {
     try {
-      // Mock data - in real implementation, this would come from your API
-      const mockSupplementInfo: SupplementInfo = {
-        name: slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
-        slug: slug,
-        description: `Quality specifications and pending products for ${slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}.`,
-        category: getSupplementCategory(slug)
-      };
-      setSupplementInfo(mockSupplementInfo);
+      // Fetch real supplement data from database
+      const dbSupplement = await getCachedSupplement(slug);
+      
+      if (dbSupplement) {
+        const supplementInfo: SupplementInfo = {
+          name: dbSupplement.name,
+          slug: dbSupplement.slug,
+          description: dbSupplement.description || `Quality specifications and pending products for ${dbSupplement.name}.`,
+          dosage: dbSupplement.dosage
+        };
+        setSupplementInfo(supplementInfo);
+      } else {
+        // Fallback if supplement not found
+        const supplementInfo: SupplementInfo = {
+          name: slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
+          slug: slug,
+          description: `Quality specifications and pending products for ${slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}.`,
+          dosage: undefined
+        };
+        setSupplementInfo(supplementInfo);
+      }
     } catch (error) {
       console.error('Error fetching supplement info:', error);
     }
@@ -80,7 +94,8 @@ export default function SupplementSubstancePage() {
   const fetchPendingProducts = useCallback(async () => {
     setLoading(true);
     try {
-      // Mock data - in real implementation, this would come from your API
+      // TODO: Replace with real pending products from database
+      // For now, using mock data structure but will be replaced with database query
       const mockProducts: PendingProduct[] = [
         {
           id: '1',
@@ -93,9 +108,9 @@ export default function SupplementSubstancePage() {
           url: 'https://example.com/product1',
           description: `High-quality ${supplementInfo?.name || 'supplement'} capsules, 60 count`,
           qualityScore: 88,
-          qualityReasons: ['Third-party tested', 'Good bioavailability', 'Proper dosage'],
+          qualityReasons: ['Third-party tested', 'GMP certified', 'High bioavailability'],
           qualityWarnings: [],
-          formulationMatch: 'Modern Capsule',
+          formulationMatch: 'Modern Standardized Form',
           approach: 'modern',
           selected: false
         },
@@ -110,27 +125,27 @@ export default function SupplementSubstancePage() {
           url: 'https://example.com/product2',
           description: `Pure ${supplementInfo?.name || 'supplement'} powder, 100g`,
           qualityScore: 82,
-          qualityReasons: ['Pure powder', 'Good value', 'No fillers'],
-          qualityWarnings: ['No third-party testing'],
-          formulationMatch: 'Pure Powder',
+          qualityReasons: ['Pure powder form', 'Good value'],
+          qualityWarnings: ['No added ingredients'],
+          formulationMatch: 'Pure Powder Form',
           approach: 'traditional',
           selected: false
         },
         {
           id: '3',
           name: `${supplementInfo?.name || 'Supplement'} Liquid`,
-          brand: 'Nature\'s Bounty',
+          brand: 'Nature\'s Answer',
           price: 22.99,
           rating: 4.4,
-          reviewCount: 203,
+          reviewCount: 67,
           image: `/images/supplements/${slug}-liquid.jpg`,
           url: 'https://example.com/product3',
-          description: `Liquid ${supplementInfo?.name || 'supplement'}, fast absorption`,
+          description: `Liquid ${supplementInfo?.name || 'supplement'}, alcohol-free`,
           qualityScore: 79,
-          qualityReasons: ['Fast absorption', 'Easy to take'],
-          qualityWarnings: ['Contains artificial flavors'],
-          formulationMatch: 'Liquid Formulation',
-          approach: 'modern',
+          qualityReasons: ['Liquid form', 'Alcohol-free'],
+          qualityWarnings: ['Lower concentration'],
+          formulationMatch: 'Liquid Extract',
+          approach: 'traditional',
           selected: false
         }
       ];
@@ -141,7 +156,7 @@ export default function SupplementSubstancePage() {
     } finally {
       setLoading(false);
     }
-  }, [slug, supplementInfo?.name]);
+  }, [slug, supplementInfo]);
 
   useEffect(() => {
     fetchSupplementInfo();

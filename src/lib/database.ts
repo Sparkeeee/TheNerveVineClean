@@ -139,6 +139,7 @@ export async function getCachedHerb(slug: string) {
         slug: true, 
         description: true, 
         heroImageUrl: true, 
+        galleryImages: true,
         latinName: true,
         indications: true,
         traditionalUses: true,
