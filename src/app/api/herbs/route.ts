@@ -1,24 +1,62 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import prisma from '@/lib/database';
+import { createApiResponse, createErrorResponse, createNotFoundResponse } from '@/lib/api-utils';
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const id = searchParams.get('id');
+  const limit = parseInt(searchParams.get('limit') || '20');
+  const offset = parseInt(searchParams.get('offset') || '0');
+  
   try {
     if (id) {
       const herb = await prisma.herb.findUnique({
         where: { id: Number(id) },
+        select: {
+          id: true,
+          name: true,
+          latinName: true,
+          slug: true,
+          description: true,
+          metaTitle: true,
+          metaDescription: true,
+          heroImageUrl: true,
+          cardImageUrl: true,
+          cautions: true
+        }
       });
-      if (!herb) return NextResponse.json({ error: 'Not found' }, { status: 404 });
-      return NextResponse.json(herb);
+      if (!herb) return createNotFoundResponse('Herb');
+      return createApiResponse(herb);
     } else {
-      const herbs = await prisma.herb.findMany();
-      return NextResponse.json(herbs);
+      const herbs = await prisma.herb.findMany({
+        select: {
+          id: true,
+          name: true,
+          latinName: true,
+          slug: true,
+          description: true
+        },
+        take: limit,
+        skip: offset,
+        orderBy: { name: 'asc' }
+      });
+      
+      const total = await prisma.herb.count();
+      
+      return createApiResponse({
+        herbs,
+        pagination: {
+          page: Math.floor(offset / limit) + 1,
+          limit,
+          total,
+          pages: Math.ceil(total / limit),
+          hasMore: offset + limit < total
+        }
+      });
     }
   } catch (error) {
-    return NextResponse.json({ error: (error instanceof Error ? error.message : String(error)) }, { status: 500 });
+    console.error('Herbs API error:', error);
+    return createErrorResponse('Failed to fetch herbs');
   }
 }
 

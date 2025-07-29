@@ -1,7 +1,7 @@
 {
   "functions": {
     "src/app/api/**/*.ts": {
-      "maxDuration": 10
+      "maxDuration": 30
     }
   },
   "headers": [
@@ -36,7 +36,11 @@
       "headers": [
         {
           "key": "Cache-Control",
-          "value": "public, max-age=3600, stale-while-revalidate=86400"
+          "value": "public, max-age=1800, stale-while-revalidate=3600"
+        },
+        {
+          "key": "X-Vercel-Cache",
+          "value": "HIT"
         }
       ]
     }
@@ -52,5 +56,9 @@
     "env": {
       "NEXT_TELEMETRY_DISABLED": "1"
     }
-  }
+  },
+  "env": {
+    "NODE_ENV": "production"
+  },
+  "public": true
 } 

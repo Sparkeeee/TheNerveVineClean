@@ -20,6 +20,11 @@ const nextConfig: NextConfig = {
   // Vercel optimizations
   output: 'standalone',
   
+  // Ensure public access
+  publicRuntimeConfig: {
+    publicAccess: true,
+  },
+  
   // Experimental features for performance
   experimental: {
     optimizeCss: true,
@@ -36,6 +41,10 @@ const nextConfig: NextConfig = {
             key: 'Cache-Control',
             value: 'public, max-age=31536000, immutable', // 1 year
           },
+          {
+            key: 'X-Robots-Tag',
+            value: 'public',
+          },
         ],
       },
       {
@@ -44,6 +53,10 @@ const nextConfig: NextConfig = {
           {
             key: 'Cache-Control',
             value: 'public, max-age=3600, stale-while-revalidate=86400', // 1 hour + 1 day stale
+          },
+          {
+            key: 'X-Robots-Tag',
+            value: 'public',
           },
         ],
       },

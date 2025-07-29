@@ -1,23 +1,17 @@
 import Link from "next/link";
-import { PrismaClient } from '@prisma/client';
-
-async function getSupplements() {
-  const prisma = new PrismaClient();
-  try {
-    const supplements = await prisma.supplement.findMany();
-    return supplements;
-  } catch (error) {
-    console.error('Error fetching supplements:', error);
-    return [];
-  } finally {
-    await prisma.$disconnect();
-  }
-}
+import { getCachedSupplements } from '@/lib/database';
 
 export default async function SupplementsPage() {
   // Fetch supplements from database and sort alphabetically by name
-  const supplements = await getSupplements();
-  const sortedSupplements = supplements.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+  let supplements = [];
+  
+  try {
+    supplements = await getCachedSupplements();
+  } catch (error) {
+    console.error('Error fetching supplements:', error);
+  }
+  
+  const sortedSupplements = supplements.sort((a: any, b: any) => (a.name || '').localeCompare(b.name || ''));
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-blue-50 to-blue-100">
@@ -29,7 +23,7 @@ export default async function SupplementsPage() {
           nutritional gaps and enhance your natural healing processes.
         </p>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {sortedSupplements.map((supplement, index) => (
+          {sortedSupplements.map((supplement: any, index: number) => (
             <Link 
               key={index} 
               href={`/supplements/${supplement.slug}`}

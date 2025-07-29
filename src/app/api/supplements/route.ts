@@ -1,22 +1,60 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import prisma from '@/lib/database';
+import { createApiResponse, createErrorResponse, createNotFoundResponse } from '@/lib/api-utils';
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const id = searchParams.get('id');
+  const limit = parseInt(searchParams.get('limit') || '20');
+  const offset = parseInt(searchParams.get('offset') || '0');
+  
   try {
     if (id) {
-      const supplement = await prisma.supplement.findUnique({ where: { id: Number(id) } });
-      if (!supplement) return NextResponse.json({ error: 'Not found' }, { status: 404 });
-      return NextResponse.json(supplement);
+      const supplement = await prisma.supplement.findUnique({ 
+        where: { id: Number(id) },
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+          description: true,
+          metaTitle: true,
+          metaDescription: true,
+          heroImageUrl: true,
+          cardImageUrl: true,
+          cautions: true
+        }
+      });
+      if (!supplement) return createNotFoundResponse('Supplement');
+      return createApiResponse(supplement);
     } else {
-      const supplements = await prisma.supplement.findMany();
-      return NextResponse.json(supplements);
+      const supplements = await prisma.supplement.findMany({
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+          description: true
+        },
+        take: limit,
+        skip: offset,
+        orderBy: { name: 'asc' }
+      });
+      
+      const total = await prisma.supplement.count();
+      
+      return createApiResponse({
+        supplements,
+        pagination: {
+          page: Math.floor(offset / limit) + 1,
+          limit,
+          total,
+          pages: Math.ceil(total / limit),
+          hasMore: offset + limit < total
+        }
+      });
     }
   } catch (error) {
-    return NextResponse.json({ error: error instanceof Error ? error.message : String(error) }, { status: 500 });
+    console.error('Supplements API error:', error);
+    return createErrorResponse('Failed to fetch supplements');
   }
 }
 

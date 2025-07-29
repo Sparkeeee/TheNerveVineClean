@@ -1,5 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { getCachedHerbs, getCachedSymptoms, getCachedSupplements } from '@/lib/database';
+import { NextRequest } from 'next/server';
+import { getCachedHerbsOptimized, getCachedSymptomsOptimized, getCachedSupplementsOptimized } from '@/lib/database';
+import { createApiResponse, createErrorResponse, withDatabaseTimeout } from '@/lib/api-utils';
 
 interface SearchResult {
   id: string;
@@ -14,19 +15,23 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const query = searchParams.get('q') || '';
+    const limit = parseInt(searchParams.get('limit') || '10');
+    const offset = parseInt(searchParams.get('offset') || '0');
 
     if (!query.trim()) {
-      return NextResponse.json({ success: true, data: [] });
+      return createApiResponse([]);
     }
 
     const searchTerm = query.toLowerCase();
 
-    // Use cached functions to reduce database calls
-    const [herbs, symptoms, supplements] = await Promise.all([
-      getCachedHerbs(),
-      getCachedSymptoms(),
-      getCachedSupplements()
-    ]);
+    // Use optimized cached functions with pagination for Vercel
+    const [herbs, symptoms, supplements] = await withDatabaseTimeout(async () => {
+      return Promise.all([
+        getCachedHerbsOptimized(50, 0), // Limit to 50 herbs for search
+        getCachedSymptomsOptimized(50, 0), // Limit to 50 symptoms for search
+        getCachedSupplementsOptimized(50, 0) // Limit to 50 supplements for search
+      ]);
+    });
 
     const results: SearchResult[] = [];
 
@@ -34,7 +39,7 @@ export async function GET(request: NextRequest) {
     const herbMatches = herbs.filter((herb: any) => 
       herb.name?.toLowerCase().includes(searchTerm) ||
       herb.description?.toLowerCase().includes(searchTerm) ||
-      herb.tags?.some((tag: string) => tag.toLowerCase().includes(searchTerm))
+      herb.latinName?.toLowerCase().includes(searchTerm)
     );
 
     herbMatches.forEach((herb: any) => {
@@ -44,33 +49,31 @@ export async function GET(request: NextRequest) {
         description: herb.description,
         type: 'herb',
         url: `/herbs/${herb.slug}`,
-        tags: herb.tags || []
+        tags: []
       });
     });
 
     // Search symptoms
     const symptomMatches = symptoms.filter((symptom: any) => 
-      symptom.name?.toLowerCase().includes(searchTerm) ||
-      symptom.description?.toLowerCase().includes(searchTerm) ||
-      symptom.tags?.some((tag: string) => tag.toLowerCase().includes(searchTerm))
+      symptom.title?.toLowerCase().includes(searchTerm) ||
+      symptom.description?.toLowerCase().includes(searchTerm)
     );
 
     symptomMatches.forEach((symptom: any) => {
       results.push({
         id: symptom.id,
-        title: symptom.name,
+        title: symptom.title,
         description: symptom.description,
         type: 'symptom',
         url: `/symptoms/${symptom.slug}`,
-        tags: symptom.tags || []
+        tags: []
       });
     });
 
     // Search supplements
     const supplementMatches = supplements.filter((supplement: any) => 
       supplement.name?.toLowerCase().includes(searchTerm) ||
-      supplement.description?.toLowerCase().includes(searchTerm) ||
-      supplement.tags?.some((tag: string) => tag.toLowerCase().includes(searchTerm))
+      supplement.description?.toLowerCase().includes(searchTerm)
     );
 
     supplementMatches.forEach((supplement: any) => {
@@ -80,20 +83,22 @@ export async function GET(request: NextRequest) {
         description: supplement.description,
         type: 'supplement',
         url: `/supplements/${supplement.slug}`,
-        tags: supplement.tags || []
+        tags: []
       });
     });
 
-    return NextResponse.json({ 
-      success: true, 
-      data: results.slice(0, 10) // Limit to 10 results
+    // Apply pagination to results
+    const paginatedResults = results.slice(offset, offset + limit);
+
+    return createApiResponse({
+      results: paginatedResults,
+      total: results.length,
+      page: Math.floor(offset / limit) + 1,
+      hasMore: offset + limit < results.length
     });
 
   } catch (error) {
     console.error('Search error:', error);
-    return NextResponse.json({ 
-      success: true, 
-      data: [] 
-    });
+    return createErrorResponse('Search operation failed');
   }
 } 

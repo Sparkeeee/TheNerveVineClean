@@ -1,35 +1,30 @@
 import Link from "next/link";
+import { getCachedSymptoms } from '@/lib/database';
 
-export default function SymptomsPage() {
-  const symptoms = [
-    // Original hardcoded symptoms (preserved)
-    { name: "Insomnia", href: "/symptoms/insomnia", description: "Sleep issues and restlessness" },
-    { name: "Depression", href: "/symptoms/depression", description: "Low mood and emotional support" },
-    { name: "Anxiety", href: "/symptoms/anxiety", description: "Stress and nervous tension" },
-    { name: "Poor Focus", href: "/symptoms/poor-focus", description: "Difficulty concentrating, maintaining attention, or staying focused on tasks" },
-    { name: "Neck Tension", href: "/symptoms/neck-tension", description: "Muscle tightness, pain, or stiffness in the neck and upper shoulders (includes muscle tension and tension headache variants)" },
-    { name: "Emotional Burnout", href: "/symptoms/burnout", description: "Chronic stress and emotional exhaustion affecting mood, energy, and motivation" },
-    { name: "Thyroid Issues", href: "/symptoms/thyroid-issues", description: "Understanding and supporting thyroid function for energy and metabolism" },
-    { name: "Blood Pressure Balance", href: "/symptoms/blood-pressure", description: "Support for healthy blood pressure levels" },
-    { name: "Heart Muscle Support", href: "/symptoms/heart-support", description: "Support for heart muscle function and cardiovascular health" },
-    { name: "Liver Function Support", href: "/symptoms/liver-detox", description: "Support for liver detoxification and function" },
-    { name: "Hormonal Imbalances", href: "/symptoms/hormonal-imbalances", description: "Disruptions in hormone levels affecting health and wellbeing" },
-    { name: "Adrenal Overload", href: "/symptoms/adrenal-overload", description: "Symptoms of excess stress and adrenal hormone output" },
-    { name: "Adrenal Exhaustion", href: "/symptoms/adrenal-exhaustion", description: "Symptoms of depleted adrenal function from chronic stress" },
-    { name: "Circadian Support", href: "/symptoms/circadian-support", description: "Support for healthy sleep-wake cycles and circadian rhythm" },
-    { name: "Vagus Nerve Support", href: "/symptoms/vagus-nerve", description: "Understanding and supporting your body's most important nerve for overall health and well-being" },
-    { name: "Dysbiosis", href: "/symptoms/dysbiosis", description: "Imbalance of gut bacteria affecting health" },
-    { name: "Leaky Gut", href: "/symptoms/leaky-gut", description: "Understanding the connection between gut health and brain function" },
-    { name: "IBS", href: "/symptoms/ibs", description: "Digestive disorder with abdominal pain and changes in bowel habits" },
-    { name: "Stress", href: "/symptoms/stress", description: "Physical and emotional responses to challenging or demanding situations" },
-    { name: "Fatigue", href: "/symptoms/fatigue", description: "Persistent tiredness and lack of energy" },
-    { name: "Mood Swings", href: "/symptoms/mood-swings", description: "Rapid or unpredictable changes in mood, energy, or emotional state" },
-    
-    // Additional symptoms from the large symptoms object (preserved)
-    { name: "Memory Loss", href: "/symptoms/memory-loss", description: "Difficulty remembering information or events" },
-    { name: "Migraine Relief", href: "/symptoms/migraine", description: "Natural solutions for migraine management and prevention" },
-    { name: "Digestive Health", href: "/symptoms/digestive-health", description: "Support for digestive function and gut health" },
-  ];
+interface Symptom {
+  name: string;
+  href: string;
+  description: string;
+}
+
+export default async function SymptomsPage() {
+  let symptoms = [];
+  
+  try {
+    symptoms = await getCachedSymptoms();
+  } catch (error) {
+    console.error('Error fetching symptoms:', error);
+  }
+
+  const symptomList: Symptom[] = symptoms.map((symptom: any): Symptom => ({
+    name: symptom.title,
+    href: `/symptoms/${symptom.slug}`,
+    description: symptom.description ? 
+      (symptom.description.length > 100 ? 
+        symptom.description.substring(0, 100) + '...' : 
+        symptom.description) : 
+      'Natural solutions for health and wellness'
+  }));
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-blue-50 to-blue-100">
@@ -42,7 +37,7 @@ export default function SymptomsPage() {
         </p>
         
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {symptoms.map((symptom, index) => (
+          {symptomList.map((symptom: Symptom, index: number) => (
             <Link 
               key={index} 
               href={symptom.href}

@@ -1,63 +1,99 @@
-import { notFound } from 'next/navigation';
+import Link from 'next/link';
 import Image from 'next/image';
 import { getCachedSupplement } from '@/lib/database';
 
 export default async function SupplementPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   
+  // Fetch supplement data directly from database instead of API
   let supplement;
   try {
     supplement = await getCachedSupplement(slug);
   } catch (error) {
-    console.error('Error fetching supplement:', error);
-    notFound();
+    console.error('Error in supplement page:', error);
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-800 mb-4">Service Temporarily Unavailable</h1>
+          <p className="text-gray-600 mb-4">We&apos;re experiencing technical difficulties. Please try again later.</p>
+          <Link 
+            href="/supplements" 
+            className="text-blue-600 hover:text-blue-800 transition-colors"
+          >
+            ← Back to Supplements
+          </Link>
+        </div>
+      </div>
+    );
   }
 
   if (!supplement) {
-    notFound();
-  }
-
-  // Generate 4 readable paragraphs for the description
-  let paragraphs: JSX.Element[] = [];
-  if (supplement.description) {
-    const paraArr = supplement.description.split(/\n\n/).filter(Boolean);
-    if (paraArr.length >= 4) {
-      paragraphs = paraArr.slice(0, 4).map((p: string, i: number) => <p key={i} className="mb-4 text-lg text-lime-700 text-left">{p.trim()}</p>);
-    } else {
-      while (paraArr.length < 4) paraArr.push(paraArr[0] || 'This supplement supports overall wellness.');
-      paragraphs = paraArr.slice(0, 4).map((p: string, i: number) => <p key={i} className="mb-4 text-lg text-lime-700 text-left">{p.trim()}</p>);
-    }
-  }
-
-  // Prepare product cards from DB
-  let productCards: JSX.Element[] = [];
-  if (Array.isArray(supplement.products) && supplement.products.length > 0) {
-    productCards = supplement.products.map((product: any, idx: number) => (
-      <div key={idx} className="border border-lime-200 rounded-lg p-4 hover:shadow-md transition-shadow mb-4 bg-white">
-        <h3 className="font-semibold text-lime-900 mb-2">{product.name || 'Product'}</h3>
-        {product.description && <p className="text-gray-600 text-sm mb-2 text-left">{product.description}</p>}
-        <Image src={product.imageUrl || "/images/closed-medical-brown-glass-bottle-yellow-vitamins.png"} alt="Product" width={96} height={96} className="w-24 h-24 object-contain mb-2" />
-        {/* Removed tags display as Product does not have tags property */}
-        <div className="flex items-center justify-between">
-          <span className="text-lg font-bold text-lime-900">{product.price ? `$${product.price}` : ''}</span>
-          {product.affiliateLink && (
-            <a href={product.affiliateLink} target="_blank" rel="noopener noreferrer" className="ml-2 px-3 py-1 bg-lime-700 text-white rounded hover:bg-lime-800 text-xs">Buy</a>
-          )}
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-800 mb-4">Supplement Not Found</h1>
+          <p className="text-gray-600 mb-4">The supplement &quot;{slug}&quot; could not be found.</p>
+          <Link 
+            href="/supplements" 
+            className="text-blue-600 hover:text-blue-800 transition-colors"
+          >
+            ← Back to Supplements
+          </Link>
         </div>
       </div>
-    ));
-  } else {
-    productCards = [<div key="coming-soon" className="text-gray-500">(Product list coming soon)</div>];
+    );
+  }
+
+  // Process description with error handling
+  let description;
+  try {
+    description = supplement.description || 'This supplement supports overall wellness.';
+  } catch (error) {
+    console.error('Error processing supplement description:', error);
+    description = 'This supplement supports overall wellness.';
+  }
+
+  // Process products with error handling
+  let products;
+  try {
+    products = supplement.products || [];
+  } catch (error) {
+    console.error('Error processing supplement products:', error);
+    products = [];
+  }
+
+  // Prepare product cards from DB with error handling
+  let productCards: JSX.Element[] = [];
+  try {
+    if (Array.isArray(products) && products.length > 0) {
+      productCards = products.map((product: any, idx: number) => (
+        <div key={idx} className="border border-lime-200 rounded-lg p-4 hover:shadow-md transition-shadow mb-4 bg-white">
+          <h3 className="font-semibold text-lime-900 mb-2">{product.name || 'Product'}</h3>
+          <p className="text-gray-600 text-sm mb-2">{product.description || 'Product description coming soon.'}</p>
+          {product.price && (
+            <p className="text-lime-700 font-medium">${product.price}</p>
+          )}
+        </div>
+      ));
+    }
+  } catch (error) {
+    console.error('Error processing product cards:', error);
+    productCards = [];
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-100">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white">
       <div className="max-w-4xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-lime-900 mb-2">{supplement.name}</h1>
+          <h1 className="text-4xl font-bold text-gray-800 mb-4">
+            {supplement.name}
+          </h1>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            {description}
+          </p>
           
-          {/* Multiple Molecular Structure Images - Database-driven */}
+          {/* Multiple Molecular Structure Images - Database-driven with error handling */}
           {supplement.galleryImages && (() => {
             try {
               // Handle both JSON array and comma-separated string
@@ -129,7 +165,6 @@ export default async function SupplementPage({ params }: { params: Promise<{ slu
             </div>
           )}
           
-          {paragraphs}
         </div>
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Info */}
