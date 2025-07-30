@@ -128,7 +128,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${lato.variable} ${merriweather.variable} font-sans`}>
+      <body className="font-sans">
         <SessionProviderWrapper>
           <Header />
           {children}

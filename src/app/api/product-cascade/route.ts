@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/database';
-import { ProductCascadeManager, CascadeUpdate } from '@/lib/data-processing-hub';
+import { ProductCascadeManager, CascadeUpdate } from '@/lib/product-cascade';
 
 /**
  * THE DOMINO RALLY CASCADE API
@@ -20,7 +19,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Initialize the cascade manager
-    const cascadeManager = new ProductCascadeManager(prisma);
+    const cascadeManager = new ProductCascadeManager();
 
     // Determine affected symptoms based on herb/supplement
     const affectedSymptoms = await cascadeManager.getAffectedSymptoms(
@@ -96,7 +95,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const cascadeManager = new ProductCascadeManager(prisma);
+    const cascadeManager = new ProductCascadeManager();
     const affectedSymptoms = await cascadeManager.getAffectedSymptoms(
       targetHerb || undefined,
       targetSupplement || undefined

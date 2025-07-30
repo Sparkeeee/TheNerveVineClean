@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import type { CascadeUpdate } from '@/lib/product-cascade';
 
 interface CascadePreviewProps {
   productId: string;

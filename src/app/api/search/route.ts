@@ -18,8 +18,52 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '10');
     const offset = parseInt(searchParams.get('offset') || '0');
 
+    // If no query, return all data for SearchComponent initialization
     if (!query.trim()) {
-      return createApiResponse([]);
+      const [herbs, symptoms, supplements] = await withDatabaseTimeout(async () => {
+        return Promise.all([
+          getCachedHerbsOptimized(20, 0),
+          getCachedSymptomsOptimized(20, 0), 
+          getCachedSupplementsOptimized(20, 0)
+        ]);
+      });
+
+      const allResults: SearchResult[] = [];
+
+      herbs.forEach((herb: any) => {
+        allResults.push({
+          id: herb.id,
+          title: herb.name,
+          description: herb.description || '',
+          type: 'herb',
+          url: `/herbs/${herb.slug}`,
+          tags: []
+        });
+      });
+
+      symptoms.forEach((symptom: any) => {
+        allResults.push({
+          id: symptom.id,
+          title: symptom.title,
+          description: symptom.description || '',
+          type: 'symptom',
+          url: `/symptoms/${symptom.slug}`,
+          tags: []
+        });
+      });
+
+      supplements.forEach((supplement: any) => {
+        allResults.push({
+          id: supplement.id,
+          title: supplement.name,
+          description: supplement.description || '',
+          type: 'supplement',
+          url: `/supplements/${supplement.slug}`,
+          tags: []
+        });
+      });
+
+      return createApiResponse({ data: allResults });
     }
 
     const searchTerm = query.toLowerCase();
@@ -91,7 +135,7 @@ export async function GET(request: NextRequest) {
     const paginatedResults = results.slice(offset, offset + limit);
 
     return createApiResponse({
-      results: paginatedResults,
+      data: paginatedResults,
       total: results.length,
       page: Math.floor(offset / limit) + 1,
       hasMore: offset + limit < results.length

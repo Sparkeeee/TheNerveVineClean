@@ -15,35 +15,19 @@ interface SearchItem {
   symptoms?: string[];
 }
 
-export default function SearchComponent() {
+interface SearchComponentProps {
+  uniqueId?: string;
+}
+
+export default function SearchComponent({ uniqueId = "search" }: SearchComponentProps) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
-  const [searchData, setSearchData] = useState<SearchItem[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
+  const searchId = useRef(`search-input-${uniqueId}`);
 
-  // Fetch search data from database on component mount
-  useEffect(() => {
-    const fetchSearchData = async () => {
-      try {
-        const response = await fetch('/api/search');
-        const data = await response.json();
-        
-        if (data.success) {
-          setSearchData(data.data);
-        } else {
-          setSearchData([]);
-        }
-      } catch {
-        setSearchData([]);
-      } finally {
-        setIsLoading(false);
-      }
-    };
 
-    fetchSearchData();
-  }, []);
 
   // Close search when clicking outside
   useEffect(() => {
@@ -57,38 +41,50 @@ export default function SearchComponent() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Search functionality
+  // Search functionality - fetch and search on demand
   useEffect(() => {
-    if (query.trim() === "" || isLoading) {
+    if (query.trim() === "") {
       setResults([]);
       return;
     }
 
-    const searchTerm = query.toLowerCase();
-    const filteredResults = searchData.filter(item => {
-      const matchesQuery = 
-        (item.title && typeof item.title === 'string' && item.title.toLowerCase().includes(searchTerm)) ||
-        (item.description && typeof item.description === 'string' && item.description.toLowerCase().includes(searchTerm)) ||
-        (item.tags && Array.isArray(item.tags) && item.tags.some(tag => typeof tag === 'string' && tag.toLowerCase().includes(searchTerm))) ||
-        (item.benefits && Array.isArray(item.benefits) && item.benefits.some(benefit => typeof benefit === 'string' && benefit.toLowerCase().includes(searchTerm))) ||
-        (item.symptoms && Array.isArray(item.symptoms) && item.symptoms.some(symptom => typeof symptom === 'string' && symptom.toLowerCase().includes(searchTerm)));
+    const performSearch = async () => {
+      setIsLoading(true);
+      try {
+        const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+        const data = await response.json();
+        
+        if (data.success && data.data) {
+          // Handle nested data structure: data.data.data
+          const actualData = data.data.data || data.data;
+          
+          // Transform API data to match SearchItem interface
+          const transformedData = actualData.map((item: any) => ({
+            id: item.id,
+            title: item.title,
+            description: item.description || '',
+            type: item.type,
+            slug: item.url, // API returns 'url', component expects 'slug'
+            tags: item.tags || [],
+            benefits: [],
+            symptoms: []
+          }));
+          setResults(transformedData.slice(0, 8)); // Limit to 8 results
+        } else {
+          setResults([]);
+        }
+      } catch (error) {
+        console.error('Search error:', error);
+        setResults([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-      return matchesQuery;
-    });
-
-    // Sort by relevance (exact title matches first, then description, then tags)
-    filteredResults.sort((a, b) => {
-      const aTitleMatch = a.title && typeof a.title === 'string' && a.title.toLowerCase().includes(searchTerm);
-      const bTitleMatch = b.title && typeof b.title === 'string' && b.title.toLowerCase().includes(searchTerm);
-      
-      if (aTitleMatch && !bTitleMatch) return -1;
-      if (!aTitleMatch && bTitleMatch) return 1;
-      
-      return (a.title || '').localeCompare(b.title || '');
-    });
-
-    setResults(filteredResults.slice(0, 8)); // Limit to 8 results
-  }, [query, searchData, isLoading]);
+    // Debounce search requests
+    const timeoutId = setTimeout(performSearch, 300);
+    return () => clearTimeout(timeoutId);
+  }, [query]);
 
   const getTypeIcon = (type: string) => {
     switch (type) {
@@ -114,20 +110,20 @@ export default function SearchComponent() {
       <div className="relative">
         <input
           type="text"
-          id="search-input"
+          id={searchId.current}
           name="search"
-          placeholder={isLoading ? "Loading search data..." : "Search herbs, supplements, symptoms..."}
+          placeholder="Search herbs, supplements, symptoms..."
           value={query}
           onChange={(e) => {
             setQuery(e.target.value);
             setIsOpen(true);
           }}
           onFocus={() => setIsOpen(true)}
-          disabled={isLoading}
+          disabled={false}
           className="w-full px-3 py-2 pl-10 pr-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm text-gray-900 placeholder-gray-600 disabled:bg-gray-50 disabled:cursor-not-allowed"
         />
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          {isLoading ? (
+          {isLoading && query.trim() !== "" ? (
             <svg className="h-4 w-4 text-gray-400 animate-spin" fill="none" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -204,11 +200,11 @@ export default function SearchComponent() {
         </div>
       )}
 
-      {/* Loading State */}
-      {isOpen && isLoading && (
+      {/* Loading State - only show when actively searching */}
+      {isOpen && isLoading && query.trim() !== "" && (
         <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-50 p-4">
           <p className="text-sm text-gray-500 text-center">
-            Loading search data...
+            Searching...
           </p>
         </div>
       )}

@@ -84,16 +84,31 @@ export default function Home() {
     <>
       <main className="herbal-wellness">
         {/* Hero Section */}
-        <section className="section-padding">
-          <div className="container-max">
+        <section className="section-padding relative">
+          {/* Background Image */}
+          <div 
+            className="absolute inset-0 z-0"
+            style={{
+              backgroundImage: "url('/images/closeup_of_st_johns_wor_3.jpg')",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+              height: "100%"
+            }}
+          >
+            {/* Overlay for better text readability */}
+            {/* <div className="absolute inset-0 bg-black bg-opacity-10"></div> */}
+          </div>
+          
+          <div className="container-max relative z-10">
             <div className="hero-section p-8 md:p-12">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div className="text-center lg:text-left">
-                                     <h1 className="text-hero text-green-800 mb-6">
+                                     <h1 className="text-hero text-green-700 mb-6">
                      Your Trusted Guide to
                      <span className="block text-lime-600">Natural Wellness</span>
                    </h1>
-                  <p className="text-subtitle text-gray-700 mb-8 max-w-2xl">
+                  <p className="text-subtitle text-gray-800 mb-8 max-w-2xl">
                     Discover premium herbal supplements for nervous system support, stress relief, and natural wellness. 
                     Expert-curated products with quality filtering for optimal health outcomes.
                   </p>
@@ -106,7 +121,7 @@ export default function Home() {
                     </Link>
                     <Link 
                       href="/about" 
-                      className="px-8 py-4 text-lg font-semibold text-green-700 border-2 border-green-700 rounded-lg hover:bg-green-50 transition-colors"
+                      className="px-8 py-4 text-lg font-semibold text-white border-2 border-white rounded-lg hover:bg-white hover:text-green-700 transition-colors"
                     >
                       Learn More
                     </Link>

@@ -42,14 +42,16 @@ export default function ProductHuntDashboard() {
         id: herb.id,
         name: herb.name,
         slug: herb.slug,
-        pendingCount: 0 // TODO: Implement pending count from PendingProduct table
+        // WORKFLOW DEMO: Show demo pending counts for workflow visualization
+        pendingCount: ['ginkgo-biloba', 'ashwagandha', 'rhodiola-rosea'].includes(herb.slug) ? 2 : 0
       }));
 
       const transformedSupplements: Supplement[] = dbSupplements.map((supplement: any) => ({
         id: supplement.id,
         name: supplement.name,
         slug: supplement.slug,
-        pendingCount: 0 // TODO: Implement pending count from PendingProduct table
+        // WORKFLOW DEMO: Show demo pending counts for workflow visualization
+        pendingCount: ['magnesium-glycinate', 'l-theanine', 'vitamin-d3'].includes(supplement.slug) ? 2 : 0
       }));
 
       setHerbs(transformedHerbs);
