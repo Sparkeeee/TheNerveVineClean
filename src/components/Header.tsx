@@ -242,10 +242,12 @@ export default function Header() {
             </div>
           </div>
 
-          {/* Mobile Search Bar */}
-          <div className="lg:hidden pb-4">
-            <SearchComponent uniqueId="mobile" />
-          </div>
+          {/* Mobile Search Bar - Only show when menu is open */}
+          {mobileMenuOpen && (
+            <div className="lg:hidden pb-4">
+              <SearchComponent uniqueId="mobile" />
+            </div>
+          )}
 
           {/* Mobile Menu */}
           {mobileMenuOpen && (

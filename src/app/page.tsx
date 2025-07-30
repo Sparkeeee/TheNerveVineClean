@@ -172,6 +172,21 @@ export default function Home() {
                 From single herbs to expert-formulated blends, find the natural support you need.
               </p>
             </div>
+            
+            {/* Infographic */}
+            <div className="mb-12 flex justify-center">
+              <div className="max-w-md w-full">
+                <Image
+                  src="/images/TNVIGraphic.svg"
+                  alt="The NerveVine Solutions Infographic"
+                  width={800}
+                  height={600}
+                  className="w-full h-auto rounded-xl shadow-lg"
+                  priority
+                />
+              </div>
+            </div>
+            
             <div className="category-grid">
               {productCategories.map((category, index) => (
                 <Link key={index} href={category.href} className="product-card p-6 group">
@@ -253,7 +268,7 @@ export default function Home() {
         </section>
 
         {/* CTA Section */}
-        <section className="section-padding bg-green-700">
+        <section className="section-padding bg-gradient-to-br from-green-600 to-lime-600">
           <div className="container-max text-center">
             <h2 className="text-3xl font-bold text-white mb-4">Ready to Start Your Wellness Journey?</h2>
             <p className="text-xl text-green-100 mb-8 max-w-2xl mx-auto">
@@ -278,63 +293,93 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-blue-950 text-white py-12">
-        <div className="container-max">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <h3 className="text-xl font-bold mb-4">The NerveVine</h3>
-              <p className="text-gray-300 mb-4">
-                Your trusted guide to natural nervous system support, stress relief, and emotional resilience.
-              </p>
-              <div className="flex gap-4">
-                <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                  <span className="sr-only">Facebook</span>
-                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                  </svg>
-                </a>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                  <span className="sr-only">Instagram</span>
-                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.62 5.367 11.987 11.988 11.987 6.62 0 11.987-5.367 11.987-11.987C24.014 5.367 18.637.001 12.017.001zM8.449 16.988c-1.297 0-2.448-.49-3.323-1.297C4.198 14.895 3.708 13.744 3.708 12.447s.49-2.448 1.418-3.323c.875-.807 2.026-1.297 3.323-1.297s2.448.49 3.323 1.297c.928.875 1.418 2.026 1.418 3.323s-.49 2.448-1.418 3.244c-.875.807-2.026 1.297-3.323 1.297z"/>
-                  </svg>
-                </a>
+      <footer 
+        className="text-white py-12 relative"
+        style={{
+          backgroundImage: "url('/images/acanthus-blue-90-1.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat"
+        }}
+      >
+        {/* Blue Overlay */}
+        <div 
+          className="absolute inset-0 z-10"
+          style={{ 
+            backgroundColor: 'rgba(10, 20, 50, 0.9)' // Even darker blue
+          }}
+        ></div>
+        {/* Content */}
+        <div className="relative z-20">
+          <div className="container-max px-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center md:text-left">
+              <div>
+                <h3 className="text-xl font-bold mb-4">The NerveVine</h3>
+                <p className="text-gray-300 mb-4">
+                  Your trusted guide to natural nervous system support, stress relief, and emotional resilience.
+                </p>
+              </div>
+              <div>
+                <h4 className="text-lg font-semibold mb-4">Products</h4>
+                <ul className="space-y-2 text-gray-300">
+                  <li><Link href="/herbs" className="hover:text-white transition-colors">Herbs</Link></li>
+                  <li><Link href="/supplements" className="hover:text-white transition-colors">Supplements</Link></li>
+                  <li><Link href="/symptoms" className="hover:text-white transition-colors">Symptom Solutions</Link></li>
+                  <li><Link href="/search" className="hover:text-white transition-colors">Custom Search</Link></li>
+                </ul>
+              </div>
+              <div>
+                <h4 className="text-lg font-semibold mb-4">Resources</h4>
+                <ul className="space-y-2 text-gray-300">
+                  <li><Link href="/blog" className="hover:text-white transition-colors">Blog</Link></li>
+                  <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
+                  <li><Link href="/contact" className="hover:text-white transition-colors">Contact</Link></li>
+                  <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
+                </ul>
+              </div>
+              <div>
+                <h4 className="text-lg font-semibold mb-4">Quality Assurance</h4>
+                <ul className="space-y-2 text-gray-300">
+                  <li>Herbalist-Curated</li>
+                  <li>Scientifically Backed</li>
+                  <li>Premium Quality</li>
+                  <li>Natural & Safe</li>
+                </ul>
               </div>
             </div>
-            <div>
-              <h4 className="text-lg font-semibold mb-4">Products</h4>
-              <ul className="space-y-2 text-gray-300">
-                <li><Link href="/herbs" className="hover:text-white transition-colors">Herbs</Link></li>
-                <li><Link href="/supplements" className="hover:text-white transition-colors">Supplements</Link></li>
-                <li><Link href="/symptoms" className="hover:text-white transition-colors">Symptom Solutions</Link></li>
-                <li><Link href="/search" className="hover:text-white transition-colors">Custom Search</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-lg font-semibold mb-4">Resources</h4>
-              <ul className="space-y-2 text-gray-300">
-                <li><Link href="/blog" className="hover:text-white transition-colors">Blog</Link></li>
-                <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
-                <li><Link href="/contact" className="hover:text-white transition-colors">Contact</Link></li>
-                <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-lg font-semibold mb-4">Quality Assurance</h4>
-              <ul className="space-y-2 text-gray-300">
-                <li>Herbalist-Curated</li>
-                <li>Scientifically Backed</li>
-                <li>Premium Quality</li>
-                <li>Natural & Safe</li>
-              </ul>
+          </div>
+          {/* Social Icons - Centered at Bottom */}
+          <div className="flex justify-center gap-4 mt-8 mb-4">
+            <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              <span className="sr-only">Facebook</span>
+              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+              </svg>
+            </a>
+            <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              <span className="sr-only">Instagram</span>
+              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.62 5.367 11.987 11.988 11.987 6.62 0 11.987-5.367 11.987-11.987C24.014 5.367 18.637.001 12.017.001zM8.449 16.988c-1.297 0-2.448-.49-3.323-1.297C4.198 14.895 3.708 13.744 3.708 12.447s.49-2.448 1.418-3.323c.875-.807 2.026-1.297 3.323-1.297s2.448.49 3.323 1.297c.928.875 1.418 2.026 1.418 3.323s-.49 2.448-1.418 3.244c-.875.807-2.026 1.297-3.323 1.297z"/>
+              </svg>
+            </a>
+          </div>
+          <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400 px-4 relative z-40">
+            <div className="max-w-2xl mx-auto">
+              <p>&copy; {new Date().getFullYear()} The NerveVine. All rights reserved.</p>
+              <p className="mt-2 text-sm">
+                Empowering you with herbal wisdom and natural support—rooted in science, tradition, and care.
+              </p>
             </div>
           </div>
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; {new Date().getFullYear()} The NerveVine. All rights reserved.</p>
-            <p className="mt-2 text-sm">
-              Empowering you with herbal wisdom and natural support—rooted in science, tradition, and care.
-            </p>
-          </div>
+        </div>
+        {/* Tincture Bottles Image - Hard right, above HR */}
+        <div className="absolute z-30 hidden sm:block w-58 h-36 sm:w-[17rem] sm:h-[11rem] md:w-[19rem] md:h-[12rem] lg:w-[22rem] lg:h-[14rem] xl:w-[24rem] xl:h-[17rem] pointer-events-none" style={{ right: '-100px', bottom: '90px' }}>
+          <Image
+            src="/images/Default_2_modern_tincture_bottles_full_of_tincture_with_no_la_3_c48b35ab-bed7-4090-82f4-b6b4c1b2fa37_0.png"
+            alt="Modern Tincture Bottles"
+            fill
+            className="opacity-100 object-contain"
+          />
         </div>
       </footer>
     </>
