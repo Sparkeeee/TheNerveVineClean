@@ -185,9 +185,9 @@ export default function CascadePreview({
             <div>
               <p className="mb-2">{result.message}</p>
               <div className="text-sm">
-                <p><strong>Pages Updated:</strong> {result.data.cascadeEffect.totalPagesAffected}</p>
-                <p><strong>Herbs Updated:</strong> {result.data.cascadeEffect.herbsUpdated}</p>
-                <p><strong>Symptoms Updated:</strong> {result.data.cascadeEffect.symptomsUpdated}</p>
+                <p><strong>Pages Updated:</strong> {result.data?.cascadeEffect?.totalPagesAffected || 0}</p>
+                <p><strong>Herbs Updated:</strong> {result.data?.cascadeEffect?.herbsUpdated || 0}</p>
+                <p><strong>Symptoms Updated:</strong> {result.data?.cascadeEffect?.symptomsUpdated || 0}</p>
               </div>
             </div>
           ) : (
