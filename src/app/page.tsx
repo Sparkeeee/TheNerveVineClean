@@ -7,14 +7,14 @@ import { Suspense } from "react";
 export default function Home() {
   const productCategories = [
     {
-      name: "Single-Herb Supplements",
+      name: "Herbal Supplements",
       description: "Pure botanical extracts for targeted wellness",
       href: "/herbs",
       image: "/images/Astragalus_membranaceu_2.jpg",
       badge: "Premium Quality"
     },
     {
-      name: "Blended Formulas",
+      name: "Nutritional Supplements",
       description: "Expert-formulated combinations for comprehensive support",
       href: "/supplements", 
       image: "/images/Panax_ginseng_Korean_g_1.jpg",
@@ -26,13 +26,6 @@ export default function Home() {
       href: "/symptoms",
       image: "/images/Rhodiola_rosea_Rhodiol_3.jpg",
       badge: "Scientifically Backed"
-    },
-    {
-      name: "Custom Recommendations",
-      description: "Personalized guidance based on your unique needs",
-      href: "/search",
-      image: "/images/Withania_somnifera_Ash_2.jpg",
-      badge: "Personalized"
     }
   ];
 
@@ -115,13 +108,13 @@ export default function Home() {
                   <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                     <Link 
                       href="/search" 
-                      className="cta-button px-8 py-4 text-lg font-semibold"
+                      className="cta-button px-8 py-4 text-lg font-semibold hover:text-white"
                     >
                       Find Your Solution
                     </Link>
                     <Link 
                       href="/about" 
-                      className="px-8 py-4 text-lg font-semibold text-white border-2 border-white rounded-lg hover:bg-white hover:text-green-700 transition-colors"
+                      className="px-8 py-4 text-lg font-semibold text-lime-700 border-2 border-lime-700 rounded-lg hover:bg-white hover:text-green-700 transition-colors"
                     >
                       Learn More
                     </Link>
@@ -142,21 +135,78 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Trust Features */}
-        <section className="section-padding bg-white">
+        {/* White Band */}
+        <div className="bg-white py-12">
           <div className="container-max">
-            <div className="text-center mb-12">
+            <div className="text-center">
               <h2 className="text-3xl font-bold text-gray-900 mb-4">Why Choose The NerveVine?</h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
                 We combine traditional herbal wisdom with modern science to provide you with the highest quality natural wellness solutions.
               </p>
             </div>
+          </div>
+        </div>
+        
+        {/* Trust Features */}
+        <section className="section-padding relative">
+          {/* Background Image for entire section */}
+          <div 
+            className="absolute inset-0 z-0"
+            style={{
+              backgroundImage: "url('/images/Herbybookses.png')",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+              opacity: 0.6
+            }}
+          ></div>
+          
+          <div className="container-max relative z-10">
+            {/* TNV Logo Section */}
+            <div className="mb-12 relative" style={{ height: '60vh', maxHeight: '60vh' }}>
+              {/* How The NerveVine Works Heading - positioned on top of hero container */}
+              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-30">
+                <div className="hero-section p-4 rounded-lg shadow-md">
+                  <h2 className="text-3xl font-bold text-green-700 text-center">How The NerveVine Works</h2>
+                </div>
+              </div>
+              
+              <div className="hero-section p-4 md:p-6 relative z-20" style={{ height: '100%' }}>
+                <div className="w-full h-full overflow-auto">
+                  {/* Landscape version for large screens (1024px+) */}
+                  <div className="hidden lg:block p-4">
+                    <Image
+                      src="/images/TNVINFO-transp.png"
+                      alt="The NerveVine Information Logo"
+                      width={1000}
+                      height={600}
+                      className="w-full h-auto"
+                      priority
+                    />
+                  </div>
+                  {/* Portrait version for medium and small screens (below 1024px) */}
+                  <div className="lg:hidden p-4">
+                    <Image
+                      src="/images/TNVInfo-portrait-transpo(1).png"
+                      alt="The NerveVine Information Logo"
+                      width={300}
+                      height={500}
+                      className="w-full h-auto"
+                      priority
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {trustFeatures.map((feature, index) => (
-                <div key={index} className="text-center p-6">
-                  <div className="text-4xl mb-4">{feature.icon}</div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">{feature.title}</h3>
-                  <p className="text-gray-600">{feature.description}</p>
+                <div key={index} className="hero-section p-6 rounded-lg shadow-md">
+                  <div className="text-center">
+                    <div className="text-4xl mb-4">{feature.icon}</div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">{feature.title}</h3>
+                    <p className="text-gray-600">{feature.description}</p>
+                  </div>
                 </div>
               ))}
             </div>
@@ -171,20 +221,6 @@ export default function Home() {
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
                 From single herbs to expert-formulated blends, find the natural support you need.
               </p>
-            </div>
-            
-            {/* Infographic */}
-            <div className="mb-12 flex justify-center">
-              <div className="max-w-md w-full">
-                <Image
-                  src="/images/TNVIGraphic.svg"
-                  alt="The NerveVine Solutions Infographic"
-                  width={800}
-                  height={600}
-                  className="w-full h-auto rounded-xl shadow-lg"
-                  priority
-                />
-              </div>
             </div>
             
             <div className="category-grid">
