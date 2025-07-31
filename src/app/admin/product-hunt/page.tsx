@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { getCachedHerbs, getCachedSupplements } from '@/lib/database';
 
 interface Herb {
   id: number;
@@ -33,29 +32,52 @@ export default function ProductHuntDashboard() {
   const fetchSubstances = async () => {
     setLoading(true);
     try {
-      // Fetch real data from database
-      const dbHerbs = await getCachedHerbs();
-      const dbSupplements = await getCachedSupplements();
-
-      // Transform database data to match interface
-      const transformedHerbs: Herb[] = dbHerbs.map((herb: any) => ({
-        id: herb.id,
-        name: herb.name,
-        slug: herb.slug,
-        // WORKFLOW DEMO: Show demo pending counts for workflow visualization
-        pendingCount: ['ginkgo-biloba', 'ashwagandha', 'rhodiola-rosea'].includes(herb.slug) ? 2 : 0
-      }));
-
-      const transformedSupplements: Supplement[] = dbSupplements.map((supplement: any) => ({
-        id: supplement.id,
-        name: supplement.name,
-        slug: supplement.slug,
-        // WORKFLOW DEMO: Show demo pending counts for workflow visualization
-        pendingCount: ['magnesium-glycinate', 'l-theanine', 'vitamin-d3'].includes(supplement.slug) ? 2 : 0
-      }));
-
-      setHerbs(transformedHerbs);
-      setSupplements(transformedSupplements);
+      // Fetch data from API endpoints instead of direct database calls
+      const herbsResponse = await fetch('/api/herbs');
+      const supplementsResponse = await fetch('/api/supplements');
+      
+      if (!herbsResponse.ok) {
+        throw new Error(`Herbs API responded with status: ${herbsResponse.status}`);
+      }
+      if (!supplementsResponse.ok) {
+        throw new Error(`Supplements API responded with status: ${supplementsResponse.status}`);
+      }
+      
+      const herbsData = await herbsResponse.json();
+      const supplementsData = await supplementsResponse.json();
+      
+      // Handle the response structure: { success: true, data: { herbs: [...], pagination: {...} } }
+      const herbsArray = herbsData.data?.herbs || herbsData.herbs || herbsData || [];
+      const supplementsArray = supplementsData.data?.supplements || supplementsData.supplements || supplementsData || [];
+      
+      if (!Array.isArray(herbsArray)) {
+        console.error('Herbs data is not an array:', herbsArray);
+        setHerbs([]);
+      } else {
+        // Transform database data to match interface
+        const transformedHerbs: Herb[] = herbsArray.map((herb: any) => ({
+          id: herb.id,
+          name: herb.name,
+          slug: herb.slug,
+          // WORKFLOW DEMO: Show demo pending counts for workflow visualization
+          pendingCount: ['ginkgo-biloba', 'ashwagandha', 'rhodiola-rosea'].includes(herb.slug) ? 2 : 0
+        }));
+        setHerbs(transformedHerbs);
+      }
+      
+      if (!Array.isArray(supplementsArray)) {
+        console.error('Supplements data is not an array:', supplementsArray);
+        setSupplements([]);
+      } else {
+        const transformedSupplements: Supplement[] = supplementsArray.map((supplement: any) => ({
+          id: supplement.id,
+          name: supplement.name,
+          slug: supplement.slug,
+          // WORKFLOW DEMO: Show demo pending counts for workflow visualization
+          pendingCount: ['magnesium-glycinate', 'l-theanine', 'vitamin-d3'].includes(supplement.slug) ? 2 : 0
+        }));
+        setSupplements(transformedSupplements);
+      }
     } catch (error) {
       console.error('Error fetching substances:', error);
     } finally {

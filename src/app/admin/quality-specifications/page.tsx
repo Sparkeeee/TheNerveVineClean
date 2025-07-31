@@ -94,8 +94,8 @@ export default function QualitySpecificationsPage() {
       const herbsData = await herbsResponse.json();
       console.log('Herbs API response:', herbsData); // Debug log
       
-      // Handle the response structure: { herbs: [...], pagination: {...} }
-      const herbsArray = herbsData.herbs || herbsData || [];
+      // Handle the response structure: { success: true, data: { herbs: [...], pagination: {...} } }
+      const herbsArray = herbsData.data?.herbs || herbsData.herbs || herbsData || [];
       if (!Array.isArray(herbsArray)) {
         console.error('Herbs data is not an array:', herbsArray);
         setHerbs([]);
@@ -111,8 +111,8 @@ export default function QualitySpecificationsPage() {
       const supplementsData = await supplementsResponse.json();
       console.log('Supplements API response:', supplementsData); // Debug log
       
-      // Handle the response structure: { supplements: [...], pagination: {...} }
-      const supplementsArray = supplementsData.supplements || supplementsData || [];
+      // Handle the response structure: { success: true, data: { supplements: [...], pagination: {...} } }
+      const supplementsArray = supplementsData.data?.supplements || supplementsData.supplements || supplementsData || [];
       if (!Array.isArray(supplementsArray)) {
         console.error('Supplements data is not an array:', supplementsArray);
         setSupplements([]);

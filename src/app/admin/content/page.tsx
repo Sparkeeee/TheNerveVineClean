@@ -354,8 +354,15 @@ export default function AdminContentPage() {
     try {
       const res = await fetch("/api/herbs");
       if (!res.ok) throw new Error("Failed to fetch herbs");
-      const items: Herb[] = await res.json();
-      setAllHerbs(items);
+      const response = await res.json();
+      // Handle the response structure: { success: true, data: { herbs: [...], pagination: {...} } }
+      const herbsArray = response.data?.herbs || response.herbs || response || [];
+      if (!Array.isArray(herbsArray)) {
+        console.error('Herbs data is not an array:', herbsArray);
+        setAllHerbs([]);
+      } else {
+        setAllHerbs(herbsArray);
+      }
     } catch {
       setAllHerbs([]);
     }
@@ -365,8 +372,15 @@ export default function AdminContentPage() {
     try {
       const res = await fetch("/api/supplements");
       if (!res.ok) throw new Error("Failed to fetch supplements");
-      const items: Supplement[] = await res.json();
-      setAllSupplements(items);
+      const response = await res.json();
+      // Handle the response structure: { success: true, data: { supplements: [...], pagination: {...} } }
+      const supplementsArray = response.data?.supplements || response.supplements || response || [];
+      if (!Array.isArray(supplementsArray)) {
+        console.error('Supplements data is not an array:', supplementsArray);
+        setAllSupplements([]);
+      } else {
+        setAllSupplements(supplementsArray);
+      }
     } catch {
       setAllSupplements([]);
     }
