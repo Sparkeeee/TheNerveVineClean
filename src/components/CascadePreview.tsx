@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import type { CascadeUpdate } from '@/lib/product-cascade';
 
 interface CascadePreviewProps {
   productId: string;
@@ -26,7 +25,19 @@ export default function CascadePreview({
   const [preview, setPreview] = useState<CascadePreview | null>(null);
   const [loading, setLoading] = useState(false);
   const [executing, setExecuting] = useState(false);
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<{
+    success: boolean;
+    message?: string;
+    error?: string;
+    details?: string | string[];
+    data?: {
+      cascadeEffect: {
+        totalPagesAffected: number;
+        herbsUpdated: number;
+        symptomsUpdated: number;
+      };
+    };
+  } | null>(null);
 
   const loadPreview = async () => {
     setLoading(true);
@@ -198,7 +209,7 @@ export default function CascadePreview({
 
       {!preview && !loading && (
         <div className="text-center py-8 text-gray-500">
-          <p>Click "Preview Cascade" to see the domino effect this approval will trigger</p>
+          <p>Click &quot;Preview Cascade&quot; to see the domino effect this approval will trigger</p>
           <p className="text-sm mt-1">🎯 One approval → Multiple page updates automatically</p>
         </div>
       )}
