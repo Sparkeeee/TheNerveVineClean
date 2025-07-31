@@ -1,3 +1,4 @@
+import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { getCachedSupplement } from '@/lib/database';
@@ -63,7 +64,7 @@ export default async function SupplementPage({ params }: { params: Promise<{ slu
   }
 
   // Prepare product cards from DB with error handling
-  let productCards: JSX.Element[] = [];
+  let productCards: React.ReactElement[] = [];
   try {
     if (Array.isArray(products) && products.length > 0) {
       productCards = products.map((product: any, idx: number) => (

@@ -25,8 +25,8 @@ export default function Header() {
   if (!mounted) {
     return (
       <>
-        {/* Trust Banner - Dark Blue */}
-        <div className="bg-blue-950 text-white py-2">
+        {/* Trust Banner - Dark Blue - Hidden on mobile */}
+        <div className="hidden lg:block bg-blue-950 text-white py-2">
           <div className="container mx-auto px-4">
             <div className="flex justify-center items-center relative">
               <div className="flex items-center space-x-4 text-sm">
@@ -52,15 +52,15 @@ export default function Header() {
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-between py-4">
               {/* Left Side - Logo and Site Name */}
-              <Link href="/" className="flex items-center space-x-3">
+              <Link href="/" className="flex items-center space-x-2">
                 <Image 
                   src="/images/nervevine smalllogo1.svg" 
                   alt="The NerveVine Logo" 
                   width={90} 
                   height={90}
-                  className="h-20 w-auto"
+                  className="h-10 sm:h-12 md:h-16 lg:h-20 w-auto"
                 />
-                <h1 className="text-2xl font-bold text-gray-900">The NerveVine</h1>
+                <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900">The NerveVine</h1>
               </Link>
               
               {/* Right Side - Navigation and Search */}
@@ -99,7 +99,7 @@ export default function Header() {
                   className="p-2 rounded-md text-gray-700 hover:text-green-600"
                   onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                   </svg>
                 </button>
@@ -118,8 +118,8 @@ export default function Header() {
 
   return (
     <>
-      {/* Trust Banner - Dark Blue */}
-      <div className="bg-blue-950 text-white py-2">
+      {/* Trust Banner - Dark Blue - Hidden on mobile */}
+      <div className="hidden lg:block bg-blue-950 text-white py-2">
         <div className="container mx-auto px-4">
           <div className="flex justify-center items-center relative">
             <div className="flex items-center space-x-4 text-sm">
@@ -186,17 +186,17 @@ export default function Header() {
       {/* Main Header - White with Shadow */}
       <header className="bg-white shadow border-b">
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between py-4">
+                       <div className="flex items-center justify-between py-4">
             {/* Left Side - Logo and Site Name */}
-            <Link href="/" className="flex items-center space-x-3">
+                           <Link href="/" className="flex items-center space-x-2">
               <Image 
                 src="/images/nervevine smalllogo1.svg" 
                 alt="The NerveVine Logo" 
                 width={90} 
                 height={90}
-                className="h-20 w-auto"
+                className="h-10 sm:h-12 md:h-16 lg:h-20 w-auto"
               />
-              <h1 className="text-2xl font-bold text-gray-900">The NerveVine</h1>
+                             <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900">The NerveVine</h1>
             </Link>
             
             {/* Right Side - Navigation and Search */}
@@ -235,19 +235,17 @@ export default function Header() {
                 className="p-2 rounded-md text-gray-700 hover:text-green-600"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               </button>
             </div>
           </div>
 
-          {/* Mobile Search Bar - Only show when menu is open */}
-          {mobileMenuOpen && (
-            <div className="lg:hidden pb-4">
-              <SearchComponent uniqueId="mobile" />
-            </div>
-          )}
+                     {/* Mobile Search Bar - Always visible */}
+           <div className="lg:hidden pb-4">
+             <SearchComponent uniqueId="mobile" />
+           </div>
 
           {/* Mobile Menu */}
           {mobileMenuOpen && (
@@ -271,10 +269,49 @@ export default function Header() {
                 <Link href="/about" className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-green-600 hover:bg-gray-50">
                   About
                 </Link>
-                {session && (
-                  <Link href="/admin" className="px-3 py-2 rounded-md text-sm font-medium text-purple-700 hover:text-purple-600 hover:bg-purple-50">
-                    Admin
-                  </Link>
+                                 
+                {/* Admin Section - Mobile */}
+                {status !== 'loading' && session ? (
+                  <>
+                    <div className="border-t border-gray-200 pt-2 mt-2">
+                      <Link href="/admin" className="px-3 py-2 rounded-md text-sm font-medium text-purple-700 hover:text-purple-600 hover:bg-purple-50 flex items-center">
+                        <span className="mr-2">👤</span>
+                        Admin
+                      </Link>
+                      <button 
+                        onClick={async () => {
+                          try {
+                            localStorage.removeItem('next-auth.session-token')
+                            sessionStorage.clear()
+                            
+                            await signOut({ 
+                              callbackUrl: '/',
+                              redirect: true 
+                            })
+                            
+                            setTimeout(() => {
+                              window.location.href = '/'
+                            }, 100)
+                          } catch (error) {
+                            console.error('SignOut error:', error)
+                          }
+                        }} 
+                        className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-red-600 hover:text-red-700 hover:bg-red-50 flex items-center"
+                      >
+                        <span className="mr-2">🚪</span>
+                        Logout
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="border-t border-gray-200 pt-2 mt-2">
+                      <Link href="/login" className="px-3 py-2 rounded-md text-sm font-medium text-blue-700 hover:text-blue-600 hover:bg-blue-50 flex items-center">
+                        <span className="mr-2">🔐</span>
+                        Admin Login
+                      </Link>
+                    </div>
+                  </>
                 )}
               </nav>
             </div>

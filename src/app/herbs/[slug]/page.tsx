@@ -1,3 +1,4 @@
+import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { getCachedHerb } from '@/lib/database';
@@ -67,7 +68,7 @@ export default async function HerbPage({ params }: { params: Promise<{ slug: str
   }
 
   // Prepare product cards from DB with error handling
-  let productCards: JSX.Element[] = [];
+  let productCards: React.ReactElement[] = [];
   try {
     if (Array.isArray(products) && products.length > 0) {
       productCards = products.map((product: any, idx: number) => (
@@ -92,7 +93,7 @@ export default async function HerbPage({ params }: { params: Promise<{ slug: str
   }
 
   // Indications (symptoms) with error handling
-  let indicationLinks: JSX.Element[] = [];
+  let indicationLinks: React.ReactElement[] = [];
   try {
     if (Array.isArray(indications) && indications.length > 0) {
       indicationLinks = indications

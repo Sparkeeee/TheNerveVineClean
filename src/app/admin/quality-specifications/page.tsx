@@ -63,6 +63,7 @@ export default function QualitySpecificationsPage() {
   const [specifications, setSpecifications] = useState<QualitySpecification[]>([]);
   const [editingSpec, setEditingSpec] = useState<QualitySpecification | null>(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Form state
   const [formData, setFormData] = useState<QualitySpecification>({
@@ -83,18 +84,47 @@ export default function QualitySpecificationsPage() {
   }, []);
 
   const fetchHerbsAndSupplements = async () => {
+    setIsLoading(true);
     try {
       // Fetch herbs
       const herbsResponse = await fetch('/api/herbs');
+      if (!herbsResponse.ok) {
+        throw new Error(`Herbs API responded with status: ${herbsResponse.status}`);
+      }
       const herbsData = await herbsResponse.json();
-      setHerbs(herbsData);
+      console.log('Herbs API response:', herbsData); // Debug log
+      
+      // Handle the response structure: { herbs: [...], pagination: {...} }
+      const herbsArray = herbsData.herbs || herbsData || [];
+      if (!Array.isArray(herbsArray)) {
+        console.error('Herbs data is not an array:', herbsArray);
+        setHerbs([]);
+      } else {
+        setHerbs(herbsArray);
+      }
 
       // Fetch supplements
       const supplementsResponse = await fetch('/api/supplements');
+      if (!supplementsResponse.ok) {
+        throw new Error(`Supplements API responded with status: ${supplementsResponse.status}`);
+      }
       const supplementsData = await supplementsResponse.json();
-      setSupplements(supplementsData);
+      console.log('Supplements API response:', supplementsData); // Debug log
+      
+      // Handle the response structure: { supplements: [...], pagination: {...} }
+      const supplementsArray = supplementsData.supplements || supplementsData || [];
+      if (!Array.isArray(supplementsArray)) {
+        console.error('Supplements data is not an array:', supplementsArray);
+        setSupplements([]);
+      } else {
+        setSupplements(supplementsArray);
+      }
     } catch (error) {
       console.error('Error fetching data:', error);
+      setHerbs([]); // Set to empty array on error
+      setSupplements([]); // Set to empty array on error
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -257,12 +287,16 @@ export default function QualitySpecificationsPage() {
                   onChange={(e) => handleHerbChange(e.target.value)}
                   className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white"
                 >
-                  <option value="" className="text-gray-900 bg-white">Choose a herb...</option>
-                  {herbs.map(herb => (
-                    <option key={herb.id} value={herb.slug} className="text-gray-900 bg-white">
-                      {herb.name} {herb.latinName && `(${herb.latinName})`}
-                    </option>
-                  ))}
+                                     <option value="" className="text-gray-900 bg-white">Choose a herb...</option>
+                   {!isLoading && Array.isArray(herbs) && herbs.length > 0 ? herbs.map(herb => (
+                     <option key={herb.id} value={herb.slug} className="text-gray-900 bg-white">
+                       {herb.name} {herb.latinName && `(${herb.latinName})`}
+                     </option>
+                   )) : (
+                     <option value="" className="text-gray-900 bg-white">
+                       {isLoading ? 'Loading herbs...' : 'No herbs available'}
+                     </option>
+                   )}
                 </select>
               </div>
 
@@ -275,12 +309,16 @@ export default function QualitySpecificationsPage() {
                   onChange={(e) => handleSupplementChange(e.target.value)}
                   className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white"
                 >
-                  <option value="" className="text-gray-900 bg-white">Choose a supplement...</option>
-                  {supplements.map(supplement => (
-                    <option key={supplement.id} value={supplement.slug} className="text-gray-900 bg-white">
-                      {supplement.name}
-                    </option>
-                  ))}
+                                     <option value="" className="text-gray-900 bg-white">Choose a supplement...</option>
+                   {!isLoading && Array.isArray(supplements) && supplements.length > 0 ? supplements.map(supplement => (
+                     <option key={supplement.id} value={supplement.slug} className="text-gray-900 bg-white">
+                       {supplement.name}
+                     </option>
+                   )) : (
+                     <option value="" className="text-gray-900 bg-white">
+                       {isLoading ? 'Loading supplements...' : 'No supplements available'}
+                     </option>
+                   )}
                 </select>
               </div>
             </div>
@@ -646,8 +684,8 @@ export default function QualitySpecificationsPage() {
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {specifications.map((spec) => (
+                             <tbody className="bg-white divide-y divide-gray-200">
+                 {Array.isArray(specifications) && specifications.map((spec) => (
                   <tr key={spec.id}>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-semibold text-gray-900">
