@@ -69,7 +69,16 @@ export class ProductCascadeManager {
         data: {
           // Product data from pending table
           name: `Approved Product ${update.productId}`,
-          // ... other product fields would go here
+          description: `Approved product from cascade ${update.productId}`,
+          merchantId: 1, // Default merchant ID - should be configurable
+          affiliateLink: `https://example.com/product/${update.productId}`,
+          currency: 'USD',
+          region: 'US',
+          qualityScore: 85,
+          approvedBy: 'system',
+          approvedAt: new Date(),
+          affiliateRate: 0.05,
+          affiliateYield: 0.03
         }
       });
 
