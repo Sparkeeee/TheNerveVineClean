@@ -213,19 +213,36 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Product Categories */}
-        <section className="section-padding">
+        {/* White Band Separator */}
+        <div className="bg-white py-12">
           <div className="container-max">
-            <div className="text-center mb-12">
+            <div className="text-center">
               <h2 className="text-3xl font-bold text-gray-900 mb-4">Explore Our Solutions</h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
                 From single herbs to expert-formulated blends, find the natural support you need.
               </p>
             </div>
-            
+          </div>
+        </div>
+        
+        {/* Product Categories */}
+        <section className="section-padding relative">
+          {/* Background Image - focusing on center band */}
+          <div 
+            className="absolute inset-0 z-0"
+            style={{
+              backgroundImage: "url('/images/herbclinic1.jpg')",
+              backgroundSize: "cover",
+              backgroundPosition: "center 60%",
+              backgroundRepeat: "no-repeat",
+              opacity: 0.5
+            }}
+          ></div>
+          
+          <div className="container-max relative z-10">
             <div className="category-grid">
               {productCategories.map((category, index) => (
-                <Link key={index} href={category.href} className="product-card p-6 group">
+                <Link key={index} href={category.href} className="product-card p-6 group bg-white/90 backdrop-blur-sm">
                   <div className="relative mb-4">
                     <Image
                       src={category.image}
@@ -260,15 +277,37 @@ export default function Home() {
                 Use our interactive body map to discover natural remedies for your specific health concerns.
               </p>
             </div>
-            <div className="max-w-4xl mx-auto">
-              <Suspense fallback={
-                <div className="text-center py-12">
-                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-700 mx-auto mb-4"></div>
-                  <p className="text-gray-600">Loading interactive body map...</p>
+            <div className="relative max-w-6xl mx-auto">
+              {/* Floating Cards in Gutters */}
+              <div className="absolute -left-16 top-0 z-10 space-y-4">
+                <div className="bg-white/95 backdrop-blur-sm border border-gray-200 rounded-lg shadow-lg p-4 w-32">
+                  <h3 className="text-sm font-semibold text-gray-800 text-center">Pain</h3>
                 </div>
-              }>
-                <BodyMap />
-              </Suspense>
+                <div className="bg-white/95 backdrop-blur-sm border border-gray-200 rounded-lg shadow-lg p-4 w-32">
+                  <h3 className="text-sm font-semibold text-gray-800 text-center">Chronic Fatigue</h3>
+                </div>
+              </div>
+              
+              <div className="absolute -right-16 top-0 z-10 space-y-4">
+                <div className="bg-white/95 backdrop-blur-sm border border-gray-200 rounded-lg shadow-lg p-4 w-32">
+                  <h3 className="text-sm font-semibold text-gray-800 text-center">Stress</h3>
+                </div>
+                <div className="bg-white/95 backdrop-blur-sm border border-gray-200 rounded-lg shadow-lg p-4 w-32">
+                  <h3 className="text-sm font-semibold text-gray-800 text-center">Multi-System Illness</h3>
+                </div>
+              </div>
+              
+              {/* BodyMap Container */}
+              <div className="max-w-4xl mx-auto">
+                <Suspense fallback={
+                  <div className="text-center py-12">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-700 mx-auto mb-4"></div>
+                    <p className="text-gray-600">Loading interactive body map...</p>
+                  </div>
+                }>
+                  <BodyMap />
+                </Suspense>
+              </div>
             </div>
           </div>
         </section>
