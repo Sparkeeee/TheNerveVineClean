@@ -30,11 +30,11 @@ export default function Header() {
           <div className="container mx-auto px-4">
             <div className="flex justify-center items-center relative">
               <div className="flex items-center space-x-4 text-sm">
-                <span>Natural Support</span>
+                <span>Traditional Remedies</span>
                 <span>•</span>
                 <span>Premium Quality Assured</span>
                 <span>•</span>
-                <span>Scientifically Backed</span>
+                <span>Fully referenced sources</span>
               </div>
               <div className="absolute right-0 text-xs">
                 <div className="flex items-center gap-2">
@@ -123,11 +123,13 @@ export default function Header() {
         <div className="container mx-auto px-4">
           <div className="flex justify-center items-center relative">
             <div className="flex items-center space-x-4 text-sm">
-              <span>Natural Support</span>
+              <span>Traditional Remedies</span>
+              <span>•</span>
+              <span>Modern Supplements</span>
               <span>•</span>
               <span>Premium Quality Assured</span>
               <span>•</span>
-              <span>Scientifically Backed</span>
+              <span>Fully Referenced Sources</span>
             </div>
             <div className="absolute right-0 text-xs">
               <div className="flex items-center gap-2">
