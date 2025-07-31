@@ -6,27 +6,8 @@ import { getCachedSymptom } from '@/lib/database';
 export default async function SymptomPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   
-  // Fetch symptom data directly from database instead of API
-  let symptom;
-  try {
-    symptom = await getCachedSymptom(slug);
-  } catch (error) {
-    console.error('Error in symptom page:', error);
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4">Service Temporarily Unavailable</h1>
-          <p className="text-gray-600 mb-4">We&apos;re experiencing technical difficulties. Please try again later.</p>
-          <Link 
-            href="/symptoms" 
-            className="text-blue-600 hover:text-blue-800 transition-colors"
-          >
-            ← Back to Symptoms
-          </Link>
-        </div>
-      </div>
-    );
-  }
+  // Fetch symptom data from database
+  const symptom = await getCachedSymptom(slug);
 
   if (!symptom) {
     return (
@@ -45,49 +26,14 @@ export default async function SymptomPage({ params }: { params: Promise<{ slug: 
     );
   }
 
-  // Transform database data to match expected format with error handling
-  let transformedSymptom;
-  try {
-    transformedSymptom = {
-      name: symptom.title,
-      title: symptom.title,
-      description: symptom.description || '',
-      paragraphs: [],
-      symptoms: [],
-      causes: [],
-      naturalSolutions: [],
-      relatedSymptoms: [],
-      disclaimer: undefined,
-      emergencyNote: undefined,
-      variants: symptom.variants || {},
-      products: symptom.products || []
-    };
-  } catch (error) {
-    console.error('Error transforming symptom data:', error);
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4">Data Error</h1>
-          <p className="text-gray-600 mb-4">Unable to process symptom data.</p>
-          <Link 
-            href="/symptoms" 
-            className="text-blue-600 hover:text-blue-800 transition-colors"
-          >
-            ← Back to Symptoms
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
-  // --- VARIANT LOGIC ---
-  const hasVariants = transformedSymptom.variants && typeof transformedSymptom.variants === 'object' && !Array.isArray(transformedSymptom.variants);
+  // Check for variants
+  const hasVariants = symptom.variants && Array.isArray(symptom.variants) && symptom.variants.length > 0;
+  
   if (hasVariants) {
-    return <VariantSymptomPage symptom={transformedSymptom} />;
+    return <VariantSymptomPage symptom={symptom} />;
   }
 
-  // Use database products or empty array if none available
-  const products = transformedSymptom.products || [];
+  const products = symptom.products || [];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white">
@@ -95,171 +41,138 @@ export default async function SymptomPage({ params }: { params: Promise<{ slug: 
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-800 mb-4">
-            {transformedSymptom.name}
+            {symptom.title}
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            {transformedSymptom.description}
+            {symptom.description || 'Natural solutions for health and wellness.'}
           </p>
         </div>
 
-        {/* Navigation */}
+        {/* Hero Image */}
+        {symptom.heroImageUrl && (
+          <div className="mb-8">
+            <Image
+              src={symptom.heroImageUrl}
+              alt={symptom.title}
+              width={800}
+              height={400}
+              className="w-full h-64 object-cover rounded-lg shadow-lg"
+            />
+          </div>
+        )}
+
+        {/* Gallery Images */}
+        {symptom.galleryImages && Array.isArray(symptom.galleryImages) && symptom.galleryImages.length > 0 && (
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">Gallery</h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {symptom.galleryImages.map((image: string, index: number) => (
+                <Image
+                  key={index}
+                  src={image}
+                  alt={`${symptom.title} - Image ${index + 1}`}
+                  width={300}
+                  height={200}
+                  className="w-full h-32 object-cover rounded-lg shadow-md"
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Associated Symptoms */}
+        {symptom.associatedSymptoms && Array.isArray(symptom.associatedSymptoms) && symptom.associatedSymptoms.length > 0 && (
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">Related Symptoms</h2>
+            <div className="flex flex-wrap gap-2">
+              {symptom.associatedSymptoms.map((relatedSymptom: string, index: number) => (
+                <Link
+                  key={index}
+                  href={`/symptoms/${relatedSymptom.toLowerCase().replace(/\s+/g, '-')}`}
+                  className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm hover:bg-blue-200 transition-colors"
+                >
+                  {relatedSymptom}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Articles */}
+        {symptom.articles && Array.isArray(symptom.articles) && symptom.articles.length > 0 && (
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">Related Articles</h2>
+            <div className="space-y-4">
+              {symptom.articles.map((article: any, index: number) => (
+                <div key={index} className="bg-white rounded-lg p-4 shadow-md">
+                  <h3 className="font-semibold text-gray-800 mb-2">{article.title}</h3>
+                  <p className="text-gray-600 text-sm">{article.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Cautions */}
+        {symptom.cautions && (
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">Important Notes</h2>
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+              <p className="text-yellow-800">{symptom.cautions}</p>
+            </div>
+          </div>
+        )}
+
+        {/* Products */}
         <div className="mb-8">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">Recommended Solutions</h2>
+          {products.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {products.map((product: any, index: number) => (
+                <div key={index} className="border border-lime-200 rounded-lg p-4 hover:shadow-md transition-shadow bg-white">
+                  <h3 className="font-semibold text-lime-900 mb-2">{product.name}</h3>
+                  {product.description && (
+                    <p className="text-gray-600 text-sm mb-2">{product.description}</p>
+                  )}
+                  <Image 
+                    src={product.imageUrl || "/images/closed-medical-brown-glass-bottle-yellow-vitamins.png"} 
+                    alt={product.name} 
+                    width={96} 
+                    height={96} 
+                    className="w-24 h-24 object-contain mb-2" 
+                  />
+                  <div className="flex items-center justify-between">
+                    {product.price && (
+                      <span className="text-lg font-bold text-lime-900">${product.price}</span>
+                    )}
+                    {product.affiliateLink && (
+                      <a 
+                        href={product.affiliateLink} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="px-3 py-1 bg-lime-700 text-white rounded hover:bg-lime-800 text-xs"
+                      >
+                        Buy Now
+                      </a>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-500 text-center">Product recommendations coming soon.</p>
+          )}
+        </div>
+
+        {/* Back to Symptoms */}
+        <div className="text-center">
           <Link 
-            href="/" 
-            className="text-blue-600 hover:text-blue-800 transition-colors"
+            href="/symptoms" 
+            className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
           >
-            ← Back to Body Map
+            ← Back to All Symptoms
           </Link>
         </div>
-
-        {/* Main Content */}
-        <div className="grid md:grid-cols-3 gap-8">
-          {/* Left Column - Education */}
-          <div className="md:col-span-2 space-y-8">
-            {/* Understanding Section */}
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-                Understanding {transformedSymptom.name}
-              </h2>
-              <div className="prose prose-gray max-w-none">
-                <p className="text-gray-700 mb-4">
-                  Understanding the underlying causes and symptoms can help you 
-                  make informed decisions about natural support options.
-                </p>
-                <p className="text-gray-700 mb-4">
-                  Natural approaches to {(transformedSymptom.name?.toLowerCase() ?? "")} often involve addressing root causes, 
-                  supporting the body&apos;s natural healing processes, and using evidence-based herbs and 
-                  supplements that have been traditionally and clinically studied.
-                </p>
-              </div>
-            </div>
-
-            {/* Symptoms Section */}
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-                Common Symptoms
-              </h2>
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <h3 className="font-semibold text-gray-800 mb-2">Primary Symptoms</h3>
-                  <ul className="text-gray-700 space-y-1">
-                    {transformedSymptom.symptoms && transformedSymptom.symptoms.slice(0, 6).map((symptomItem: string, index: number) => (
-                      <li key={index}>• {symptomItem}</li>
-                    ))}
-                  </ul>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-800 mb-2">Common Causes</h3>
-                  <ul className="text-gray-700 space-y-1">
-                    {transformedSymptom.causes && transformedSymptom.causes.slice(0, 6).map((cause: string, index: number) => (
-                      <li key={index}>• {cause}</li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            {/* Natural Solutions Section */}
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-                Natural Solutions
-              </h2>
-              <div className="prose prose-gray max-w-none">
-                <p className="text-gray-700 mb-4">
-                  Natural approaches to {transformedSymptom.name?.toLowerCase() ?? ""} focus on supporting the body&apos;s 
-                  natural healing processes through evidence-based herbs, supplements, and lifestyle modifications.
-                </p>
-                <div className="grid md:grid-cols-2 gap-4 mt-6">
-                  {transformedSymptom.naturalSolutions && transformedSymptom.naturalSolutions.slice(0, 4).map((solution: string, index: number) => (
-                    <div key={index} className="bg-blue-50 p-4 rounded-lg">
-                      <h4 className="font-semibold text-blue-800 mb-2">Solution {index + 1}</h4>
-                      <p className="text-blue-700 text-sm">{solution}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Column - Products */}
-          <div className="space-y-6">
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-xl font-semibold text-gray-800 mb-4">
-                Recommended Products
-              </h2>
-              <div className="space-y-4">
-                {products.length > 0 ? (
-                  products.map((product: any, index: number) => (
-                    <div key={index} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-                      <h3 className="font-semibold text-gray-800 mb-2">{product.name || 'Product'}</h3>
-                      {product.description && <p className="text-gray-600 text-sm mb-2">{product.description}</p>}
-                      {product.imageUrl && (
-                        <Image 
-                          src={product.imageUrl} 
-                          alt={product.name || 'Product'} 
-                          width={80} 
-                          height={80} 
-                          className="w-20 h-20 object-contain mb-2" 
-                        />
-                      )}
-                      <div className="flex items-center justify-between">
-                        <span className="text-lg font-bold text-gray-800">{product.price ? `$${product.price}` : ''}</span>
-                        {product.affiliateLink && (
-                          <a 
-                            href={product.affiliateLink} 
-                            target="_blank" 
-                            rel="noopener noreferrer" 
-                            className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm"
-                          >
-                            Buy Now
-                          </a>
-                        )}
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-gray-500 text-sm italic text-center py-4">
-                    No products available for this symptom yet. Check back soon for recommendations.
-                  </p>
-                )}
-              </div>
-            </div>
-
-            {/* Related Symptoms */}
-            {transformedSymptom.relatedSymptoms && transformedSymptom.relatedSymptoms.length > 0 && (
-              <div className="bg-white rounded-lg shadow-md p-6">
-                <h3 className="text-lg font-semibold text-gray-800 mb-3">Related Symptoms</h3>
-                <div className="space-y-2">
-                  {transformedSymptom.relatedSymptoms.map((relatedSymptom: string, index: number) => (
-                    <Link 
-                      key={index}
-                      href={`/symptoms/${relatedSymptom.toLowerCase().replace(/\s+/g, '-')}`}
-                      className="block text-blue-600 hover:text-blue-800 transition-colors"
-                    >
-                      • {relatedSymptom}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Disclaimer */}
-        {transformedSymptom.disclaimer && (
-          <div className="mt-8 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-            <h3 className="text-lg font-semibold text-yellow-800 mb-2">Important Notice</h3>
-            <p className="text-yellow-700 text-sm">{transformedSymptom.disclaimer}</p>
-          </div>
-        )}
-
-        {/* Emergency Note */}
-        {transformedSymptom.emergencyNote && (
-          <div className="mt-4 bg-red-50 border border-red-200 rounded-lg p-4">
-            <h3 className="text-lg font-semibold text-red-800 mb-2">⚠️ Emergency Warning</h3>
-            <p className="text-red-700 text-sm">{transformedSymptom.emergencyNote}</p>
-          </div>
-        )}
       </div>
     </div>
   );

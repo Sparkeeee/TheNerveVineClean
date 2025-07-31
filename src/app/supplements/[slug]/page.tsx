@@ -6,27 +6,8 @@ import { getCachedSupplement } from '@/lib/database';
 export default async function SupplementPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   
-  // Fetch supplement data directly from database instead of API
-  let supplement;
-  try {
-    supplement = await getCachedSupplement(slug);
-  } catch (error) {
-    console.error('Error in supplement page:', error);
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4">Service Temporarily Unavailable</h1>
-          <p className="text-gray-600 mb-4">We&apos;re experiencing technical difficulties. Please try again later.</p>
-          <Link 
-            href="/supplements" 
-            className="text-blue-600 hover:text-blue-800 transition-colors"
-          >
-            ← Back to Supplements
-          </Link>
-        </div>
-      </div>
-    );
-  }
+  // Fetch supplement data from database
+  const supplement = await getCachedSupplement(slug);
 
   if (!supplement) {
     return (
@@ -45,42 +26,7 @@ export default async function SupplementPage({ params }: { params: Promise<{ slu
     );
   }
 
-  // Process description with error handling
-  let description;
-  try {
-    description = supplement.description || 'This supplement supports overall wellness.';
-  } catch (error) {
-    console.error('Error processing supplement description:', error);
-    description = 'This supplement supports overall wellness.';
-  }
-
-  // Process products with error handling
-  let products;
-  try {
-    products = supplement.products || [];
-  } catch (error) {
-    console.error('Error processing supplement products:', error);
-    products = [];
-  }
-
-  // Prepare product cards from DB with error handling
-  let productCards: React.ReactElement[] = [];
-  try {
-    if (Array.isArray(products) && products.length > 0) {
-      productCards = products.map((product: any, idx: number) => (
-        <div key={idx} className="border border-lime-200 rounded-lg p-4 hover:shadow-md transition-shadow mb-4 bg-white">
-          <h3 className="font-semibold text-lime-900 mb-2">{product.name || 'Product'}</h3>
-          <p className="text-gray-600 text-sm mb-2">{product.description || 'Product description coming soon.'}</p>
-          {product.price && (
-            <p className="text-lime-700 font-medium">${product.price}</p>
-          )}
-        </div>
-      ));
-    }
-  } catch (error) {
-    console.error('Error processing product cards:', error);
-    productCards = [];
-  }
+  const products = supplement.products || [];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white">
@@ -91,134 +37,118 @@ export default async function SupplementPage({ params }: { params: Promise<{ slu
             {supplement.name}
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            {description}
+            {supplement.description || 'This supplement supports overall wellness.'}
           </p>
-          
-          {/* Multiple Molecular Structure Images - Database-driven with error handling */}
-          {supplement.galleryImages && (() => {
-            try {
-              // Handle JSON data from database
-              let imageUrls: string[] = [];
-              
-              if (typeof supplement.galleryImages === 'string') {
-                // Try to parse JSON string
-                try {
-                  const parsed = JSON.parse(supplement.galleryImages);
-                  if (Array.isArray(parsed)) {
-                    imageUrls = parsed;
-                  } else if (typeof parsed === 'string') {
-                    imageUrls = parsed.split(',').map((url: string) => url.trim()).filter((url: string) => url);
-                  }
-                } catch {
-                  // If JSON parsing fails, treat as comma-separated string
-                  imageUrls = supplement.galleryImages.split(',').map((url: string) => url.trim()).filter((url: string) => url);
-                }
-              } else if (Array.isArray(supplement.galleryImages)) {
-                // Already an array
-                imageUrls = supplement.galleryImages;
-              } else if (typeof supplement.galleryImages === 'object' && supplement.galleryImages !== null) {
-                // JSON object - try to extract URLs
-                const obj = supplement.galleryImages as any;
-                if (obj.urls && Array.isArray(obj.urls)) {
-                  imageUrls = obj.urls;
-                } else if (obj.images && Array.isArray(obj.images)) {
-                  imageUrls = obj.images;
-                } else {
-                  // Try to convert object values to array
-                  imageUrls = Object.values(obj).filter((val: any) => typeof val === 'string');
-                }
-              }
-              
-              // Only render if we have actual image URLs
-              if (imageUrls.length > 0) {
-                return (
-                  <div className="flex justify-center mb-6">
-                    <div className="flex gap-4 flex-wrap justify-center">
-                      {imageUrls.map((imageUrl: string, index: number) => (
-                        <Image 
-                          key={index}
-                          src={imageUrl} 
-                          alt={`${supplement.name} molecular structure ${index + 1}`} 
-                          width={400} 
-                          height={300} 
-                          className={`rounded-lg shadow-md w-auto h-auto object-contain ${
-                            supplement.name?.toLowerCase().includes('l-tryptophan') 
-                              ? 'max-w-xs max-h-48' 
-                              : 'max-w-md max-h-80'
-                          }`}
-                          priority
-                        />
-                      ))}
-                    </div>
+        </div>
+
+        {/* Hero Image */}
+        {supplement.heroImageUrl && (
+          <div className="mb-8">
+            <Image
+              src={supplement.heroImageUrl}
+              alt={supplement.name}
+              width={800}
+              height={400}
+              className="w-full h-64 object-cover rounded-lg shadow-lg"
+            />
+          </div>
+        )}
+
+        {/* Gallery Images */}
+        {supplement.galleryImages && Array.isArray(supplement.galleryImages) && supplement.galleryImages.length > 0 && (
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">Gallery</h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {supplement.galleryImages.map((image: string, index: number) => (
+                <Image
+                  key={index}
+                  src={image}
+                  alt={`${supplement.name} - Image ${index + 1}`}
+                  width={300}
+                  height={200}
+                  className="w-full h-32 object-cover rounded-lg shadow-md"
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Indications */}
+        {supplement.indications && Array.isArray(supplement.indications) && supplement.indications.length > 0 && (
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">Common Uses</h2>
+            <div className="flex flex-wrap gap-2">
+              {supplement.indications.map((indication: string, index: number) => (
+                <span
+                  key={index}
+                  className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm"
+                >
+                  {indication}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Cautions */}
+        {supplement.cautions && (
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">Important Notes</h2>
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+              <p className="text-yellow-800">{supplement.cautions}</p>
+            </div>
+          </div>
+        )}
+
+        {/* Products */}
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">Recommended Products</h2>
+          {products.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {products.map((product: any, index: number) => (
+                <div key={index} className="border border-lime-200 rounded-lg p-4 hover:shadow-md transition-shadow bg-white">
+                  <h3 className="font-semibold text-lime-900 mb-2">{product.name}</h3>
+                  {product.description && (
+                    <p className="text-gray-600 text-sm mb-2">{product.description}</p>
+                  )}
+                  <Image 
+                    src={product.imageUrl || "/images/closed-medical-brown-glass-bottle-yellow-vitamins.png"} 
+                    alt={product.name} 
+                    width={96} 
+                    height={96} 
+                    className="w-24 h-24 object-contain mb-2" 
+                  />
+                  <div className="flex items-center justify-between">
+                    {product.price && (
+                      <span className="text-lg font-bold text-lime-900">${product.price}</span>
+                    )}
+                    {product.affiliateLink && (
+                      <a 
+                        href={product.affiliateLink} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="px-3 py-1 bg-lime-700 text-white rounded hover:bg-lime-800 text-xs"
+                      >
+                        Buy Now
+                      </a>
+                    )}
                   </div>
-                );
-              }
-            } catch (error) {
-              console.error('Error processing gallery images:', error);
-            }
-            return null;
-          })()}
-          
-          {/* Single Molecular Structure Image - Fallback */}
-          {supplement.heroImageUrl && (!supplement.galleryImages || (() => {
-            try {
-              // Check if galleryImages is empty
-              if (Array.isArray(supplement.galleryImages)) {
-                return supplement.galleryImages.length === 0;
-              } else if (typeof supplement.galleryImages === 'string') {
-                return !supplement.galleryImages.trim();
-              }
-              return true; // If galleryImages is null/undefined, show heroImageUrl
-            } catch (error) {
-              console.error('Error checking gallery images:', error);
-              return true; // Fallback to showing heroImageUrl
-            }
-          })()) && (
-            <div className="flex justify-center mb-6">
-              <Image 
-                src={supplement.heroImageUrl} 
-                alt={`${supplement.name} molecular structure`} 
-                width={400} 
-                height={300} 
-                className={`rounded-lg shadow-md w-auto h-auto object-contain ${
-                  supplement.name?.toLowerCase().includes('l-tryptophan') 
-                    ? 'max-w-xs max-h-48' 
-                    : 'max-w-md max-h-80'
-                }`}
-                priority
-              />
+                </div>
+              ))}
             </div>
+          ) : (
+            <p className="text-gray-500 text-center">Product recommendations coming soon.</p>
           )}
-          
         </div>
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Info */}
-          <div className="lg:col-span-2 space-y-6">
-            <div className="bg-white rounded-lg p-6 shadow-lg">
-              <h2 className="text-2xl font-semibold text-lime-800 mb-4">Supplement Details</h2>
-              <ul className="space-y-3">
-                {supplement.cautions && (
-                  <li className="flex items-start">
-                    <span className="text-lime-500 mr-3 mt-1">✓</span>
-                    <span className="text-gray-700">{supplement.cautions}</span>
-                  </li>
-                )}
-              </ul>
-            </div>
-          </div>
-          {/* Top Products */}
-          <div className="bg-white rounded-lg p-6 shadow-lg h-fit">
-            <h2 className="text-2xl font-semibold text-lime-800 mb-6">Top Products</h2>
-            <div className="space-y-4">{productCards}</div>
-          </div>
-        </div>
-        {/* Disclaimer */}
-        <div className="mt-8 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-          <p className="text-yellow-800 text-sm">
-            <strong>Disclaimer:</strong> These statements have not been evaluated by the FDA. 
-            This product is not intended to diagnose, treat, cure, or prevent any disease. 
-            Always consult with a healthcare professional before starting any new supplement regimen.
-          </p>
+
+        {/* Back to Supplements */}
+        <div className="text-center">
+          <Link 
+            href="/supplements" 
+            className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            ← Back to All Supplements
+          </Link>
         </div>
       </div>
     </div>
