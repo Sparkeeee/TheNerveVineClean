@@ -40,10 +40,32 @@ function getColorForSymptom(symptomName: string): string {
 }
 
 function getSymptomTag(usedFor: string, symptoms: any[]) {
-  // Find a matching symptom (case-insensitive)
-  return symptoms.find(
-    s => s.title.toLowerCase() === usedFor.toLowerCase()
-  );
+  const indication = usedFor.toLowerCase().trim();
+  
+  // First try exact match
+  let match = symptoms.find(s => s.title.toLowerCase() === indication);
+  if (match) return match;
+  
+  // Try partial matches (indication is part of symptom title)
+  match = symptoms.find(s => s.title.toLowerCase().includes(indication));
+  if (match) return match;
+  
+  // Try reverse partial match (symptom title is part of indication)
+  match = symptoms.find(s => indication.includes(s.title.toLowerCase()));
+  if (match) return match;
+  
+  // Try word-by-word matching
+  const indicationWords = indication.split(/\s+/);
+  match = symptoms.find(s => {
+    const symptomWords = s.title.toLowerCase().split(/\s+/);
+    return indicationWords.some(word => 
+      symptomWords.some(symptomWord => 
+        symptomWord.includes(word) || word.includes(symptomWord)
+      )
+    );
+  });
+  
+  return match;
 }
 
 export default async function HerbsPage() {
