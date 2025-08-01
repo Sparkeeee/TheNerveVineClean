@@ -20,9 +20,8 @@ const herbs = [
     ],
     references: [
       { type: "traditional", value: "Used for stress relief in European herbalism." }
-    ],
-    indications: ["anxiety", "digestive tension"],
-    traditionalUses: ["Stress and anxiety relief", "Digestive upset"]
+         ],
+     traditionalUses: ["Stress and anxiety relief", "Digestive upset"]
   },
   {
     name: "Ashwagandha",
@@ -40,9 +39,8 @@ const herbs = [
     ],
     references: [
       { type: "clinical", value: "Shown to reduce cortisol in clinical studies." }
-    ],
-    indications: ["stress", "fatigue"],
-    traditionalUses: ["Ayurvedic tonic", "Energy support"]
+         ],
+     traditionalUses: ["Ayurvedic tonic", "Energy support"]
   },
   {
     name: "Chamomile",
@@ -57,7 +55,7 @@ const herbs = [
     cautions: "Rare allergy in those sensitive to ragweed.",
     productFormulations: [],
     references: [],
-    indications: ["anxiety", "insomnia"],
+
     traditionalUses: ["Sleep aid", "Digestive tonic"]
   },
   {
@@ -77,7 +75,7 @@ const herbs = [
     references: [
       { type: "clinical", value: "Shown to reduce anxiety in clinical studies." }
     ],
-    indications: ["anxiety", "insomnia", "nervous tension"],
+
     traditionalUses: ["Relaxation", "Sleep aid", "Nervous system support"]
   },
   {
@@ -97,7 +95,7 @@ const herbs = [
     references: [
       { type: "clinical", value: "Multiple studies show effectiveness for mild depression." }
     ],
-    indications: ["depression", "seasonal affective disorder", "low mood"],
+
     traditionalUses: ["Mood support", "Depression", "Seasonal blues"]
   },
   {
@@ -117,15 +115,15 @@ const herbs = [
     references: [
       { type: "clinical", value: "Shown to improve stress resilience and energy in studies." }
     ],
-    indications: ["stress", "fatigue", "burnout"],
+
     traditionalUses: ["Stress adaptation", "Energy support", "Mental performance"]
   },
   {
-    name: "Holy Basil (Tulsi)",
+    name: "Holy Basil",
     latinName: "Ocimum sanctum",
     slug: "holy-basil",
-    description: "Holy Basil, also known as Tulsi, is a sacred herb in Ayurvedic medicine with powerful adaptogenic properties.",
-    metaTitle: "Holy Basil (Tulsi) - Sacred Adaptogenic Herb",
+    description: "Holy Basil is a sacred herb in Ayurvedic medicine with powerful adaptogenic properties.",
+    metaTitle: "Holy Basil - Sacred Adaptogenic Herb",
     metaDescription: "Holy Basil is a sacred herb in Ayurvedic medicine with powerful adaptogenic properties.",
     heroImageUrl: "/images/holy-basil.jpg",
     cardImageUrl: "/images/holy-basil.jpg",
@@ -137,7 +135,7 @@ const herbs = [
     references: [
       { type: "traditional", value: "Sacred herb in Ayurvedic medicine for stress and spiritual support." }
     ],
-    indications: ["stress", "mental fog", "spiritual seeking"],
+
     traditionalUses: ["Stress adaptation", "Mental clarity", "Spiritual support"]
   },
   {
@@ -157,7 +155,7 @@ const herbs = [
     references: [
       { type: "clinical", value: "Shown to support adrenal function and cortisol regulation." }
     ],
-    indications: ["adrenal fatigue", "low energy", "stress"],
+
     traditionalUses: ["Adrenal support", "Energy tonic", "Stress adaptation"]
   },
   {
@@ -177,7 +175,7 @@ const herbs = [
     references: [
       { type: "clinical", value: "Extensive research shows effectiveness for energy and stress adaptation." }
     ],
-    indications: ["fatigue", "low energy", "stress"],
+
     traditionalUses: ["Energy tonic", "Stress adaptation", "Cognitive support"]
   },
   {
@@ -197,7 +195,7 @@ const herbs = [
     references: [
       { type: "clinical", value: "Multiple studies show effectiveness for migraine prevention." }
     ],
-    indications: ["migraines", "tension headaches", "stress"],
+
     traditionalUses: ["Migraine prevention", "Headache relief", "Inflammation reduction"]
   },
   {
@@ -217,7 +215,7 @@ const herbs = [
     references: [
       { type: "traditional", value: "Used for anxiety and sleep in European herbalism." }
     ],
-    indications: ["anxiety", "insomnia", "nervous tension"],
+
     traditionalUses: ["Sleep aid", "Anxiety relief", "Nervous system support"]
   },
   {
@@ -237,7 +235,7 @@ const herbs = [
     references: [
       { type: "traditional", value: "Used for mood enhancement in traditional medicine." }
     ],
-    indications: ["low mood", "mild depression", "stress"],
+
     traditionalUses: ["Mood enhancement", "Nervous system tonic", "Emotional balance"]
   },
   {
@@ -257,7 +255,7 @@ const herbs = [
     references: [
       { type: "traditional", value: "Used for anxiety and nervous system support in traditional medicine." }
     ],
-    indications: ["anxiety", "nervous tension", "insomnia"],
+
     traditionalUses: ["Nervous system support", "Anxiety relief", "Sleep aid"]
   },
   {
@@ -277,7 +275,7 @@ const herbs = [
     references: [
       { type: "clinical", value: "Multiple studies show effectiveness for sleep support." }
     ],
-    indications: ["insomnia", "anxiety", "nervous tension"],
+
     traditionalUses: ["Sleep aid", "Anxiety relief", "Nervous system support"]
   },
   {
@@ -297,7 +295,7 @@ const herbs = [
     references: [
       { type: "clinical", value: "Shown to reduce anxiety in clinical studies." }
     ],
-    indications: ["anxiety", "stress", "nervous tension"],
+
     traditionalUses: ["Anxiety relief", "Relaxation", "Social anxiety"]
   },
   {
@@ -317,14 +315,14 @@ const herbs = [
     references: [
       { type: "traditional", value: "Used for energy and hormonal balance in traditional Peruvian medicine." }
     ],
-    indications: ["fatigue", "low energy", "hormonal imbalance"],
+
     traditionalUses: ["Energy tonic", "Hormonal balance", "Stress adaptation"]
   },
   {
-    name: "Siberian Ginseng (Eleuthero)",
+    name: "Siberian Ginseng",
     latinName: "Eleutherococcus senticosus",
     slug: "siberian-ginseng",
-    description: "Siberian Ginseng, also known as Eleuthero, is an adaptogenic herb that helps the body adapt to stress and maintain energy levels.",
+    description: "Siberian Ginseng is an adaptogenic herb that helps the body adapt to stress and maintain energy levels.",
     metaTitle: "Siberian Ginseng - Adaptogenic Energy Support",
     metaDescription: "Siberian Ginseng is an adaptogenic herb that helps the body adapt to stress and maintain energy levels.",
     heroImageUrl: "/images/Eleutherococcus_sentic_3.jpg",
@@ -337,7 +335,7 @@ const herbs = [
     references: [
       { type: "clinical", value: "Shown to improve stress resilience and energy in studies." }
     ],
-    indications: ["stress", "fatigue", "burnout"],
+
     traditionalUses: ["Stress adaptation", "Energy support", "Adrenal support"]
   },
   {
@@ -357,7 +355,7 @@ const herbs = [
     references: [
       { type: "clinical", value: "Multiple studies show effectiveness for cardiovascular support." }
     ],
-    indications: ["heart palpitations", "poor circulation", "stress"],
+
     traditionalUses: ["Heart support", "Cardiovascular tonic", "Circulation improvement"]
   },
   {
@@ -377,16 +375,16 @@ const herbs = [
     references: [
       { type: "traditional", value: "Used for pain relief in traditional medicine for centuries." }
     ],
-    indications: ["tension headaches", "muscle pain", "stress"],
+
     traditionalUses: ["Pain relief", "Inflammation reduction", "Headache relief"]
   },
   {
-    name: "Capsaicin (Chilli Extract)",
+    name: "Chilli Pepper",
     latinName: "Capsicum annuum",
-    slug: "capsaicin",
-    description: "Capsaicin is the active compound found in chili peppers that provides natural pain relief.",
-    metaTitle: "Capsaicin - Natural Pain Relief Compound",
-    metaDescription: "Capsaicin is the active compound found in chili peppers that provides natural pain relief.",
+    slug: "chilli-pepper",
+    description: "Chilli Pepper is a traditional herb used for pain relief and circulation support.",
+    metaTitle: "Chilli Pepper - Natural Pain Relief",
+    metaDescription: "Chilli Pepper is a traditional herb used for pain relief and circulation support.",
     heroImageUrl: "/images/capsaicin.jpg",
     cardImageUrl: "/images/capsaicin.jpg",
     galleryImages: ["/images/capsaicin.jpg"],
@@ -397,7 +395,7 @@ const herbs = [
     references: [
       { type: "clinical", value: "Multiple studies show effectiveness for pain relief." }
     ],
-    indications: ["nerve pain", "muscle pain", "tension"],
+
     traditionalUses: ["Pain relief", "Muscle relaxation", "Tension reduction"]
   },
   {
@@ -417,7 +415,7 @@ const herbs = [
     references: [
       { type: "clinical", value: "Shown to improve stress resilience and cognitive function in studies." }
     ],
-    indications: ["stress", "fatigue", "mental fog"],
+
     traditionalUses: ["Stress adaptation", "Energy support", "Cognitive enhancement"]
   },
   {
@@ -437,16 +435,16 @@ const herbs = [
     references: [
       { type: "traditional", value: "Used for stress adaptation and liver support in traditional Chinese medicine." }
     ],
-    indications: ["stress", "liver stress", "fatigue"],
+
     traditionalUses: ["Stress adaptation", "Liver support", "Energy tonic"]
   },
   {
-    name: "Astragalus Root",
+    name: "Astragalus",
     latinName: "Astragalus membranaceus",
-    slug: "astragalus-root",
-    description: "Astragalus Root is an adaptogenic herb used in traditional Chinese medicine for immune support and stress adaptation.",
-    metaTitle: "Astragalus Root - Immune and Stress Support",
-    metaDescription: "Astragalus Root is an adaptogenic herb used in traditional Chinese medicine for immune support and stress adaptation.",
+    slug: "astragalus",
+    description: "Astragalus is an adaptogenic herb used in traditional Chinese medicine for immune support and stress adaptation.",
+    metaTitle: "Astragalus - Immune and Stress Support",
+    metaDescription: "Astragalus is an adaptogenic herb used in traditional Chinese medicine for immune support and stress adaptation.",
     heroImageUrl: "/images/Astragalus_membranaceu_2.jpg",
     cardImageUrl: "/images/Astragalus_membranaceu_2.jpg",
     galleryImages: ["/images/Astragalus_membranaceu_2.jpg"],
@@ -457,7 +455,7 @@ const herbs = [
     references: [
       { type: "traditional", value: "Used for immune support and stress adaptation in traditional Chinese medicine." }
     ],
-    indications: ["immune stress", "fatigue", "stress"],
+
     traditionalUses: ["Immune support", "Stress adaptation", "Energy tonic"]
   }
 ];
@@ -486,24 +484,23 @@ export async function GET() {
       }
       
       try {
-        await prisma.herb.create({
-          data: {
-            name: herb.name,
-            latinName: herb.latinName,
-            slug: herb.slug,
-            description: herb.description,
-            metaTitle: herb.metaTitle,
-            metaDescription: herb.metaDescription,
-            heroImageUrl: herb.heroImageUrl,
-            cardImageUrl: herb.cardImageUrl,
-            galleryImages: herb.galleryImages,
-            cautions: herb.cautions,
-            productFormulations: herb.productFormulations,
-            references: herb.references,
-            indications: herb.indications,
-            traditionalUses: herb.traditionalUses,
-          },
-        });
+                 await prisma.herb.create({
+           data: {
+             name: herb.name,
+             latinName: herb.latinName,
+             slug: herb.slug,
+             description: herb.description,
+             metaTitle: herb.metaTitle,
+             metaDescription: herb.metaDescription,
+             heroImageUrl: herb.heroImageUrl,
+             cardImageUrl: herb.cardImageUrl,
+             galleryImages: herb.galleryImages,
+             cautions: herb.cautions,
+             productFormulations: herb.productFormulations,
+             references: herb.references,
+             traditionalUses: herb.traditionalUses,
+           },
+         });
         console.log(`Imported herb: ${herb.name}`);
         importedCount++;
       } catch (e) {

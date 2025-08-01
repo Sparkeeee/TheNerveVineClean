@@ -291,7 +291,19 @@ export async function getCachedSupplements() {
   
   try {
     const data = await prisma.supplement.findMany({
-      select: { id: true, name: true, slug: true, description: true }
+      select: { 
+        id: true, 
+        name: true, 
+        slug: true, 
+        description: true,
+        cardImageUrl: true,
+        indicationTags: {
+          select: {
+            name: true,
+            slug: true
+          }
+        }
+      }
     });
     
     cache.set(cacheKey, { data, timestamp: Date.now() });

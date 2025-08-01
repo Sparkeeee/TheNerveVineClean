@@ -5,10 +5,10 @@ const prisma = new PrismaClient();
 
 const expectedHerbs = [
   "Lemon Balm", "Ashwagandha", "Chamomile", "Lavender", "St. John's Wort",
-  "Rhodiola Rosea", "Holy Basil (Tulsi)", "Licorice Root", "Ginseng", "Feverfew",
+  "Rhodiola Rosea", "Holy Basil", "Licorice Root", "Ginseng", "Feverfew",
   "Passionflower", "Damiana", "Skullcap", "Valerian Root", "Kava Kava",
-  "Maca Root", "Siberian Ginseng (Eleuthero)", "Hawthorn", "Willow Bark",
-  "Capsaicin (Chilli Extract)", "American Ginseng", "Schisandra Berry", "Astragalus Root",
+  "Maca Root", "Siberian Ginseng", "Hawthorn", "Willow Bark",
+  "Chilli Pepper", "American Ginseng", "Schisandra Berry", "Astragalus",
   "Ginkgo Biloba", "Bilberry", "Milk Thistle"
 ];
 

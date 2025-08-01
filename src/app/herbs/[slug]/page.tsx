@@ -74,9 +74,18 @@ export default async function HerbPage({ params }: { params: Promise<{ slug: str
                   {herb.latinName}
                 </p>
               )}
-              <p className="text-lg text-gray-600 max-w-2xl lg:max-w-none">
-                {herb.description}
-              </p>
+              {/* Formatted description with proper paragraph spacing */}
+              <div className="text-lg text-gray-600 max-w-2xl lg:max-w-none prose prose-lg text-justify">
+                {herb.description ? (
+                  herb.description.split('\n\n').map((paragraph: string, index: number) => (
+                    <p key={index} className="mb-4 last:mb-0 text-justify">
+                      {paragraph}
+                    </p>
+                  ))
+                ) : (
+                  <p className="text-justify">This herb supports overall wellness.</p>
+                )}
+              </div>
             </div>
 
             {/* Gallery Images */}

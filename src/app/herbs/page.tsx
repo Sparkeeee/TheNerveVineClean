@@ -1,6 +1,22 @@
 import Link from "next/link";
 import { getCachedHerbs, getCachedSymptoms } from '@/lib/database';
 
+// Helper function to truncate description to ~2 lines
+function truncateDescription(description: string): string {
+  if (!description) return '';
+  
+  // Split into sentences and take first 2-3 sentences
+  const sentences = description.split(/[.!?]+/).filter(s => s.trim().length > 0);
+  const firstTwoSentences = sentences.slice(0, 2).join('. ');
+  
+  // If it's still too long, truncate to ~150 characters
+  if (firstTwoSentences.length > 150) {
+    return firstTwoSentences.substring(0, 150).trim() + '...';
+  }
+  
+  return firstTwoSentences + (sentences.length > 2 ? '...' : '');
+}
+
 // Use ISR for optimal caching with database updates
 export const revalidate = 900; // 15 minutes - matches cache TTL
 
@@ -138,39 +154,13 @@ export default async function HerbsPage() {
               <p className="text-gray-500 text-sm italic mb-2">
                 {herb.latinName || getLatinName(herb.description || '')}
               </p>
+              {/* Truncated description */}
+              <p className="text-gray-600 text-sm mb-4 leading-relaxed">
+                {truncateDescription(herb.description)}
+              </p>
               <hr className="my-3 border-blue-100" />
-              {/* Tags for main indications (symptoms) */}
-              <div className="flex flex-wrap gap-2 mt-4">
-                {herb.indications && Array.isArray(herb.indications) && (() => {
-                  const uniqueTags = new Map();
-                  herb.indications.forEach((indication: any) => {
-                    const tag = getSymptomTag(indication as string, symptoms);
-                    if (tag && !uniqueTags.has(tag.slug)) {
-                      uniqueTags.set(tag.slug, tag);
-                    }
-                  });
-                  return Array.from(uniqueTags.values()).map((tag: any, i: number) => (
-                    <Link
-                      key={i}
-                      href={`/symptoms/${tag.slug}`}
-                      className={`inline-block px-3 py-1 rounded-full border text-xs font-semibold mr-2 mb-2 transition-colors duration-200 hover:brightness-110 ${getSymptomTagClasses(tag.title)}`}
-                    >
-                      {tag.title}
-                    </Link>
-                  ));
-                })()}
-              </div>
-              {/* Traditional Uses */}
-              <div className="flex flex-wrap gap-2 mt-4">
-                {herb.traditionalUses && Array.isArray(herb.traditionalUses) && herb.traditionalUses.map((use: any, i: number) => (
-                  <span
-                    key={i}
-                    className="inline-block px-3 py-1 rounded-full border text-xs font-semibold mr-2 mb-2 bg-gray-100 text-gray-700 border-gray-200"
-                  >
-                    {use as string}
-                  </span>
-                ))}
-              </div>
+
+
             </div>
           ))}
         </div>
