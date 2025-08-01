@@ -10,7 +10,15 @@ export async function getSymptomBySlug(slug: string): Promise<SymptomType | null
     }
 
     // Transform database data to match the Symptom type
+    console.log(`[DEBUG] Transforming variants for ${dbSymptom.title}:`, {
+      hasVariants: !!dbSymptom.variants,
+      variantsLength: dbSymptom.variants?.length || 0,
+      variantNames: dbSymptom.variants?.map(v => v.name) || []
+    });
+    
     const transformedVariants = dbSymptom.variants?.reduce((acc: Record<string, Variant>, variant: any) => {
+      // Use variant.name as the key for the object
+      console.log(`[DEBUG] Processing variant: ${variant.name}`);
       acc[variant.name] = {
         paragraphs: variant.description ? [variant.description] : [],
         bestHerb: variant.herbs?.[0] ? {
@@ -40,6 +48,11 @@ export async function getSymptomBySlug(slug: string): Promise<SymptomType | null
       };
       return acc;
     }, {} as Record<string, Variant>) || {};
+
+    console.log(`[DEBUG] Transformed variants result:`, {
+      transformedKeys: Object.keys(transformedVariants),
+      transformedCount: Object.keys(transformedVariants).length
+    });
 
     const symptom: SymptomType = {
       name: dbSymptom.title, // Use title as name since name doesn't exist in schema

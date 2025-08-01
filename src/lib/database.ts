@@ -104,18 +104,12 @@ export async function getCachedSupplement(slug: string) {
 }
 
 export async function getCachedSymptom(slug: string) {
-  console.log(`[DEBUG] getCachedSymptom called with slug: ${slug}`);
-  const cacheKey = `symptom:${slug}`;
-  const cached = cache.get(cacheKey);
-  
-  if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
-    console.log(`[DEBUG] Returning cached symptom for: ${slug}`);
-    return cached.data;
-  }
-  
   try {
-    console.log(`[DEBUG] Fetching symptom from database: ${slug}`);
-    const data = await prisma.symptom.findUnique({
+    // Temporarily bypass cache for debugging
+    console.log(`[DEBUG] getCachedSymptom called with slug: ${slug}`);
+    
+    // Fetch from database
+    const symptom = await prisma.symptom.findUnique({
       where: { slug },
       include: {
         products: {
@@ -131,13 +125,19 @@ export async function getCachedSymptom(slug: string) {
         }
       }
     });
-    
-    console.log(`[DEBUG] Symptom query result:`, data ? 'Found' : 'Not found');
-    
-    if (data) {
-      cache.set(cacheKey, { data, timestamp: Date.now() });
+
+    if (symptom) {
+      // Debug: Log the raw variants data
+      console.log(`[DEBUG] Raw variants data for ${slug}:`, {
+        variantsCount: symptom.variants?.length || 0,
+        variantNames: symptom.variants?.map(v => v.name) || [],
+        isArray: Array.isArray(symptom.variants)
+      });
+      
+      return symptom;
     }
-    return data;
+
+    return null;
   } catch (error) {
     console.error('Error fetching symptom:', error);
     return null;
@@ -166,7 +166,6 @@ export async function getCachedHerb(slug: string) {
         heroImageUrl: true, 
         galleryImages: true,
         latinName: true,
-        indications: true,
         traditionalUses: true,
         cautions: true,
         products: {
@@ -219,7 +218,6 @@ export async function getCachedHerbs() {
         slug: true, 
         description: true,
         latinName: true,
-        indications: true,
         traditionalUses: true
       },
       orderBy: { name: 'asc' }

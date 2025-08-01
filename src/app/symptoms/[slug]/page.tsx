@@ -1,13 +1,13 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import VariantSymptomPage from './VariantSymptomPage';
-import { getCachedSymptom } from '@/lib/database';
+import { getSymptomBySlug } from '@/lib/symptoms';
 
 export default async function SymptomPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   
-  // Fetch symptom data from database
-  const symptom = await getCachedSymptom(slug);
+  // Fetch symptom data from database with transformation
+  const symptom = await getSymptomBySlug(slug);
 
   if (!symptom) {
     return (
@@ -27,7 +27,7 @@ export default async function SymptomPage({ params }: { params: Promise<{ slug: 
   }
 
   // Check for variants
-  const hasVariants = symptom.variants && Array.isArray(symptom.variants) && symptom.variants.length > 0;
+  const hasVariants = symptom.variants && typeof symptom.variants === 'object' && !Array.isArray(symptom.variants) && Object.keys(symptom.variants).length > 0;
   
   if (hasVariants) {
     return <VariantSymptomPage symptom={symptom} />;

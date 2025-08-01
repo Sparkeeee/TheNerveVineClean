@@ -18,7 +18,11 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
         description: symptom.description,
         slug: symptom.slug,
         hasProducts: symptom.products ? symptom.products.length > 0 : false,
-        hasVariants: symptom.variants ? Object.keys(symptom.variants).length > 0 : false
+        rawVariants: symptom.variants,
+        variantsType: typeof symptom.variants,
+        variantsIsArray: Array.isArray(symptom.variants),
+        variantsKeys: symptom.variants ? Object.keys(symptom.variants) : [],
+        variantsLength: symptom.variants ? (Array.isArray(symptom.variants) ? symptom.variants.length : Object.keys(symptom.variants).length) : 0
       }
     });
   } catch (error) {

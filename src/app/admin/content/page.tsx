@@ -89,6 +89,17 @@ interface SymptomVariant {
   supplements?: Supplement[];
 }
 
+// Add interface for Indication
+interface Indication {
+  id: number;
+  name: string;
+  slug: string;
+  description?: string;
+  color?: string;
+  herbs?: Herb[];
+  supplements?: Supplement[];
+}
+
 // Define ProductFormulation type for clarity
 interface ProductFormulation {
   name?: string;
@@ -107,7 +118,7 @@ type Article = {
   fileName: string | null;
 };
 
-const TABS = ["Herbs", "Supplements", "Symptoms", "Blog"];
+const TABS = ["Herbs", "Supplements", "Symptoms", "Indications", "Blog"];
 
 const HERB_FIELDS = [
   { key: "name", label: "Name", required: true },
@@ -199,6 +210,12 @@ export default function AdminContentPage() {
   const [variantFormData, setVariantFormData] = useState<Partial<SymptomVariant>>({});
   const [showVariantForm, setShowVariantForm] = useState(false);
   const [variantFormMode, setVariantFormMode] = useState<"add" | "edit">("add");
+
+  // Add indications management state
+  const [indications, setIndications] = useState<Indication[]>([]);
+  const [showIndicationForm, setShowIndicationForm] = useState(false);
+  const [indicationFormMode, setIndicationFormMode] = useState<"add" | "edit">("add");
+  const [indicationFormData, setIndicationFormData] = useState<Partial<Indication>>({});
 
 
   // Handle file upload and/or text entry
@@ -324,6 +341,11 @@ export default function AdminContentPage() {
       fetchAllHerbs();
       fetchAllSupplements();
     }
+    if (tab === "Indications") {
+      fetchIndications();
+      fetchAllHerbs();
+      fetchAllSupplements();
+    }
      
   }, [tab]);
 
@@ -343,8 +365,15 @@ export default function AdminContentPage() {
     try {
       const res = await fetch("/api/symptoms");
       if (!res.ok) throw new Error("Failed to fetch symptoms");
-      const items: Symptom[] = await res.json();
-      setAllSymptoms(items);
+      const response = await res.json();
+      // Handle the response structure: { success: true, data: { symptoms: [...], pagination: {...} } }
+      const symptomsArray = response.data?.symptoms || response.symptoms || response || [];
+      if (!Array.isArray(symptomsArray)) {
+        console.error('Symptoms data is not an array:', symptomsArray);
+        setAllSymptoms([]);
+      } else {
+        setAllSymptoms(symptomsArray);
+      }
     } catch {
       setAllSymptoms([]);
     }
@@ -386,6 +415,23 @@ export default function AdminContentPage() {
     }
   }
 
+  async function fetchIndications() {
+    try {
+      const res = await fetch("/api/indications");
+      if (!res.ok) throw new Error("Failed to fetch indications");
+      const response = await res.json();
+      const indicationsArray = response.data?.indications || response.indications || response || [];
+      if (!Array.isArray(indicationsArray)) {
+        console.error('Indications data is not an array:', indicationsArray);
+        setIndications([]);
+      } else {
+        setIndications(indicationsArray);
+      }
+    } catch {
+      setIndications([]);
+    }
+  }
+
   async function fetchData() {
     setLoading(true);
     setError("");
@@ -393,9 +439,30 @@ export default function AdminContentPage() {
     try {
       const res = await fetch(url);
       if (!res.ok) throw new Error("Failed to fetch " + tab);
-      const items: Herb[] | Supplement[] | Symptom[] = await res.json();
+      const response = await res.json();
+      
+      // Handle the API response structure: { herbs: [...], pagination: {...} }
+      let items: Herb[] | Supplement[] | Symptom[] | Indication[] = [];
+      if (response.data) {
+        // New API structure
+        items = response.data[tab.toLowerCase()] || response.data || [];
+      } else if (response[tab.toLowerCase()]) {
+        // Alternative structure
+        items = response[tab.toLowerCase()];
+      } else {
+        // Direct array (old structure)
+        items = response;
+      }
+      
+      // Ensure items is an array
+      if (!Array.isArray(items)) {
+        console.error('Items is not an array:', items);
+        items = [];
+      }
+      
       setData(items);
-    } catch {
+    } catch (error) {
+      console.error('Error fetching data:', error);
       setError('An error occurred');
       setData([]);
     } finally {
@@ -488,13 +555,86 @@ export default function AdminContentPage() {
     }
   }
 
-  function openAddForm() {
-    setFormMode("add");
-    setFormData({});
-    setShowForm(true);
+  // Indication management functions
+  function openIndicationForm(mode: "add" | "edit", indication?: Indication) {
+    setIndicationFormMode(mode);
+    if (mode === "edit" && indication) {
+      setIndicationFormData(indication);
+    } else {
+      setIndicationFormData({
+        name: "",
+        slug: "",
+        description: "",
+        color: "blue"
+      });
+    }
+    setShowIndicationForm(true);
   }
 
-  function openEditForm(item: Herb | Supplement | Symptom) {
+  async function handleIndicationFormSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    
+    try {
+      const url = "/api/indications";
+      const method = indicationFormMode === "add" ? "POST" : "PUT";
+      
+      const res = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(indicationFormData),
+      });
+
+      if (!res.ok) throw new Error("Failed to save indication");
+      
+      setShowIndicationForm(false);
+      await fetchIndications();
+    } catch (error) {
+      console.error('Error saving indication:', error);
+      setError('Failed to save indication');
+    }
+  }
+
+  async function handleIndicationDelete(indicationId: number) {
+    if (!window.confirm("Are you sure you want to delete this indication?")) return;
+
+    try {
+      const res = await fetch(`/api/indications/${indicationId}`, {
+        method: "DELETE",
+      });
+
+      if (!res.ok) throw new Error("Failed to delete indication");
+      
+      await fetchIndications();
+    } catch (error) {
+      console.error('Error deleting indication:', error);
+      setError('Failed to delete indication');
+    }
+  }
+
+  function openAddForm() {
+    setFormMode("add");
+    if (tab === "Indications") {
+      setIndicationFormData({
+        name: "",
+        slug: "",
+        description: "",
+        color: "blue"
+      });
+      setShowIndicationForm(true);
+    } else {
+      setFormData({});
+      setShowForm(true);
+    }
+  }
+
+  function openEditForm(item: Herb | Supplement | Symptom | Indication) {
+    if (tab === "Indications") {
+      setIndicationFormMode("edit");
+      setIndicationFormData(item as Indication);
+      setShowIndicationForm(true);
+      return;
+    }
+    
     setFormMode("edit");
     
     // Parse JSON fields that come from the database
@@ -562,6 +702,22 @@ export default function AdminContentPage() {
     if (!window.confirm("Are you sure you want to delete this entry?")) return;
     setLoading(true);
     setError("");
+    
+    if (tab === "Indications") {
+      try {
+        const res = await fetch(`/api/indications/${id}`, {
+          method: "DELETE",
+        });
+        if (!res.ok) throw new Error("Failed to delete indication");
+        await fetchIndications();
+      } catch {
+        setError('An error occurred');
+      } finally {
+        setLoading(false);
+      }
+      return;
+    }
+    
     const url = "/api/" + tab.toLowerCase();
     try {
       const res = await fetch(url, {
@@ -600,6 +756,20 @@ export default function AdminContentPage() {
           {SUPPLEMENT_FIELDS.map((f) => (
             <th key={f.key} className="px-2 py-1 text-xs">{f.label}</th>
           ))}
+        </tr>
+      );
+    }
+    if (tab === "Indications") {
+      return (
+        <tr>
+          <th className="px-2 py-1 text-xs">Actions</th>
+          <th className="px-2 py-1 text-xs">ID</th>
+          <th className="px-2 py-1 text-xs">Name</th>
+          <th className="px-2 py-1 text-xs">Slug</th>
+          <th className="px-2 py-1 text-xs">Description</th>
+          <th className="px-2 py-1 text-xs">Color</th>
+          <th className="px-2 py-1 text-xs">Associated Herbs</th>
+          <th className="px-2 py-1 text-xs">Associated Supplements</th>
         </tr>
       );
     }
@@ -736,6 +906,86 @@ export default function AdminContentPage() {
         </tr>
       );
     }
+    if (tab === "Indications") {
+      const indicationItem = item as Indication;
+      return (
+        <tr key={item.id} className={`border-t border-gray-700 ${rowBgClass}`}>
+          <td className="px-2 py-1">
+            <div className="flex gap-1">
+              <button
+                className="px-1.5 py-0.5 bg-blue-500 rounded text-xs hover:bg-blue-600 transition-colors"
+                onClick={() => openIndicationForm("edit", indicationItem)}
+              >
+                Edit
+              </button>
+              <button
+                className="px-1.5 py-0.5 bg-red-500 rounded text-xs hover:bg-red-600 transition-colors"
+                onClick={() => handleIndicationDelete(item.id)}
+              >
+                Delete
+              </button>
+            </div>
+          </td>
+          <td className="px-2 py-1 text-xs">{item.id}</td>
+          <td className="px-2 py-1 text-xs">
+            <div className="flex items-center gap-2">
+              <span className="font-semibold">{indicationItem.name}</span>
+              <div 
+                className={`w-3 h-3 rounded-full bg-${indicationItem.color || 'blue'}-500`}
+                style={{ backgroundColor: indicationItem.color || '#3b82f6' }}
+              ></div>
+            </div>
+          </td>
+          <td className="px-2 py-1 text-xs text-gray-400">{indicationItem.slug}</td>
+          <td className="px-2 py-1 text-xs max-w-[200px] truncate">
+            {renderDescription(indicationItem.description, item.id)}
+          </td>
+          <td className="px-2 py-1 text-xs">
+            <div className="flex items-center gap-2">
+              <div 
+                className={`w-4 h-4 rounded-full bg-${indicationItem.color || 'blue'}-500`}
+                style={{ backgroundColor: indicationItem.color || '#3b82f6' }}
+              ></div>
+              <span className="capitalize">{indicationItem.color || 'blue'}</span>
+            </div>
+          </td>
+          <td className="px-2 py-1 text-xs">
+            {indicationItem.herbs && indicationItem.herbs.length > 0 ? (
+              <div className="max-w-[150px]">
+                <div className="font-semibold text-green-300">{indicationItem.herbs.length} herb(s)</div>
+                <div className="text-xs text-gray-400 max-h-12 overflow-y-auto">
+                  {indicationItem.herbs.slice(0, 3).map(herb => (
+                    <div key={herb.id} className="truncate">• {herb.name}</div>
+                  ))}
+                  {indicationItem.herbs.length > 3 && (
+                    <div className="text-gray-500">... and {indicationItem.herbs.length - 3} more</div>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <span className="text-gray-500">No herbs</span>
+            )}
+          </td>
+          <td className="px-2 py-1 text-xs">
+            {indicationItem.supplements && indicationItem.supplements.length > 0 ? (
+              <div className="max-w-[150px]">
+                <div className="font-semibold text-blue-300">{indicationItem.supplements.length} supplement(s)</div>
+                <div className="text-xs text-gray-400 max-h-12 overflow-y-auto">
+                  {indicationItem.supplements.slice(0, 3).map(supplement => (
+                    <div key={supplement.id} className="truncate">• {supplement.name}</div>
+                  ))}
+                  {indicationItem.supplements.length > 3 && (
+                    <div className="text-gray-500">... and {indicationItem.supplements.length - 3} more</div>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <span className="text-gray-500">No supplements</span>
+            )}
+          </td>
+        </tr>
+      );
+    }
     // Fallback for other tabs (Symptoms)
     const symptomItem = item as Symptom;
     
@@ -830,7 +1080,7 @@ export default function AdminContentPage() {
         <div className="mb-4">
           <label className="block mb-1">Indications (Symptoms)</label>
           <div className="max-h-48 overflow-y-auto border border-gray-600 rounded p-2 bg-gray-900">
-            {allSymptoms.map(sym => (
+            {Array.isArray(allSymptoms) ? allSymptoms.map(sym => (
               <div key={sym.id} className="flex items-center mb-2">
                 <input
                   type="checkbox"
@@ -846,9 +1096,9 @@ export default function AdminContentPage() {
                 />
                 <span className="ml-2 font-bold text-gray-100">{sym.title}</span>
               </div>
-            ))}
+            )) : <div className="text-gray-400">Loading symptoms...</div>}
           </div>
-          {Array.isArray(herbForm.indications) && herbForm.indications.length > 0 && (
+          {Array.isArray(herbForm.indications) && herbForm.indications.length > 0 && Array.isArray(allSymptoms) && (
             <div className="flex flex-wrap gap-1 mt-2">
               {herbForm.indications.map((id: string) => {
                 const sym = allSymptoms.find(s => s.id === Number(id));
@@ -1013,7 +1263,7 @@ export default function AdminContentPage() {
         <div className="mb-4">
           <label className="block mb-1">Indications (Symptoms)</label>
           <div className="max-h-48 overflow-y-auto border border-gray-600 rounded p-2 bg-gray-900">
-            {allSymptoms.map(sym => (
+            {Array.isArray(allSymptoms) ? allSymptoms.map(sym => (
               <div key={sym.id} className="flex items-center mb-2">
                 <input
                   type="checkbox"
@@ -1029,9 +1279,9 @@ export default function AdminContentPage() {
                 />
                 <span className="ml-2 font-bold text-gray-100">{sym.title}</span>
               </div>
-            ))}
+            )) : <div className="text-gray-400">Loading symptoms...</div>}
           </div>
-          {Array.isArray(supplementForm.indications) && supplementForm.indications.length > 0 && (
+          {Array.isArray(supplementForm.indications) && supplementForm.indications.length > 0 && Array.isArray(allSymptoms) && (
             <div className="flex flex-wrap gap-1 mt-2">
               {supplementForm.indications.map((id: string) => {
                 const sym = allSymptoms.find(s => s.id === Number(id));
@@ -1089,7 +1339,7 @@ export default function AdminContentPage() {
         <div className="mb-4">
           <label className="block mb-1">Select Herbs to Display</label>
           <div className="max-h-48 overflow-y-auto border border-gray-600 rounded p-2 bg-gray-900">
-            {allHerbs.map((herb) => (
+            {Array.isArray(allHerbs) ? allHerbs.map((herb) => (
               <div key={herb.id} className="flex items-center mb-2">
                 <input
                   type="checkbox"
@@ -1103,13 +1353,13 @@ export default function AdminContentPage() {
                 <span className="ml-2 font-bold text-gray-100">{herb.name}</span>
                 <span className="ml-2 text-xs text-gray-400">{herb.productFormulations?.map((f: ProductFormulation) => `${f.type || '—'} (${f.qualityCriteria || '—'})`).join(', ')}</span>
               </div>
-            ))}
+            )) : <div className="text-gray-400">Loading herbs...</div>}
           </div>
         </div>
         <div className="mb-4">
           <label className="block mb-1">Select Supplements to Display</label>
           <div className="max-h-48 overflow-y-auto border border-gray-600 rounded p-2 bg-gray-900">
-            {allSupplements.map((supp) => (
+            {Array.isArray(allSupplements) ? allSupplements.map((supp) => (
               <div key={supp.id} className="flex items-center mb-2">
                 <input
                   type="checkbox"
@@ -1123,10 +1373,134 @@ export default function AdminContentPage() {
                 <span className="ml-2 font-bold text-gray-100">{supp.name}</span>
                 <span className="ml-2 text-xs text-gray-400">{supp.productFormulations?.map((f: ProductFormulation) => `${f.type || '—'} (${f.qualityCriteria || '—'})`).join(', ')}</span>
               </div>
-            ))}
+            )) : <div className="text-gray-400">Loading supplements...</div>}
           </div>
         </div>
       </>;
+    }
+    if (tab === "Indications") {
+      const indicationForm = formData as Partial<Indication>;
+      return (
+        <>
+          {/* Help text */}
+          <div className="mb-6 p-4 bg-blue-900/20 border border-blue-700 rounded-lg">
+            <h3 className="text-blue-300 font-semibold mb-2">How to Use Indications</h3>
+            <p className="text-blue-200 text-sm mb-2">
+              Indications are tags that describe what herbs and supplements are used for (e.g., "Stress", "Anxiety", "Insomnia"). 
+              They help users find relevant products and create a consistent tagging system across your site.
+            </p>
+            <p className="text-blue-200 text-sm">
+              <strong>Examples:</strong> Stress, Anxiety, Sleep, Focus, Energy, Mood, Pain Relief, Digestive Support
+            </p>
+          </div>
+
+          <div className="mb-4">
+            <label className="block mb-1">Name *</label>
+            <input
+              className="w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
+              value={indicationForm.name || ""}
+              onChange={e => setFormData({ ...indicationForm, name: e.target.value })}
+              placeholder="e.g., Stress, Anxiety, Sleep Support"
+              required
+            />
+            <p className="text-xs text-gray-400 mt-1">The display name for this indication tag</p>
+          </div>
+
+          <div className="mb-4">
+            <label className="block mb-1">Slug *</label>
+            <input
+              className="w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
+              value={indicationForm.slug || ""}
+              onChange={e => setFormData({ ...indicationForm, slug: e.target.value })}
+              placeholder="e.g., stress, anxiety, sleep-support"
+              required
+            />
+            <p className="text-xs text-gray-400 mt-1">URL-friendly version of the name (lowercase, hyphens instead of spaces)</p>
+          </div>
+
+          <div className="mb-4">
+            <label className="block mb-1">Description</label>
+            <textarea
+              className="w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
+              rows={3}
+              value={indicationForm.description || ""}
+              onChange={e => setFormData({ ...indicationForm, description: e.target.value })}
+              placeholder="Brief description of what this indication covers..."
+            />
+            <p className="text-xs text-gray-400 mt-1">Optional description to help clarify what this indication means</p>
+          </div>
+
+          <div className="mb-6">
+            <label className="block mb-1">Color</label>
+            <select
+              className="w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
+              value={indicationForm.color || "blue"}
+              onChange={e => setFormData({ ...indicationForm, color: e.target.value })}
+            >
+              <option value="blue">Blue (Stress, Anxiety)</option>
+              <option value="green">Green (Energy, Vitality)</option>
+              <option value="red">Red (Pain, Inflammation)</option>
+              <option value="yellow">Yellow (Digestive, Liver)</option>
+              <option value="purple">Purple (Sleep, Relaxation)</option>
+              <option value="pink">Pink (Mood, Emotional)</option>
+              <option value="indigo">Indigo (Focus, Cognitive)</option>
+              <option value="gray">Gray (General, Neutral)</option>
+              <option value="orange">Orange (Immune, Energy)</option>
+              <option value="teal">Teal (Detox, Cleansing)</option>
+            </select>
+            <p className="text-xs text-gray-400 mt-1">Color used for this indication tag on the website</p>
+          </div>
+
+          {/* Show associated herbs and supplements if editing */}
+          {indicationFormMode === "edit" && indicationForm.id && (
+            <>
+              <div className="mb-4">
+                <label className="block mb-2 font-semibold text-gray-200">Associated Herbs</label>
+                <div className="max-h-32 overflow-y-auto border border-gray-600 rounded p-2 bg-gray-900">
+                  {indicationForm.herbs && indicationForm.herbs.length > 0 ? (
+                    indicationForm.herbs.map((herb, index) => (
+                      <div key={herb.id} className="flex items-center justify-between mb-1">
+                        <span className="text-gray-200">{herb.name}</span>
+                        <span className="text-xs text-gray-400">{herb.latinName}</span>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-gray-400 text-sm">No herbs associated with this indication yet</div>
+                  )}
+                </div>
+                <p className="text-xs text-gray-400 mt-1">Herbs that use this indication tag</p>
+              </div>
+
+              <div className="mb-4">
+                <label className="block mb-2 font-semibold text-gray-200">Associated Supplements</label>
+                <div className="max-h-32 overflow-y-auto border border-gray-600 rounded p-2 bg-gray-900">
+                  {indicationForm.supplements && indicationForm.supplements.length > 0 ? (
+                    indicationForm.supplements.map((supplement, index) => (
+                      <div key={supplement.id} className="flex items-center justify-between mb-1">
+                        <span className="text-gray-200">{supplement.name}</span>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-gray-400 text-sm">No supplements associated with this indication yet</div>
+                  )}
+                </div>
+                <p className="text-xs text-gray-400 mt-1">Supplements that use this indication tag</p>
+              </div>
+            </>
+          )}
+
+          {/* Usage instructions */}
+          <div className="mt-6 p-4 bg-gray-800/50 border border-gray-600 rounded-lg">
+            <h4 className="text-gray-300 font-semibold mb-2">Next Steps</h4>
+            <ul className="text-sm text-gray-400 space-y-1">
+              <li>• After creating this indication, you can assign it to herbs and supplements</li>
+              <li>• Go to the "Herbs" or "Supplements" tab to add this indication to specific items</li>
+              <li>• The indication will appear as a colored tag on herb/supplement cards</li>
+              <li>• Users can click on indication tags to see all related herbs/supplements</li>
+            </ul>
+          </div>
+        </>
+      );
     }
     // Fallback for other tabs
     return (
@@ -1290,6 +1664,38 @@ export default function AdminContentPage() {
                 >
                   + Add New {tab.slice(0, -1)}
                 </button>
+                
+                {/* Indications Help Section */}
+                {tab === "Indications" && (
+                  <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                    <h3 className="text-blue-800 font-semibold mb-2">What are Indications?</h3>
+                    <p className="text-blue-700 text-sm mb-3">
+                      Indications are tags that describe what herbs and supplements are used for. They help users find relevant products 
+                      and create a consistent tagging system across your site.
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                      <div>
+                        <h4 className="font-semibold text-blue-800 mb-1">Examples:</h4>
+                        <ul className="text-blue-700 space-y-1">
+                          <li>• Stress, Anxiety, Sleep Support</li>
+                          <li>• Focus, Memory, Cognitive Health</li>
+                          <li>• Energy, Vitality, Fatigue</li>
+                          <li>• Pain Relief, Inflammation</li>
+                        </ul>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-blue-800 mb-1">How to Use:</h4>
+                        <ul className="text-blue-700 space-y-1">
+                          <li>• Create indications here first</li>
+                          <li>• Then assign them to herbs/supplements</li>
+                          <li>• They appear as colored tags on cards</li>
+                          <li>• Users can click tags to see related items</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                
                 <div className="border border-gray-700 rounded bg-gray-800">
                   <div className="overflow-x-auto">
                     <div className="max-h-[60vh] overflow-y-auto">
@@ -1514,6 +1920,94 @@ export default function AdminContentPage() {
                   type="button"
                   className="bg-gray-500 text-white px-6 py-2 rounded font-bold"
                   onClick={() => setShowVariantForm(false)}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Indication Form Modal */}
+      {showIndicationForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
+          <div className="bg-gray-900 rounded shadow-lg w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
+            <div className="p-6 border-b border-gray-700">
+              <h2 className="text-2xl font-bold text-white">
+                {indicationFormMode === "add" ? "Add New Indication" : "Edit Indication"}
+              </h2>
+            </div>
+            
+            <form id="indication-form" onSubmit={handleIndicationFormSubmit} className="p-6 overflow-y-auto flex-1">
+              <div className="space-y-4">
+                <div>
+                  <label className="block mb-1 text-white">Name *</label>
+                  <input
+                    type="text"
+                    className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600"
+                    value={indicationFormData.name || ""}
+                    onChange={(e) => setIndicationFormData({ ...indicationFormData, name: e.target.value })}
+                    required
+                  />
+                </div>
+                
+                <div>
+                  <label className="block mb-1 text-white">Slug *</label>
+                  <input
+                    type="text"
+                    className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600"
+                    value={indicationFormData.slug || ""}
+                    onChange={(e) => setIndicationFormData({ ...indicationFormData, slug: e.target.value })}
+                    required
+                  />
+                </div>
+                
+                <div>
+                  <label className="block mb-1 text-white">Description</label>
+                  <textarea
+                    className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600"
+                    rows={4}
+                    value={indicationFormData.description || ""}
+                    onChange={(e) => setIndicationFormData({ ...indicationFormData, description: e.target.value })}
+                  />
+                </div>
+                
+                <div>
+                  <label className="block mb-1 text-white">Color</label>
+                  <select
+                    className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600"
+                    value={indicationFormData.color || "blue"}
+                    onChange={(e) => setIndicationFormData({ ...indicationFormData, color: e.target.value })}
+                  >
+                    <option value="blue">Blue</option>
+                    <option value="green">Green</option>
+                    <option value="red">Red</option>
+                    <option value="yellow">Yellow</option>
+                    <option value="purple">Purple</option>
+                    <option value="pink">Pink</option>
+                    <option value="indigo">Indigo</option>
+                    <option value="gray">Gray</option>
+                    <option value="orange">Orange</option>
+                    <option value="teal">Teal</option>
+                  </select>
+                </div>
+              </div>
+            </form>
+            
+            <div className="p-6 border-t border-gray-700">
+              <div className="flex gap-4">
+                <button
+                  type="submit"
+                  form="indication-form"
+                  className="bg-green-700 text-white px-6 py-2 rounded font-bold"
+                >
+                  Save
+                </button>
+                <button
+                  type="button"
+                  className="bg-gray-500 text-white px-6 py-2 rounded font-bold"
+                  onClick={() => setShowIndicationForm(false)}
                 >
                   Cancel
                 </button>

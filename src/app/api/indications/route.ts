@@ -9,47 +9,33 @@ export async function GET(req: NextRequest) {
   const offset = parseInt(searchParams.get('offset') || '0');
   
   try {
-    // Test database connection first
-    console.log('Testing database connection...');
     await prisma.$connect();
-    console.log('Database connected successfully');
     
     if (id) {
-      const herb = await prisma.herb.findUnique({
+      const indication = await prisma.indication.findUnique({
         where: { id: Number(id) },
-        select: {
-          id: true,
-          name: true,
-          latinName: true,
-          slug: true,
-          description: true,
-          metaTitle: true,
-          metaDescription: true,
-          heroImageUrl: true,
-          cardImageUrl: true,
-          cautions: true
+        include: {
+          herbs: true,
+          supplements: true
         }
       });
-      if (!herb) return createNotFoundResponse('Herb');
-      return createApiResponse(herb);
+      if (!indication) return createNotFoundResponse('Indication');
+      return createApiResponse(indication);
     } else {
-      const herbs = await prisma.herb.findMany({
-        select: {
-          id: true,
-          name: true,
-          latinName: true,
-          slug: true,
-          description: true
+      const indications = await prisma.indication.findMany({
+        include: {
+          herbs: true,
+          supplements: true
         },
         take: limit,
         skip: offset,
         orderBy: { name: 'asc' }
       });
       
-      const total = await prisma.herb.count();
+      const total = await prisma.indication.count();
       
       return createApiResponse({
-        herbs,
+        indications,
         pagination: {
           page: Math.floor(offset / limit) + 1,
           limit,
@@ -60,24 +46,23 @@ export async function GET(req: NextRequest) {
       });
     }
   } catch (error) {
-    console.error('Herbs API error:', error);
-    console.error('Error details:', {
-      message: error instanceof Error ? error.message : 'Unknown error',
-      stack: error instanceof Error ? error.stack : 'No stack trace',
-      name: error instanceof Error ? error.name : 'Unknown name',
-      cause: error instanceof Error ? error.cause : 'No cause'
-    });
-    return createErrorResponse(`Failed to fetch herbs: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    console.error('Indications API error:', error);
+    return createErrorResponse(`Failed to fetch indications: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 }
 
 export async function POST(req: NextRequest) {
   try {
     const data = await req.json();
-    const herb = await prisma.herb.create({
-      data: data,
+    const indication = await prisma.indication.create({
+      data: {
+        name: data.name,
+        slug: data.slug,
+        description: data.description,
+        color: data.color || 'blue'
+      },
     });
-    return NextResponse.json(herb, { status: 201 });
+    return NextResponse.json(indication, { status: 201 });
   } catch (error) {
     return NextResponse.json({ error: (error instanceof Error ? error.message : String(error)) }, { status: 400 });
   }
@@ -87,12 +72,17 @@ export async function PUT(req: NextRequest) {
   try {
     const data = await req.json();
     if (!data.id) return NextResponse.json({ error: 'ID required' }, { status: 400 });
-    const { id, ...herbData } = data;
-    const herb = await prisma.herb.update({
+    
+    const indication = await prisma.indication.update({
       where: { id: data.id },
-      data: herbData,
+      data: {
+        name: data.name,
+        slug: data.slug,
+        description: data.description,
+        color: data.color || 'blue'
+      },
     });
-    return NextResponse.json(herb);
+    return NextResponse.json(indication);
   } catch (error) {
     return NextResponse.json({ error: (error instanceof Error ? error.message : String(error)) }, { status: 400 });
   }
@@ -102,7 +92,7 @@ export async function DELETE(req: NextRequest) {
   try {
     const { id } = await req.json();
     if (!id) return NextResponse.json({ error: 'ID required' }, { status: 400 });
-    await prisma.herb.delete({ where: { id } });
+    await prisma.indication.delete({ where: { id } });
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ error: (error instanceof Error ? error.message : String(error)) }, { status: 400 });

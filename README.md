@@ -92,16 +92,23 @@ flowchart TD
 
 ### **⚡ The Ripple Effect in Action**
 
-When an admin approves a **Ginkgo Biloba standardized extract**:
+**Phase 1: Product Approval & Herb/Supplement Population**
+When an admin approves products, they first populate their respective herb/supplement pages:
+- **Ginkgo tincture & standardized extract** → populate `/herbs/ginkgo-biloba` (Traditional & Modern formulations)
+- **Lion's Mane double-fermented tincture & extract** → populate `/herbs/lions-mane` 
+- **L-tyrosine high-strength vegi gelcaps** → populate `/supplements/l-tyrosine`
 
-1. **Primary Update**: `/herbs/ginkgo-biloba` page gets new product
-2. **Cascade Triggers**: System identifies all symptoms where Ginkgo is recommended
-3. **Automatic Updates**: 
-   - `/symptoms/memory-issues` - new Ginkgo product appears
-   - `/symptoms/focus-problems` - new Ginkgo product appears  
-   - `/symptoms/cognitive-decline` - new Ginkgo product appears
-4. **Cache Invalidation**: All affected pages refresh with new content
-5. **Network Effect**: One approval updates 10+ pages simultaneously
+**Phase 2: Indication Assignment & Symptom Cascade**
+When these herbs/supplements are assigned "Poor Memory" indication:
+- All approved products from Ginkgo, Lion's Mane, and L-tyrosine cascade to `/symptoms/poor-memory`
+- Evidence scores control product priority and order on symptom pages
+- Prevents overpopulation by limiting products per symptom based on evidence scores
+
+**Evidence Scoring System:**
+- Evidence scores stored on relationship tables (HerbIndication, SupplementIndication)
+- Same herb can have different evidence scores for different indications
+- Example: Ginkgo + Memory (evidence: 90), Ginkgo + Anxiety (evidence: 60)
+- Controls product priority and visibility on symptom pages
 
 ## 🔄 Automated Product Sourcing System
 

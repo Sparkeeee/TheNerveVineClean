@@ -5,8 +5,8 @@ import Image from 'next/image';
 import { Symptom } from '../../../types/symptom';
 
 export default function VariantSymptomPage({ symptom }: { symptom: Symptom }) {
-  const variantNames = Object.keys(symptom.variants ?? {});
-  const [selectedVariant, setSelectedVariant] = useState<string | null>(null);
+  const variantNames = Object.keys(symptom.variants || {});
+  const [selectedVariant, setSelectedVariant] = useState<string | null>(null); // Start with overview
   const variant = selectedVariant ? symptom.variants?.[selectedVariant] : null;
 
   return (
@@ -29,7 +29,7 @@ export default function VariantSymptomPage({ symptom }: { symptom: Symptom }) {
         </h1>
         
         <div className="mt-6 flex gap-3 justify-center flex-wrap">
-          {/* Main/Overview button - always show if we're on a variant */}
+          {/* Overview button - only show when viewing a specific variant */}
           {selectedVariant && (
             <button
               onClick={() => setSelectedVariant(null)}
@@ -39,16 +39,12 @@ export default function VariantSymptomPage({ symptom }: { symptom: Symptom }) {
             </button>
           )}
           
-          {/* Variant buttons - show all variants, highlight current one */}
-          {variantNames.map((name) => (
+          {/* Variant buttons - show only non-selected variants */}
+          {variantNames.filter(name => name !== selectedVariant).map((name) => (
             <button
               key={name}
               onClick={() => setSelectedVariant(name)}
-              className={`px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm ${
-                selectedVariant === name 
-                  ? 'bg-blue-600 text-white border-blue-600' 
-                  : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-gray-400'
-              }`}
+              className="px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-gray-400"
             >
               {name}
             </button>

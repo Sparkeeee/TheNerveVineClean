@@ -19,6 +19,16 @@ const relatedSymptomsMap = {
 };
 export default function VariantSymptomPage({ symptom }) {
     var _a, _b, _c, _d, _e, _f, _g, _h;
+    
+    // Debug: Log the actual symptom data
+    console.log('Symptom data received:', {
+      title: symptom.title,
+      variants: symptom.variants,
+      variantKeys: symptom.variants ? Object.keys(symptom.variants) : [],
+      variantType: typeof symptom.variants,
+      isArray: Array.isArray(symptom.variants)
+    });
+    
     const variantNames = Object.keys((_a = symptom.variants) !== null && _a !== void 0 ? _a : {});
     const [selectedVariant, setSelectedVariant] = useState(variantNames[0]);
     const variant = (_b = symptom.variants) === null || _b === void 0 ? void 0 : _b[selectedVariant];
@@ -50,7 +60,7 @@ export default function VariantSymptomPage({ symptom }) {
         <h1 className="text-4xl md:text-5xl font-extrabold text-purple-900 mb-2 drop-shadow-lg text-center">{symptom.title}</h1>
         <p className="text-lg md:text-xl text-purple-700 text-center max-w-2xl mx-auto mb-2">{symptom.description}</p>
         {variantNames.length > 1 && (<div className="mt-4 flex gap-2 justify-center flex-wrap">
-            {variantNames.map((name) => (<button key={name} onClick={() => setSelectedVariant(name)} className={`px-4 py-2 rounded-full font-semibold border transition-colors duration-150 shadow-sm ${selectedVariant === name ? 'bg-blue-300 text-blue-900 border-blue-400' : 'bg-white text-blue-700 border-blue-100 hover:bg-blue-50'}`} style={{ boxShadow: selectedVariant === name ? '0 2px 8px rgba(59, 130, 246, 0.12)' : undefined }}>
+            {variantNames.filter(name => name !== selectedVariant).map((name) => (<button key={name} onClick={() => setSelectedVariant(name)} className="px-4 py-2 rounded-full font-semibold border transition-colors duration-150 shadow-sm bg-white text-blue-700 border-blue-100 hover:bg-blue-50">
                 {name}
               </button>))}
           </div>)}

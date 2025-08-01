@@ -15,7 +15,7 @@ function getColorForSymptom(symptomName: string): string {
     'Insomnia': 'indigo',
     'Depression': 'pink',
     'Anxiety': 'blue',
-    'Poor Focus': 'yellow',
+    'Poor Focus': 'amber',
     'Tension Headaches': 'green',
     'Emotional Burnout': 'orange',
     'Thyroid Issues': 'purple',
@@ -28,7 +28,7 @@ function getColorForSymptom(symptomName: string): string {
     'Adrenal Exhaustion': 'amber',
     'Circadian Support': 'sky',
     'Vagus Nerve Support': 'emerald',
-    'Dysbiosis': 'gray',
+    'Dysbiosis': 'slate',
     'Leaky Gut': 'stone',
     'IBS': 'violet',
     'Stress': 'blue',
@@ -36,34 +36,64 @@ function getColorForSymptom(symptomName: string): string {
     'Mood Swings': 'pink'
   };
   
-  return colorMap[symptomName] || 'gray';
+  return colorMap[symptomName] || 'slate';
+}
+
+function getSymptomTagClasses(symptomName: string): string {
+  const colorMap: { [key: string]: string } = {
+    'Insomnia': 'bg-indigo-100 text-indigo-800 border-indigo-200',
+    'Depression': 'bg-pink-100 text-pink-800 border-pink-200',
+    'Anxiety': 'bg-blue-100 text-blue-800 border-blue-200',
+    'Poor Focus': 'bg-amber-100 text-amber-800 border-amber-200',
+    'Tension Headaches': 'bg-green-100 text-green-800 border-green-200',
+    'Emotional Burnout': 'bg-orange-100 text-orange-800 border-orange-200',
+    'Thyroid Issues': 'bg-purple-100 text-purple-800 border-purple-200',
+    'Neck Tension': 'bg-teal-100 text-teal-800 border-teal-200',
+    'Blood Pressure Balance': 'bg-red-100 text-red-800 border-red-200',
+    'Heart Muscle Support': 'bg-rose-100 text-rose-800 border-rose-200',
+    'Liver Function Support': 'bg-lime-100 text-lime-800 border-lime-200',
+    'Hormonal Imbalances': 'bg-fuchsia-100 text-fuchsia-800 border-fuchsia-200',
+    'Adrenal Overload': 'bg-cyan-100 text-cyan-800 border-cyan-200',
+    'Adrenal Exhaustion': 'bg-amber-100 text-amber-800 border-amber-200',
+    'Circadian Support': 'bg-sky-100 text-sky-800 border-sky-200',
+    'Vagus Nerve Support': 'bg-emerald-100 text-emerald-800 border-emerald-200',
+    'Dysbiosis': 'bg-slate-100 text-slate-800 border-slate-200',
+    'Leaky Gut': 'bg-stone-100 text-stone-800 border-stone-200',
+    'IBS': 'bg-violet-100 text-violet-800 border-violet-200',
+    'Stress': 'bg-blue-100 text-blue-800 border-blue-200',
+    'Fatigue': 'bg-orange-100 text-orange-800 border-orange-200',
+    'Mood Swings': 'bg-pink-100 text-pink-800 border-pink-200'
+  };
+  
+  return colorMap[symptomName] || 'bg-slate-100 text-slate-800 border-slate-200';
 }
 
 function getSymptomTag(usedFor: string, symptoms: any[]) {
   const indication = usedFor.toLowerCase().trim();
   
-  // First try exact match
+  // First try exact match (most precise)
   let match = symptoms.find(s => s.title.toLowerCase() === indication);
   if (match) return match;
   
-  // Try partial matches (indication is part of symptom title)
-  match = symptoms.find(s => s.title.toLowerCase().includes(indication));
-  if (match) return match;
-  
-  // Try reverse partial match (symptom title is part of indication)
-  match = symptoms.find(s => indication.includes(s.title.toLowerCase()));
-  if (match) return match;
-  
-  // Try word-by-word matching
+  // Try word boundary matches (more precise than partial)
   const indicationWords = indication.split(/\s+/);
   match = symptoms.find(s => {
     const symptomWords = s.title.toLowerCase().split(/\s+/);
-    return indicationWords.some(word => 
+    // Check if all indication words are present in symptom title
+    return indicationWords.every(word => 
       symptomWords.some(symptomWord => 
-        symptomWord.includes(word) || word.includes(symptomWord)
+        symptomWord === word || symptomWord.startsWith(word) || word.startsWith(symptomWord)
       )
     );
   });
+  if (match) return match;
+  
+  // Only if no word boundary match, try partial match
+  match = symptoms.find(s => s.title.toLowerCase().includes(indication));
+  if (match) return match;
+  
+  // Last resort: reverse partial match
+  match = symptoms.find(s => indication.includes(s.title.toLowerCase()));
   
   return match;
 }
@@ -111,18 +141,24 @@ export default async function HerbsPage() {
               <hr className="my-3 border-blue-100" />
               {/* Tags for main indications (symptoms) */}
               <div className="flex flex-wrap gap-2 mt-4">
-                {herb.indications && Array.isArray(herb.indications) && herb.indications.map((indication: any, i: number) => {
-                  const tag = getSymptomTag(indication as string, symptoms);
-                  return tag ? (
+                {herb.indications && Array.isArray(herb.indications) && (() => {
+                  const uniqueTags = new Map();
+                  herb.indications.forEach((indication: any) => {
+                    const tag = getSymptomTag(indication as string, symptoms);
+                    if (tag && !uniqueTags.has(tag.slug)) {
+                      uniqueTags.set(tag.slug, tag);
+                    }
+                  });
+                  return Array.from(uniqueTags.values()).map((tag: any, i: number) => (
                     <Link
                       key={i}
                       href={`/symptoms/${tag.slug}`}
-                      className={`inline-block px-3 py-1 rounded-full border text-xs font-semibold mr-2 mb-2 bg-${getColorForSymptom(tag.title)}-100 text-${getColorForSymptom(tag.title)}-700 border-${getColorForSymptom(tag.title)}-200 transition-colors duration-200 hover:brightness-110`}
+                      className={`inline-block px-3 py-1 rounded-full border text-xs font-semibold mr-2 mb-2 transition-colors duration-200 hover:brightness-110 ${getSymptomTagClasses(tag.title)}`}
                     >
                       {tag.title}
                     </Link>
-                  ) : null;
-                })}
+                  ));
+                })()}
               </div>
               {/* Traditional Uses */}
               <div className="flex flex-wrap gap-2 mt-4">

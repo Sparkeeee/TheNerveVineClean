@@ -61,16 +61,12 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const data = await req.json();
-    const { indications, ...supplementData } = data;
     const supplement = await prisma.supplement.create({
-      data: {
-        ...supplementData,
-        indications: indications && indications.length > 0 ? indications : null,
-      },
+      data: data,
     });
     return NextResponse.json(supplement, { status: 201 });
   } catch (error) {
-    return NextResponse.json({ error: error instanceof Error ? error.message : String(error) }, { status: 400 });
+    return NextResponse.json({ error: (error instanceof Error ? error.message : String(error)) }, { status: 400 });
   }
 }
 
@@ -78,17 +74,14 @@ export async function PUT(req: NextRequest) {
   try {
     const data = await req.json();
     if (!data.id) return NextResponse.json({ error: 'ID required' }, { status: 400 });
-    const { indications, ...supplementData } = data;
+    const { id, ...supplementData } = data;
     const supplement = await prisma.supplement.update({
       where: { id: data.id },
-      data: {
-        ...supplementData,
-        indications: indications && indications.length > 0 ? indications : null,
-      },
+      data: supplementData,
     });
     return NextResponse.json(supplement);
   } catch (error) {
-    return NextResponse.json({ error: error instanceof Error ? error.message : String(error) }, { status: 400 });
+    return NextResponse.json({ error: (error instanceof Error ? error.message : String(error)) }, { status: 400 });
   }
 }
 
