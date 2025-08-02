@@ -30,21 +30,31 @@ export default async function SymptomsPage() {
   }));
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-blue-50 to-blue-100">
-      <div className="max-w-6xl mx-auto px-6 py-8">
-        <h1 className="text-4xl font-bold text-gray-800 mb-6 text-center">Symptoms & Conditions</h1>
-        
-        <p className="text-lg text-gray-700 mb-8 text-center max-w-3xl mx-auto">
-          Explore natural solutions for various health concerns. Each symptom page provides 
-          targeted herbal and supplement recommendations to support your wellness journey.
-        </p>
+    <div className="min-h-screen bg-white relative" style={{
+      backgroundImage: "url('/images/RoseWPWM.PNG')",
+      backgroundSize: "110%",
+      backgroundPosition: "center",
+      backgroundRepeat: "no-repeat",
+      backgroundAttachment: "fixed"
+    }}>
+      <div className="absolute inset-0 bg-pink-100 opacity-90"></div>
+      <div className="relative max-w-6xl mx-auto px-6 py-8">
+        <div className="rounded-xl p-8 shadow-sm border border-gray-100 mb-8" style={{background: 'linear-gradient(135deg, #f0f9ff 0%, #ecfdf5 50%, #f0fdf4 100%)'}}>
+          <h1 className="text-4xl font-bold text-gray-800 mb-6 text-center">Symptoms & Conditions</h1>
+          
+          <p className="text-lg text-gray-700 text-center max-w-3xl mx-auto">
+            Explore natural solutions for various health concerns. Each symptom page provides 
+            targeted herbal and supplement recommendations to support your wellness journey.
+          </p>
+        </div>
         
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {symptomList.map((symptom: Symptom, index: number) => (
             <Link 
               key={index} 
               href={symptom.href}
-              className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-blue-100 hover:shadow-xl transition-all duration-200 hover:scale-105"
+              className="rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-200 hover:scale-105"
+              style={{background: 'linear-gradient(135deg, #f0f9ff 0%, #ecfdf5 50%, #f0fdf4 100%)'}}
             >
               <h3 className="text-xl font-semibold text-blue-800 mb-2">{symptom.name}</h3>
               <p className="text-gray-600 text-sm">{symptom.description}</p>
@@ -55,7 +65,7 @@ export default async function SymptomsPage() {
         <div className="mt-12 text-center">
           <Link 
             href="/" 
-            className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors duration-200 shadow-md hover:shadow-lg"
+            className="inline-flex items-center px-6 py-3 bg-green-700 text-blue-50 font-semibold rounded-lg hover:bg-green-800 transition-colors"
           >
             ← Back to NerveVine
           </Link>

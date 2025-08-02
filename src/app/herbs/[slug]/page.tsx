@@ -27,7 +27,7 @@ export default async function HerbPage({ params }: { params: Promise<{ slug: str
   }
 
   const products = herb.products || [];
-  const indications = herb.indications || [];
+
 
   // Separate products into Traditional and Modern formulations
   const traditionalProducts = products.filter((product: any) => 
@@ -107,23 +107,7 @@ export default async function HerbPage({ params }: { params: Promise<{ slug: str
               </div>
             )}
 
-            {/* Indications (Symptoms) */}
-            {indications.length > 0 && (
-              <div className="mb-8">
-                <h2 className="text-2xl font-bold text-gray-800 mb-4">Traditionally Used For</h2>
-                <div className="flex flex-wrap gap-2">
-                  {indications.map((indication: string, index: number) => (
-                    <Link
-                      key={index}
-                      href={`/symptoms/${indication.toLowerCase().replace(/\s+/g, '-')}`}
-                      className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm hover:bg-blue-200 transition-colors"
-                    >
-                      {indication}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
+
 
             {/* Traditional Uses */}
             {herb.traditionalUses && Array.isArray(herb.traditionalUses) && herb.traditionalUses.length > 0 && (

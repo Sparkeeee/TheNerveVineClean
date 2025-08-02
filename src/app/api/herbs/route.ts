@@ -39,7 +39,8 @@ export async function GET(req: NextRequest) {
           name: true,
           latinName: true,
           slug: true,
-          description: true
+          description: true,
+          cardImageUrl: true
         },
         take: limit,
         skip: offset,
