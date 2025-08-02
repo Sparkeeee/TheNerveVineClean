@@ -88,37 +88,7 @@ export default async function SymptomPage({ params }: { params: Promise<{ slug: 
               </div>
             </div>
 
-        {/* Hero Image */}
-        {symptom.heroImageUrl && (
-          <div className="mb-8 rounded-xl p-8 shadow-sm border border-gray-100" style={{background: 'linear-gradient(135deg, #f0f9ff 0%, #ecfdf5 50%, #f0fdf4 100%)'}}>
-            <Image
-              src={symptom.heroImageUrl}
-              alt={symptom.title}
-              width={800}
-              height={400}
-              className="w-full h-64 object-cover rounded-lg shadow-lg"
-            />
-          </div>
-        )}
 
-        {/* Gallery Images */}
-        {symptom.galleryImages && Array.isArray(symptom.galleryImages) && symptom.galleryImages.length > 0 && (
-          <div className="mb-8 rounded-xl p-8 shadow-sm border border-gray-100" style={{background: 'linear-gradient(135deg, #f0f9ff 0%, #ecfdf5 50%, #f0fdf4 100%)'}}>
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">Gallery</h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {symptom.galleryImages.map((image: string, index: number) => (
-                <Image
-                  key={index}
-                  src={image}
-                  alt={`${symptom.title} - Image ${index + 1}`}
-                  width={300}
-                  height={200}
-                  className="w-full h-32 object-cover rounded-lg shadow-md"
-                />
-              ))}
-            </div>
-          </div>
-        )}
 
         {/* Associated Symptoms */}
         {symptom.associatedSymptoms && Array.isArray(symptom.associatedSymptoms) && symptom.associatedSymptoms.length > 0 && (
