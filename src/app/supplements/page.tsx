@@ -43,7 +43,7 @@ function getSymptomTag(usedFor: string, symptoms: any[]) {
     const symptomWords = s.title.toLowerCase().split(/\s+/);
     // Check if all indication words are present in symptom title
     return indicationWords.every(word => 
-      symptomWords.some(symptomWord => 
+      symptomWords.some((symptomWord: string) => 
         symptomWord === word || symptomWord.startsWith(word) || word.startsWith(symptomWord)
       )
     );
