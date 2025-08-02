@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getCachedHerbs, getCachedSymptoms } from '@/lib/database';
+import { getCachedHerbs } from '@/lib/database';
 import HerbImage from '@/components/HerbImage';
 
 // Helper function to truncate description to ~2 lines
@@ -27,65 +27,7 @@ function getLatinName(description: string): string {
   return match ? match[1] : '';
 }
 
-function getColorForSymptom(symptomName: string): string {
-  const colorMap: { [key: string]: string } = {
-    'Insomnia': 'indigo',
-    'Depression': 'pink',
-    'Anxiety': 'blue',
-    'Poor Focus': 'amber',
-    'Tension Headaches': 'green',
-    'Emotional Burnout': 'orange',
-    'Thyroid Issues': 'purple',
-    'Neck Tension': 'teal',
-    'Blood Pressure Balance': 'red',
-    'Heart Muscle Support': 'rose',
-    'Liver Function Support': 'lime',
-    'Hormonal Imbalances': 'fuchsia',
-    'Adrenal Overload': 'cyan',
-    'Adrenal Exhaustion': 'amber',
-    'Circadian Support': 'sky',
-    'Vagus Nerve Support': 'emerald',
-    'Dysbiosis': 'slate',
-    'Leaky Gut': 'stone',
-    'IBS': 'violet',
-    'Stress': 'blue',
-    'Fatigue': 'orange',
-    'Mood Swings': 'pink'
-  };
-  
-  return colorMap[symptomName] || 'slate';
-}
-
-function getSymptomTagClasses(symptomName: string): string {
-  const colorMap: { [key: string]: string } = {
-    'Insomnia': 'bg-indigo-100 text-indigo-800 border-indigo-200',
-    'Depression': 'bg-pink-100 text-pink-800 border-pink-200',
-    'Anxiety': 'bg-blue-100 text-blue-800 border-blue-200',
-    'Poor Focus': 'bg-amber-100 text-amber-800 border-amber-200',
-    'Tension Headaches': 'bg-green-100 text-green-800 border-green-200',
-    'Emotional Burnout': 'bg-orange-100 text-orange-800 border-orange-200',
-    'Thyroid Issues': 'bg-purple-100 text-purple-800 border-purple-200',
-    'Neck Tension': 'bg-teal-100 text-teal-800 border-teal-200',
-    'Blood Pressure Balance': 'bg-red-100 text-red-800 border-red-200',
-    'Heart Muscle Support': 'bg-rose-100 text-rose-800 border-rose-200',
-    'Liver Function Support': 'bg-lime-100 text-lime-800 border-lime-200',
-    'Hormonal Imbalances': 'bg-fuchsia-100 text-fuchsia-800 border-fuchsia-200',
-    'Adrenal Overload': 'bg-cyan-100 text-cyan-800 border-cyan-200',
-    'Adrenal Exhaustion': 'bg-amber-100 text-amber-800 border-amber-200',
-    'Circadian Support': 'bg-sky-100 text-sky-800 border-sky-200',
-    'Vagus Nerve Support': 'bg-emerald-100 text-emerald-800 border-emerald-200',
-    'Dysbiosis': 'bg-slate-100 text-slate-800 border-slate-200',
-    'Leaky Gut': 'bg-stone-100 text-stone-800 border-stone-200',
-    'IBS': 'bg-violet-100 text-violet-800 border-violet-200',
-    'Stress': 'bg-blue-100 text-blue-800 border-blue-200',
-    'Fatigue': 'bg-orange-100 text-orange-800 border-orange-200',
-    'Mood Swings': 'bg-pink-100 text-pink-800 border-pink-200'
-  };
-  
-  return colorMap[symptomName] || 'bg-slate-100 text-slate-800 border-slate-200';
-}
-
-function getSymptomTag(usedFor: string, symptoms: any[]) {
+// Removed unused functions to fix ESLint warnings
   const indication = usedFor.toLowerCase().trim();
   
   // First try exact match (most precise)
@@ -116,20 +58,13 @@ function getSymptomTag(usedFor: string, symptoms: any[]) {
 }
 
 export default async function HerbsPage() {
-  // Fetch herbs and symptoms directly from database
+  // Fetch herbs directly from database
   let herbs = [];
-  let symptoms = [];
   
   try {
     herbs = await getCachedHerbs();
   } catch (error) {
     console.error('Error fetching herbs:', error);
-  }
-  
-  try {
-    symptoms = await getCachedSymptoms();
-  } catch (error) {
-    console.error('Error fetching symptoms:', error);
   }
   
   const sortedHerbs = herbs.sort((a: any, b: any) => (a.name || '').localeCompare(b.name || ''));

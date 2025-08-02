@@ -1294,7 +1294,7 @@ export default function AdminContentPage() {
           <div className="mb-6 p-4 bg-blue-900/20 border border-blue-700 rounded-lg">
             <h3 className="text-blue-300 font-semibold mb-2">How to Use Indications</h3>
             <p className="text-blue-200 text-sm mb-2">
-              Indications are tags that describe what herbs and supplements are used for (e.g., "Stress", "Anxiety", "Insomnia"). 
+              Indications are tags that describe what herbs and supplements are used for (e.g., &quot;Stress&quot;, &quot;Anxiety&quot;, &quot;Insomnia&quot;). 
               They help users find relevant products and create a consistent tagging system across your site.
             </p>
             <p className="text-blue-200 text-sm">
@@ -1402,7 +1402,7 @@ export default function AdminContentPage() {
             <h4 className="text-gray-300 font-semibold mb-2">Next Steps</h4>
             <ul className="text-sm text-gray-400 space-y-1">
               <li>• After creating this indication, you can assign it to herbs and supplements</li>
-              <li>• Go to the "Herbs" or "Supplements" tab to add this indication to specific items</li>
+              <li>• Go to the &quot;Herbs&quot; or &quot;Supplements&quot; tab to add this indication to specific items</li>
               <li>• The indication will appear as a colored tag on herb/supplement cards</li>
               <li>• Users can click on indication tags to see all related herbs/supplements</li>
             </ul>
