@@ -35,7 +35,7 @@ export default async function SymptomPage({ params }: { params: Promise<{ slug: 
     variantsLength: symptom.variants ? Object.keys(symptom.variants).length : 0
   });
   
-  if (hasVariants) {
+  if (hasVariants && symptom.variants) {
     // Check if any variant has actual content (paragraphs, bestHerb, etc.)
     const hasVariantContent = Object.values(symptom.variants).some((variant: any) => 
       variant && (
@@ -48,12 +48,12 @@ export default async function SymptomPage({ params }: { params: Promise<{ slug: 
     
     console.log(`[DEBUG] Variant content check for ${symptom.title}:`, {
       hasVariantContent,
-      variantDetails: Object.values(symptom.variants).map((variant: any) => ({
+      variantDetails: symptom.variants ? Object.values(symptom.variants).map((variant: any) => ({
         hasParagraphs: variant?.paragraphs?.length > 0,
         hasBestHerb: !!variant?.bestHerb,
         hasBestStandardized: !!variant?.bestStandardized,
         hasTopSupplements: variant?.topSupplements?.length > 0
-      }))
+      })) : []
     });
     
     if (hasVariantContent) {
