@@ -90,23 +90,7 @@ export default async function SymptomPage({ params }: { params: Promise<{ slug: 
 
 
 
-        {/* Associated Symptoms */}
-        {symptom.associatedSymptoms && Array.isArray(symptom.associatedSymptoms) && symptom.associatedSymptoms.length > 0 && (
-          <div className="mb-8 rounded-xl p-8 shadow-sm border border-gray-100" style={{background: 'linear-gradient(135deg, #f0f9ff 0%, #ecfdf5 50%, #f0fdf4 100%)'}}>
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">Related Symptoms</h2>
-            <div className="flex flex-wrap gap-2">
-              {symptom.associatedSymptoms.map((relatedSymptom: string, index: number) => (
-                <Link
-                  key={index}
-                  href={`/symptoms/${relatedSymptom.toLowerCase().replace(/\s+/g, '-')}`}
-                  className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm hover:bg-blue-200 transition-colors"
-                >
-                  {relatedSymptom}
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
+
 
         {/* Articles */}
         {symptom.articles && Array.isArray(symptom.articles) && symptom.articles.length > 0 && (
