@@ -158,27 +158,33 @@ export default async function HerbsPage() {
               className="rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-200 hover:scale-105"
               style={{background: 'linear-gradient(135deg, #f0f9ff 0%, #ecfdf5 50%, #f0fdf4 100%)'}}
             >
-              {/* Herb image - only show cardImageUrl */}
-              {herb.cardImageUrl && (
-                <div className="flex justify-center mb-4">
-                  <HerbImage 
-                    src={herb.cardImageUrl} 
-                    alt={`${herb.name} herb`}
-                    className="w-24 h-24 object-contain rounded-lg shadow-sm border border-gray-200 bg-gray-50"
-                  />
+              <div className="flex items-start gap-4">
+                {/* Text content on the left */}
+                <div className="flex-1">
+                  <h3 className="text-xl font-semibold text-blue-800 mb-1">
+                    <Link href={`/herbs/${herb.slug}`}>{herb.name}</Link>
+                  </h3>
+                  {/* Latin name from database */}
+                  <p className="text-gray-500 text-sm italic mb-2">
+                    {herb.latinName || getLatinName(herb.description || '')}
+                  </p>
+                  {/* Truncated description */}
+                  <p className="text-gray-600 text-sm mb-4 leading-relaxed">
+                    {truncateDescription(herb.description)}
+                  </p>
                 </div>
-              )}
-              <h3 className="text-xl font-semibold text-blue-800 mb-1">
-                <Link href={`/herbs/${herb.slug}`}>{herb.name}</Link>
-              </h3>
-              {/* Latin name from database */}
-              <p className="text-gray-500 text-sm italic mb-2">
-                {herb.latinName || getLatinName(herb.description || '')}
-              </p>
-              {/* Truncated description */}
-              <p className="text-gray-600 text-sm mb-4 leading-relaxed">
-                {truncateDescription(herb.description)}
-              </p>
+                
+                {/* Herb image on the right */}
+                {herb.cardImageUrl && (
+                  <div className="flex-shrink-0">
+                    <HerbImage 
+                      src={herb.cardImageUrl} 
+                      alt={`${herb.name} herb`}
+                      className="w-20 h-20 object-contain rounded-lg shadow-sm border border-gray-200 bg-gray-50"
+                    />
+                  </div>
+                )}
+              </div>
               <hr className="my-3 border-blue-100" />
 
 
