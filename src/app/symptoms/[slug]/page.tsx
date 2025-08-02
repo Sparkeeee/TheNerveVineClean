@@ -92,20 +92,7 @@ export default async function SymptomPage({ params }: { params: Promise<{ slug: 
 
 
 
-        {/* Articles */}
-        {symptom.articles && Array.isArray(symptom.articles) && symptom.articles.length > 0 && (
-          <div className="mb-8 rounded-xl p-8 shadow-sm border border-gray-100" style={{background: 'linear-gradient(135deg, #f0f9ff 0%, #ecfdf5 50%, #f0fdf4 100%)'}}>
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">Related Articles</h2>
-            <div className="space-y-4">
-              {symptom.articles.map((article: any, index: number) => (
-                <div key={index} className="rounded-lg p-4 shadow-md">
-                  <h3 className="font-semibold text-gray-800 mb-2">{article.title}</h3>
-                  <p className="text-gray-600 text-sm">{article.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+
 
         {/* Cautions */}
         {symptom.cautions && (
