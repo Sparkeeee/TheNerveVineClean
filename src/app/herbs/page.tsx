@@ -27,36 +27,6 @@ function getLatinName(description: string): string {
   return match ? match[1] : '';
 }
 
-// Removed unused functions to fix ESLint warnings
-  const indication = usedFor.toLowerCase().trim();
-  
-  // First try exact match (most precise)
-  let match = symptoms.find(s => s.title.toLowerCase() === indication);
-  if (match) return match;
-  
-  // Try word boundary matches (more precise than partial)
-  const indicationWords = indication.split(/\s+/);
-  match = symptoms.find(s => {
-    const symptomWords = s.title.toLowerCase().split(/\s+/);
-    // Check if all indication words are present in symptom title
-    return indicationWords.every(word => 
-      symptomWords.some(symptomWord => 
-        symptomWord === word || symptomWord.startsWith(word) || word.startsWith(symptomWord)
-      )
-    );
-  });
-  if (match) return match;
-  
-  // Only if no word boundary match, try partial match
-  match = symptoms.find(s => s.title.toLowerCase().includes(indication));
-  if (match) return match;
-  
-  // Last resort: reverse partial match
-  match = symptoms.find(s => indication.includes(s.title.toLowerCase()));
-  
-  return match;
-}
-
 export default async function HerbsPage() {
   // Fetch herbs directly from database
   let herbs = [];
