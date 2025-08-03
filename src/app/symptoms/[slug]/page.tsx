@@ -72,7 +72,7 @@ export default async function SymptomPage({ params }: { params: Promise<{ slug: 
             {/* Header */}
             <div className="text-center mb-8 rounded-xl p-8 shadow-sm border border-gray-100" style={{background: 'linear-gradient(135deg, #f0f9ff 0%, #ecfdf5 50%, #f0fdf4 100%)'}}>
               <h1 className="text-4xl font-bold text-gray-800 mb-4">
-                {symptom.title}
+                {symptom.title as string}
               </h1>
               {/* Formatted description with proper paragraph spacing */}
               <div className="text-lg text-gray-600 max-w-2xl mx-auto prose prose-lg text-justify">
