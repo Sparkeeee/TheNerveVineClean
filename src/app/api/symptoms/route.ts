@@ -22,6 +22,7 @@ export async function GET(req: NextRequest) {
             metaTitle: true,
             metaDescription: true,
             cautions: true,
+            references: true,
             products: {
               select: {
                 id: true,
@@ -48,6 +49,7 @@ export async function GET(req: NextRequest) {
             metaTitle: true,
             metaDescription: true,
             cautions: true,
+            references: true,
             products: {
               select: {
                 id: true,
@@ -97,7 +99,8 @@ export async function GET(req: NextRequest) {
             id: true,
             title: true,
             slug: true,
-            description: true
+            description: true,
+            references: true
           },
           take: limit,
           skip: offset,

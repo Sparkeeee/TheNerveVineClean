@@ -21,7 +21,8 @@ export async function GET(req: NextRequest) {
           metaDescription: true,
           heroImageUrl: true,
           cardImageUrl: true,
-          cautions: true
+          cautions: true,
+          references: true
         }
       });
       if (!supplement) return createNotFoundResponse('Supplement');
@@ -32,7 +33,8 @@ export async function GET(req: NextRequest) {
           id: true,
           name: true,
           slug: true,
-          description: true
+          description: true,
+          references: true
         },
         take: limit,
         skip: offset,

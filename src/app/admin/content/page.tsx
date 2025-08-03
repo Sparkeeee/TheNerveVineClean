@@ -1086,10 +1086,10 @@ export default function AdminContentPage() {
                   type="file"
                   accept=".txt,.html,.md"
                   className="mt-2"
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
                     const file = e.target.files ? e.target.files[0] : null;
                     if (!file) return;
-                    const text = file.text();
+                    const text = await file.text();
                     setFormData({ ...herbForm, [f.key]: text });
                   }}
                 />
@@ -1144,7 +1144,7 @@ export default function AdminContentPage() {
                   onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
                     const file = e.target.files ? e.target.files[0] : null;
                     if (!file) return;
-                    const text = file.text();
+                    const text = await file.text();
                     setFormData({ ...supplementForm, [f.key]: text });
                   }}
                 />
@@ -1287,10 +1287,10 @@ export default function AdminContentPage() {
                   type="file"
                   accept=".txt,.html,.md"
                   className="mt-2"
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
                     const file = e.target.files ? e.target.files[0] : null;
                     if (!file) return;
-                    const text = file.text();
+                    const text = await file.text();
                     setFormData({ ...symptomForm, [f.key]: text });
                   }}
                 />
