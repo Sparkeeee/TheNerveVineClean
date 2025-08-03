@@ -7,7 +7,7 @@ export default async function SymptomPage({ params }: { params: Promise<{ slug: 
   const { slug } = await params;
   
   // Fetch symptom data from database with transformation
-  const symptom = await getSymptomBySlug(slug);
+  const symptom = await getSymptomBySlug(slug) as any;
 
   if (!symptom) {
     return (
