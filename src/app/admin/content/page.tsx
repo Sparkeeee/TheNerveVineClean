@@ -123,6 +123,7 @@ const HERB_FIELDS = [
   { key: "latinName", label: "Latin Name" },
   { key: "slug", label: "Slug" },
   { key: "description", label: "Description" },
+  { key: "comprehensiveArticle", label: "Comprehensive Article (Markdown)" },
   { key: "cautions", label: "Cautions" },
   { key: "heroImageUrl", label: "Hero Image URL" },
   { key: "cardImageUrl", label: "Card Image URL" },
@@ -137,6 +138,7 @@ const SUPPLEMENT_FIELDS = [
   { key: "name", label: "Name", required: true },
   { key: "slug", label: "Slug" },
   { key: "description", label: "Description" },
+  { key: "comprehensiveArticle", label: "Comprehensive Article (Markdown)" },
   { key: "cautions", label: "Cautions" },
   { key: "heroImageUrl", label: "Hero Image URL" },
   { key: "cardImageUrl", label: "Card Image URL" },
@@ -156,6 +158,7 @@ const SYMPTOM_FIELDS = [
   { key: "title", label: "Title", required: true },
   { key: "slug", label: "Slug" },
   { key: "description", label: "Description" },
+  { key: "comprehensiveArticle", label: "Comprehensive Article (Markdown)" },
   { key: "metaTitle", label: "Meta Title" },
   { key: "metaDescription", label: "Meta Description" },
   { key: "cautions", label: "Cautions" },
@@ -171,26 +174,109 @@ function getFormattedDate() {
   return new Date().toISOString().slice(0, 10);
 }
 
-// Helper function to convert simple comma-separated references to JSON format
+// Helper function to convert complex reference strings to JSON format
 function convertReferencesToJson(referencesText: string): Array<{ type: string; value: string }> {
   if (!referencesText.trim()) return [];
-  
+
   // If it's already JSON, try to parse it
   if (referencesText.trim().startsWith('[')) {
     try {
       return JSON.parse(referencesText);
     } catch {
-      // If JSON parsing fails, treat as comma-separated
+      // If JSON parsing fails, treat as complex reference string
     }
   }
+
+  const references: Array<{ type: string; value: string }> = [];
+
+  // First, try to split by numbered references (1., 2., 3., etc.)
+  // Use a regex that captures prefix, number, and content
+  const numberedMatches = referencesText.match(/(.*?)(?:\s*|^)(\d+)\.\s+([^]*?)(?=(?:\s*|^)\d+\.\s+|$)/g);
   
-  // Split by commas and create reference objects
-  const references = referencesText.split(',').map(ref => ref.trim()).filter(ref => ref.length > 0);
-  
-  return references.map(reference => ({
-    type: 'study', // Default type
-    value: reference
-  }));
+  if (numberedMatches && numberedMatches.length > 0) {
+    // We have numbered references, process each one
+    numberedMatches.forEach((match) => {
+      // Use exec to get capture groups
+      const execResult = /(.*?)(?:\s*|^)(\d+)\.\s+([^]*?)(?=(?:\s*|^)\d+\.\s+|$)/g.exec(match);
+      if (execResult) {
+        const prefix = execResult[1]?.trim() || '';
+        const number = execResult[2];
+        const content = execResult[3]?.trim() || '';
+        
+        if (content) {
+          let type = 'study';
+          let value = '';
+
+          // Combine prefix and content, preserving the prefix
+          if (prefix) {
+            value = `${prefix} ${number}. ${content}`;
+          } else {
+            value = `${number}. ${content}`;
+          }
+
+          // Determine type based on content
+          if (value.includes('Journal Article')) {
+            type = 'journal';
+          } else if (value.includes('Book Chapter')) {
+            type = 'book';
+          } else if (value.includes('10.')) {
+            type = 'doi';
+          }
+
+          // Clean up the value
+          value = value.replace(/^[,\s]+/, '').replace(/[,\s]+$/, '');
+          
+          // Add line breaks before numbered references (integer followed by period and then a letter)
+          // This differentiates from DOIs which have more integers after the period
+          value = value.replace(/\s+(\d+)\.\s+(?=[A-Za-z])/g, '\n$1. ');
+
+          references.push({ type, value });
+        }
+      }
+    });
+  } else {
+    // No numbered references, try to split by type sections
+    const journalArticleMatch = referencesText.match(/Journal Article[•\s]*([\s\S]*?)(?=Book Chapter|$)/);
+    const bookChapterMatch = referencesText.match(/Book Chapter[•\s]*([\s\S]*?)(?=Journal Article|$)/);
+    
+    // Process Journal Article section
+    if (journalArticleMatch) {
+      const journalContent = journalArticleMatch[1].trim();
+      if (journalContent) {
+        // Split by numbered references within journal section
+        const journalRefs = journalContent.split(/\d+\.\s+/).filter(ref => ref.trim().length > 0);
+        journalRefs.forEach(ref => {
+          const cleanedRef = ref.trim().replace(/^[,\s]+/, '').replace(/[,\s]+$/, '');
+          if (cleanedRef) {
+            references.push({ 
+              type: 'journal', 
+              value: cleanedRef
+            });
+          }
+        });
+      }
+    }
+
+    // Process Book Chapter section
+    if (bookChapterMatch) {
+      const bookContent = bookChapterMatch[1].trim();
+      if (bookContent) {
+        // Split by numbered references within book section
+        const bookRefs = bookContent.split(/\d+\.\s+/).filter(ref => ref.trim().length > 0);
+        bookRefs.forEach(ref => {
+          const cleanedRef = ref.trim().replace(/^[,\s]+/, '').replace(/[,\s]+$/, '');
+          if (cleanedRef) {
+            references.push({ 
+              type: 'book', 
+              value: cleanedRef
+            });
+          }
+        });
+      }
+    }
+  }
+
+  return references;
 }
 
 // Helper function to convert JSON references back to simple format for display
@@ -259,6 +345,98 @@ export default function AdminContentPage() {
   const [indicationFormMode, setIndicationFormMode] = useState<"add" | "edit">("add");
   const [indicationFormData, setIndicationFormData] = useState<Partial<Indication>>({});
 
+  // Add format preservation and preview functionality
+  const [showPreview, setShowPreview] = useState(false);
+  const [previewContent, setPreviewContent] = useState("");
+
+  // Function to preserve formatting from SciSpace documents
+  const preserveFormatting = (content: string): string => {
+    return content
+      // Preserve line breaks
+      .replace(/\n/g, '\n')
+      // Preserve bold formatting
+      .replace(/\*\*(.*?)\*\*/g, '**$1**')
+      // Preserve italic formatting  
+      .replace(/\*(.*?)\*/g, '*$1*')
+      // Preserve headers
+      .replace(/^# (.*$)/gm, '# $1')
+      .replace(/^## (.*$)/gm, '## $1')
+      .replace(/^### (.*$)/gm, '### $1')
+      // Preserve lists
+      .replace(/^[-*] (.*$)/gm, '- $1')
+      .replace(/^\d+\. (.*$)/gm, '$&')
+      // Preserve code blocks
+      .replace(/```([\s\S]*?)```/g, '```$1```')
+      // Preserve inline code
+      .replace(/`(.*?)`/g, '`$1`')
+      // Preserve links
+      .replace(/\[(.*?)\]\((.*?)\)/g, '[$1]($2)')
+      // Preserve blockquotes
+      .replace(/^> (.*$)/gm, '> $1')
+      // Preserve interactive citations from SciSpace - improved to handle "et al." and multiple authors
+      .replace(/\(([^)]+)\)/g, (match, citation) => {
+        // Check if this looks like a citation (author, year format) - improved regex
+        // Handles: "Author, Year", "Author et al., Year", "Author & Author, Year"
+        // Also handles special characters like hyphens and accented characters
+        if (/^[A-Za-zÀ-ÿ\s&\-]+(?:\s+et\s+al\.)?,\s+\d{4}$/.test(citation.trim())) {
+          // Create a safe ID by removing special characters and converting to lowercase
+          const safeId = citation.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
+          return `[${citation}](#citation-${safeId})`;
+        }
+        return match;
+      });
+  };
+
+  // Function to create citation references section
+  const createCitationReferences = (content: string): string => {
+    const citations = content.match(/\[([^]]+)\]\(#citation-[^)]+\)/g) || [];
+    const uniqueCitations = [...new Set(citations)];
+    
+    if (uniqueCitations.length === 0) return content;
+    
+    let referencesSection = '\n\n## References\n\n';
+    uniqueCitations.forEach((citation, index) => {
+      const citationText = citation.match(/\[([^]]+)\]/)?.[1] || '';
+      referencesSection += `${index + 1}. ${citationText}\n`;
+    });
+    
+    return content + referencesSection;
+  };
+
+  // Function to handle file upload with format preservation
+  const handleFileUploadWithPreservation = async (file: File, fieldKey: string) => {
+    const text = await file.text();
+    const preservedText = preserveFormatting(text);
+    const finalText = createCitationReferences(preservedText);
+    
+    if (tab === "Herbs") {
+      const herbForm = formData as HerbForm;
+      setFormData({ ...herbForm, [fieldKey]: finalText });
+    } else if (tab === "Supplements") {
+      const supplementForm = formData as SupplementForm;
+      setFormData({ ...supplementForm, [fieldKey]: finalText });
+    } else if (tab === "Symptoms") {
+      const symptomForm = formData as SymptomForm;
+      setFormData({ ...symptomForm, [fieldKey]: finalText });
+    }
+  };
+
+  // Function to show preview
+  const showContentPreview = () => {
+    let content = "";
+    if (tab === "Herbs") {
+      const herbForm = formData as HerbForm;
+      content = herbForm.comprehensiveArticle || "";
+    } else if (tab === "Supplements") {
+      const supplementForm = formData as SupplementForm;
+      content = supplementForm.comprehensiveArticle || "";
+    } else if (tab === "Symptoms") {
+      const symptomForm = formData as SymptomForm;
+      content = symptomForm.comprehensiveArticle || "";
+    }
+    setPreviewContent(content);
+    setShowPreview(true);
+  };
 
   // Handle file upload and/or text entry
   const handleUpload = (e: React.FormEvent<HTMLFormElement>) => {
@@ -322,6 +500,7 @@ export default function AdminContentPage() {
     latinName?: string;
     slug?: string;
     description?: string;
+    comprehensiveArticle?: string;
     cautions?: string;
     heroImageUrl?: string;
     cardImageUrl?: string;
@@ -336,6 +515,7 @@ export default function AdminContentPage() {
     name?: string;
     slug?: string;
     description?: string;
+    comprehensiveArticle?: string;
     cautions?: string;
     heroImageUrl?: string;
     cardImageUrl?: string;
@@ -355,6 +535,7 @@ export default function AdminContentPage() {
     title?: string;
     slug?: string;
     description?: string;
+    comprehensiveArticle?: string;
     metaTitle?: string;
     metaDescription?: string;
     cautions?: string;
@@ -1073,27 +1254,54 @@ export default function AdminContentPage() {
       const herbForm = formData as HerbForm;
       return <>
         {HERB_FIELDS.map((f) => {
-          if (f.key === "description" || f.key === "cautions") {
+          if (f.key === "description" || f.key === "cautions" || f.key === "references" || f.key === "comprehensiveArticle") {
             return (
               <div className="mb-4" key={f.key}>
                 <label className="block mb-1">{f.label}{f.required && <span className="text-red-400">*</span>}</label>
                 <textarea
-                  className="w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
+                  className={`w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600 ${f.key === 'description' || f.key === 'references' || f.key === 'comprehensiveArticle' ? 'h-64' : ''}`}
                   value={herbForm[f.key] || ""}
                   onChange={e => setFormData({ ...herbForm, [f.key]: e.target.value })}
+                  placeholder={f.key === 'references' ? 'Enter references separated by commas or numbered format (e.g., "1. Study A, 2. Study B")' : f.key === 'comprehensiveArticle' ? 'Enter comprehensive article content in Markdown format...' : undefined}
                 />
+                <button
+                  type="button"
+                  className="mt-2 px-3 py-1 rounded bg-green-600 text-white hover:bg-green-700 mr-2"
+                  onClick={() => document.getElementById(`herb-file-${f.key}`)?.click()}
+                >
+                  Import from File
+                </button>
+                <button
+                  type="button"
+                  className="mt-2 px-3 py-1 rounded bg-blue-600 text-white hover:bg-blue-700"
+                  onClick={showContentPreview}
+                >
+                  Preview
+                </button>
                 <input
+                  id={`herb-file-${f.key}`}
                   type="file"
                   accept=".txt,.html,.md"
-                  className="mt-2"
+                  className="hidden"
                   onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
                     const file = e.target.files ? e.target.files[0] : null;
                     if (!file) return;
-                    const text = await file.text();
-                    setFormData({ ...herbForm, [f.key]: text });
+                    await handleFileUploadWithPreservation(file, f.key);
                   }}
                 />
                 <span className="text-xs text-gray-400">Upload .txt, .html, or .md to import content</span>
+                {f.key === 'references' && (
+                  <div className="mt-2 text-xs text-gray-400">
+                    <p>Enter references separated by commas or numbered format. The system will automatically detect reference types (journal, book, doi, study).</p>
+                    <p className="mt-1">Example format: "1. Study A, 2. Study B" or "Journal Article•DOI 1. Study A, 2. Study B"</p>
+                  </div>
+                )}
+                {f.key === 'comprehensiveArticle' && (
+                  <div className="mt-2 text-xs text-gray-400">
+                    <p>This content will appear in the "View Here" modal and "Full Page View" for comprehensive scientific research.</p>
+                    <p className="mt-1">Use Markdown format: # Headers, **bold**, - lists, etc. Include the main title in the content.</p>
+                  </div>
+                )}
               </div>
             );
           }
@@ -1105,11 +1313,7 @@ export default function AdminContentPage() {
                 value={String(herbForm[f.key] ?? '')}
                 onChange={e => setFormData({ ...herbForm, [f.key]: e.target.value })}
                 required={!!f.required}
-                placeholder={f.key === 'references' ? 'Enter references separated by commas (e.g., "Study A, Study B, Research C")' : undefined}
               />
-              {f.key === 'references' && (
-                <span className="text-xs text-gray-400">Enter references separated by commas. Each reference will be stored as a study type.</span>
-              )}
             </div>
           );
         })}
@@ -1120,21 +1324,29 @@ export default function AdminContentPage() {
       const supplementForm = formData as SupplementForm;
       return <>
         {SUPPLEMENT_FIELDS.map((f) => {
-          if (f.key === "description" || f.key === "cautions") {
+          if (f.key === "description" || f.key === "cautions" || f.key === "references" || f.key === "comprehensiveArticle") {
             return (
               <div className="mb-4" key={f.key}>
                 <label className="block mb-1">{f.label}{f.required && <span className="text-red-400">*</span>}</label>
                 <textarea
-                  className="w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
+                  className={`w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600 ${f.key === 'description' || f.key === 'references' || f.key === 'comprehensiveArticle' ? 'h-64' : ''}`}
                   value={supplementForm[f.key] || ""}
                   onChange={e => setFormData({ ...supplementForm, [f.key]: e.target.value })}
+                  placeholder={f.key === 'references' ? 'Enter references separated by commas or numbered format (e.g., "1. Study A, 2. Study B")' : f.key === 'comprehensiveArticle' ? 'Enter comprehensive article content in Markdown format...' : undefined}
                 />
                 <button
                   type="button"
-                  className="mt-2 px-3 py-1 rounded bg-green-600 text-white hover:bg-green-700"
+                  className="mt-2 px-3 py-1 rounded bg-green-600 text-white hover:bg-green-700 mr-2"
                   onClick={() => document.getElementById(`supplement-file-${f.key}`)?.click()}
                 >
                   Import from File
+                </button>
+                <button
+                  type="button"
+                  className="mt-2 px-3 py-1 rounded bg-blue-600 text-white hover:bg-blue-700"
+                  onClick={showContentPreview}
+                >
+                  Preview
                 </button>
                 <input
                   id={`supplement-file-${f.key}`}
@@ -1144,11 +1356,22 @@ export default function AdminContentPage() {
                   onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
                     const file = e.target.files ? e.target.files[0] : null;
                     if (!file) return;
-                    const text = await file.text();
-                    setFormData({ ...supplementForm, [f.key]: text });
+                    await handleFileUploadWithPreservation(file, f.key);
                   }}
                 />
                 <span className="text-xs text-gray-400">Upload .txt, .html, or .md to import content</span>
+                {f.key === 'references' && (
+                  <div className="mt-2 text-xs text-gray-400">
+                    <p>Enter references separated by commas or numbered format. The system will automatically detect reference types (journal, book, doi, study).</p>
+                    <p className="mt-1">Example format: "1. Study A, 2. Study B" or "Journal Article•DOI 1. Study A, 2. Study B"</p>
+                  </div>
+                )}
+                {f.key === 'comprehensiveArticle' && (
+                  <div className="mt-2 text-xs text-gray-400">
+                    <p>This content will appear in the "View Here" modal and "Full Page View" for comprehensive scientific research.</p>
+                    <p className="mt-1">Use Markdown format: # Headers, **bold**, - lists, etc. Include the main title in the content.</p>
+                  </div>
+                )}
               </div>
             );
           }
@@ -1176,11 +1399,7 @@ export default function AdminContentPage() {
                 value={String(supplementForm[f.key] ?? '')}
                 onChange={e => setFormData({ ...supplementForm, [f.key]: e.target.value })}
                 required={!!f.required}
-                placeholder={f.key === 'references' ? 'Enter references separated by commas (e.g., "Study A, Study B, Research C")' : undefined}
               />
-              {f.key === 'references' && (
-                <span className="text-xs text-gray-400">Enter references separated by commas. Each reference will be stored as a study type.</span>
-              )}
             </div>
           );
         })}
@@ -1274,27 +1493,54 @@ export default function AdminContentPage() {
       const symptomForm = formData as SymptomForm;
       return <>
         {SYMPTOM_FIELDS.map((f) => {
-          if (f.key === "description" || f.key === "cautions") {
+          if (f.key === "description" || f.key === "cautions" || f.key === "references" || f.key === "comprehensiveArticle") {
             return (
               <div className="mb-4" key={f.key}>
                 <label className="block mb-1">{f.label}{f.required && <span className="text-red-400">*</span>}</label>
                 <textarea
-                  className="w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
+                  className={`w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600 ${f.key === 'description' || f.key === 'references' || f.key === 'comprehensiveArticle' ? 'h-64' : ''}`}
                   value={symptomForm[f.key] || ""}
                   onChange={e => setFormData({ ...symptomForm, [f.key]: e.target.value })}
+                  placeholder={f.key === 'references' ? 'Enter references separated by commas or numbered format (e.g., "1. Study A, 2. Study B")' : f.key === 'comprehensiveArticle' ? 'Enter comprehensive article content in Markdown format...' : undefined}
                 />
+                <button
+                  type="button"
+                  className="mt-2 px-3 py-1 rounded bg-green-600 text-white hover:bg-green-700 mr-2"
+                  onClick={() => document.getElementById(`symptom-file-${f.key}`)?.click()}
+                >
+                  Import from File
+                </button>
+                <button
+                  type="button"
+                  className="mt-2 px-3 py-1 rounded bg-blue-600 text-white hover:bg-blue-700"
+                  onClick={showContentPreview}
+                >
+                  Preview
+                </button>
                 <input
+                  id={`symptom-file-${f.key}`}
                   type="file"
                   accept=".txt,.html,.md"
-                  className="mt-2"
+                  className="hidden"
                   onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
                     const file = e.target.files ? e.target.files[0] : null;
                     if (!file) return;
-                    const text = await file.text();
-                    setFormData({ ...symptomForm, [f.key]: text });
+                    await handleFileUploadWithPreservation(file, f.key);
                   }}
                 />
                 <span className="text-xs text-gray-400">Upload .txt, .html, or .md to import content</span>
+                {f.key === 'references' && (
+                  <div className="mt-2 text-xs text-gray-400">
+                    <p>Enter references separated by commas or numbered format. The system will automatically detect reference types (journal, book, doi, study).</p>
+                    <p className="mt-1">Example format: "1. Study A, 2. Study B" or "Journal Article•DOI 1. Study A, 2. Study B"</p>
+                  </div>
+                )}
+                {f.key === 'comprehensiveArticle' && (
+                  <div className="mt-2 text-xs text-gray-400">
+                    <p>This content will appear in the "View Here" modal and "Full Page View" for comprehensive scientific research.</p>
+                    <p className="mt-1">Use Markdown format: # Headers, **bold**, - lists, etc. Include the main title in the content.</p>
+                  </div>
+                )}
               </div>
             );
           }
@@ -1306,11 +1552,7 @@ export default function AdminContentPage() {
                 value={String(symptomForm[f.key] ?? '')}
                 onChange={e => setFormData({ ...symptomForm, [f.key]: e.target.value })}
                 required={!!f.required}
-                placeholder={f.key === 'references' ? 'Enter references separated by commas (e.g., "Study A, Study B, Research C")' : undefined}
               />
-              {f.key === 'references' && (
-                <span className="text-xs text-gray-400">Enter references separated by commas. Each reference will be stored as a study type.</span>
-              )}
             </div>
           );
         })}
@@ -1988,6 +2230,58 @@ export default function AdminContentPage() {
                   onClick={() => setShowIndicationForm(false)}
                 >
                   Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Content Preview Modal */}
+      {showPreview && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
+          <div className="bg-gray-900 rounded shadow-lg w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
+            <div className="p-6 border-b border-gray-700 flex justify-between items-center">
+              <h2 className="text-2xl font-bold text-white">Content Preview</h2>
+              <button
+                type="button"
+                className="text-gray-400 hover:text-white text-2xl"
+                onClick={() => setShowPreview(false)}
+              >
+                ×
+              </button>
+            </div>
+            
+            <div className="p-6 overflow-y-auto flex-1">
+              <div className="bg-white text-gray-900 p-6 rounded-lg max-w-none">
+                <div 
+                  className="prose prose-lg max-w-none"
+                  dangerouslySetInnerHTML={{
+                    __html: previewContent
+                      .replace(/\n/g, '<br>')
+                      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                      .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                      .replace(/^# (.*$)/gm, '<h1 class="text-3xl font-bold mb-4">$1</h1>')
+                      .replace(/^## (.*$)/gm, '<h2 class="text-2xl font-bold mb-3">$1</h2>')
+                      .replace(/^### (.*$)/gm, '<h3 class="text-xl font-bold mb-2">$1</h3>')
+                      .replace(/^[-*] (.*$)/gm, '<li class="mb-1">$1</li>')
+                      .replace(/^\d+\. (.*$)/gm, '<li class="mb-1">$1</li>')
+                      .replace(/`(.*?)`/g, '<code class="bg-gray-200 px-1 rounded">$1</code>')
+                      .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" class="text-blue-600 hover:underline">$1</a>')
+                      .replace(/^> (.*$)/gm, '<blockquote class="border-l-4 border-gray-300 pl-4 italic">$1</blockquote>')
+                  }}
+                />
+              </div>
+            </div>
+            
+            <div className="p-6 border-t border-gray-700">
+              <div className="flex gap-4">
+                <button
+                  type="button"
+                  className="bg-gray-500 text-white px-6 py-2 rounded font-bold"
+                  onClick={() => setShowPreview(false)}
+                >
+                  Close Preview
                 </button>
               </div>
             </div>

@@ -73,9 +73,11 @@ export async function getCachedSupplement(slug: string) {
         name: true, 
         slug: true, 
         description: true, 
+        comprehensiveArticle: true,
         heroImageUrl: true, 
         galleryImages: true, 
         cautions: true,
+        references: true,
         products: {
           select: {
             id: true,
@@ -163,11 +165,13 @@ export async function getCachedHerb(slug: string) {
         name: true, 
         slug: true, 
         description: true, 
+        comprehensiveArticle: true,
         heroImageUrl: true, 
         galleryImages: true,
         latinName: true,
         traditionalUses: true,
         cautions: true,
+        references: true,
         products: {
           select: {
             id: true,
@@ -219,7 +223,8 @@ export async function getCachedHerbs() {
         description: true,
         latinName: true,
         traditionalUses: true,
-        cardImageUrl: true
+        cardImageUrl: true,
+        references: true
       },
       orderBy: { name: 'asc' }
     });

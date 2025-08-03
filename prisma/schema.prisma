@@ -15,6 +15,7 @@ model Herb {
   latinName           String?
   slug                String?   @unique
   description         String
+  comprehensiveArticle String?
   metaTitle           String?
   metaDescription     String?
   heroImageUrl        String?
@@ -38,6 +39,7 @@ model Symptom {
   slug                String            @unique
   title               String
   description         String?
+  comprehensiveArticle String?
   metaTitle           String?
   metaDescription     String?
   articles            Json?
@@ -76,6 +78,7 @@ model Supplement {
   name                String
   slug                String?   @unique
   description         String
+  comprehensiveArticle String?
   metaTitle           String?
   metaDescription     String?
   heroImageUrl        String?
