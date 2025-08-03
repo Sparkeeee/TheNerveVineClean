@@ -5,7 +5,7 @@ import { createApiResponse, createErrorResponse, createNotFoundResponse } from '
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const id = searchParams.get('id');
-  const limit = parseInt(searchParams.get('limit') || '20');
+  const limit = parseInt(searchParams.get('limit') || '1000');
   const offset = parseInt(searchParams.get('offset') || '0');
   
   try {
