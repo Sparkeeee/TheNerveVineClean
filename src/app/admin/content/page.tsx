@@ -171,6 +171,50 @@ function getFormattedDate() {
   return new Date().toISOString().slice(0, 10);
 }
 
+// Helper function to convert simple comma-separated references to JSON format
+function convertReferencesToJson(referencesText: string): Array<{ type: string; value: string }> {
+  if (!referencesText.trim()) return [];
+  
+  // If it's already JSON, try to parse it
+  if (referencesText.trim().startsWith('[')) {
+    try {
+      return JSON.parse(referencesText);
+    } catch {
+      // If JSON parsing fails, treat as comma-separated
+    }
+  }
+  
+  // Split by commas and create reference objects
+  const references = referencesText.split(',').map(ref => ref.trim()).filter(ref => ref.length > 0);
+  
+  return references.map(reference => ({
+    type: 'study', // Default type
+    value: reference
+  }));
+}
+
+// Helper function to convert JSON references back to simple format for display
+function convertReferencesToSimple(references: Array<{ type: string; value: string }> | string | undefined): string {
+  if (!references) return '';
+  
+  if (typeof references === 'string') {
+    try {
+      const parsed = JSON.parse(references);
+      if (Array.isArray(parsed)) {
+        return parsed.map(ref => ref.value).join(', ');
+      }
+    } catch {
+      return references;
+    }
+  }
+  
+  if (Array.isArray(references)) {
+    return references.map(ref => ref.value).join(', ');
+  }
+  
+  return '';
+}
+
 function getHerbFieldValue(herb: Herb, key: string): unknown {
   if (Object.prototype.hasOwnProperty.call(herb, key)) {
     return (herb as unknown as Record<string, unknown>)[key];
@@ -651,12 +695,17 @@ export default function AdminContentPage() {
     
     if (processedItem.references && typeof processedItem.references === 'string') {
       try {
-        processedItem.references = JSON.parse(processedItem.references as string);
+        const parsed = JSON.parse(processedItem.references as string);
+        // Convert back to simple format for display
+        processedItem.references = convertReferencesToSimple(parsed);
       } catch {
-        processedItem.references = [];
+        processedItem.references = '';
       }
+    } else if (Array.isArray(processedItem.references)) {
+      // Convert array format back to simple format for display
+      processedItem.references = convertReferencesToSimple(processedItem.references);
     } else if (!processedItem.references) {
-      processedItem.references = [];
+      processedItem.references = '';
     }
     
     setFormData(processedItem);
@@ -669,11 +718,20 @@ export default function AdminContentPage() {
     setError("");
     const url = "/api/" + tab.toLowerCase();
     const method = formMode === "add" ? "POST" : "PUT";
+    
+    // Process form data before sending
+    const processedData = { ...formData };
+    
+    // Convert references from simple format to JSON if present
+    if (processedData.references && typeof processedData.references === 'string') {
+      processedData.references = convertReferencesToJson(processedData.references as string);
+    }
+    
     try {
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(processedData),
       });
       if (!res.ok) throw new Error("Failed to save " + tab.slice(0, -1));
       setShowForm(false);
@@ -1047,7 +1105,11 @@ export default function AdminContentPage() {
                 value={String(herbForm[f.key] ?? '')}
                 onChange={e => setFormData({ ...herbForm, [f.key]: e.target.value })}
                 required={!!f.required}
+                placeholder={f.key === 'references' ? 'Enter references separated by commas (e.g., "Study A, Study B, Research C")' : undefined}
               />
+              {f.key === 'references' && (
+                <span className="text-xs text-gray-400">Enter references separated by commas. Each reference will be stored as a study type.</span>
+              )}
             </div>
           );
         })}
@@ -1114,7 +1176,11 @@ export default function AdminContentPage() {
                 value={String(supplementForm[f.key] ?? '')}
                 onChange={e => setFormData({ ...supplementForm, [f.key]: e.target.value })}
                 required={!!f.required}
+                placeholder={f.key === 'references' ? 'Enter references separated by commas (e.g., "Study A, Study B, Research C")' : undefined}
               />
+              {f.key === 'references' && (
+                <span className="text-xs text-gray-400">Enter references separated by commas. Each reference will be stored as a study type.</span>
+              )}
             </div>
           );
         })}
@@ -1240,7 +1306,11 @@ export default function AdminContentPage() {
                 value={String(symptomForm[f.key] ?? '')}
                 onChange={e => setFormData({ ...symptomForm, [f.key]: e.target.value })}
                 required={!!f.required}
+                placeholder={f.key === 'references' ? 'Enter references separated by commas (e.g., "Study A, Study B, Research C")' : undefined}
               />
+              {f.key === 'references' && (
+                <span className="text-xs text-gray-400">Enter references separated by commas. Each reference will be stored as a study type.</span>
+              )}
             </div>
           );
         })}
