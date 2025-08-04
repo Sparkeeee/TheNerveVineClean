@@ -1262,7 +1262,7 @@ export default function AdminContentPage() {
                   className={`w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600 ${f.key === 'description' || f.key === 'references' || f.key === 'comprehensiveArticle' ? 'h-64' : ''}`}
                   value={herbForm[f.key] || ""}
                   onChange={e => setFormData({ ...herbForm, [f.key]: e.target.value })}
-                  placeholder={f.key === 'references' ? 'Enter references separated by commas or numbered format (e.g., "1. Study A, 2. Study B")' : f.key === 'comprehensiveArticle' ? 'Enter comprehensive article content in Markdown format...' : undefined}
+                  placeholder={f.key === 'references' ? 'Enter references separated by commas or numbered format (e.g., &quot;1. Study A, 2. Study B&quot;)' : f.key === 'comprehensiveArticle' ? 'Enter comprehensive article content in Markdown format...' : undefined}
                 />
                 <button
                   type="button"
@@ -1293,12 +1293,12 @@ export default function AdminContentPage() {
                 {f.key === 'references' && (
                   <div className="mt-2 text-xs text-gray-400">
                     <p>Enter references separated by commas or numbered format. The system will automatically detect reference types (journal, book, doi, study).</p>
-                    <p className="mt-1">Example format: "1. Study A, 2. Study B" or "Journal Article•DOI 1. Study A, 2. Study B"</p>
+                    <p className="mt-1">Example format: &quot;1. Study A, 2. Study B&quot; or &quot;Journal Article•DOI 1. Study A, 2. Study B&quot;</p>
                   </div>
                 )}
                 {f.key === 'comprehensiveArticle' && (
                   <div className="mt-2 text-xs text-gray-400">
-                    <p>This content will appear in the "View Here" modal and "Full Page View" for comprehensive scientific research.</p>
+                    <p>This content will appear in the &quot;View Here&quot; modal and &quot;Full Page View&quot; for comprehensive scientific research.</p>
                     <p className="mt-1">Use Markdown format: # Headers, **bold**, - lists, etc. Include the main title in the content.</p>
                   </div>
                 )}
@@ -1332,7 +1332,7 @@ export default function AdminContentPage() {
                   className={`w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600 ${f.key === 'description' || f.key === 'references' || f.key === 'comprehensiveArticle' ? 'h-64' : ''}`}
                   value={supplementForm[f.key] || ""}
                   onChange={e => setFormData({ ...supplementForm, [f.key]: e.target.value })}
-                  placeholder={f.key === 'references' ? 'Enter references separated by commas or numbered format (e.g., "1. Study A, 2. Study B")' : f.key === 'comprehensiveArticle' ? 'Enter comprehensive article content in Markdown format...' : undefined}
+                  placeholder={f.key === 'references' ? 'Enter references separated by commas or numbered format (e.g., &quot;1. Study A, 2. Study B&quot;)' : f.key === 'comprehensiveArticle' ? 'Enter comprehensive article content in Markdown format...' : undefined}
                 />
                 <button
                   type="button"
@@ -1363,12 +1363,12 @@ export default function AdminContentPage() {
                 {f.key === 'references' && (
                   <div className="mt-2 text-xs text-gray-400">
                     <p>Enter references separated by commas or numbered format. The system will automatically detect reference types (journal, book, doi, study).</p>
-                    <p className="mt-1">Example format: "1. Study A, 2. Study B" or "Journal Article•DOI 1. Study A, 2. Study B"</p>
+                    <p className="mt-1">Example format: &quot;1. Study A, 2. Study B&quot; or &quot;Journal Article•DOI 1. Study A, 2. Study B&quot;</p>
                   </div>
                 )}
                 {f.key === 'comprehensiveArticle' && (
                   <div className="mt-2 text-xs text-gray-400">
-                    <p>This content will appear in the "View Here" modal and "Full Page View" for comprehensive scientific research.</p>
+                    <p>This content will appear in the &quot;View Here&quot; modal and &quot;Full Page View&quot; for comprehensive scientific research.</p>
                     <p className="mt-1">Use Markdown format: # Headers, **bold**, - lists, etc. Include the main title in the content.</p>
                   </div>
                 )}
@@ -1501,7 +1501,7 @@ export default function AdminContentPage() {
                   className={`w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600 ${f.key === 'description' || f.key === 'references' || f.key === 'comprehensiveArticle' ? 'h-64' : ''}`}
                   value={symptomForm[f.key] || ""}
                   onChange={e => setFormData({ ...symptomForm, [f.key]: e.target.value })}
-                  placeholder={f.key === 'references' ? 'Enter references separated by commas or numbered format (e.g., "1. Study A, 2. Study B")' : f.key === 'comprehensiveArticle' ? 'Enter comprehensive article content in Markdown format...' : undefined}
+                  placeholder={f.key === 'references' ? 'Enter references separated by commas or numbered format (e.g., &quot;1. Study A, 2. Study B&quot;)' : f.key === 'comprehensiveArticle' ? 'Enter comprehensive article content in Markdown format...' : undefined}
                 />
                 <button
                   type="button"
@@ -1532,12 +1532,12 @@ export default function AdminContentPage() {
                 {f.key === 'references' && (
                   <div className="mt-2 text-xs text-gray-400">
                     <p>Enter references separated by commas or numbered format. The system will automatically detect reference types (journal, book, doi, study).</p>
-                    <p className="mt-1">Example format: "1. Study A, 2. Study B" or "Journal Article•DOI 1. Study A, 2. Study B"</p>
+                    <p className="mt-1">Example format: &quot;1. Study A, 2. Study B&quot; or &quot;Journal Article•DOI 1. Study A, 2. Study B&quot;</p>
                   </div>
                 )}
                 {f.key === 'comprehensiveArticle' && (
                   <div className="mt-2 text-xs text-gray-400">
-                    <p>This content will appear in the "View Here" modal and "Full Page View" for comprehensive scientific research.</p>
+                    <p>This content will appear in the &quot;View Here&quot; modal and &quot;Full Page View&quot; for comprehensive scientific research.</p>
                     <p className="mt-1">Use Markdown format: # Headers, **bold**, - lists, etc. Include the main title in the content.</p>
                   </div>
                 )}
