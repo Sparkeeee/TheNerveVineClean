@@ -6,16 +6,37 @@ import HerbImage from '@/components/HerbImage';
 function truncateDescription(description: string): string {
   if (!description) return '';
   
-  // Split into sentences and take first 2-3 sentences
-  const sentences = description.split(/[.!?]+/).filter(s => s.trim().length > 0);
-  const firstTwoSentences = sentences.slice(0, 2).join('. ');
+  // Check if content is HTML
+  const isHtml = /<[^>]*>/.test(description);
   
-  // If it's still too long, truncate to ~150 characters
-  if (firstTwoSentences.length > 150) {
-    return firstTwoSentences.substring(0, 150).trim() + '...';
+  if (isHtml) {
+    // For HTML content, strip tags and get plain text
+    const plainText = description
+      .replace(/<[^>]*>/g, '') // Remove all HTML tags
+      .replace(/&nbsp;/g, ' ') // Replace HTML entities
+      .replace(/&amp;/g, '&')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .trim();
+    
+    // Truncate the plain text
+    if (plainText.length > 150) {
+      return plainText.substring(0, 150).trim() + '...';
+    }
+    
+    return plainText;
+  } else {
+    // For plain text, use the original logic
+    const sentences = description.split(/[.!?]+/).filter(s => s.trim().length > 0);
+    const firstTwoSentences = sentences.slice(0, 2).join('. ');
+    
+    // If it's still too long, truncate to ~150 characters
+    if (firstTwoSentences.length > 150) {
+      return firstTwoSentences.substring(0, 150).trim() + '...';
+    }
+    
+    return firstTwoSentences + (sentences.length > 2 ? '...' : '');
   }
-  
-  return firstTwoSentences + (sentences.length > 2 ? '...' : '');
 }
 
 // Use ISR for optimal caching with database updates

@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider   = "prisma-client-js"
   engineType = "binary"
 }
 
@@ -9,92 +9,78 @@ datasource db {
 }
 
 model Herb {
-  id                  Int       @id @default(autoincrement())
-  name                String?
-  commonName          String?
-  latinName           String?
-  slug                String?   @unique
-  description         String
+  id                   Int              @id @default(autoincrement())
+  name                 String?
+  commonName           String?
+  latinName            String?
+  slug                 String?          @unique
+  description          String
+  metaTitle            String?
+  metaDescription      String?
+  heroImageUrl         String?
+  cardImageUrl         String?
+  galleryImages        Json?
+  cautions             String?
+  productFormulations  Json?
+  references           Json?
+  traditionalUses      Json?
   comprehensiveArticle String?
-  metaTitle           String?
-  metaDescription     String?
-  heroImageUrl        String?
-  cardImageUrl        String?
-  galleryImages       Json?
-  cautions            String?
-  productFormulations Json?
-  references          Json?
-  traditionalUses     Json?
-  products            Product[] @relation("HerbProducts")
-  
-  // Add variant relationships
-  symptomVariants     SymptomVariant[] @relation("VariantHerbs")
-  
-  // Add indication relationships
-  indicationTags      Indication[] @relation("HerbIndications")
+  indicationTags       Indication[]     @relation("HerbIndications")
+  products             Product[]        @relation("HerbProducts")
+  symptomVariants      SymptomVariant[] @relation("VariantHerbs")
 }
 
 model Symptom {
-  id                  Int               @id @default(autoincrement())
-  slug                String            @unique
-  title               String
-  description         String?
+  id                   Int              @id @default(autoincrement())
+  slug                 String           @unique
+  title                String
+  description          String?
+  articles             Json?
+  associatedSymptoms   Json?
+  cautions             String?
+  references           Json?
+  metaDescription      String?
+  metaTitle            String?
   comprehensiveArticle String?
-  metaTitle           String?
-  metaDescription     String?
-  articles            Json?
-  associatedSymptoms  Json?
-  cautions            String?
-  references          Json?
-  products            Product[]         @relation("SymptomProducts")
-  
-  // Add proper variant relationship
-  variants            SymptomVariant[]
+  variants             SymptomVariant[]
+  products             Product[]        @relation("SymptomProducts")
 }
 
 model SymptomVariant {
-  id              Int      @id @default(autoincrement())
+  id              Int          @id @default(autoincrement())
   parentSymptomId Int
-  name            String   // e.g., "SAD", "Seasonal Affective Disorder"
-  slug            String   @unique
+  name            String
+  slug            String       @unique
   description     String?
   metaTitle       String?
   metaDescription String?
   cautions        String?
   references      Json?
-  
-  // Product relationships
+  parentSymptom   Symptom      @relation(fields: [parentSymptomId], references: [id])
   herbs           Herb[]       @relation("VariantHerbs")
   supplements     Supplement[] @relation("VariantSupplements")
-  
-  // Parent relationship
-  parentSymptom   Symptom      @relation(fields: [parentSymptomId], references: [id])
-  
+
   @@index([parentSymptomId])
 }
 
 model Supplement {
-  id                  Int       @id @default(autoincrement())
-  name                String
-  slug                String?   @unique
-  description         String
+  id                   Int              @id @default(autoincrement())
+  name                 String
+  slug                 String?          @unique
+  description          String
+  metaTitle            String?
+  metaDescription      String?
+  heroImageUrl         String?
+  cardImageUrl         String?
+  galleryImages        Json?
+  cautions             String?
+  productFormulations  Json?
+  references           Json?
+  tags                 Json?
   comprehensiveArticle String?
-  metaTitle           String?
-  metaDescription     String?
-  heroImageUrl        String?
-  cardImageUrl        String?
-  galleryImages       Json?
-  cautions            String?
-  productFormulations Json?
-  references          Json?
-  tags                Json?
-  products            Product[] @relation("SupplementProducts")
-  
-  // Add variant relationships
-  symptomVariants     SymptomVariant[] @relation("VariantSupplements")
-  
-  // Add indication relationships
-  indicationTags      Indication[] @relation("SupplementIndications")
+  indicationTags       Indication[]     @relation("SupplementIndications")
+  products             Product[]        @relation("SupplementProducts")
+  symptomVariants      SymptomVariant[] @relation("VariantSupplements")
 }
 
 model BlogPage {
@@ -183,46 +169,36 @@ model Product {
   symptoms       Symptom[]    @relation("SymptomProducts")
 }
 
-/*
- * INDICATION MODEL - CASCADE SYSTEM CORE
- * 
- * This model serves as the central hub for evidence-based product prioritization 
- * and the domino cascade system of product propagation.
- * 
- * CASCADE FLOW:
- * 1. PRODUCT APPROVAL: Products are approved and populate their respective herb/supplement pages
- *    - Ginkgo tincture & extract → /herbs/ginkgo-biloba (Traditional & Modern formulations)
- *    - Lion's Mane double-fermented tincture & extract → /herbs/lions-mane
- *    - L-tyrosine high-strength vegi gelcaps → /supplements/l-tyrosine
- * 
- * 2. INDICATION ASSIGNMENT: Admins assign indications to herbs/supplements
- *    - Ginkgo, Lion's Mane, L-tyrosine all assigned "Poor Memory" indication
- * 
- * 3. SYMPTOM PAGE POPULATION: Products cascade to symptom pages based on indications
- *    - All approved products from herbs/supplements with "Poor Memory" indication
- *    - Populate /symptoms/poor-memory recommended products section
- * 
- * EVIDENCE SCORING:
- * - Evidence scores are stored on the relationship tables (HerbIndication, SupplementIndication)
- * - Same herb can have different evidence scores for different indications
- * - Example: Ginkgo + Memory (evidence: 90), Ginkgo + Anxiety (evidence: 60)
- * - Controls product priority and order on symptom pages
- * - Prevents overpopulation by limiting products per symptom based on evidence scores
- * 
- * FUTURE CASCADE INTEGRATION:
- * - When products are approved, system queries "which indications does this herb/supplement have"
- * - Automatically cascades approved products to all related symptom pages
- * - Evidence scores determine product order and visibility on symptom pages
- */
-
 model Indication {
-  id          Int         @id @default(autoincrement())
-  name        String      @unique
-  slug        String      @unique
+  id          Int          @id @default(autoincrement())
+  name        String       @unique
+  slug        String       @unique
   description String?
-  color       String      @default("blue")
-  herbs       Herb[]      @relation("HerbIndications")
+  color       String       @default("blue")
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  herbs       Herb[]       @relation("HerbIndications")
   supplements Supplement[] @relation("SupplementIndications")
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+}
+
+model User {
+  id               String        @id @default(cuid())
+  email            String        @unique
+  name             String?
+  createdAt        DateTime      @default(now())
+  savedHerbs       String[]
+  savedSupplements String[]
+  password         String
+  savedArticles    String[]
+  shoppingList     ShoppingList?
+}
+
+model ShoppingList {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  name      String   @default("My Shopping List")
+  items     Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
 }

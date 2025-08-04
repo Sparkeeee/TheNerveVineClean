@@ -5,7 +5,54 @@ import Link from 'next/link';
 import Image from 'next/image';
 import ContentProtection from '@/components/ContentProtection';
 import InteractiveCitations from '@/components/InteractiveCitations';
+import SaveToListButton from '@/components/SaveToListButton';
 
+// Convert Markdown to HTML for better formatting
+function convertMarkdownToHtml(content: string): string {
+  // Check if content is already HTML
+  const isHtml = /<[^>]*>/.test(content);
+  
+  if (isHtml) {
+    // If it's already HTML, just clean it up and apply consistent styling
+    return content
+      // Remove any existing style attributes that might conflict
+      .replace(/style="[^"]*"/g, '')
+      // Remove any existing class attributes that might conflict
+      .replace(/class="[^"]*"/g, '')
+      // Ensure paragraphs have consistent styling
+      .replace(/<p>/g, '<p class="mb-4 text-gray-800 leading-relaxed text-justify">')
+      .replace(/<h1>/g, '<h1 class="text-3xl font-bold text-gray-900 mt-8 mb-6">')
+      .replace(/<h2>/g, '<h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">')
+      .replace(/<h3>/g, '<h3 class="text-xl font-bold text-gray-900 mt-6 mb-3">')
+      .replace(/<strong>/g, '<strong class="font-bold text-gray-900">')
+      .replace(/<em>/g, '<em class="italic text-gray-900">')
+      .replace(/<ul>/g, '<ul class="list-disc ml-6 mb-4 pl-8">')
+      .replace(/<li>/g, '<li class="ml-4 mb-1 text-gray-800 text-justify">');
+  } else {
+    // If it's markdown, convert it to HTML
+    return content
+      // Headers
+      .replace(/^### (.*$)/gim, '<h3 class="text-xl font-bold text-gray-900 mt-6 mb-3">$1</h3>')
+      .replace(/^## (.*$)/gim, '<h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">$1</h2>')
+      .replace(/^# (.*$)/gim, '<h1 class="text-3xl font-bold text-gray-900 mt-8 mb-6">$1</h1>')
+      // Bold
+      .replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-gray-900">$1</strong>')
+      // Italic
+      .replace(/\*(.*?)\*/g, '<em class="italic text-gray-900">$1</em>')
+      // Lists
+      .replace(/^- (.*$)/gim, '<li class="ml-4 mb-1 text-gray-800 text-justify">$1</li>')
+      .replace(/^(\d+)\. (.*$)/gim, '<li class="ml-4 mb-1 text-gray-800 text-justify">$1. $2</li>')
+      // Wrap lists in ul/ol
+      .replace(/(<li.*<\/li>)/g, '<ul class="list-disc ml-6 mb-4 pl-8">$1</ul>')
+      // Paragraphs
+      .replace(/\n\n/g, '</p><p class="mb-4 text-gray-800 leading-relaxed text-justify">')
+      // Wrap in paragraph tags
+      .replace(/^(?!<[h|u|o|d]|<p>)(.*)$/gm, '<p class="mb-4 text-gray-800 leading-relaxed text-justify">$1</p>')
+      // Clean up empty paragraphs
+      .replace(/<p class="mb-4 text-gray-800 leading-relaxed"><\/p>/g, '')
+      .replace(/<p class="mb-4 text-gray-800 leading-relaxed"><\/p>/g, '');
+  }
+}
 
 
 // Science Modal Component
@@ -208,14 +255,24 @@ export default function HerbPage({ params }: { params: Promise<{ slug: string }>
                 </p>
               )}
               
+              {/* Save to My List Button */}
+              <div className="mb-6 flex justify-center lg:justify-start">
+                <SaveToListButton 
+                  type="herb" 
+                  slug={herb.slug} 
+                  name={herb.name}
+                  className="text-sm"
+                />
+              </div>
+              
               {/* Overview Section */}
               <div className="text-lg text-gray-800 max-w-2xl lg:max-w-none prose prose-lg text-justify mb-6">
                 {herb.description ? (
-                  herb.description.split('\n\n').map((paragraph: string, index: number) => (
-                    <p key={index} className="mb-4 last:mb-0 text-justify">
-                      {paragraph}
-                    </p>
-                  ))
+                  <div 
+                    dangerouslySetInnerHTML={{ 
+                      __html: convertMarkdownToHtml(herb.description) 
+                    }} 
+                  />
                 ) : (
                   <p className="text-justify">This herb supports overall wellness.</p>
                 )}

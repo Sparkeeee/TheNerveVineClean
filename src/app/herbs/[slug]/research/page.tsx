@@ -6,6 +6,7 @@ import path from 'path';
 import ResearchPageWrapper from '@/components/ResearchPageWrapper';
 import ContentProtection from '@/components/ContentProtection';
 import InteractiveCitations from '@/components/InteractiveCitations';
+import SaveArticleButton from '@/components/SaveArticleButton';
 
 // Function to read Markdown file
 async function getMarkdownArticle(slug: string): Promise<string | null> {
@@ -76,6 +77,15 @@ export default async function HerbResearchPage({ params }: { params: Promise<{ s
                     {herb.latinName}
                   </p>
                 )}
+              </div>
+              
+              {/* Save to Research Library Button */}
+              <div className="mb-6 flex justify-center">
+                <SaveArticleButton 
+                  slug={slug} 
+                  title={`Research: ${herb.name}`}
+                  className="text-sm"
+                />
               </div>
             </div>
 

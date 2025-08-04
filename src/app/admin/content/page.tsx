@@ -122,7 +122,7 @@ const HERB_FIELDS = [
   { key: "name", label: "Name", required: true },
   { key: "latinName", label: "Latin Name" },
   { key: "slug", label: "Slug" },
-  { key: "description", label: "Description" },
+  { key: "description", label: "Description", required: true },
   { key: "comprehensiveArticle", label: "Comprehensive Article (Markdown)" },
   { key: "cautions", label: "Cautions" },
   { key: "heroImageUrl", label: "Hero Image URL" },
@@ -137,7 +137,7 @@ const HERB_FIELDS = [
 const SUPPLEMENT_FIELDS = [
   { key: "name", label: "Name", required: true },
   { key: "slug", label: "Slug" },
-  { key: "description", label: "Description" },
+  { key: "description", label: "Description", required: true },
   { key: "comprehensiveArticle", label: "Comprehensive Article (Markdown)" },
   { key: "cautions", label: "Cautions" },
   { key: "heroImageUrl", label: "Hero Image URL" },
@@ -147,11 +147,6 @@ const SUPPLEMENT_FIELDS = [
   { key: "metaDescription", label: "Meta Description" },
   { key: "productFormulations", label: "Product Formulations (JSON)" },
   { key: "references", label: "References (JSON)" },
-  { key: "organic", label: "Organic" },
-  { key: "strength", label: "Strength" },
-  { key: "formulation", label: "Formulation" },
-  { key: "affiliatePercentage", label: "Affiliate %" },
-  { key: "customerReviews", label: "Customer Reviews" },
 ];
 
 const SYMPTOM_FIELDS = [
@@ -499,7 +494,7 @@ export default function AdminContentPage() {
     name?: string;
     latinName?: string;
     slug?: string;
-    description?: string;
+    description: string;
     comprehensiveArticle?: string;
     cautions?: string;
     heroImageUrl?: string;
@@ -514,7 +509,7 @@ export default function AdminContentPage() {
   type SupplementForm = {
     name?: string;
     slug?: string;
-    description?: string;
+    description: string;
     comprehensiveArticle?: string;
     cautions?: string;
     heroImageUrl?: string;
@@ -524,11 +519,6 @@ export default function AdminContentPage() {
     metaDescription?: string;
     productFormulations?: ProductFormulation[];
     references?: string;
-    strength?: string;
-    formulation?: string;
-    affiliatePercentage?: string;
-    customerReviews?: string;
-    organic?: boolean;
     [key: string]: unknown;
   };
   type SymptomForm = {
@@ -843,7 +833,20 @@ export default function AdminContentPage() {
       });
       setShowIndicationForm(true);
     } else {
-      setFormData({});
+      // Initialize with default values for required fields
+      const defaultFormData: Record<string, unknown> = {};
+      
+      if (tab === "Herbs") {
+        defaultFormData.name = "";
+        defaultFormData.description = "";
+      } else if (tab === "Supplements") {
+        defaultFormData.name = "";
+        defaultFormData.description = "";
+      } else if (tab === "Symptoms") {
+        defaultFormData.title = "";
+      }
+      
+      setFormData(defaultFormData);
       setShowForm(true);
     }
   }
@@ -889,7 +892,32 @@ export default function AdminContentPage() {
       processedItem.references = '';
     }
     
-    setFormData(processedItem);
+    // Ensure all string fields are properly initialized
+    const finalFormData = {
+      ...processedItem,
+      heroImageUrl: processedItem.heroImageUrl || '',
+      cardImageUrl: processedItem.cardImageUrl || '',
+      metaTitle: processedItem.metaTitle || '',
+      metaDescription: processedItem.metaDescription || '',
+      galleryImages: processedItem.galleryImages || '',
+      name: processedItem.name || '',
+      latinName: processedItem.latinName || '',
+      slug: processedItem.slug || '',
+      description: processedItem.description || '',
+      comprehensiveArticle: processedItem.comprehensiveArticle || '',
+      cautions: processedItem.cautions || '',
+    };
+
+    // Remove any non-existent fields that might be present
+    delete (finalFormData as any).strength;
+    delete (finalFormData as any).formulation;
+    delete (finalFormData as any).affiliatePercentage;
+    delete (finalFormData as any).customerReviews;
+    delete (finalFormData as any).organic;
+
+
+    
+    setFormData(finalFormData);
     setShowForm(true);
   }
 
@@ -903,10 +931,25 @@ export default function AdminContentPage() {
     // Process form data before sending
     const processedData = { ...formData };
     
+    // Remove any non-existent fields that might be present
+    delete (processedData as any).strength;
+    delete (processedData as any).formulation;
+    delete (processedData as any).affiliatePercentage;
+    delete (processedData as any).customerReviews;
+    delete (processedData as any).organic;
+    
     // Convert references from simple format to JSON if present
     if (processedData.references && typeof processedData.references === 'string') {
       processedData.references = convertReferencesToJson(processedData.references as string);
     }
+    
+    console.log('Submitting form data:', {
+      url,
+      method,
+      tab,
+      formMode,
+      processedData
+    });
     
     try {
       const res = await fetch(url, {
@@ -914,11 +957,24 @@ export default function AdminContentPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(processedData),
       });
-      if (!res.ok) throw new Error("Failed to save " + tab.slice(0, -1));
+      
+      console.log('Response status:', res.status);
+      console.log('Response ok:', res.ok);
+      
+      if (!res.ok) {
+        const errorText = await res.text();
+        console.error('Response error:', errorText);
+        throw new Error(`Failed to save ${tab.slice(0, -1)}: ${res.status} ${errorText}`);
+      }
+      
+      const result = await res.json();
+      console.log('Success response:', result);
+      
       setShowForm(false);
       await fetchData();
-    } catch {
-      setError('An error occurred');
+    } catch (error) {
+      console.error('Form submission error:', error);
+      setError(`An error occurred: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setLoading(false);
     }
@@ -1258,12 +1314,12 @@ export default function AdminContentPage() {
             return (
               <div className="mb-4" key={f.key}>
                 <label className="block mb-1">{f.label}{f.required && <span className="text-red-400">*</span>}</label>
-                <textarea
-                  className={`w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600 ${f.key === 'description' || f.key === 'references' || f.key === 'comprehensiveArticle' ? 'h-64' : ''}`}
-                  value={herbForm[f.key] || ""}
-                  onChange={e => setFormData({ ...herbForm, [f.key]: e.target.value })}
-                  placeholder={f.key === 'references' ? 'Enter references separated by commas or numbered format (e.g., &quot;1. Study A, 2. Study B&quot;)' : f.key === 'comprehensiveArticle' ? 'Enter comprehensive article content in Markdown format...' : undefined}
-                />
+                                  <textarea
+                    className={`w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600 ${f.key === 'description' || f.key === 'references' || f.key === 'comprehensiveArticle' ? 'h-64' : ''}`}
+                    value={f.key === 'references' ? (typeof herbForm[f.key] === 'string' ? herbForm[f.key] : '') : (typeof herbForm[f.key] === 'string' ? herbForm[f.key] : '')}
+                    onChange={e => setFormData({ ...herbForm, [f.key]: e.target.value })}
+                    placeholder={f.key === 'references' ? 'Enter references separated by commas or numbered format (e.g., &quot;1. Study A, 2. Study B&quot;)' : f.key === 'comprehensiveArticle' ? 'Enter comprehensive article content in Markdown format...' : undefined}
+                  />
                 <button
                   type="button"
                   className="mt-2 px-3 py-1 rounded bg-green-600 text-white hover:bg-green-700 mr-2"
@@ -1328,12 +1384,12 @@ export default function AdminContentPage() {
             return (
               <div className="mb-4" key={f.key}>
                 <label className="block mb-1">{f.label}{f.required && <span className="text-red-400">*</span>}</label>
-                <textarea
-                  className={`w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600 ${f.key === 'description' || f.key === 'references' || f.key === 'comprehensiveArticle' ? 'h-64' : ''}`}
-                  value={supplementForm[f.key] || ""}
-                  onChange={e => setFormData({ ...supplementForm, [f.key]: e.target.value })}
-                  placeholder={f.key === 'references' ? 'Enter references separated by commas or numbered format (e.g., &quot;1. Study A, 2. Study B&quot;)' : f.key === 'comprehensiveArticle' ? 'Enter comprehensive article content in Markdown format...' : undefined}
-                />
+                                  <textarea
+                    className={`w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600 ${f.key === 'description' || f.key === 'references' || f.key === 'comprehensiveArticle' ? 'h-64' : ''}`}
+                    value={f.key === 'references' ? (typeof supplementForm[f.key] === 'string' ? supplementForm[f.key] : '') : (typeof supplementForm[f.key] === 'string' ? supplementForm[f.key] : '')}
+                    onChange={e => setFormData({ ...supplementForm, [f.key]: e.target.value })}
+                    placeholder={f.key === 'references' ? 'Enter references separated by commas or numbered format (e.g., &quot;1. Study A, 2. Study B&quot;)' : f.key === 'comprehensiveArticle' ? 'Enter comprehensive article content in Markdown format...' : undefined}
+                  />
                 <button
                   type="button"
                   className="mt-2 px-3 py-1 rounded bg-green-600 text-white hover:bg-green-700 mr-2"
@@ -1375,22 +1431,7 @@ export default function AdminContentPage() {
               </div>
             );
           }
-          if (f.key === "organic") {
-            return (
-              <div className="mb-4" key={f.key}>
-                <label className="block mb-1">{f.label}</label>
-                <select
-                  className="w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
-                  value={supplementForm[f.key] === true ? 'true' : supplementForm[f.key] === false ? 'false' : ''}
-                  onChange={e => setFormData({ ...supplementForm, [f.key]: e.target.value === 'true' ? true : e.target.value === 'false' ? false : undefined })}
-                >
-                  <option value="">Select</option>
-                  <option value="true">Yes</option>
-                  <option value="false">No</option>
-                </select>
-              </div>
-            );
-          }
+
           return (
             <div className="mb-4" key={f.key}>
               <label className="block mb-1">{f.label}{f.required && <span className="text-red-400">*</span>}</label>
@@ -1497,12 +1538,12 @@ export default function AdminContentPage() {
             return (
               <div className="mb-4" key={f.key}>
                 <label className="block mb-1">{f.label}{f.required && <span className="text-red-400">*</span>}</label>
-                <textarea
-                  className={`w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600 ${f.key === 'description' || f.key === 'references' || f.key === 'comprehensiveArticle' ? 'h-64' : ''}`}
-                  value={symptomForm[f.key] || ""}
-                  onChange={e => setFormData({ ...symptomForm, [f.key]: e.target.value })}
-                  placeholder={f.key === 'references' ? 'Enter references separated by commas or numbered format (e.g., &quot;1. Study A, 2. Study B&quot;)' : f.key === 'comprehensiveArticle' ? 'Enter comprehensive article content in Markdown format...' : undefined}
-                />
+                                  <textarea
+                    className={`w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600 ${f.key === 'description' || f.key === 'references' || f.key === 'comprehensiveArticle' ? 'h-64' : ''}`}
+                    value={f.key === 'references' ? (typeof symptomForm[f.key] === 'string' ? symptomForm[f.key] : '') : (typeof symptomForm[f.key] === 'string' ? symptomForm[f.key] : '')}
+                    onChange={e => setFormData({ ...symptomForm, [f.key]: e.target.value })}
+                    placeholder={f.key === 'references' ? 'Enter references separated by commas or numbered format (e.g., &quot;1. Study A, 2. Study B&quot;)' : f.key === 'comprehensiveArticle' ? 'Enter comprehensive article content in Markdown format...' : undefined}
+                  />
                 <button
                   type="button"
                   className="mt-2 px-3 py-1 rounded bg-green-600 text-white hover:bg-green-700 mr-2"

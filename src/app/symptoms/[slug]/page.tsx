@@ -186,8 +186,15 @@ export default function SymptomPage({ params }: { params: Promise<{ slug: string
       shareUrl={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://thenervevine.com'}/symptoms/${symptom.slug}`}
       shareTitle={`${symptom.title} - The NerveVine`}
     >
-      <div className="min-h-screen bg-white">
-        <div className="max-w-6xl mx-auto px-4 py-8">
+      <div className="min-h-screen bg-white relative" style={{
+        backgroundImage: "url('/images/RoseWPWM.PNG')",
+        backgroundSize: "110%",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        backgroundAttachment: "fixed"
+      }}>
+        <div className="absolute inset-0 bg-pink-100 opacity-90"></div>
+        <div className="relative max-w-6xl mx-auto px-4 py-8">
           <div className="flex flex-col lg:flex-row gap-8">
             {/* Main Content */}
             <div className="flex-1">

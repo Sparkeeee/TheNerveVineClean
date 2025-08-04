@@ -94,7 +94,7 @@ function ScienceModal({
                 <div className="space-y-3">
                   {references.map((reference: any, index: number) => (
                     <div key={index} className="text-sm text-gray-800 leading-relaxed p-3 bg-gray-50 rounded">
-                      {reference.value}
+                      {typeof reference === 'string' ? reference : reference.value || ''}
                     </div>
                   ))}
                 </div>
@@ -289,9 +289,9 @@ export default function SupplementPage({ params }: { params: Promise<{ slug: str
                 {supplement.references && Array.isArray(supplement.references) && supplement.references.length > 0 ? (
                   <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
                     <ul className="list-disc list-inside space-y-2">
-                      {supplement.references.map((reference: string, index: number) => (
+                      {supplement.references.map((reference: any, index: number) => (
                         <li key={index} className="text-gray-700 text-sm">
-                          {reference}
+                          {typeof reference === 'string' ? reference : reference.value || ''}
                         </li>
                       ))}
                     </ul>

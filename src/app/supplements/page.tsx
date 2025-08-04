@@ -157,9 +157,9 @@ export default async function SupplementsPage() {
                     <Link
                       key={i}
                       href={`/symptoms/${tag.slug}`}
-                      className={`inline-block px-3 py-1 rounded-full border text-xs font-semibold mr-2 mb-2 transition-colors duration-200 hover:brightness-110 ${getSymptomTagClasses(tag.title)}`}
+                      className={`inline-block px-3 py-1 rounded-full border text-xs font-semibold mr-2 mb-2 transition-colors duration-200 hover:brightness-110 ${getSymptomTagClasses(tag.name)}`}
                     >
-                      {tag.title}
+                      {tag.name}
                     </Link>
                   ));
                 })()}

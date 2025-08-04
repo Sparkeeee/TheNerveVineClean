@@ -54,8 +54,10 @@ export default function InteractiveCitations({ content }: InteractiveCitationsPr
     // Look for "References" heading in various formats
     const referencesPatterns = [
       /<strong>References<\/strong><\/p>/i,
+      /<em><strong>References<\/strong><\/em>/i,
       /<h\d[^>]*>References<\/h\d>/i,
       /<p[^>]*><strong>References<\/strong><\/p>/i,
+      /<p[^>]*><em><strong>References<\/strong><\/em><\/p>/i,
       /References\s*$/m,
       /## References/i,
       /# References/i,
@@ -70,11 +72,14 @@ export default function InteractiveCitations({ content }: InteractiveCitationsPr
     }
     
     if (referencesMatch) {
+      console.log('References pattern matched:', referencesMatch[0]);
       // Get everything after "References"
       const afterReferences = content.substring(referencesMatch.index! + referencesMatch[0].length);
       
       // Remove all HTML tags and get clean text
       const cleanText = afterReferences.replace(/<[^>]*>/g, '');
+      
+      console.log('Text after References (first 500 chars):', cleanText.substring(0, 500));
       
       // Debug: Log the raw text after References
       if (process.env.NODE_ENV === 'development') {
@@ -90,7 +95,7 @@ export default function InteractiveCitations({ content }: InteractiveCitationsPr
          const line = lines[i].trim();
          
          // Check if this line starts a new reference (contains author pattern and year)
-         if (line.match(/[A-Z][a-z]+,\s*[A-Z]/) && line.match(/\d{4}/)) {
+         if ((line.match(/[A-Z][a-z]+,\s*[A-Z]/) || line.match(/[A-Z][a-z]+\s+[A-Z]/) || line.match(/[A-Z][a-z]+,\s*[A-Z]\.\s*&/)) && line.match(/\d{4}/)) {
            // If we have a previous block, save it
            if (currentBlock.trim().length > 30) {
              referenceBlocks.push(currentBlock.trim());
@@ -112,12 +117,10 @@ export default function InteractiveCitations({ content }: InteractiveCitationsPr
          referenceBlocks.push(currentBlock.trim());
        }
        
-       if (process.env.NODE_ENV === 'development') {
-         console.log('Number of blocks found:', referenceBlocks.length);
-         referenceBlocks.forEach((block, index) => {
-           console.log(`Block ${index + 1} (${block.length} chars):`, block.substring(0, 100));
-         });
-       }
+       console.log('Number of blocks found:', referenceBlocks.length);
+       referenceBlocks.forEach((block, index) => {
+         console.log(`Block ${index + 1} (${block.length} chars):`, block.substring(0, 100));
+       });
        
        let counter = 1;
        referenceBlocks.forEach(block => {
@@ -143,12 +146,10 @@ export default function InteractiveCitations({ content }: InteractiveCitationsPr
          }
        });
       
-      if (process.env.NODE_ENV === 'development') {
-        console.log('Final references extracted:', references.size);
-        references.forEach((ref, key) => {
-          console.log(`Reference ${key}:`, ref.substring(0, 100));
-        });
-      }
+      console.log('Final references extracted:', references.size);
+      references.forEach((ref, key) => {
+        console.log(`Reference ${key}:`, ref.substring(0, 100));
+      });
     }
     
     return references;

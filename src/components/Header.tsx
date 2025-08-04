@@ -17,6 +17,16 @@ export default function Header() {
     setMounted(true)
   }, [])
 
+  // Debug session role
+  useEffect(() => {
+    if (session) {
+      console.log('Session user:', session.user)
+      console.log('Session user role:', session.user?.role)
+      console.log('Session user id:', session.user?.id)
+      console.log('Session user email:', session.user?.email)
+    }
+  }, [session])
+
   const isActivePath = (path: string) => {
     return pathname?.startsWith(path)
   }
@@ -85,6 +95,11 @@ export default function Header() {
                   <Link href="/about" className="font-medium transition-colors text-gray-700 hover:text-green-600">
                     About
                   </Link>
+                  {session && (
+                    <Link href="/my-list" className="font-medium transition-colors text-green-600 hover:text-green-700">
+                      My List
+                    </Link>
+                  )}
                 </nav>
                 
                 {/* Search Bar - Positioned below navigation */}
@@ -135,38 +150,41 @@ export default function Header() {
               <div className="flex items-center gap-2">
                 {status !== 'loading' && session ? (
                   <>
-                    <Link 
-                      href="/admin"
-                      className="bg-white text-blue-900 border border-blue-200 h-6 flex items-center px-3 rounded hover:bg-blue-100 hover:text-blue-900 cursor-pointer transition-colors font-medium shadow-sm text-sm"
-                      style={{ minHeight: '1.5rem', height: '1.5rem' }}
-                    >
-                      Admin
-                    </Link>
-                    <button 
-                      onClick={async () => {
-                        try {
-                          // Clear any local session data
-                          localStorage.removeItem('next-auth.session-token')
-                          sessionStorage.clear()
-                          
-                          await signOut({ 
-                            callbackUrl: '/',
-                            redirect: true 
-                          })
-                          
-                          // Force page reload after a short delay
-                          setTimeout(() => {
-                            window.location.href = '/'
-                          }, 100)
-                        } catch (error) {
-                          console.error('SignOut error:', error)
-                        }
-                      }} 
-                      className="bg-blue-950 text-white border border-white h-6 flex items-center px-3 rounded hover:bg-blue-900 cursor-pointer transition-colors font-medium shadow-sm text-sm"
-                      style={{ minHeight: '1.5rem', height: '1.5rem' }}
-                    >
-                      Logout
-                    </button>
+                    {session.user.role === 'admin' ? (
+                      <Link 
+                        href="/admin"
+                        className="bg-white text-blue-900 border border-blue-200 h-6 flex items-center px-3 rounded hover:bg-blue-100 hover:text-blue-900 cursor-pointer transition-colors font-medium shadow-sm text-sm"
+                        style={{ minHeight: '1.5rem', height: '1.5rem' }}
+                      >
+                        Admin
+                      </Link>
+                    ) : (
+                      <Link 
+                        href="/my-list"
+                        className="bg-white text-green-700 border border-green-200 h-6 flex items-center px-3 rounded hover:bg-green-100 hover:text-green-800 cursor-pointer transition-colors font-medium shadow-sm text-sm"
+                        style={{ minHeight: '1.5rem', height: '1.5rem' }}
+                      >
+                        My List
+                      </Link>
+                    )}
+                                         <button 
+                       onClick={async () => {
+                         try {
+                           localStorage.clear();
+                           sessionStorage.clear();
+                           await signOut({ callbackUrl: '/login', redirect: true });
+                           setTimeout(() => {
+                             window.location.href = '/login';
+                           }, 200);
+                         } catch (error) {
+                           console.error('SignOut error:', error)
+                         }
+                       }} 
+                       className="bg-blue-950 text-white border border-white h-6 flex items-center px-3 rounded hover:bg-blue-900 cursor-pointer transition-colors font-medium shadow-sm text-sm"
+                       style={{ minHeight: '1.5rem', height: '1.5rem' }}
+                     >
+                       Logout
+                     </button>
                   </>
                 ) : (
                   <>
@@ -175,7 +193,7 @@ export default function Header() {
                       className="bg-blue-950 text-white border border-white h-6 flex items-center px-3 rounded hover:bg-blue-900 cursor-pointer transition-colors font-medium shadow-sm text-sm"
                       style={{ minHeight: '1.5rem', height: '1.5rem' }}
                     >
-                      Admin Login
+                      Login
                     </Link>
                   </>
                 )}
@@ -223,6 +241,11 @@ export default function Header() {
                 <Link href="/about" className={`font-medium transition-colors ${isActivePath('/about') ? 'text-green-600 border-b-2 border-green-600' : 'text-gray-700 hover:text-green-600'}`}>
                   About
                 </Link>
+                {session && session.user.role !== 'admin' && (
+                  <Link href="/my-list" className={`font-medium transition-colors ${isActivePath('/my-list') ? 'text-green-600 border-b-2 border-green-600' : 'text-gray-700 hover:text-green-600'}`}>
+                    My List
+                  </Link>
+                )}
               </nav>
               
               {/* Search Bar - Positioned below navigation */}
@@ -271,38 +294,45 @@ export default function Header() {
                 <Link href="/about" className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-green-600 hover:bg-gray-50">
                   About
                 </Link>
+                {session && session.user.role !== 'admin' && (
+                  <Link href="/my-list" className="px-3 py-2 rounded-md text-sm font-medium text-green-600 hover:text-green-700 hover:bg-gray-50">
+                    My List
+                  </Link>
+                )}
                                  
                 {/* Admin Section - Mobile */}
                 {status !== 'loading' && session ? (
                   <>
                     <div className="border-t border-gray-200 pt-2 mt-2">
-                      <Link href="/admin" className="px-3 py-2 rounded-md text-sm font-medium text-purple-700 hover:text-purple-600 hover:bg-purple-50 flex items-center">
-                        <span className="mr-2">👤</span>
-                        Admin
-                      </Link>
-                      <button 
-                        onClick={async () => {
-                          try {
-                            localStorage.removeItem('next-auth.session-token')
-                            sessionStorage.clear()
-                            
-                            await signOut({ 
-                              callbackUrl: '/',
-                              redirect: true 
-                            })
-                            
-                            setTimeout(() => {
-                              window.location.href = '/'
-                            }, 100)
-                          } catch (error) {
-                            console.error('SignOut error:', error)
-                          }
-                        }} 
-                        className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-red-600 hover:text-red-700 hover:bg-red-50 flex items-center"
-                      >
-                        <span className="mr-2">🚪</span>
-                        Logout
-                      </button>
+                      {session.user.role === 'admin' ? (
+                        <Link href="/admin" className="px-3 py-2 rounded-md text-sm font-medium text-purple-700 hover:text-purple-600 hover:bg-purple-50 flex items-center">
+                          <span className="mr-2">👤</span>
+                          Admin
+                        </Link>
+                      ) : (
+                        <Link href="/my-list" className="px-3 py-2 rounded-md text-sm font-medium text-green-600 hover:text-green-700 hover:bg-gray-50 flex items-center">
+                          <span className="mr-2">📋</span>
+                          My List
+                        </Link>
+                      )}
+                                             <button 
+                         onClick={async () => {
+                           try {
+                             localStorage.clear();
+                             sessionStorage.clear();
+                             await signOut({ callbackUrl: '/login', redirect: true });
+                             setTimeout(() => {
+                               window.location.href = '/login';
+                             }, 200);
+                           } catch (error) {
+                             console.error('SignOut error:', error)
+                           }
+                         }} 
+                         className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-red-600 hover:text-red-700 hover:bg-red-50 flex items-center"
+                       >
+                         <span className="mr-2">🚪</span>
+                         Logout
+                       </button>
                     </div>
                   </>
                 ) : (
@@ -310,7 +340,7 @@ export default function Header() {
                     <div className="border-t border-gray-200 pt-2 mt-2">
                       <Link href="/login" className="px-3 py-2 rounded-md text-sm font-medium text-blue-700 hover:text-blue-600 hover:bg-blue-50 flex items-center">
                         <span className="mr-2">🔐</span>
-                        Admin Login
+                        Login
                       </Link>
                     </div>
                   </>
