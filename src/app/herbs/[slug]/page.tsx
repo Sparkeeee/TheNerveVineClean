@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import ContentProtection from '@/components/ContentProtection';
+import InteractiveCitations from '@/components/InteractiveCitations';
 
 // Simple Markdown to HTML converter
 function convertMarkdownToHtml(markdown: string): string {
@@ -15,16 +16,16 @@ function convertMarkdownToHtml(markdown: string): string {
     // Bold
     .replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-gray-900">$1</strong>')
     // Lists
-    .replace(/^- (.*$)/gim, '<li class="ml-4 mb-1 text-gray-800">$1</li>')
-    .replace(/^(\d+)\. (.*$)/gim, '<li class="ml-4 mb-1 text-gray-800">$1. $2</li>')
+    .replace(/^- (.*$)/gim, '<li class="ml-4 mb-1 text-gray-900 font-medium">$1</li>')
+    .replace(/^(\d+)\. (.*$)/gim, '<li class="ml-4 mb-1 text-gray-900 font-medium">$1. $2</li>')
     // Wrap lists in ul/ol
     .replace(/(<li.*<\/li>)/g, '<ul class="list-disc ml-6 mb-4">$1</ul>')
     // Paragraphs
-    .replace(/\n\n/g, '</p><p class="mb-4 text-gray-800 leading-relaxed">')
+    .replace(/\n\n/g, '</p><p class="mb-4 text-gray-900 leading-relaxed font-medium">')
     // Wrap in paragraph tags
-    .replace(/^(?!<[h|u|o]|<p>)(.*)$/gm, '<p class="mb-4 text-gray-800 leading-relaxed">$1</p>')
+    .replace(/^(?!<[h|u|o]|<p>)(.*)$/gm, '<p class="mb-4 text-gray-900 leading-relaxed font-medium">$1</p>')
     // Clean up empty paragraphs
-    .replace(/<p class="mb-4 text-gray-800 leading-relaxed"><\/p>/g, '')
+    .replace(/<p class="mb-4 text-gray-900 leading-relaxed font-medium"><\/p>/g, '')
     .replace(/<p class="mb-4 text-gray-800 leading-relaxed"><\/p>/g, '');
 }
 
@@ -77,13 +78,10 @@ function ScienceModal({
           shareTitle={`Scientific Research: ${herbName}`}
         >
                      <div className="p-6">
-             {/* Comprehensive Article */}
+             {/* Comprehensive Article with full FPV features */}
              {markdownArticle && (
                <div className="mb-8">
-                 <div 
-                   className="prose prose-lg max-w-none"
-                   dangerouslySetInnerHTML={{ __html: convertMarkdownToHtml(markdownArticle) }}
-                 />
+                 <InteractiveCitations content={markdownArticle} />
                </div>
              )}
 
@@ -93,7 +91,7 @@ function ScienceModal({
                 <h3 className="text-xl font-bold text-gray-900 mb-4">References</h3>
                 <div className="space-y-3">
                   {references.map((reference: any, index: number) => (
-                    <div key={index} className="text-sm text-gray-800 leading-relaxed p-3 bg-gray-50 rounded">
+                    <div key={index} className="text-sm text-gray-900 leading-relaxed p-4 bg-gray-100 rounded border border-gray-200 font-medium">
                       {reference.value}
                     </div>
                   ))}

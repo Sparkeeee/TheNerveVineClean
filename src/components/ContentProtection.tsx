@@ -18,45 +18,46 @@ export default function ContentProtection({
   const [showShareMenu, setShowShareMenu] = useState(false);
 
   useEffect(() => {
+    // TEMPORARILY DISABLED FOR DEBUGGING
     // Disable right-click
-    const handleContextMenu = (e: MouseEvent) => {
-      e.preventDefault();
-    };
+    // const handleContextMenu = (e: MouseEvent) => {
+    //   e.preventDefault();
+    // };
 
     // Disable text selection on research pages and modals
-    const handleSelectStart = (e: Event) => {
-      if (pageType === 'research' || pageType === 'modal') {
-        e.preventDefault();
-      }
-    };
+    // const handleSelectStart = (e: Event) => {
+    //   if (pageType === 'research' || pageType === 'modal') {
+    //     e.preventDefault();
+    //   }
+    // };
 
     // Disable keyboard shortcuts for copy
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'C')) {
-        if (pageType === 'research' || pageType === 'modal') {
-          e.preventDefault();
-        }
-      }
-    };
+    // const handleKeyDown = (e: KeyboardEvent) => {
+    //   if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'C')) {
+    //     if (pageType === 'research' || pageType === 'modal') {
+    //       e.preventDefault();
+    //     }
+    //   }
+    // };
 
     // Disable developer tools (basic)
-    const handleDevTools = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && (e.shiftKey || e.altKey) && e.key === 'I') {
-        e.preventDefault();
-      }
-    };
+    // const handleDevTools = (e: KeyboardEvent) => {
+    //   if ((e.ctrlKey || e.metaKey) && (e.shiftKey || e.altKey) && e.key === 'I') {
+    //     e.preventDefault();
+    //   }
+    // };
 
-    document.addEventListener('contextmenu', handleContextMenu);
-    document.addEventListener('selectstart', handleSelectStart);
-    document.addEventListener('keydown', handleKeyDown);
-    document.addEventListener('keydown', handleDevTools);
+    // document.addEventListener('contextmenu', handleContextMenu);
+    // document.addEventListener('selectstart', handleSelectStart);
+    // document.addEventListener('keydown', handleKeyDown);
+    // document.addEventListener('keydown', handleDevTools);
 
-    return () => {
-      document.removeEventListener('contextmenu', handleContextMenu);
-      document.removeEventListener('selectstart', handleSelectStart);
-      document.removeEventListener('keydown', handleKeyDown);
-      document.removeEventListener('keydown', handleDevTools);
-    };
+    // return () => {
+    //   document.removeEventListener('contextmenu', handleContextMenu);
+    //   document.removeEventListener('selectstart', handleSelectStart);
+    //   document.removeEventListener('keydown', handleKeyDown);
+    //   document.removeEventListener('keydown', handleDevTools);
+    // };
   }, [pageType]);
 
   const handleShare = async (platform: string) => {

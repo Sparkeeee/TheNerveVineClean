@@ -8,6 +8,7 @@ interface InteractiveMarkdownRendererProps {
 }
 
 export default function InteractiveMarkdownRenderer({ content }: InteractiveMarkdownRendererProps) {
+  
   // Function to process tables
   const processTables = (text: string): string => {
     const lines = text.split('\n');
@@ -71,6 +72,17 @@ export default function InteractiveMarkdownRenderer({ content }: InteractiveMark
     }
     
     return result.join('\n');
+  };
+
+  // Convert plain text to HTML with proper formatting
+  const convertPlainTextToHtml = (text: string): string => {
+    return text
+      // Split into paragraphs (double line breaks)
+      .split(/\n\n+/)
+      .map(paragraph => paragraph.trim())
+      .filter(paragraph => paragraph.length > 0)
+      .map(paragraph => `<p class="mb-4 text-gray-800 leading-relaxed text-justify pl-12">${paragraph}</p>`)
+      .join('');
   };
 
   // Convert Markdown to HTML for better formatting
@@ -153,14 +165,14 @@ export default function InteractiveMarkdownRenderer({ content }: InteractiveMark
       // Italic
       .replace(/\*(.*?)\*/g, '<em class="italic text-gray-900">$1</em>')
       // Lists
-      .replace(/^- (.*$)/gim, '<li class="ml-4 mb-1 text-gray-800">$1</li>')
-      .replace(/^(\d+)\. (.*$)/gim, '<li class="ml-4 mb-1 text-gray-800">$1. $2</li>')
+      .replace(/^- (.*$)/gim, '<li class="ml-4 mb-1 text-gray-800 text-justify">$1</li>')
+      .replace(/^(\d+)\. (.*$)/gim, '<li class="ml-4 mb-1 text-gray-800 text-justify">$1. $2</li>')
       // Wrap lists in ul/ol
-      .replace(/(<li.*<\/li>)/g, '<ul class="list-disc ml-6 mb-4">$1</ul>')
+      .replace(/(<li.*<\/li>)/g, '<ul class="list-disc ml-6 mb-4 pl-8">$1</ul>')
       // Paragraphs
-      .replace(/\n\n/g, '</p><p class="mb-4 text-gray-800 leading-relaxed">')
+      .replace(/\n\n/g, '</p><p class="mb-4 text-gray-800 leading-relaxed text-justify pl-12">')
       // Wrap in paragraph tags
-      .replace(/^(?!<[h|u|o|d]|<p>)(.*)$/gm, '<p class="mb-4 text-gray-800 leading-relaxed">$1</p>')
+      .replace(/^(?!<[h|u|o|d]|<p>)(.*)$/gm, '<p class="mb-4 text-gray-800 leading-relaxed text-justify pl-12">$1</p>')
       // Clean up empty paragraphs
       .replace(/<p class="mb-4 text-gray-800 leading-relaxed"><\/p>/g, '')
       .replace(/<p class="mb-4 text-gray-800 leading-relaxed"><\/p>/g, '');
@@ -169,7 +181,7 @@ export default function InteractiveMarkdownRenderer({ content }: InteractiveMark
   // Check if content has interactive citations
   const hasInteractiveCitations = /\[([^\]]+)\]\(#citation-([^)]+)\)/.test(content);
 
-  // Extract body content from HTML documents
+  // Extract body content from HTML documents and apply formatting
   const extractBodyContent = (htmlContent: string): string => {
     // Clean the content first
     let cleanedContent = htmlContent.trim();
@@ -183,12 +195,47 @@ export default function InteractiveMarkdownRenderer({ content }: InteractiveMark
     if (cleanedContent.includes('<body')) {
       const bodyMatch = cleanedContent.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
       if (bodyMatch) {
-        return bodyMatch[1].trim();
+        cleanedContent = bodyMatch[1].trim();
       }
     }
     
-    // If no body tag, return the cleaned content
-    return cleanedContent.trim();
+    // COMPLETE STACKEDIT OVERRIDE: Strip all external stylesheets and rebuild content
+    // Based on StackOverflow findings, StackEdit's external CSS is blocking our styles
+    
+    // Remove ALL external stylesheet links (this is the key issue)
+    cleanedContent = cleanedContent.replace(/<link[^>]*>/gi, '');
+    
+    // Remove ALL script tags that might interfere
+    cleanedContent = cleanedContent.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
+    
+    // Remove ALL StackEdit-specific classes and styles
+    cleanedContent = cleanedContent
+      .replace(/class="[^"]*"/gi, '')
+      .replace(/class='[^']*'/gi, '')
+      .replace(/style="[^"]*"/gi, '')
+      .replace(/style='[^']*'/gi, '');
+    
+    // Extract only the actual content (remove container divs)
+    if (cleanedContent.includes('<div class="container">')) {
+      const containerMatch = cleanedContent.match(/<div class="container">([\s\S]*?)<\/div>/i);
+      if (containerMatch) {
+        cleanedContent = containerMatch[1].trim();
+      }
+    }
+    
+    // Now rebuild the content with clean styling and PROPER JUSTIFICATION
+    const formattedContent = cleanedContent
+      // Add basic styling to paragraphs WITH JUSTIFICATION
+      .replace(/<p([^>]*)>/gi, '<p$1 style="margin-bottom: 1rem; line-height: 1.6; padding-left: 3rem; color: #1f2937; font-size: 1rem; text-align: justify !important;">')
+      // Add basic styling to list items WITH JUSTIFICATION
+      .replace(/<li([^>]*)>/gi, '<li$1 style="margin-left: 1rem; margin-bottom: 0.25rem; color: #1f2937; text-align: justify !important;">')
+      // Add basic styling to divs WITH JUSTIFICATION
+      .replace(/<div([^>]*)>/gi, '<div$1 style="padding-left: 3rem; color: #1f2937; text-align: justify !important;">')
+      // Keep tables left-aligned
+      .replace(/<td([^>]*)>/gi, '<td$1 style="text-align: left; border: 1px solid #d1d5db; padding: 8px 12px; color: #1f2937;">')
+      .replace(/<th([^>]*)>/gi, '<th$1 style="text-align: left; border: 1px solid #d1d5db; padding: 8px 12px; background-color: #f9fafb; font-weight: 600; color: #111827;">');
+    
+    return formattedContent;
   };
 
   // Check if content is HTML (not just starts with DOCTYPE)
@@ -200,9 +247,38 @@ export default function InteractiveMarkdownRenderer({ content }: InteractiveMark
            content.startsWith('<!DOCTYPE html>');
   };
 
+  // Check if content is plain text (no markdown formatting)
+  const isPlainText = (content: string): boolean => {
+    return !content.includes('#') && 
+           !content.includes('**') && 
+           !content.includes('*') && 
+           !content.includes('- ') && 
+           !content.includes('|') &&
+           !content.includes('<html') &&
+           !content.includes('<body') &&
+           !content.includes('<div') &&
+           !content.includes('<p>');
+  };
+
+  // Add debugging to see what type of content we're dealing with
+  React.useEffect(() => {
+    console.log('InteractiveMarkdownRenderer called with content length:', content.length);
+    console.log('Content type check:');
+    console.log('- isHtmlContent:', isHtmlContent(content));
+    console.log('- isPlainText:', isPlainText(content));
+    console.log('- hasInteractiveCitations:', hasInteractiveCitations);
+    console.log('- Content starts with:', content.substring(0, 100));
+  }, [content]);
+
   return (
     <div className="prose prose-lg max-w-none text-gray-900 leading-relaxed">
       <style jsx global>{`
+        /* DEBUGGING: Add visual indicators */
+        .debug-justification {
+          border: 2px solid red !important;
+          background-color: rgba(255, 0, 0, 0.1) !important;
+        }
+        
         /* Only apply table styles to actual table elements */
         table {
           border-collapse: collapse !important;
@@ -218,62 +294,106 @@ export default function InteractiveMarkdownRenderer({ content }: InteractiveMark
           overflow-wrap: break-word !important;
           max-width: 200px !important;
         }
+        
+        /* Ensure table cells are NEVER justified */
+        table td, table th, td, th {
+          text-align: left !important;
+          text-align-last: left !important;
+        }
         th {
           background-color: #f9fafb !important;
           font-weight: 600 !important;
         }
         
-                 /* Preserve original HTML formatting for non-table content */
-         .prose p {
-           margin-bottom: 1rem !important;
-           line-height: 1.6 !important;
-           text-align: justify !important;
-         }
-         .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
-           margin-top: 2rem !important;
-           margin-bottom: 1rem !important;
-           font-weight: 600 !important;
-         }
-         .prose ul, .prose ol {
-           margin-bottom: 1rem !important;
-           padding-left: 1.5rem !important;
-           list-style-type: disc !important;
-         }
-         .prose li {
-           margin-bottom: 0.5rem !important;
-           display: list-item !important;
-           list-style-type: inherit !important;
-         }
-         .prose blockquote {
-           margin: 1.5rem 0 !important;
-           padding-left: 1rem !important;
-           border-left: 4px solid #e5e7eb !important;
-         }
-         
-         /* Ensure bullets are visible for all list items */
-         ul {
-           list-style-type: disc !important;
-           padding-left: 1.5rem !important;
-         }
-         li {
-           display: list-item !important;
-           list-style-type: inherit !important;
-         }
+        /* Basic prose styles */
+        .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+          margin-top: 2rem !important;
+          margin-bottom: 1rem !important;
+          font-weight: 600 !important;
+        }
+        .prose ul, .prose ol {
+          margin-bottom: 1rem !important;
+          padding-left: 1.5rem !important;
+          list-style-type: disc !important;
+        }
+        .prose li {
+          margin-bottom: 0.5rem !important;
+          display: list-item !important;
+          list-style-type: inherit !important;
+        }
+        .prose blockquote {
+          margin: 1.5rem 0 !important;
+          padding-left: 1rem !important;
+          border-left: 4px solid #e5e7eb !important;
+        }
+        
+        /* Ensure bullets are visible for all list items */
+        ul {
+          list-style-type: disc !important;
+          padding-left: 1.5rem !important;
+        }
+        li {
+          display: list-item !important;
+          list-style-type: inherit !important;
+        }
+        
+        /* IMPROVED JUSTIFICATION RULES WITH HIGHER SPECIFICITY */
+        /* Target all paragraphs with maximum specificity */
+        p, div[class*="prose"] p, div[class*="overflow"] p, div[class*="text-justify"] p {
+          text-align: justify !important;
+          text-align-last: auto !important;
+        }
+        
+        /* Target the specific container we're using for HTML content */
+        div[class*="overflow-x-auto"] p,
+        div[class*="pl-12"] p,
+        div[class*="text-justify"] p {
+          text-align: justify !important;
+          text-align-last: auto !important;
+        }
+        
+        /* Nuclear option - force justification on ALL text elements except tables */
+        *:not(table):not(th):not(td) {
+          text-align: justify !important;
+        }
+        
+        /* But keep tables left-aligned */
+        table, th, td {
+          text-align: left !important;
+        }
       `}</style>
-             {isHtmlContent(content) ? (
-         // Handle HTML content directly - extract body content
-         <div 
-           className="overflow-x-auto pl-12 text-justify"
-           dangerouslySetInnerHTML={{ __html: extractBodyContent(content) }} 
-         />
-       ) : hasInteractiveCitations ? (
-         <InteractiveCitations content={content} />
-       ) : (
-         <div
-           className="prose prose-lg max-w-none text-gray-900 leading-relaxed overflow-x-auto pl-12 text-justify"
-           dangerouslySetInnerHTML={{ __html: convertMarkdownToHtml(content) }}
-         />
-       )}
+      
+      {isHtmlContent(content) ? (
+        // Handle HTML content directly - extract body content
+        <div 
+          className="overflow-x-auto pl-12 text-justify debug-justification"
+          style={{ 
+            paddingLeft: '3rem', 
+            textAlign: 'justify', 
+            textAlignLast: 'auto',
+            wordSpacing: '0.05em',
+            letterSpacing: 'normal',
+            // Force all child elements to inherit justification
+            fontSize: '1rem',
+            lineHeight: '1.6',
+            color: '#1f2937'
+          }}
+          dangerouslySetInnerHTML={{ __html: extractBodyContent(content) }} 
+        />
+      ) : isPlainText(content) ? (
+        // Handle plain text content
+        <div
+          className="prose prose-lg max-w-none text-gray-900 leading-relaxed overflow-x-auto"
+          dangerouslySetInnerHTML={{ __html: convertPlainTextToHtml(content) }}
+        />
+      ) : hasInteractiveCitations ? (
+        <InteractiveCitations content={content} />
+      ) : (
+        <div
+          className="prose prose-lg max-w-none text-gray-900 leading-relaxed overflow-x-auto pl-12 text-justify"
+          dangerouslySetInnerHTML={{ __html: convertMarkdownToHtml(content) }}
+        />
+      )}
     </div>
   );
 } 

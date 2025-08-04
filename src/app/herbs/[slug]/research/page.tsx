@@ -6,7 +6,7 @@ import fs from 'fs';
 import path from 'path';
 import ResearchPageWrapper from '@/components/ResearchPageWrapper';
 import ContentProtection from '@/components/ContentProtection';
-import InteractiveMarkdownRenderer from '@/components/InteractiveMarkdownRenderer';
+import InteractiveCitations from '@/components/InteractiveCitations';
 
 // Function to read Markdown file
 async function getMarkdownArticle(slug: string): Promise<string | null> {
@@ -89,7 +89,7 @@ export default async function HerbResearchPage({ params }: { params: Promise<{ s
             </Link>
           </div>
 
-          <div className="max-w-7xl mx-auto px-4 pt-20 pb-8 min-h-screen">
+          <div className="w-3/4 mx-auto px-4 pt-20 pb-8 min-h-screen">
             {/* Header */}
             <div className="mb-8">
               <div className="mb-6">
@@ -103,8 +103,8 @@ export default async function HerbResearchPage({ params }: { params: Promise<{ s
 
             {/* Comprehensive Article */}
             {markdownArticle && (
-              <div className="mb-8 bg-white rounded-lg shadow-lg p-8 overflow-x-auto">
-                <InteractiveMarkdownRenderer content={markdownArticle} />
+              <div className="mb-8 bg-white/95 rounded-lg shadow-lg p-8 overflow-x-auto w-full mx-4">
+                <InteractiveCitations content={markdownArticle} />
               </div>
             )}
 

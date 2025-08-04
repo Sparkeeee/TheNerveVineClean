@@ -17,46 +17,244 @@ export default function InteractiveCitations({ content }: InteractiveCitationsPr
 
   // Extract citations from content
   const extractCitations = (text: string): Citation[] => {
-    const citationRegex = /\[([^\]]+)\]\(#citation-([^)]+)\)/g;
     const citations: Citation[] = [];
+    
+    // Pattern 1: [citation-text](#citation-id)
+    const citationRegex1 = /\[([^\]]+)\]\(#citation-([^)]+)\)/g;
     let match;
-
-    while ((match = citationRegex.exec(text)) !== null) {
+    while ((match = citationRegex1.exec(text)) !== null) {
       citations.push({
         id: match[2],
         text: match[1],
-        fullReference: match[1] // For now, use the citation text as the reference
+        fullReference: match[1]
       });
+    }
+    
+    // Pattern 2: (Author & Author, Year) or (Author et al., Year)
+    const citationRegex2 = /\(([^)]+)\)/g;
+    while ((match = citationRegex2.exec(text)) !== null) {
+      const citationText = match[1];
+      // Check if it looks like a citation (contains year and author patterns)
+      if (citationText.match(/\d{4}/) && citationText.match(/[A-Z][a-z]+/)) {
+        citations.push({
+          id: citationText.replace(/\s+/g, '-').toLowerCase(),
+          text: citationText,
+          fullReference: citationText
+        });
+      }
     }
 
     return citations;
   };
 
-  // Generate a more detailed reference based on the citation text
-  const generateReference = (citationText: string): string => {
-    // This is a simple implementation - in a real system, you'd have a database of references
-    // For now, we'll format the citation text as a proper reference
-    const parts = citationText.split(',');
-    if (parts.length >= 2) {
-      const authors = parts[0].trim();
-      const year = parts[1].trim();
-      
-      // Handle "et al." format
-      if (authors.includes('et al.')) {
-        const firstAuthor = authors.replace('et al.', '').trim();
-        return `${firstAuthor} et al. (${year}). [Full reference would be displayed here in a complete system].`;
-      }
-      
-      // Handle multiple authors with "&"
-      if (authors.includes('&')) {
-        return `${authors} (${year}). [Full reference would be displayed here in a complete system].`;
-      }
-      
-      // Single author
-      return `${authors} (${year}). [Full reference would be displayed here in a complete system].`;
+  // Extract actual references from the article content
+  const extractReferencesFromContent = (content: string): Map<string, string> => {
+    const references = new Map<string, string>();
+    
+    // Look for "References" heading in various formats
+    const referencesPatterns = [
+      /<strong>References<\/strong><\/p>/i,
+      /<h\d[^>]*>References<\/h\d>/i,
+      /<p[^>]*><strong>References<\/strong><\/p>/i,
+      /References\s*$/m,
+      /## References/i,
+      /# References/i,
+      /References:/i,
+      /<p[^>]*>References<\/p>/i
+    ];
+    
+    let referencesMatch = null;
+    for (const pattern of referencesPatterns) {
+      referencesMatch = content.match(pattern);
+      if (referencesMatch) break;
     }
     
-    return citationText;
+    if (referencesMatch) {
+      // Get everything after "References"
+      const afterReferences = content.substring(referencesMatch.index! + referencesMatch[0].length);
+      
+      // Remove all HTML tags and get clean text
+      const cleanText = afterReferences.replace(/<[^>]*>/g, '');
+      
+      // Debug: Log the raw text after References
+      if (process.env.NODE_ENV === 'development') {
+        console.log('Raw text after References (first 1000 chars):', cleanText.substring(0, 1000));
+      }
+      
+                    // Process line by line to find individual references
+       const lines = cleanText.split(/\n/);
+       const referenceBlocks = [];
+       let currentBlock = '';
+       
+       for (let i = 0; i < lines.length; i++) {
+         const line = lines[i].trim();
+         
+         // Check if this line starts a new reference (contains author pattern and year)
+         if (line.match(/[A-Z][a-z]+,\s*[A-Z]/) && line.match(/\d{4}/)) {
+           // If we have a previous block, save it
+           if (currentBlock.trim().length > 30) {
+             referenceBlocks.push(currentBlock.trim());
+           }
+           // Start new block
+           currentBlock = line;
+         } else if (line.length > 0) {
+           // Continue the current block
+           currentBlock += (currentBlock ? ' ' : '') + line;
+         } else if (line.length === 0 && currentBlock.trim().length > 30) {
+           // Empty line after a block - save the current block
+           referenceBlocks.push(currentBlock.trim());
+           currentBlock = '';
+         }
+       }
+       
+       // Don't forget the last block
+       if (currentBlock.trim().length > 30) {
+         referenceBlocks.push(currentBlock.trim());
+       }
+       
+       if (process.env.NODE_ENV === 'development') {
+         console.log('Number of blocks found:', referenceBlocks.length);
+         referenceBlocks.forEach((block, index) => {
+           console.log(`Block ${index + 1} (${block.length} chars):`, block.substring(0, 100));
+         });
+       }
+       
+       let counter = 1;
+       referenceBlocks.forEach(block => {
+         const cleanBlock = block.trim();
+         
+         // Skip empty blocks and non-reference content
+         if (cleanBlock.length > 30 && 
+             cleanBlock.match(/[A-Z][a-z]+,\s*[A-Z]/) && 
+             cleanBlock.match(/\d{4}/)) {
+           
+           // Clean up the reference text
+           const cleanReference = cleanBlock
+             .replace(/&amp;/g, '&')
+             .replace(/&lt;/g, '<')
+             .replace(/&gt;/g, '>')
+             .replace(/&quot;/g, '"')
+             .replace(/&#39;/g, "'")
+             .replace(/\s+/g, ' ')
+             .trim();
+           
+           references.set(counter.toString(), cleanReference);
+           counter++;
+         }
+       });
+      
+      if (process.env.NODE_ENV === 'development') {
+        console.log('Final references extracted:', references.size);
+        references.forEach((ref, key) => {
+          console.log(`Reference ${key}:`, ref.substring(0, 100));
+        });
+      }
+    }
+    
+    return references;
+  };
+
+  // Generate a reference based on the citation text and actual references from content
+  const generateReference = (citationText: string): string => {
+    // First, try to extract references from the content
+    const references = extractReferencesFromContent(content);
+    
+    // Debug: Log what we're trying to match
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Trying to match citation:', citationText);
+      console.log('Available references count:', references.size);
+    }
+    
+    // Clean up the citation text (remove brackets if present)
+    let cleanCitation = citationText;
+    if (citationText.startsWith('[') && citationText.endsWith(']')) {
+      cleanCitation = citationText.slice(1, -1);
+    }
+    
+    // Extract year from citation
+    const yearMatch = cleanCitation.match(/(\d{4})/);
+    const year = yearMatch ? yearMatch[1] : null;
+    
+    // Extract author names from citation (everything before the year)
+    let authors = '';
+    if (year) {
+      authors = cleanCitation.substring(0, cleanCitation.indexOf(year)).trim();
+      // Remove trailing punctuation
+      authors = authors.replace(/[,\s]+$/, '');
+    } else {
+      // If no year, try to extract authors differently
+      authors = cleanCitation.replace(/[,\s]+$/, '');
+    }
+    
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Extracted year:', year);
+      console.log('Extracted authors:', authors);
+    }
+    
+    // Try to find the BEST matching reference by year and author
+    let bestMatch: string | null = null;
+    let bestScore = 0;
+    
+    for (const [refNumber, refText] of references.entries()) {
+      let score = 0;
+      
+      // Check if reference contains the year
+      if (year && refText.includes(year)) {
+        score += 10;
+        
+        // Check if reference contains the authors (case insensitive)
+        const authorWords = authors.toLowerCase()
+          .replace(/et\s+al\.?/g, '') // Remove "et al." for matching
+          .split(/\s+/)
+          .filter(word => word.length > 1 && word !== 'et' && word !== 'al');
+        const refTextLower = refText.toLowerCase();
+        
+        // For "et al." citations, focus on first author's last name
+        if (authors.toLowerCase().includes('et al')) {
+          const firstAuthor = authors.split(/[\s,]/)[0].toLowerCase();
+          if (firstAuthor.length > 1 && refTextLower.includes(firstAuthor)) {
+            score += 15; // Higher score for first author match in et al. citations
+          }
+        }
+        
+        // Count how many author words appear in the reference
+        const matchingAuthorWords = authorWords.filter(word => refTextLower.includes(word));
+        score += matchingAuthorWords.length * 5;
+        
+        if (process.env.NODE_ENV === 'development') {
+          console.log(`Ref ${refNumber} score: ${score} (${matchingAuthorWords.length}/${authorWords.length} author words)`);
+        }
+        
+        // If this is a better match, update best match
+        if (score > bestScore) {
+          bestScore = score;
+          bestMatch = refText;
+        }
+      }
+    }
+    
+    // Return the best match if found
+    if (bestMatch && bestScore > 0) {
+      if (process.env.NODE_ENV === 'development') {
+        console.log('Best match found with score:', bestScore);
+      }
+      return bestMatch;
+    }
+    
+    // If no good match found, try just by year (first one)
+    if (year) {
+      for (const [refNumber, refText] of references.entries()) {
+        if (refText.includes(year)) {
+          if (process.env.NODE_ENV === 'development') {
+            console.log('Found match by year only (first occurrence)');
+          }
+          return refText;
+        }
+      }
+    }
+    
+    // If still no match, return a fallback message
+    return `${citationText} - Reference not found in document.`;
   };
 
   // Function to process tables
@@ -204,14 +402,14 @@ export default function InteractiveCitations({ content }: InteractiveCitationsPr
       // Italic
       .replace(/\*(.*?)\*/g, '<em class="italic text-gray-900">$1</em>')
       // Lists
-      .replace(/^- (.*$)/gim, '<li class="ml-4 mb-1 text-gray-800">$1</li>')
-      .replace(/^(\d+)\. (.*$)/gim, '<li class="ml-4 mb-1 text-gray-800">$1. $2</li>')
+      .replace(/^- (.*$)/gim, '<li class="ml-4 mb-1 text-gray-800 text-justify">$1</li>')
+      .replace(/^(\d+)\. (.*$)/gim, '<li class="ml-4 mb-1 text-gray-800 text-justify">$1. $2</li>')
       // Wrap lists in ul/ol
-      .replace(/(<li.*<\/li>)/g, '<ul class="list-disc ml-6 mb-4">$1</ul>')
+      .replace(/(<li.*<\/li>)/g, '<ul class="list-disc ml-6 mb-4 pl-8">$1</ul>')
       // Paragraphs
-      .replace(/\n\n/g, '</p><p class="mb-4 text-gray-800 leading-relaxed">')
+      .replace(/\n\n/g, '</p><p class="mb-4 text-gray-800 leading-relaxed text-justify pl-12">')
       // Wrap in paragraph tags
-      .replace(/^(?!<[h|u|o|d]|<p>)(.*)$/gm, '<p class="mb-4 text-gray-800 leading-relaxed">$1</p>')
+      .replace(/^(?!<[h|u|o|d]|<p>)(.*)$/gm, '<p class="mb-4 text-gray-800 leading-relaxed text-justify pl-12">$1</p>')
       // Clean up empty paragraphs
       .replace(/<p class="mb-4 text-gray-800 leading-relaxed"><\/p>/g, '')
       .replace(/<p class="mb-4 text-gray-800 leading-relaxed"><\/p>/g, '');
@@ -247,30 +445,30 @@ export default function InteractiveCitations({ content }: InteractiveCitationsPr
       const isExpanded = expandedCitations.has(uniqueKey);
       const fullReference = generateReference(citationText);
 
-      parts.push(
-        <span key={uniqueKey} className="relative inline-block">
-          <button
-            onClick={() => {
-              const newExpanded = new Set(expandedCitations);
-              if (isExpanded) {
-                newExpanded.delete(uniqueKey);
-              } else {
-                newExpanded.add(uniqueKey);
-              }
-              setExpandedCitations(newExpanded);
-            }}
-            className="inline-flex items-center px-2 py-1 mx-1 text-sm font-medium text-blue-600 bg-blue-50 border border-blue-200 rounded-md hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
-          >
-            {citationText}
-            <svg
-              className={`ml-1 w-3 h-3 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
-          </button>
+             parts.push(
+         <span key={uniqueKey} className="relative inline-block">
+           <button
+             onClick={() => {
+               const newExpanded = new Set(expandedCitations);
+               if (isExpanded) {
+                 newExpanded.delete(uniqueKey);
+               } else {
+                 newExpanded.add(uniqueKey);
+               }
+               setExpandedCitations(newExpanded);
+             }}
+             className="inline-flex items-center mx-1 text-sm font-medium text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+           >
+             [{citationText}]
+             <svg
+               className={`ml-1 w-3 h-3 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
+               fill="none"
+               stroke="currentColor"
+               viewBox="0 0 24 24"
+             >
+               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+             </svg>
+           </button>
           
           {isExpanded && (
             <div className="absolute z-10 mt-2 w-96 bg-white border border-gray-200 rounded-lg shadow-lg p-4">
@@ -318,7 +516,7 @@ export default function InteractiveCitations({ content }: InteractiveCitationsPr
     return parts;
   };
 
-  // Extract body content from HTML documents
+  // Extract body content from HTML documents and apply formatting
   const extractBodyContent = (htmlContent: string): string => {
     // Clean the content first
     let cleanedContent = htmlContent.trim();
@@ -332,12 +530,105 @@ export default function InteractiveCitations({ content }: InteractiveCitationsPr
     if (cleanedContent.includes('<body')) {
       const bodyMatch = cleanedContent.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
       if (bodyMatch) {
-        return bodyMatch[1].trim();
+        cleanedContent = bodyMatch[1].trim();
       }
     }
     
-    // If no body tag, return the cleaned content
-    return cleanedContent.trim();
+    // COMPLETE STACKEDIT OVERRIDE: Strip all external stylesheets and rebuild content
+    // Based on StackOverflow findings, StackEdit's external CSS is blocking our styles
+    
+    // Remove ALL external stylesheet links (this is the key issue)
+    cleanedContent = cleanedContent.replace(/<link[^>]*>/gi, '');
+    
+    // Remove ALL script tags that might interfere
+    cleanedContent = cleanedContent.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
+    
+    // Remove ALL StackEdit-specific classes and styles
+    cleanedContent = cleanedContent
+      .replace(/class="[^"]*"/gi, '')
+      .replace(/class='[^']*'/gi, '')
+      .replace(/style="[^"]*"/gi, '')
+      .replace(/style='[^']*'/gi, '');
+    
+    // Extract only the actual content (remove container divs)
+    if (cleanedContent.includes('<div class="container">')) {
+      const containerMatch = cleanedContent.match(/<div class="container">([\s\S]*?)<\/div>/i);
+      if (containerMatch) {
+        cleanedContent = containerMatch[1].trim();
+      }
+    }
+    
+    // CONVERT CITATIONS IN HTML CONTENT TO INTERACTIVE BUTTONS
+    // Replace citation patterns with interactive button HTML
+    cleanedContent = cleanedContent.replace(
+      /\[([^\]]+)\]\(#citation-([^)]+)\)/g,
+      '<button class="inline-flex items-center mx-1 text-sm font-medium text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors citation-button" data-citation-id="$2" data-citation-text="$1">[$1]</button>'
+    );
+    
+    // Convert "Author et al. (Year)" format citations - handle multiple authors
+    cleanedContent = cleanedContent.replace(
+      /\b([A-Z][a-z]+(?:\s*&\s*[A-Z][a-z]+)*(?:\s+et\s+al\.?)?)\s+\((\d{4}[a-z]?)\)/g,
+      (match, authors, year) => {
+        const citationText = `${authors}, ${year}`;
+        const citationId = citationText.replace(/\s+/g, '-').toLowerCase();
+        return `<button class="inline-flex items-center mx-1 text-sm font-medium text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors citation-button" data-citation-id="${citationId}" data-citation-text="${citationText}">${authors} (${year})</button>`;
+      }
+    );
+    
+    // Also convert parenthetical citations like (K & L, 2008)
+    cleanedContent = cleanedContent.replace(
+      /\(([^)]+)\)/g,
+      (match, citationText) => {
+        // Check if it looks like a citation (contains year and author patterns)
+        if (citationText.match(/\d{4}/) && citationText.match(/[A-Z][a-z]+/)) {
+          const citationId = citationText.replace(/\s+/g, '-').toLowerCase();
+          return `<button class="inline-flex items-center mx-1 text-sm font-medium text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors citation-button" data-citation-id="${citationId}" data-citation-text="${citationText}">(${citationText})</button>`;
+        }
+        return match; // Keep original if not a citation
+      }
+    );
+    
+         // Apply consistent, generic styling for any document format
+     const formattedContent = cleanedContent
+        // Clean up existing classes EXCEPT citation buttons
+        .replace(/class="(?!.*citation-button)[^"]*"/gi, '')
+        .replace(/style="[^"]*"/gi, '')
+        // Add consistent paragraph styling
+        .replace(/<p([^>]*)>/gi, '<p$1 class="mb-4 leading-relaxed text-gray-800 text-base">')
+        // Add consistent list styling
+        .replace(/<li([^>]*)>/gi, '<li$1 class="ml-4 mb-1 text-gray-800">')
+        // Add consistent div styling
+        .replace(/<div([^>]*)>/gi, '<div$1 class="text-gray-800">')
+        // Add consistent heading styles
+        .replace(/<h1([^>]*)>/gi, '<h1$1 class="text-3xl font-bold text-gray-900 mt-8 mb-6">')
+        .replace(/<h2([^>]*)>/gi, '<h2$1 class="text-2xl font-bold text-gray-900 mt-8 mb-4">')
+        .replace(/<h3([^>]*)>/gi, '<h3$1 class="text-xl font-bold text-gray-900 mt-6 mb-3">')
+        // Keep tables consistently styled
+        .replace(/<table([^>]*)>/gi, '<table$1 class="w-full border-collapse mt-6 mb-6">')
+        .replace(/<td([^>]*)>/gi, '<td$1 class="border border-gray-300 px-3 py-2 text-left">')
+        .replace(/<th([^>]*)>/gi, '<th$1 class="border border-gray-300 px-3 py-2 text-left bg-gray-50 font-semibold">')
+       // FIX THE BR TAG ISSUE - replace <br> tags with spaces to prevent word-per-line
+       .replace(/<br\s*\/?>\s*/gi, ' ')
+       // Also remove any remaining line breaks and normalize whitespace
+       .replace(/\r?\n/g, ' ')
+       // Remove any HTML entities that might cause spacing issues
+       .replace(/&nbsp;/g, ' ')
+       .replace(/&amp;/g, '&')
+       .replace(/&lt;/g, '<')
+       .replace(/&gt;/g, '>')
+       // Clean up multiple spaces
+       .replace(/\s+/g, ' ')
+       .trim()
+       // Clean up any existing malformed DOI links first (defensive)
+       .replace(/<a[^>]*href="(https:\/\/doi\.org\/[^"]*)"[^>]*>.*?<\/a>/gi, '$1')
+       .replace(/href="(https:\/\/doi\.org\/[^"]*)"[^>]*>/gi, '$1')
+       // Now safely convert clean DOI URLs to proper links
+       .replace(/(?<!href="|>)\b(https:\/\/doi\.org\/10\.\d+\/[^\s<>]+?)(?=[\s<>]|$)/gi, '<a href="$1" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 underline break-all">$1</a>')
+       // Remove only specific StackEdit attribution text
+       .replace(/\britten with <a[^>]*>StackEdit<\/a>\./gi, '')
+       .replace(/\bWritten with StackEdit\./gi, '');
+    
+    return formattedContent;
   };
 
   // Check if content is HTML (not just starts with DOCTYPE)
@@ -349,9 +640,159 @@ export default function InteractiveCitations({ content }: InteractiveCitationsPr
            content.startsWith('<!DOCTYPE html>');
   };
 
+  // Debug: Log content type and citation detection (only in development)
+  if (process.env.NODE_ENV === 'development') {
+    console.log('Content type:', isHtmlContent(content) ? 'HTML' : 'Markdown');
+    console.log('Content length:', content.length);
+    console.log('Citations found:', extractCitations(content).length);
+    
+               // Debug references extraction
+      const references = extractReferencesFromContent(content);
+      console.log('References found:', references.size);
+      if (references.size > 0) {
+        console.log('Sample references:', Array.from(references.entries()).slice(0, 3));
+        // Debug the first reference specifically
+        const firstRef = Array.from(references.values())[0];
+        console.log('First reference (full):', firstRef);
+        console.log('First reference length:', firstRef.length);
+        console.log('First reference ends with:', firstRef.substring(firstRef.length - 50));
+      } else {
+        console.log('NO REFERENCES EXTRACTED!');
+        // Debug the extraction process
+        const refMatch = content.match(/<strong>References<\/strong><\/p>/);
+        console.log('References match found:', refMatch ? 'YES' : 'NO');
+        if (refMatch) {
+          const afterRef = content.substring(refMatch.index! + refMatch[0].length);
+          console.log('Content after References (first 500 chars):', afterRef.substring(0, 500));
+        }
+      }
+    
+    // Debug content structure
+    console.log('Content sample (first 500 chars):', content.substring(0, 500));
+    console.log('Content sample (last 500 chars):', content.substring(content.length - 500));
+    
+    // Debug: Look for "References" heading specifically
+    const referencesIndex = content.indexOf('References');
+    console.log('References found at index:', referencesIndex);
+    if (referencesIndex !== -1) {
+      console.log('Context around References:', content.substring(referencesIndex - 50, referencesIndex + 100));
+    }
+    
+    // Debug: Check for different reference heading formats
+    const refPatterns = [
+      /References\s*\n/,
+      /^References$/m,
+      /## References/,
+      /# References/,
+      /References:/,
+      /References\s*$/m
+    ];
+    
+    refPatterns.forEach((pattern, index) => {
+      const match = content.match(pattern);
+      console.log(`Pattern ${index} (${pattern}):`, match ? 'MATCHED' : 'no match');
+    });
+  }
+  
+    // Handle citation clicks using document event listener
+  React.useEffect(() => {
+    const handleCitationClick = (e: Event) => {
+      const target = e.target as HTMLElement;
+      if (target.classList.contains('citation-button')) {
+                 // Visual feedback (subtle)
+         target.style.backgroundColor = 'rgba(59, 130, 246, 0.1)';
+         setTimeout(() => {
+           target.style.backgroundColor = '';
+         }, 300);
+        
+        const citationId = target.getAttribute('data-citation-id');
+        const citationText = target.getAttribute('data-citation-text');
+        
+                 if (citationId && citationText) {
+           const uniqueKey = `${citationId}-html`;
+           const isExpanded = expandedCitations.has(uniqueKey);
+           const newExpanded = new Set(expandedCitations);
+           
+           if (isExpanded) {
+             newExpanded.delete(uniqueKey);
+           } else {
+             newExpanded.add(uniqueKey);
+           }
+           setExpandedCitations(newExpanded);
+           
+                       // Remove existing dropdowns first
+            document.querySelectorAll('.citation-dropdown').forEach(d => d.remove());
+            
+            // Generate the correct reference for this specific citation
+            const correctReference = generateReference(citationText);
+            
+                         // Convert DOIs to clickable links in the reference text
+             const referenceWithLinks = correctReference.replace(
+               /(https:\/\/doi\.org\/10\.\d+\/[^\s<>]+?)(?=[\s<>]|$)/g,
+               '<a href="$1" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 underline">$1</a>'
+             );
+             
+             // Show dropdown with ONLY this reference
+             const dropdown = document.createElement('div');
+             dropdown.className = 'absolute z-50 mt-2 w-[32rem] bg-white border border-gray-200 rounded-lg shadow-lg p-4 citation-dropdown';
+             dropdown.innerHTML = `
+               <div class="flex justify-between items-start mb-2">
+                 <span class="text-xs text-gray-600 font-medium">Reference</span>
+                 <button class="text-gray-400 hover:text-gray-600 close-dropdown">×</button>
+               </div>
+               <div class="text-sm text-gray-800 leading-relaxed max-h-96 overflow-y-auto whitespace-normal">
+                 ${referenceWithLinks}
+               </div>
+             `;
+           
+           // Position dropdown with overflow detection
+           const rect = target.getBoundingClientRect();
+           const dropdownWidth = 512; // 32rem = 512px
+           const viewportWidth = window.innerWidth;
+           const rightEdge = rect.left + dropdownWidth;
+           
+           dropdown.style.position = 'fixed';
+           dropdown.style.top = `${rect.bottom + 5}px`;
+           dropdown.style.zIndex = '9999';
+           
+           // Check if dropdown would overflow right edge
+           if (rightEdge > viewportWidth - 20) { // 20px margin from edge
+             // Position from right edge instead
+             dropdown.style.right = '20px';
+             dropdown.style.left = 'auto';
+           } else {
+             // Normal left positioning
+             dropdown.style.left = `${rect.left}px`;
+             dropdown.style.right = 'auto';
+           }
+           
+           // Add close functionality
+           dropdown.querySelector('.close-dropdown')?.addEventListener('click', () => {
+             dropdown.remove();
+             const newExpanded = new Set(expandedCitations);
+             newExpanded.delete(uniqueKey);
+             setExpandedCitations(newExpanded);
+           });
+           
+           document.body.appendChild(dropdown);
+         }
+      }
+    };
+
+    // Add event listener to document
+    document.addEventListener('click', handleCitationClick);
+    
+    // Cleanup
+    return () => {
+      document.removeEventListener('click', handleCitationClick);
+    };
+  }, [expandedCitations, setExpandedCitations, generateReference]);
+  
   return (
     <div className="prose prose-lg max-w-none text-gray-900 leading-relaxed">
       <style jsx global>{`
+        /* Clean styling without debugging */
+        
         /* Only apply table styles to actual table elements */
         table {
           border-collapse: collapse !important;
@@ -367,59 +808,103 @@ export default function InteractiveCitations({ content }: InteractiveCitationsPr
           overflow-wrap: break-word !important;
           max-width: 200px !important;
         }
+        
+        /* Ensure table cells are NEVER justified */
+        table td, table th, td, th {
+          text-align: left !important;
+          text-align-last: left !important;
+        }
         th {
           background-color: #f9fafb !important;
           font-weight: 600 !important;
         }
         
-                 /* Preserve original HTML formatting for non-table content */
-         .prose p {
-           margin-bottom: 1rem !important;
-           line-height: 1.6 !important;
-           text-align: justify !important;
-         }
-         .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
-           margin-top: 2rem !important;
-           margin-bottom: 1rem !important;
-           font-weight: 600 !important;
-         }
-         .prose ul, .prose ol {
-           margin-bottom: 1rem !important;
-           padding-left: 1.5rem !important;
-           list-style-type: disc !important;
-         }
-         .prose li {
-           margin-bottom: 0.5rem !important;
-           display: list-item !important;
-           list-style-type: inherit !important;
-         }
-         .prose blockquote {
-           margin: 1.5rem 0 !important;
-           padding-left: 1rem !important;
-           border-left: 4px solid #e5e7eb !important;
+        /* Basic prose styles */
+        .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+          margin-top: 2rem !important;
+          margin-bottom: 1rem !important;
+          font-weight: 600 !important;
+        }
+        .prose ul, .prose ol {
+          margin-bottom: 1rem !important;
+          padding-left: 1.5rem !important;
+          list-style-type: disc !important;
+        }
+        .prose li {
+          margin-bottom: 0.5rem !important;
+          display: list-item !important;
+          list-style-type: inherit !important;
+        }
+        .prose blockquote {
+          margin: 1.5rem 0 !important;
+          padding-left: 1rem !important;
+          border-left: 4px solid #e5e7eb !important;
+        }
+        
+        /* Ensure bullets are visible for all list items */
+        ul {
+          list-style-type: disc !important;
+          padding-left: 1.5rem !important;
+        }
+        li {
+          display: list-item !important;
+          list-style-type: inherit !important;
+        }
+        
+                 /* Basic text alignment - keeping it simple for now */
+         p {
+           text-align: left;
          }
          
-         /* Ensure bullets are visible for all list items */
-         ul {
-           list-style-type: disc !important;
-           padding-left: 1.5rem !important;
+         /* Justification fix using :after pseudo-element trick */
+         .justify-text {
+           text-align: justify !important;
          }
-         li {
-           display: list-item !important;
-           list-style-type: inherit !important;
+         .justify-text:after {
+           content: "";
+           display: inline-block;
+           width: 100%;
+         }
+         
+         /* Keep tables left-aligned */
+         table, th, td {
+           text-align: left !important;
+         }
+         
+         /* Target only the content area to prevent page-wide issues */
+         .prose p, .prose div, .prose span {
+           word-break: normal !important;
+           word-wrap: normal !important;
+           overflow-wrap: normal !important;
+           white-space: normal !important;
+           max-width: none !important;
+           width: auto !important;
+         }
+         
+         /* Ensure proper text flow */
+         .prose {
+           max-width: none !important;
+           width: 100% !important;
          }
       `}</style>
+      
              <span>
-         {isHtmlContent(content) ? (
-           // Handle HTML content directly - extract body content
-           <div 
-             className="overflow-x-auto pl-12 text-justify"
-             dangerouslySetInnerHTML={{ __html: extractBodyContent(content) }} 
-           />
-         ) : (
-           // Handle Markdown content with interactive citations
-           renderInteractiveContent(content)
-         )}
+                  {isHtmlContent(content) ? (
+                        // Handle HTML content directly - extract body content
+             <div 
+               className="overflow-x-auto"
+               style={{ 
+                 width: '100%', 
+                 maxWidth: 'none', 
+                 wordBreak: 'normal', 
+                 wordWrap: 'normal'
+               }}
+               dangerouslySetInnerHTML={{ __html: extractBodyContent(content) }}
+             />
+          ) : (
+            // Handle Markdown content with interactive citations
+            renderInteractiveContent(content)
+          )}
        </span>
     </div>
   );
