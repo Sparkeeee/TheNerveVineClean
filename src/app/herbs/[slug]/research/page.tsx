@@ -1,6 +1,5 @@
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { getCachedHerb } from '@/lib/database';
 import fs from 'fs';
 import path from 'path';
@@ -19,28 +18,7 @@ async function getMarkdownArticle(slug: string): Promise<string | null> {
   }
 }
 
-// Simple Markdown to HTML converter
-function convertMarkdownToHtml(markdown: string): string {
-  return markdown
-    // Headers
-    .replace(/^### (.*$)/gim, '<h3 class="text-xl font-bold text-gray-900 mt-6 mb-3">$1</h3>')
-    .replace(/^## (.*$)/gim, '<h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">$1</h2>')
-    .replace(/^# (.*$)/gim, '<h1 class="text-3xl font-bold text-gray-900 mt-8 mb-6">$1</h1>')
-    // Bold
-    .replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-gray-900">$1</strong>')
-    // Lists
-    .replace(/^- (.*$)/gim, '<li class="ml-4 mb-1 text-gray-800">$1</li>')
-    .replace(/^(\d+)\. (.*$)/gim, '<li class="ml-4 mb-1 text-gray-800">$1. $2</li>')
-    // Wrap lists in ul/ol
-    .replace(/(<li.*<\/li>)/g, '<ul class="list-disc ml-6 mb-4">$1</ul>')
-    // Paragraphs
-    .replace(/\n\n/g, '</p><p class="mb-4 text-gray-800 leading-relaxed">')
-    // Wrap in paragraph tags
-    .replace(/^(?!<[h|u|o]|<p>)(.*)$/gm, '<p class="mb-4 text-gray-800 leading-relaxed">$1</p>')
-    // Clean up empty paragraphs
-    .replace(/<p class="mb-4 text-gray-800 leading-relaxed"><\/p>/g, '')
-    .replace(/<p class="mb-4 text-gray-800 leading-relaxed"><\/p>/g, '');
-}
+
 
 export default async function HerbResearchPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;

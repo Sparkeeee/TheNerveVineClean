@@ -6,28 +6,7 @@ import Image from 'next/image';
 import ContentProtection from '@/components/ContentProtection';
 import InteractiveCitations from '@/components/InteractiveCitations';
 
-// Simple Markdown to HTML converter
-function convertMarkdownToHtml(markdown: string): string {
-  return markdown
-    // Headers
-    .replace(/^### (.*$)/gim, '<h3 class="text-xl font-bold text-gray-900 mt-6 mb-3">$1</h3>')
-    .replace(/^## (.*$)/gim, '<h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">$1</h2>')
-    .replace(/^# (.*$)/gim, '<h1 class="text-3xl font-bold text-gray-900 mt-8 mb-6">$1</h1>')
-    // Bold
-    .replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-gray-900">$1</strong>')
-    // Lists
-    .replace(/^- (.*$)/gim, '<li class="ml-4 mb-1 text-gray-900 font-medium">$1</li>')
-    .replace(/^(\d+)\. (.*$)/gim, '<li class="ml-4 mb-1 text-gray-900 font-medium">$1. $2</li>')
-    // Wrap lists in ul/ol
-    .replace(/(<li.*<\/li>)/g, '<ul class="list-disc ml-6 mb-4">$1</ul>')
-    // Paragraphs
-    .replace(/\n\n/g, '</p><p class="mb-4 text-gray-900 leading-relaxed font-medium">')
-    // Wrap in paragraph tags
-    .replace(/^(?!<[h|u|o]|<p>)(.*)$/gm, '<p class="mb-4 text-gray-900 leading-relaxed font-medium">$1</p>')
-    // Clean up empty paragraphs
-    .replace(/<p class="mb-4 text-gray-900 leading-relaxed font-medium"><\/p>/g, '')
-    .replace(/<p class="mb-4 text-gray-800 leading-relaxed"><\/p>/g, '');
-}
+
 
 // Science Modal Component
 function ScienceModal({ 

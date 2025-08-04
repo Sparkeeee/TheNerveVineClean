@@ -1,6 +1,5 @@
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { getCachedSymptom } from '@/lib/database';
 import fs from 'fs';
 import path from 'path';
