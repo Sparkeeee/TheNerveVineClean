@@ -986,7 +986,8 @@ export default function AdminContentPage() {
                 processedData.articles = JSON.parse(processedData.articles as string);
               } catch {
                 // If it's not valid JSON, treat it as a simple string array and convert to JSON
-                const articlesArray = processedData.articles.split(',').map(item => item.trim()).filter(item => item.length > 0);
+                const articlesString = processedData.articles as string;
+                const articlesArray = articlesString.split(',').map(item => item.trim()).filter(item => item.length > 0);
                 processedData.articles = articlesArray;
               }
             } else if (!processedData.articles || processedData.articles === '') {
@@ -999,7 +1000,8 @@ export default function AdminContentPage() {
                 processedData.associatedSymptoms = JSON.parse(processedData.associatedSymptoms as string);
               } catch {
                 // If it's not valid JSON, treat it as a simple string array and convert to JSON
-                const symptomsArray = processedData.associatedSymptoms.split(',').map(item => item.trim()).filter(item => item.length > 0);
+                const symptomsString = processedData.associatedSymptoms as string;
+                const symptomsArray = symptomsString.split(',').map(item => item.trim()).filter(item => item.length > 0);
                 processedData.associatedSymptoms = symptomsArray;
               }
             } else if (!processedData.associatedSymptoms || processedData.associatedSymptoms === '') {
@@ -1676,9 +1678,9 @@ export default function AdminContentPage() {
               <div key={herb.id} className="flex items-center mb-2">
                 <input
                   type="checkbox"
-                  checked={(symptomForm.selectedHerbs || []).includes(herb.id)}
+                  checked={(symptomForm.selectedHerbs as number[] || []).includes(herb.id)}
                   onChange={e => {
-                    const selected = new Set(symptomForm.selectedHerbs || []);
+                    const selected = new Set(symptomForm.selectedHerbs as number[] || []);
                     if (e.target.checked) selected.add(herb.id); else selected.delete(herb.id);
                     setFormData({ ...symptomForm, selectedHerbs: Array.from(selected) });
                   }}
@@ -1696,9 +1698,9 @@ export default function AdminContentPage() {
               <div key={supp.id} className="flex items-center mb-2">
                 <input
                   type="checkbox"
-                  checked={(symptomForm.selectedSupplements || []).includes(supp.id)}
+                  checked={(symptomForm.selectedSupplements as number[] || []).includes(supp.id)}
                   onChange={e => {
-                    const selected = new Set(symptomForm.selectedSupplements || []);
+                    const selected = new Set(symptomForm.selectedSupplements as number[] || []);
                     if (e.target.checked) selected.add(supp.id); else selected.delete(supp.id);
                     setFormData({ ...symptomForm, selectedSupplements: Array.from(selected) });
                   }}

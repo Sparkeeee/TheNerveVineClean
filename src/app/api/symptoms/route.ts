@@ -179,13 +179,13 @@ export async function PUT(req: NextRequest) {
     return createApiResponse(symptom);
   } catch (error) {
     console.error('PUT symptoms error:', error);
-    console.error('Error name:', error.name);
-    console.error('Error message:', error.message);
-    console.error('Error stack:', error.stack);
+    console.error('Error name:', (error as Error).name);
+    console.error('Error message:', (error as Error).message);
+    console.error('Error stack:', (error as Error).stack);
     
     // Check if it's a Prisma error
-    if (error.code) {
-      console.error('Prisma error code:', error.code);
+    if ((error as any).code) {
+      console.error('Prisma error code:', (error as any).code);
     }
     
     return createErrorResponse('Failed to update symptom', 400);

@@ -21,8 +21,8 @@ export default function Header() {
   useEffect(() => {
     if (session) {
       console.log('Session user:', session.user)
-      console.log('Session user role:', session.user?.role)
-      console.log('Session user id:', session.user?.id)
+      console.log('Session user role:', (session.user as any)?.role)
+      console.log('Session user id:', (session.user as any)?.id)
       console.log('Session user email:', session.user?.email)
     }
   }, [session])
@@ -150,22 +150,10 @@ export default function Header() {
               <div className="flex items-center gap-2">
                 {status !== 'loading' && session ? (
                   <>
-                    {session.user.role === 'admin' ? (
-                      <Link 
-                        href="/admin"
-                        className="bg-white text-blue-900 border border-blue-200 h-6 flex items-center px-3 rounded hover:bg-blue-100 hover:text-blue-900 cursor-pointer transition-colors font-medium shadow-sm text-sm"
-                        style={{ minHeight: '1.5rem', height: '1.5rem' }}
-                      >
-                        Admin
-                      </Link>
+                    {session.user && (session.user as any).role === 'admin' ? (
+                      <span className="text-gray-600">Admin</span>
                     ) : (
-                      <Link 
-                        href="/my-list"
-                        className="bg-white text-green-700 border border-green-200 h-6 flex items-center px-3 rounded hover:bg-green-100 hover:text-green-800 cursor-pointer transition-colors font-medium shadow-sm text-sm"
-                        style={{ minHeight: '1.5rem', height: '1.5rem' }}
-                      >
-                        My List
-                      </Link>
+                      <span className="text-gray-600">User</span>
                     )}
                                          <button 
                        onClick={async () => {
@@ -241,8 +229,8 @@ export default function Header() {
                 <Link href="/about" className={`font-medium transition-colors ${isActivePath('/about') ? 'text-green-600 border-b-2 border-green-600' : 'text-gray-700 hover:text-green-600'}`}>
                   About
                 </Link>
-                {session && session.user.role !== 'admin' && (
-                  <Link href="/my-list" className={`font-medium transition-colors ${isActivePath('/my-list') ? 'text-green-600 border-b-2 border-green-600' : 'text-gray-700 hover:text-green-600'}`}>
+                {session && session.user && (session.user as any).role !== 'admin' && (
+                  <Link href="/my-list" className="px-3 py-2 rounded-md text-sm font-medium text-green-600 hover:text-green-700 hover:bg-gray-50">
                     My List
                   </Link>
                 )}
@@ -294,7 +282,7 @@ export default function Header() {
                 <Link href="/about" className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-green-600 hover:bg-gray-50">
                   About
                 </Link>
-                {session && session.user.role !== 'admin' && (
+                {session && session.user && (session.user as any).role !== 'admin' && (
                   <Link href="/my-list" className="px-3 py-2 rounded-md text-sm font-medium text-green-600 hover:text-green-700 hover:bg-gray-50">
                     My List
                   </Link>
@@ -304,7 +292,7 @@ export default function Header() {
                 {status !== 'loading' && session ? (
                   <>
                     <div className="border-t border-gray-200 pt-2 mt-2">
-                      {session.user.role === 'admin' ? (
+                      {session.user && (session.user as any).role === 'admin' ? (
                         <Link href="/admin" className="px-3 py-2 rounded-md text-sm font-medium text-purple-700 hover:text-purple-600 hover:bg-purple-50 flex items-center">
                           <span className="mr-2">👤</span>
                           Admin
