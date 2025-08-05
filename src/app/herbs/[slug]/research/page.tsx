@@ -68,56 +68,58 @@ export default async function HerbResearchPage({ params }: { params: Promise<{ s
             </Link>
           </div>
 
-          <div className="w-3/4 mx-auto px-4 pt-20 pb-8 min-h-screen">
-            {/* Header */}
-            <div className="mb-8">
-              <div className="mb-6">
-                {herb.latinName && (
-                  <p className="text-base sm:text-lg text-gray-700 italic">
-                    {herb.latinName}
-                  </p>
-                )}
-              </div>
-              
-              {/* Save to Research Library Button */}
-              <div className="mb-6 flex justify-center">
-                <SaveArticleButton 
-                  slug={slug} 
-                  title={`Research: ${herb.name}`}
-                  className="text-sm"
-                />
-              </div>
-            </div>
-
-            {/* Comprehensive Article */}
-            {markdownArticle && (
-              <div className="mb-8 bg-white/95 rounded-lg shadow-lg p-8 overflow-x-auto w-full mx-4">
-                <InteractiveCitations content={markdownArticle} />
-              </div>
-            )}
-
-            {/* References */}
-            {herb.references && Array.isArray(herb.references) && herb.references.length > 0 && (
-              <div className="bg-white rounded-lg shadow-lg p-8">
-                <h2 className="text-2xl font-bold text-gray-800 mb-6">References</h2>
-                <div className="space-y-4">
-                  {herb.references.map((reference: any, index: number) => (
-                    <div key={index} className="text-sm text-gray-800 leading-relaxed p-4 bg-gray-50 rounded">
-                      {reference.value}
-                    </div>
-                  ))}
+          <div className="flex justify-center">
+            <div className="w-full max-w-[75vw] px-4 pt-20 pb-8 min-h-screen">
+              {/* Header */}
+              <div className="mb-8">
+                <div className="mb-6">
+                  {herb.latinName && (
+                    <p className="text-base sm:text-lg text-gray-700 italic">
+                      {herb.latinName}
+                    </p>
+                  )}
+                </div>
+                
+                {/* Save to Research Library Button */}
+                <div className="mb-6 flex justify-center">
+                  <SaveArticleButton 
+                    slug={slug} 
+                    title={`Research: ${herb.name}`}
+                    className="text-sm"
+                  />
                 </div>
               </div>
-            )}
 
-            {/* Navigation */}
-            <div className="mt-8 text-center">
-              <Link 
-                href={`/herbs/${slug}`}
-                className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                ← Back to {herb.name} Overview
-              </Link>
+              {/* Comprehensive Article */}
+              {markdownArticle && (
+                <div className="mb-8 bg-white/95 rounded-lg shadow-lg p-8 overflow-x-auto w-full">
+                  <InteractiveCitations content={markdownArticle} />
+                </div>
+              )}
+
+              {/* References */}
+              {herb.references && Array.isArray(herb.references) && herb.references.length > 0 && (
+                <div className="bg-white rounded-lg shadow-lg p-8">
+                  <h2 className="text-2xl font-bold text-gray-800 mb-6">References</h2>
+                  <div className="space-y-4">
+                    {herb.references.map((reference: any, index: number) => (
+                      <div key={index} className="text-sm text-gray-800 leading-relaxed p-4 bg-gray-50 rounded">
+                        {reference.value}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Navigation */}
+              <div className="mt-8 text-center">
+                <Link 
+                  href={`/herbs/${slug}`}
+                  className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  ← Back to {herb.name} Overview
+                </Link>
+              </div>
             </div>
           </div>
         </div>

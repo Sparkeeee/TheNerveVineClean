@@ -159,10 +159,7 @@ const SYMPTOM_FIELDS = [
   { key: "cautions", label: "Cautions" },
   { key: "articles", label: "Articles (JSON)" },
   { key: "associatedSymptoms", label: "Associated Symptoms (JSON)" },
-  { key: "variants", label: "Variants (JSON)" },
   { key: "references", label: "References (JSON)" },
-  { key: "variantDescriptions", label: "Variant Descriptions (JSON)" },
-  { key: "products", label: "Products" },
 ];
 
 function getFormattedDate() {
@@ -522,7 +519,7 @@ export default function AdminContentPage() {
     [key: string]: unknown;
   };
   type SymptomForm = {
-    title?: string;
+    title: string;
     slug?: string;
     description?: string;
     comprehensiveArticle?: string;
@@ -531,11 +528,7 @@ export default function AdminContentPage() {
     cautions?: string;
     articles?: string;
     associatedSymptoms?: string;
-    variants?: string;
     references?: string;
-    variantDescriptions?: string;
-    selectedHerbs?: number[];
-    selectedSupplements?: number[];
     [key: string]: unknown;
   };
   type FormDataType = HerbForm | SupplementForm | SymptomForm | Record<string, unknown>;
@@ -892,6 +885,35 @@ export default function AdminContentPage() {
       processedItem.references = '';
     }
     
+    // Handle articles and associatedSymptoms for symptoms
+    if (tab === "Symptoms") {
+      if (processedItem.articles && typeof processedItem.articles === 'string') {
+        try {
+          const parsed = JSON.parse(processedItem.articles as string);
+          processedItem.articles = Array.isArray(parsed) ? parsed.join(', ') : processedItem.articles;
+        } catch {
+          processedItem.articles = processedItem.articles;
+        }
+      } else if (Array.isArray(processedItem.articles)) {
+        processedItem.articles = processedItem.articles.join(', ');
+      } else if (!processedItem.articles) {
+        processedItem.articles = '';
+      }
+      
+      if (processedItem.associatedSymptoms && typeof processedItem.associatedSymptoms === 'string') {
+        try {
+          const parsed = JSON.parse(processedItem.associatedSymptoms as string);
+          processedItem.associatedSymptoms = Array.isArray(parsed) ? parsed.join(', ') : processedItem.associatedSymptoms;
+        } catch {
+          processedItem.associatedSymptoms = processedItem.associatedSymptoms;
+        }
+      } else if (Array.isArray(processedItem.associatedSymptoms)) {
+        processedItem.associatedSymptoms = processedItem.associatedSymptoms.join(', ');
+      } else if (!processedItem.associatedSymptoms) {
+        processedItem.associatedSymptoms = '';
+      }
+    }
+    
     // Ensure all string fields are properly initialized
     const finalFormData = {
       ...processedItem,
@@ -903,9 +925,12 @@ export default function AdminContentPage() {
       name: processedItem.name || '',
       latinName: processedItem.latinName || '',
       slug: processedItem.slug || '',
+      title: processedItem.title || '',
       description: processedItem.description || '',
       comprehensiveArticle: processedItem.comprehensiveArticle || '',
       cautions: processedItem.cautions || '',
+      articles: processedItem.articles || '',
+      associatedSymptoms: processedItem.associatedSymptoms || '',
     };
 
     // Remove any non-existent fields that might be present
@@ -914,6 +939,11 @@ export default function AdminContentPage() {
     delete (finalFormData as any).affiliatePercentage;
     delete (finalFormData as any).customerReviews;
     delete (finalFormData as any).organic;
+    
+    // Remove symptom-specific fields that don't exist in Prisma schema
+    delete (finalFormData as any).variants;
+    delete (finalFormData as any).variantDescriptions;
+    delete (finalFormData as any).products;
 
 
     
@@ -938,10 +968,44 @@ export default function AdminContentPage() {
     delete (processedData as any).customerReviews;
     delete (processedData as any).organic;
     
+    // Remove symptom-specific fields that don't exist in Prisma schema
+    delete (processedData as any).variants;
+    delete (processedData as any).variantDescriptions;
+    delete (processedData as any).products;
+    delete (processedData as any).selectedHerbs;
+    delete (processedData as any).selectedSupplements;
+    
     // Convert references from simple format to JSON if present
     if (processedData.references && typeof processedData.references === 'string') {
       processedData.references = convertReferencesToJson(processedData.references as string);
     }
+    
+                // Convert articles and associatedSymptoms from string to JSON if present
+            if (processedData.articles && typeof processedData.articles === 'string') {
+              try {
+                processedData.articles = JSON.parse(processedData.articles as string);
+              } catch {
+                // If it's not valid JSON, treat it as a simple string array and convert to JSON
+                const articlesArray = processedData.articles.split(',').map(item => item.trim()).filter(item => item.length > 0);
+                processedData.articles = articlesArray;
+              }
+            } else if (!processedData.articles || processedData.articles === '') {
+              // Ensure empty strings are converted to empty arrays
+              processedData.articles = [];
+            }
+
+            if (processedData.associatedSymptoms && typeof processedData.associatedSymptoms === 'string') {
+              try {
+                processedData.associatedSymptoms = JSON.parse(processedData.associatedSymptoms as string);
+              } catch {
+                // If it's not valid JSON, treat it as a simple string array and convert to JSON
+                const symptomsArray = processedData.associatedSymptoms.split(',').map(item => item.trim()).filter(item => item.length > 0);
+                processedData.associatedSymptoms = symptomsArray;
+              }
+            } else if (!processedData.associatedSymptoms || processedData.associatedSymptoms === '') {
+              // Ensure empty strings are converted to empty arrays
+              processedData.associatedSymptoms = [];
+            }
     
     console.log('Submitting form data:', {
       url,
@@ -950,6 +1014,14 @@ export default function AdminContentPage() {
       formMode,
       processedData
     });
+    
+    // Debug: Log the exact data being sent for symptoms
+    if (tab === "Symptoms") {
+      console.log('Symptom form data being sent:', JSON.stringify(processedData, null, 2));
+      console.log('Symptom form data types:', Object.entries(processedData).map(([key, value]) => `${key}: ${typeof value}`));
+      console.log('Articles field type and value:', typeof processedData.articles, processedData.articles);
+      console.log('AssociatedSymptoms field type and value:', typeof processedData.associatedSymptoms, processedData.associatedSymptoms);
+    }
     
     try {
       const res = await fetch(url, {

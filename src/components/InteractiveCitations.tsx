@@ -76,8 +76,10 @@ export default function InteractiveCitations({ content }: InteractiveCitationsPr
       // Get everything after "References"
       const afterReferences = content.substring(referencesMatch.index! + referencesMatch[0].length);
       
-      // Remove all HTML tags and get clean text
-      const cleanText = afterReferences.replace(/<[^>]*>/g, '');
+      // Convert </a> tags to newlines before removing other HTML tags
+      let cleanText = afterReferences.replace(/<\/a>/g, '</a>\n');
+      // Remove remaining HTML tags
+      cleanText = cleanText.replace(/<[^>]*>/g, '');
       
       console.log('Text after References (first 500 chars):', cleanText.substring(0, 500));
       

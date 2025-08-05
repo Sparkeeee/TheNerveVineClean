@@ -5,6 +5,8 @@ import fs from 'fs';
 import path from 'path';
 import ResearchPageWrapper from '@/components/ResearchPageWrapper';
 import ContentProtection from '@/components/ContentProtection';
+import InteractiveCitations from '@/components/InteractiveCitations';
+import SaveArticleButton from '@/components/SaveArticleButton';
 
 // Function to read Markdown file
 async function getMarkdownArticle(slug: string): Promise<string | null> {
@@ -15,29 +17,6 @@ async function getMarkdownArticle(slug: string): Promise<string | null> {
   } catch (error) {
     return null;
   }
-}
-
-// Simple Markdown to HTML converter
-function convertMarkdownToHtml(markdown: string): string {
-  return markdown
-    // Headers
-    .replace(/^### (.*$)/gim, '<h3 class="text-xl font-bold text-gray-900 mt-6 mb-3">$1</h3>')
-    .replace(/^## (.*$)/gim, '<h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">$1</h2>')
-    .replace(/^# (.*$)/gim, '<h1 class="text-3xl font-bold text-gray-900 mt-8 mb-6">$1</h1>')
-    // Bold
-    .replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-gray-900">$1</strong>')
-    // Lists
-    .replace(/^- (.*$)/gim, '<li class="ml-4 mb-1 text-gray-800">$1</li>')
-    .replace(/^(\d+)\. (.*$)/gim, '<li class="ml-4 mb-1 text-gray-800">$1. $2</li>')
-    // Wrap lists in ul/ol
-    .replace(/(<li.*<\/li>)/g, '<ul class="list-disc ml-6 mb-4">$1</ul>')
-    // Paragraphs
-    .replace(/\n\n/g, '</p><p class="mb-4 text-gray-800 leading-relaxed">')
-    // Wrap in paragraph tags
-    .replace(/^(?!<[h|u|o]|<p>)(.*)$/gm, '<p class="mb-4 text-gray-800 leading-relaxed">$1</p>')
-    // Clean up empty paragraphs
-    .replace(/<p class="mb-4 text-gray-800 leading-relaxed"><\/p>/g, '')
-    .replace(/<p class="mb-4 text-gray-800 leading-relaxed"><\/p>/g, '');
 }
 
 export default async function SymptomResearchPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -76,60 +55,71 @@ export default async function SymptomResearchPage({ params }: { params: Promise<
         shareUrl={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://thenervevine.com'}/symptoms/${slug}/research`}
         shareTitle={`Scientific Research: ${symptom.title}`}
       >
-        <div className="min-h-screen bg-[url('/images/WMherbsBG.PNG')] bg-cover bg-center bg-fixed bg-no-repeat">
+        <div className="min-h-screen bg-[url('/images/RoseWPWM.PNG')] bg-cover bg-center bg-fixed bg-no-repeat">
+          {/* Pink overlay */}
+          <div className="min-h-screen bg-pink-100 opacity-90 w-full">
 
-          {/* Sticky Back Button */}
-          <div className="fixed top-4 right-4 z-50">
-            <Link 
-              href={`/symptoms/${slug}`}
-              className="inline-flex items-center px-3 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors shadow-lg text-sm sm:text-base sm:px-4"
-            >
-              ← Back to Overview
-            </Link>
-          </div>
-
-          <div className="max-w-4xl mx-auto px-4 pt-20 pb-8">
-            {/* Header */}
-            <div className="mb-8">
-              <div className="mb-6">
-                <h1 className="text-3xl font-bold text-gray-900 mb-4">
-                  {symptom.title}
-                </h1>
-              </div>
-            </div>
-
-            {/* Comprehensive Article */}
-            {markdownArticle && (
-              <div className="mb-8 bg-white rounded-lg shadow-lg p-8">
-                <div 
-                  className="prose prose-lg max-w-none"
-                  dangerouslySetInnerHTML={{ __html: convertMarkdownToHtml(markdownArticle) }}
-                />
-              </div>
-            )}
-
-            {/* References */}
-            {symptom.references && Array.isArray(symptom.references) && symptom.references.length > 0 && (
-              <div className="bg-white rounded-lg shadow-lg p-8">
-                <h2 className="text-2xl font-bold text-gray-800 mb-6">References</h2>
-                <div className="space-y-4">
-                  {symptom.references.map((reference: any, index: number) => (
-                    <div key={index} className="text-sm text-gray-800 leading-relaxed p-4 bg-gray-50 rounded">
-                      {reference.value}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Navigation */}
-            <div className="mt-8 text-center">
+            {/* Sticky Back Button */}
+            <div className="fixed top-4 right-4 z-50">
               <Link 
                 href={`/symptoms/${slug}`}
-                className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
+                className="inline-flex items-center px-3 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors shadow-lg text-sm sm:text-base sm:px-4"
               >
-                ← Back to {symptom.title} Overview
+                ← Back to Overview
               </Link>
+            </div>
+
+            <div className="flex justify-center">
+              <div className="w-full max-w-[75vw] px-4 pt-20 pb-8 min-h-screen">
+                {/* Header */}
+                <div className="mb-8">
+                  <div className="mb-6">
+                    <h1 className="text-3xl font-bold text-gray-900 mb-4">
+                      {symptom.title}
+                    </h1>
+                  </div>
+                  
+                  {/* Save to Research Library Button */}
+                  <div className="mb-6 flex justify-center">
+                    <SaveArticleButton 
+                      slug={slug} 
+                      title={`Research: ${symptom.title}`}
+                      className="text-sm"
+                    />
+                  </div>
+                </div>
+
+                {/* Comprehensive Article */}
+                {markdownArticle && (
+                  <div className="mb-8 bg-white/95 rounded-lg shadow-lg p-8 overflow-x-auto w-full">
+                    <InteractiveCitations content={markdownArticle} />
+                  </div>
+                )}
+
+                {/* References */}
+                {symptom.references && Array.isArray(symptom.references) && symptom.references.length > 0 && (
+                  <div className="bg-white rounded-lg shadow-lg p-8">
+                    <h2 className="text-2xl font-bold text-gray-800 mb-6">References</h2>
+                    <div className="space-y-4">
+                      {symptom.references.map((reference: any, index: number) => (
+                        <div key={index} className="text-sm text-gray-800 leading-relaxed p-4 bg-gray-50 rounded">
+                          {reference.value}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Navigation */}
+                <div className="mt-8 text-center">
+                  <Link 
+                    href={`/symptoms/${slug}`}
+                    className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
+                  >
+                    ← Back to {symptom.title} Overview
+                  </Link>
+                </div>
+              </div>
             </div>
           </div>
         </div>

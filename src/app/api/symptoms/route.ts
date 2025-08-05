@@ -149,11 +149,45 @@ export async function POST(req: NextRequest) {
 export async function PUT(req: NextRequest) {
   try {
     const data = await req.json();
+    console.log('PUT symptoms received data:', JSON.stringify(data, null, 2));
+    
     if (!data.id) return createErrorResponse('ID required', 400);
-    const symptom = await prisma.symptom.update({ where: { id: data.id }, data });
+    
+    // Only include fields that can be updated directly on the Symptom model
+    const { id, ...updateData } = data;
+    const cleanedData: any = {};
+    
+    // Only include the fields that exist in the Prisma Symptom model
+    const allowedFields = [
+      'title', 'slug', 'description', 'metaTitle', 'metaDescription', 
+      'cautions', 'references', 'articles', 'associatedSymptoms', 
+      'comprehensiveArticle'
+    ];
+    
+    for (const field of allowedFields) {
+      if (field in updateData) {
+        cleanedData[field] = updateData[field];
+      }
+    }
+    
+    console.log('PUT symptoms cleaned data:', JSON.stringify(cleanedData, null, 2));
+    
+    // Log the exact Prisma query we're about to execute
+    console.log('Prisma query:', { where: { id: data.id }, data: cleanedData });
+    
+    const symptom = await prisma.symptom.update({ where: { id: data.id }, data: cleanedData });
     return createApiResponse(symptom);
   } catch (error) {
     console.error('PUT symptoms error:', error);
+    console.error('Error name:', error.name);
+    console.error('Error message:', error.message);
+    console.error('Error stack:', error.stack);
+    
+    // Check if it's a Prisma error
+    if (error.code) {
+      console.error('Prisma error code:', error.code);
+    }
+    
     return createErrorResponse('Failed to update symptom', 400);
   }
 }
