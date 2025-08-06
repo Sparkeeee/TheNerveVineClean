@@ -19,12 +19,8 @@ interface Supplement {
 interface QualitySpecification {
   id?: number;
   herbSlug?: string;
-  supplementSlug?: string;
   herbName?: string;
-  supplementName?: string;
   productType: string;
-  formulationName: string;
-  approach: 'traditional' | 'modern' | 'both';
   requiredTerms: string[];
   preferredTerms: string[];
   avoidTerms: string[];
@@ -52,7 +48,6 @@ interface QualitySpecification {
   reviewCountThreshold: number;
   brandPreferences?: string[];
   brandAvoid?: string[];
-  notes?: string;
 }
 
 export default function QualitySpecificationsPage() {
@@ -202,18 +197,50 @@ export default function QualitySpecificationsPage() {
       if (response.ok) {
         fetchSpecifications();
         resetForm();
+        alert(isEditing ? 'Quality specification updated successfully!' : 'Quality specification created successfully!');
       } else {
-        console.error('Error saving specification');
+        const errorData = await response.json();
+        alert(`Error: ${errorData.error || 'Failed to save specification'}`);
       }
     } catch (error) {
       console.error('Error:', error);
+      alert('Error saving specification. Please try again.');
     }
   };
 
   const handleEdit = (spec: QualitySpecification) => {
     setEditingSpec(spec);
-    setFormData(spec);
+    // Ensure all fields have proper default values to prevent null errors
+    setFormData({
+      productType: spec.productType || '',
+      formulationName: spec.formulationName || '',
+      approach: spec.approach || 'traditional',
+      requiredTerms: spec.requiredTerms || [],
+      preferredTerms: spec.preferredTerms || [],
+      avoidTerms: spec.avoidTerms || [],
+      standardization: spec.standardization || undefined,
+      alcoholSpecs: spec.alcoholSpecs || undefined,
+      dosageSpecs: spec.dosageSpecs || undefined,
+      priceRange: spec.priceRange || { min: 0, max: 100, currency: 'USD' },
+      ratingThreshold: spec.ratingThreshold || 4.0,
+      reviewCountThreshold: spec.reviewCountThreshold || 50,
+      brandPreferences: spec.brandPreferences || undefined,
+      brandAvoid: spec.brandAvoid || undefined,
+      herbSlug: spec.herbSlug || '',
+      herbName: spec.herbName || '',
+      supplementSlug: spec.supplementSlug || '',
+      supplementName: spec.supplementName || ''
+    });
     setIsEditing(true);
+    
+    // Set the selected herb/supplement dropdowns
+    if (spec.herbSlug) {
+      setSelectedHerb(spec.herbSlug);
+      setSelectedSupplement('');
+    } else if (spec.supplementSlug) {
+      setSelectedSupplement(spec.supplementSlug);
+      setSelectedHerb('');
+    }
   };
 
   const handleDelete = async (id: number) => {
@@ -264,7 +291,7 @@ export default function QualitySpecificationsPage() {
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             Quality Specifications Management
           </h1>
-          <p className="text-gray-600">
+          <p className="text-gray-700">
             Define quality criteria for herbs and supplements to ensure only the best products are recommended.
           </p>
         </div>
@@ -429,7 +456,7 @@ export default function QualitySpecificationsPage() {
                     value={formData.standardization?.compound || ''}
                     onChange={(e) => handleInputChange('standardization', {
                       ...formData.standardization,
-                      compound: e.target.value
+                      compound: e.target.value || undefined
                     })}
                     placeholder="e.g., hypericin, withanolides"
                     className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white placeholder-gray-500"
@@ -443,10 +470,10 @@ export default function QualitySpecificationsPage() {
                   <input
                     type="number"
                     step="0.1"
-                    value={formData.standardization?.percentage || ''}
+                    value={formData.standardization?.percentage?.toString() || ''}
                     onChange={(e) => handleInputChange('standardization', {
                       ...formData.standardization,
-                      percentage: parseFloat(e.target.value)
+                      percentage: e.target.value ? parseFloat(e.target.value) : undefined
                     })}
                     placeholder="e.g., 2.5"
                     className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white placeholder-gray-500"
@@ -485,7 +512,7 @@ export default function QualitySpecificationsPage() {
                     value={formData.alcoholSpecs?.ratio || ''}
                     onChange={(e) => handleInputChange('alcoholSpecs', {
                       ...formData.alcoholSpecs,
-                      ratio: e.target.value
+                      ratio: e.target.value || undefined
                     })}
                     placeholder="e.g., 1:2, 1:1"
                     className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white placeholder-gray-500"
@@ -518,7 +545,7 @@ export default function QualitySpecificationsPage() {
                     value={formData.alcoholSpecs?.type?.join(', ') || ''}
                     onChange={(e) => handleInputChange('alcoholSpecs', {
                       ...formData.alcoholSpecs,
-                      type: e.target.value.split(',').map(t => t.trim()).filter(t => t)
+                      type: e.target.value ? e.target.value.split(',').map(t => t.trim()).filter(t => t) : undefined
                     })}
                     placeholder="e.g., grain alcohol, vodka, brandy"
                     className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white placeholder-gray-500"
@@ -535,10 +562,10 @@ export default function QualitySpecificationsPage() {
                 </label>
                 <input
                   type="number"
-                  value={formData.priceRange.min}
+                  value={formData.priceRange.min || ''}
                   onChange={(e) => handleInputChange('priceRange', {
                     ...formData.priceRange,
-                    min: parseFloat(e.target.value)
+                    min: e.target.value ? parseFloat(e.target.value) : 0
                   })}
                   placeholder="e.g., 15"
                   className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white placeholder-gray-500"
@@ -551,10 +578,10 @@ export default function QualitySpecificationsPage() {
                 </label>
                 <input
                   type="number"
-                  value={formData.priceRange.max}
+                  value={formData.priceRange.max || ''}
                   onChange={(e) => handleInputChange('priceRange', {
                     ...formData.priceRange,
-                    max: parseFloat(e.target.value)
+                    max: e.target.value ? parseFloat(e.target.value) : 100
                   })}
                   placeholder="e.g., 50"
                   className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white placeholder-gray-500"
@@ -570,8 +597,8 @@ export default function QualitySpecificationsPage() {
                   step="0.1"
                   min="0"
                   max="5"
-                  value={formData.ratingThreshold}
-                  onChange={(e) => handleInputChange('ratingThreshold', parseFloat(e.target.value))}
+                  value={formData.ratingThreshold || ''}
+                  onChange={(e) => handleInputChange('ratingThreshold', e.target.value ? parseFloat(e.target.value) : 4.0)}
                   placeholder="e.g., 4.0"
                   className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white placeholder-gray-500"
                 />
@@ -583,8 +610,8 @@ export default function QualitySpecificationsPage() {
                 </label>
                 <input
                   type="number"
-                  value={formData.reviewCountThreshold}
-                  onChange={(e) => handleInputChange('reviewCountThreshold', parseInt(e.target.value))}
+                  value={formData.reviewCountThreshold || ''}
+                  onChange={(e) => handleInputChange('reviewCountThreshold', e.target.value ? parseInt(e.target.value) : 50)}
                   placeholder="e.g., 100"
                   className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white placeholder-gray-500"
                 />
@@ -643,13 +670,21 @@ export default function QualitySpecificationsPage() {
                 {isEditing ? 'Update Specification' : 'Add Specification'}
               </button>
               
-              {isEditing && (
+              {isEditing ? (
                 <button
                   type="button"
                   onClick={resetForm}
                   className="bg-gray-500 text-white px-6 py-3 rounded-md hover:bg-gray-600 transition font-medium"
                 >
                   Cancel Edit
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={resetForm}
+                  className="bg-gray-300 text-gray-700 px-6 py-3 rounded-md hover:bg-gray-400 transition font-medium"
+                >
+                  Clear Form
                 </button>
               )}
             </div>
@@ -658,28 +693,28 @@ export default function QualitySpecificationsPage() {
 
         {/* Specifications List */}
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-semibold mb-4">Quality Specifications</h2>
+          <h2 className="text-xl font-semibold mb-4 text-gray-900">Quality Specifications</h2>
           
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                     Product
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                     Type
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                     Formulation
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                     Approach
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                     Price Range
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
@@ -691,7 +726,7 @@ export default function QualitySpecificationsPage() {
                       <div className="text-sm font-semibold text-gray-900">
                         {spec.herbName || spec.supplementName}
                       </div>
-                      <div className="text-sm text-gray-600">
+                      <div className="text-sm text-gray-800">
                         {spec.herbSlug || spec.supplementSlug}
                       </div>
                     </td>
@@ -718,13 +753,35 @@ export default function QualitySpecificationsPage() {
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <button
                         onClick={() => handleEdit(spec)}
-                        className="text-blue-600 hover:text-blue-900 mr-4"
+                        className="text-blue-600 hover:text-blue-900 mr-2"
+                        title="Edit specification"
                       >
                         Edit
                       </button>
                       <button
+                        onClick={() => {
+                          alert(`Quality Specification Details:\n\n` +
+                            `Product: ${spec.herbName || spec.supplementName}\n` +
+                            `Type: ${spec.productType}\n` +
+                            `Formulation: ${spec.formulationName}\n` +
+                            `Approach: ${spec.approach}\n` +
+                            `Required Terms: ${spec.requiredTerms.join(', ')}\n` +
+                            `Preferred Terms: ${spec.preferredTerms.join(', ')}\n` +
+                            `Avoid Terms: ${spec.avoidTerms.join(', ')}\n` +
+                            `Price Range: $${spec.priceRange.min} - $${spec.priceRange.max}\n` +
+                            `Rating Threshold: ${spec.ratingThreshold}+\n` +
+                            `Review Count: ${spec.reviewCountThreshold}+`
+                          );
+                        }}
+                        className="text-green-600 hover:text-green-900 mr-2"
+                        title="View details"
+                      >
+                        View
+                      </button>
+                      <button
                         onClick={() => handleDelete(spec.id!)}
                         className="text-red-600 hover:text-red-900"
+                        title="Delete specification"
                       >
                         Delete
                       </button>

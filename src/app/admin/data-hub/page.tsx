@@ -143,11 +143,11 @@ export default function DataHubAdminPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Processing Criteria Panel */}
           <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-2xl font-bold mb-4">Processing Criteria</h2>
+            <h2 className="text-2xl font-bold mb-4 text-gray-900">Processing Criteria</h2>
             
             {/* Herbs */}
             <div className="mb-4">
-              <label className="block text-sm font-semibold mb-2">Herbs:</label>
+              <label className="block text-sm font-semibold mb-2 text-gray-900">Herbs:</label>
               <div className="flex flex-wrap gap-2 mb-2">
                 {criteria.herbs?.map((herb, index) => (
                   <span key={index} className="bg-green-100 text-green-800 px-2 py-1 rounded flex items-center gap-1">
@@ -171,7 +171,7 @@ export default function DataHubAdminPage() {
 
             {/* Symptoms */}
             <div className="mb-4">
-              <label className="block text-sm font-semibold mb-2">Symptoms:</label>
+              <label className="block text-sm font-semibold mb-2 text-gray-900">Symptoms:</label>
               <div className="flex flex-wrap gap-2 mb-2">
                 {criteria.symptoms?.map((symptom, index) => (
                   <span key={index} className="bg-blue-100 text-blue-800 px-2 py-1 rounded flex items-center gap-1">
@@ -195,11 +195,11 @@ export default function DataHubAdminPage() {
 
             {/* User Segment */}
             <div className="mb-4">
-              <label className="block text-sm font-semibold mb-2">User Segment:</label>
+              <label className="block text-sm font-semibold mb-2 text-gray-900">User Segment:</label>
               <select
                 value={criteria.userSegment || 'balanced'}
                 onChange={(e) => updateCriteria('userSegment', e.target.value as ProcessingCriteria['userSegment'])}
-                className="w-full border rounded px-3 py-2"
+                className="w-full border-2 border-gray-600 rounded px-3 py-2 placeholder-gray-700 text-gray-900"
               >
                 <option value="quality-focused">Quality Focused</option>
                 <option value="price-sensitive">Price Sensitive</option>
@@ -209,7 +209,7 @@ export default function DataHubAdminPage() {
 
             {/* Price Range */}
             <div className="mb-4">
-              <label className="block text-sm font-semibold mb-2">Price Range:</label>
+              <label className="block text-sm font-semibold mb-2 text-gray-900">Price Range:</label>
               <div className="flex gap-2">
                 <input
                   type="number"
@@ -219,7 +219,7 @@ export default function DataHubAdminPage() {
                     ...criteria.priceRange, 
                     min: parseFloat(e.target.value) || 0 
                   })}
-                  className="w-1/2 border rounded px-3 py-2"
+                  className="w-1/2 border-2 border-gray-600 rounded px-3 py-2 placeholder-gray-700 text-gray-900"
                 />
                 <input
                   type="number"
@@ -229,46 +229,46 @@ export default function DataHubAdminPage() {
                     ...criteria.priceRange, 
                     max: parseFloat(e.target.value) || 0 
                   })}
-                  className="w-1/2 border rounded px-3 py-2"
+                  className="w-1/2 border-2 border-gray-600 rounded px-3 py-2 placeholder-gray-700 text-gray-900"
                 />
               </div>
             </div>
 
             {/* Quality Threshold */}
             <div className="mb-6">
-              <label className="block text-sm font-semibold mb-2">Quality Threshold:</label>
+              <label className="block text-sm font-semibold mb-2 text-gray-900">Quality Threshold:</label>
               <input
                 type="number"
                 min="1"
                 max="10"
                 value={criteria.qualityThreshold || 6}
                 onChange={(e) => updateCriteria('qualityThreshold', parseInt(e.target.value))}
-                className="w-full border rounded px-3 py-2"
+                className="w-full border-2 border-gray-600 rounded px-3 py-2 placeholder-gray-700 text-gray-900"
               />
             </div>
 
             {/* Database Integration */}
             <div className="mb-6">
-              <h3 className="font-semibold mb-2">Database Integration:</h3>
+              <h3 className="font-semibold mb-2 text-gray-900">Database Integration:</h3>
               <div className="space-y-2">
                 <div>
-                  <label className="block text-sm mb-1">Herb Slug:</label>
+                  <label className="block text-sm mb-1 text-gray-900">Herb Slug:</label>
                   <input
                     type="text"
                     value={herbSlug}
                     onChange={(e) => setHerbSlug(e.target.value)}
                     placeholder="e.g., ashwagandha"
-                    className="w-full border rounded px-3 py-2"
+                    className="w-full border-2 border-gray-600 rounded px-3 py-2 placeholder-gray-700 text-gray-900"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm mb-1">Supplement Slug:</label>
+                  <label className="block text-sm mb-1 text-gray-900">Supplement Slug:</label>
                   <input
                     type="text"
                     value={supplementSlug}
                     onChange={(e) => setSupplementSlug(e.target.value)}
                     placeholder="e.g., vitamin-d"
-                    className="w-full border rounded px-3 py-2"
+                    className="w-full border-2 border-gray-600 rounded px-3 py-2 placeholder-gray-700 text-gray-900"
                   />
                 </div>
               </div>
@@ -292,7 +292,7 @@ export default function DataHubAdminPage() {
 
           {/* Results Panel */}
           <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-2xl font-bold mb-4">Processing Results</h2>
+            <h2 className="text-2xl font-bold mb-4 text-gray-900">Processing Results</h2>
             
             {results ? (
               <div>
@@ -333,7 +333,7 @@ export default function DataHubAdminPage() {
                         <div className="flex justify-between items-start">
                           <div className="flex-1">
                             <h4 className="font-semibold">{product.name}</h4>
-                            <p className="text-sm text-gray-600">{product.brand} - {product.supplier}</p>
+                            <p className="text-sm text-gray-700">{product.brand} - {product.supplier}</p>
                             <div className="flex gap-4 text-xs mt-1">
                               <span>${product.price}</span>
                               <span>Quality: {product.qualityScore}/10</span>
@@ -362,7 +362,7 @@ export default function DataHubAdminPage() {
                 </div>
               </div>
             ) : (
-              <div className="text-gray-500 text-center py-8">
+              <div className="text-gray-800 text-center py-8">
                 No results yet. Set criteria and click &quot;Process Data&quot; to get started.
               </div>
             )}
@@ -378,7 +378,7 @@ export default function DataHubAdminPage() {
                   <h3 className="text-xl font-bold">{selectedProduct.name}</h3>
                   <button
                     onClick={() => setSelectedProduct(null)}
-                    className="text-gray-500 hover:text-gray-700"
+                    className="text-gray-800 hover:text-gray-700"
                   >
                     ×
                   </button>
@@ -402,7 +402,7 @@ export default function DataHubAdminPage() {
                 {selectedProduct.description && (
                   <div className="mb-4">
                     <strong>Description:</strong><br/>
-                    <p className="text-sm text-gray-600">{selectedProduct.description}</p>
+                    <p className="text-sm text-gray-700">{selectedProduct.description}</p>
                   </div>
                 )}
 

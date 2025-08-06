@@ -2,7 +2,11 @@ import type { Metadata } from "next";
 import { Lato, Merriweather } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import SessionProviderWrapper from "@/components/SessionProviderWrapper";
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
+
 
 const lato = Lato({
   variable: "--font-lato",
@@ -128,11 +132,16 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="font-sans">
+      <body className="font-sans flex flex-col min-h-screen">
         <SessionProviderWrapper>
           <Header />
-          {children}
+          <main className="flex-grow">
+            {children}
+          </main>
+          <Footer />
         </SessionProviderWrapper>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

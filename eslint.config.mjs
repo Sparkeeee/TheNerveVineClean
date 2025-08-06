@@ -26,6 +26,14 @@ const eslintConfig = [
       // Temporarily warn on unused vars instead of error to allow build
       '@typescript-eslint/no-unused-vars': 'warn',
     },
+    settings: {
+      'import/resolver': {
+        typescript: {
+          alwaysTryTypes: true,
+          project: './tsconfig.json',
+        },
+      },
+    },
     // Rationale: These settings provide strong stability without being overly strict. 'any' is allowed with a warning for rare cases. Unused vars are errors to keep code clean.
   },
 ];

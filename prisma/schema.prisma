@@ -94,9 +94,13 @@ model BlogPage {
 
 model QualitySpecification {
   id                   Int    @id @default(autoincrement())
-  herbSlug             String
-  herbName             String
+  herbSlug             String?
+  herbName             String?
+  supplementSlug       String?
+  supplementName       String?
   productType          String
+  formulationName      String?
+  approach             String? @default("traditional")
   requiredTerms        Json
   preferredTerms       Json
   avoidTerms           Json
@@ -108,6 +112,7 @@ model QualitySpecification {
   reviewCountThreshold Int
   brandPreferences     Json?
   brandAvoid           Json?
+  notes                String?
 }
 
 model Merchant {

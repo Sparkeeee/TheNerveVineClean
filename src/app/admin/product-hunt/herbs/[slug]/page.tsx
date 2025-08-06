@@ -4,7 +4,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
-import { getCachedHerb } from '@/lib/database';
 
 interface PendingProduct {
   id: string;
@@ -44,10 +43,11 @@ export default function HerbSubstancePage() {
 
   const fetchHerbInfo = useCallback(async () => {
     try {
-      // Fetch real herb data from database
-      const dbHerb = await getCachedHerb(slug);
+      // Fetch herb data from API endpoint
+      const response = await fetch(`/api/herbs/${slug}`);
       
-      if (dbHerb) {
+      if (response.ok) {
+        const dbHerb = await response.json();
         const herbInfo: HerbInfo = {
           name: dbHerb.name,
           slug: dbHerb.slug,
@@ -67,6 +67,14 @@ export default function HerbSubstancePage() {
       }
     } catch (error) {
       console.error('Error fetching herb info:', error);
+      // Fallback on error
+      const herbInfo: HerbInfo = {
+        name: slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
+        slug: slug,
+        description: `Quality specifications and pending products for ${slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}.`,
+        latinName: slug === 'st-johns-wort' ? 'Hypericum perforatum' : undefined
+      };
+      setHerbInfo(herbInfo);
     }
   }, [slug]);
 
@@ -225,7 +233,7 @@ export default function HerbSubstancePage() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600">Loading herb information...</p>
+            <p className="mt-4 text-gray-800">Loading herb information...</p>
           </div>
         </div>
       </div>
@@ -252,13 +260,13 @@ export default function HerbSubstancePage() {
                 {herbInfo?.name}
               </h1>
               {herbInfo?.latinName && (
-                <p className="text-lg text-gray-600 italic">{herbInfo.latinName}</p>
+                <p className="text-lg text-gray-800 italic">{herbInfo.latinName}</p>
               )}
-              <p className="text-gray-600 mt-2">{herbInfo?.description}</p>
+              <p className="text-gray-800 mt-2">{herbInfo?.description}</p>
             </div>
             
             <div className="text-right">
-              <p className="text-sm text-gray-600">Pending Products</p>
+              <p className="text-sm text-gray-800">Pending Products</p>
               <p className="text-3xl font-bold text-red-600">{pendingProducts.length}</p>
             </div>
           </div>
@@ -306,7 +314,7 @@ export default function HerbSubstancePage() {
               </button>
               <button
                 onClick={() => setSelectedProducts([])}
-                className="text-gray-600 hover:text-gray-800 text-sm font-medium"
+                className="text-gray-800 hover:text-gray-800 text-sm font-medium"
               >
                 Clear Selection
               </button>
@@ -320,7 +328,7 @@ export default function HerbSubstancePage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <p className="text-gray-600">No pending products for this herb.</p>
+              <p className="text-gray-800">No pending products for this herb.</p>
               <p className="text-sm text-gray-500 mt-2">All products have been reviewed.</p>
             </div>
           ) : (
@@ -350,7 +358,7 @@ export default function HerbSubstancePage() {
                   <div className="space-y-3">
                     <div>
                       <h3 className="font-semibold text-lg text-gray-900">{product.name}</h3>
-                      <p className="text-sm text-gray-600">{product.brand}</p>
+                      <p className="text-sm text-gray-800">{product.brand}</p>
                     </div>
 
                     <div className="flex justify-between items-center">
@@ -358,7 +366,7 @@ export default function HerbSubstancePage() {
                       <div className="flex items-center space-x-1">
                         <span className="text-yellow-500">★</span>
                         <span className="text-sm text-gray-700 font-medium">{product.rating}</span>
-                        <span className="text-xs text-gray-600">({product.reviewCount})</span>
+                        <span className="text-xs text-gray-800">({product.reviewCount})</span>
                       </div>
                     </div>
 

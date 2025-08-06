@@ -66,6 +66,10 @@ export default function AboutPage() {
               <h3 className="text-xl font-semibold text-blue-700 mb-2">How do we get paid?</h3>
               <p className="text-gray-700">Some links on this site are affiliate links, which means we may earn a small commission if you make a purchase—at no extra cost to you. This helps support our work and keeps the site free for everyone. We never accept payment for positive reviews or to feature specific products.</p>
             </div>
+            <div className="mb-6">
+              <h3 className="text-xl font-semibold text-blue-700 mb-2">Contact Information</h3>
+              <p className="text-gray-700">For questions, support, or feedback, please contact us at <a href="mailto:contact@thenervevine.com" className="text-blue-600 hover:text-blue-800">contact@thenervevine.com</a>. For legal inquiries, please email <a href="mailto:legal@thenervevine.com" className="text-blue-600 hover:text-blue-800">legal@thenervevine.com</a>.</p>
+            </div>
           </div>
         </section>
       </div>

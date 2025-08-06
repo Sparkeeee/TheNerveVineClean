@@ -19,10 +19,11 @@ The **Data Processing Hub** is the central intelligence system that processes af
    - Rate limiting and error handling
    - Standardized data format
 
-3. **Quality Analyzer** (`src/lib/product-quality-specs.ts`)
-   - Analyzes product quality based on multiple factors
+3. **Quality Analyzer** (Database-driven)
+   - Analyzes product quality based on database-stored specifications
    - Generates quality scores (1-10)
    - Considers organic, standardized, third-party testing
+   - Uses `/api/quality-specifications` for dynamic quality criteria
 
 4. **Affiliate Optimizer** (`src/lib/affiliateOptimizer.ts`)
    - Calculates profit margins and user value scores

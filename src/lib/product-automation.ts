@@ -96,20 +96,18 @@ class IHerbAPI {
   }
 }
 
-import { ProductQualityAnalyzer } from './product-quality-specs';
+
 
 // Product categorization and matching
 export class ProductAutomation {
   private providers: AffiliateProvider[];
   public amazonAPI: AmazonAssociatesAPI;
   public iherbAPI: IHerbAPI;
-  private qualityAnalyzer: ProductQualityAnalyzer;
   
   constructor(providers: AffiliateProvider[]) {
     this.providers = providers;
     this.amazonAPI = new AmazonAssociatesAPI(providers.find(p => p.name === 'Amazon')?.apiKey || '');
     this.iherbAPI = new IHerbAPI(providers.find(p => p.name === 'iHerb')?.apiKey || '');
-    this.qualityAnalyzer = new ProductQualityAnalyzer();
   }
   
   // Match products to symptoms/herbs based on criteria
@@ -209,38 +207,145 @@ export class ProductAutomation {
     const herb = { slug: herbSlug, usedFor: [], actions: [] };
     if (!herb) return [];
     
-    // Get quality specifications for this herb and product type
-    const specs = this.qualityAnalyzer.getSpecsForHerb(herbSlug, productType);
-    if (specs.length === 0) {
-      // Fall back to basic search if no quality specs
+    // Get quality specifications from database for this herb and product type
+    try {
+      const response = await fetch(`/api/quality-specifications?herbSlug=${herbSlug}&productType=${productType}`);
+      const specs = await response.json();
+      
+      if (specs.length === 0) {
+        // Fall back to basic search if no quality specs
+        return this.findProductsForCriteria({
+          symptoms: herb.usedFor,
+          herbs: [herbSlug.replace('-', ' ')],
+          supplements: herb.actions
+        });
+      }
+      
+      // Search for products
+      const allProducts: Product[] = [];
+      for (const spec of specs) {
+        const searchTerms = [...spec.requiredTerms, ...spec.preferredTerms];
+        for (const term of searchTerms) {
+          const amazonProducts = await this.amazonAPI.searchProducts(term);
+          const iherbProducts = await this.iherbAPI.searchProducts(term);
+          allProducts.push(...amazonProducts, ...iherbProducts);
+        }
+      }
+      
+      // Apply quality filtering using database specs
+      return this.filterProductsByQualitySpecs(allProducts, specs);
+    } catch (error) {
+      console.error('Error fetching quality specifications:', error);
       return this.findProductsForCriteria({
         symptoms: herb.usedFor,
         herbs: [herbSlug.replace('-', ' ')],
         supplements: herb.actions
       });
     }
-    
-    // Search for products
-    const allProducts: Product[] = [];
-    for (const spec of specs) {
-      const searchTerms = [...spec.requiredTerms, ...spec.preferredTerms];
-      for (const term of searchTerms) {
-        const amazonProducts = await this.amazonAPI.searchProducts(term);
-        const iherbProducts = await this.iherbAPI.searchProducts(term);
-        allProducts.push(...amazonProducts, ...iherbProducts);
+  }
+  
+  // Filter products using database quality specifications
+  private filterProductsByQualitySpecs(products: Product[], specs: any[]): Product[] {
+    return products.filter(product => {
+      for (const spec of specs) {
+        // Check required terms
+        const hasRequiredTerms = spec.requiredTerms.every((term: string) => 
+          product.name.toLowerCase().includes(term.toLowerCase()) ||
+          product.description.toLowerCase().includes(term.toLowerCase())
+        );
+        
+        if (!hasRequiredTerms) continue;
+        
+        // Check avoid terms
+        const hasAvoidTerms = spec.avoidTerms.some((term: string) =>
+          product.name.toLowerCase().includes(term.toLowerCase()) ||
+          product.description.toLowerCase().includes(term.toLowerCase())
+        );
+        
+        if (hasAvoidTerms) continue;
+        
+        // Check price range
+        if (product.price < spec.priceRange.min || product.price > spec.priceRange.max) {
+          continue;
+        }
+        
+        // Check rating threshold
+        if (product.rating && product.rating < spec.ratingThreshold) {
+          continue;
+        }
+        
+        // Check review count threshold
+        if (product.reviewCount && product.reviewCount < spec.reviewCountThreshold) {
+          continue;
+        }
+        
+        return true;
       }
-    }
-    
-    // Apply quality filtering
-    return this.qualityAnalyzer.filterProductsByQuality(allProducts, herbSlug, productType);
+      return false;
+    });
   }
   
   // Get quality analysis for a specific product
-  analyzeProductQuality(product: Product, herbSlug: string, productType: string) {
-    const specs = this.qualityAnalyzer.getSpecsForHerb(herbSlug, productType);
-    if (specs.length === 0) return null;
+  async analyzeProductQuality(product: Product, herbSlug: string, productType: string) {
+    try {
+      const response = await fetch(`/api/quality-specifications?herbSlug=${herbSlug}&productType=${productType}`);
+      const specs = await response.json();
+      
+      if (specs.length === 0) return null;
+      
+      return this.analyzeProductAgainstSpecs(product, specs[0]);
+    } catch (error) {
+      console.error('Error analyzing product quality:', error);
+      return null;
+    }
+  }
+  
+  private analyzeProductAgainstSpecs(product: Product, spec: any) {
+    const score = 0;
+    const reasons: string[] = [];
+    const warnings: string[] = [];
+    const matches = {
+      required: [] as string[],
+      preferred: [] as string[],
+      avoid: [] as string[]
+    };
     
-    return this.qualityAnalyzer.analyzeProduct(product, specs[0]);
+    // Check required terms
+    for (const term of spec.requiredTerms) {
+      if (product.name.toLowerCase().includes(term.toLowerCase()) ||
+          product.description.toLowerCase().includes(term.toLowerCase())) {
+        matches.required.push(term);
+        score += 20;
+        reasons.push(`Contains required term: ${term}`);
+      }
+    }
+    
+    // Check preferred terms
+    for (const term of spec.preferredTerms) {
+      if (product.name.toLowerCase().includes(term.toLowerCase()) ||
+          product.description.toLowerCase().includes(term.toLowerCase())) {
+        matches.preferred.push(term);
+        score += 10;
+        reasons.push(`Contains preferred term: ${term}`);
+      }
+    }
+    
+    // Check avoid terms
+    for (const term of spec.avoidTerms) {
+      if (product.name.toLowerCase().includes(term.toLowerCase()) ||
+          product.description.toLowerCase().includes(term.toLowerCase())) {
+        matches.avoid.push(term);
+        score -= 30;
+        warnings.push(`Contains avoid term: ${term}`);
+      }
+    }
+    
+    return {
+      score: Math.max(0, Math.min(100, score)),
+      reasons,
+      warnings,
+      matches
+    };
   }
 }
 

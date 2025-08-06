@@ -22,6 +22,8 @@
     "@prisma/client": "^6.12.0",
     "@tiptap/react": "^3.0.7",
     "@tiptap/starter-kit": "^3.0.7",
+    "@vercel/analytics": "^1.5.0",
+    "@vercel/speed-insights": "^1.2.0",
     "adminjs": "^7.6.1",
     "body-parser": "^2.2.0",
     "critters": "^0.0.23",

@@ -98,6 +98,43 @@ interface Indication {
   supplements?: Supplement[];
 }
 
+// Add interface for Product
+interface Product {
+  id: number;
+  name: string;
+  description?: string;
+  merchantId: number;
+  affiliateLink: string;
+  price?: number;
+  currency: string;
+  region?: string;
+  imageUrl?: string;
+  qualityScore?: number;
+  approvedBy?: string;
+  approvedAt?: string;
+  createdAt: string;
+  updatedAt: string;
+  affiliateRate?: number;
+  affiliateYield?: number;
+  merchant?: Merchant;
+  herbs?: Herb[];
+  supplements?: Supplement[];
+  symptoms?: Symptom[];
+}
+
+// Add interface for Merchant
+interface Merchant {
+  id: number;
+  name: string;
+  apiSource?: string;
+  logoUrl?: string;
+  websiteUrl?: string;
+  region: string;
+  createdAt: string;
+  updatedAt: string;
+  defaultAffiliateRate?: number;
+}
+
 // Define ProductFormulation type for clarity
 interface ProductFormulation {
   name?: string;
@@ -116,7 +153,7 @@ type Article = {
   fileName: string | null;
 };
 
-const TABS = ["Herbs", "Supplements", "Symptoms", "Indications", "Blog"];
+const TABS = ["Herbs", "Supplements", "Symptoms", "Indications", "Products", "Blog"];
 
 const HERB_FIELDS = [
   { key: "name", label: "Name", required: true },
@@ -160,6 +197,20 @@ const SYMPTOM_FIELDS = [
   { key: "articles", label: "Articles (JSON)" },
   { key: "associatedSymptoms", label: "Associated Symptoms (JSON)" },
   { key: "references", label: "References (JSON)" },
+];
+
+const PRODUCT_FIELDS = [
+  { key: "name", label: "Product Name", required: true },
+  { key: "description", label: "Description" },
+  { key: "merchantId", label: "Merchant ID", required: true },
+  { key: "affiliateLink", label: "Affiliate Link", required: true },
+  { key: "price", label: "Price" },
+  { key: "currency", label: "Currency", required: true },
+  { key: "region", label: "Region" },
+  { key: "imageUrl", label: "Image URL" },
+  { key: "qualityScore", label: "Quality Score (1-10)" },
+  { key: "affiliateRate", label: "Affiliate Rate (%)" },
+  { key: "affiliateYield", label: "Affiliate Yield" },
 ];
 
 function getFormattedDate() {
@@ -309,6 +360,13 @@ function getSupplementFieldValue(supp: Supplement, key: string): unknown {
 function getSymptomFieldValue(symptom: Symptom, key: string): unknown {
   if (Object.prototype.hasOwnProperty.call(symptom, key)) {
     return (symptom as unknown as Record<string, unknown>)[key];
+  }
+  return undefined;
+}
+
+function getProductFieldValue(product: Product, key: string): unknown {
+  if (Object.prototype.hasOwnProperty.call(product, key)) {
+    return (product as unknown as Record<string, unknown>)[key];
   }
   return undefined;
 }
@@ -531,13 +589,69 @@ export default function AdminContentPage() {
     references?: string;
     [key: string]: unknown;
   };
-  type FormDataType = HerbForm | SupplementForm | SymptomForm | Record<string, unknown>;
+
+  type ProductForm = {
+    name: string;
+    description?: string;
+    merchantId: number;
+    affiliateLink: string;
+    price?: number;
+    currency: string;
+    region?: string;
+    imageUrl?: string;
+    qualityScore?: number;
+    affiliateRate?: number;
+    affiliateYield?: number;
+    selectedHerbs?: number[];
+    selectedSupplements?: number[];
+    selectedSymptoms?: number[];
+    [key: string]: unknown;
+  };
+
+  type FormDataType = HerbForm | SupplementForm | SymptomForm | ProductForm | Record<string, unknown>;
   const [formData, setFormData] = useState<FormDataType>({});
   const [allSymptoms, setAllSymptoms] = useState<Symptom[]>([]);
   // Add state for allHerbs and allSupplements
   const [allHerbs, setAllHerbs] = useState<Herb[]>([]);
   const [allSupplements, setAllSupplements] = useState<Supplement[]>([]);
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
+  const [allMerchants, setAllMerchants] = useState<Merchant[]>([]);
   const [expandedDescriptions, setExpandedDescriptions] = useState<Set<number>>(new Set());
+                  const [showBatchImport, setShowBatchImport] = useState(false);
+                const [batchUrls, setBatchUrls] = useState('');
+                const [importing, setImporting] = useState(false);
+                const [useScraping, setUseScraping] = useState(false);
+
+  // Batch import function
+  const handleBatchImport = async () => {
+    if (!batchUrls.trim()) return;
+    
+    setImporting(true);
+    const urls = batchUrls.split('\n').map(url => url.trim()).filter(url => url);
+    
+    try {
+                        const response = await fetch('/api/products/batch-import', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ urls, useScraping })
+                  });
+      
+      const result = await response.json();
+      if (result.success) {
+        alert(`Successfully imported ${result.data.importedCount} products`);
+        setBatchUrls('');
+        setShowBatchImport(false);
+        fetchProducts();
+      } else {
+        alert(`Import failed: ${result.error}`);
+      }
+    } catch (error) {
+      console.error('Batch import error:', error);
+      alert('Import failed. Check console for details.');
+    } finally {
+      setImporting(false);
+    }
+  };
 
   // Fetch all herbs and supplements when Symptoms tab is active
   useEffect(() => {
@@ -549,6 +663,12 @@ export default function AdminContentPage() {
       fetchIndications();
       fetchAllHerbs();
       fetchAllSupplements();
+    }
+    if (tab === "Products") {
+      fetchMerchants();
+      fetchAllHerbs();
+      fetchAllSupplements();
+      fetchSymptoms();
     }
      
   }, [tab]);
@@ -636,6 +756,40 @@ export default function AdminContentPage() {
     }
   }
 
+  async function fetchProducts() {
+    try {
+      const res = await fetch("/api/products");
+      if (!res.ok) throw new Error("Failed to fetch products");
+      const response = await res.json();
+      const productsArray = response.data?.products || response.products || response || [];
+      if (!Array.isArray(productsArray)) {
+        console.error('Products data is not an array:', productsArray);
+        setData([]);
+      } else {
+        setData(productsArray);
+      }
+    } catch {
+      setData([]);
+    }
+  }
+
+  async function fetchMerchants() {
+    try {
+      const res = await fetch("/api/merchants");
+      if (!res.ok) throw new Error("Failed to fetch merchants");
+      const response = await res.json();
+      const merchantsArray = response.data?.merchants || response.merchants || response || [];
+      if (!Array.isArray(merchantsArray)) {
+        console.error('Merchants data is not an array:', merchantsArray);
+        setAllMerchants([]);
+      } else {
+        setAllMerchants(merchantsArray);
+      }
+    } catch {
+      setAllMerchants([]);
+    }
+  }
+
   async function fetchData() {
     setLoading(true);
     setError("");
@@ -646,7 +800,7 @@ export default function AdminContentPage() {
       const response = await res.json();
       
       // Handle the API response structure: { herbs: [...], pagination: {...} }
-      let items: Herb[] | Supplement[] | Symptom[] | Indication[] = [];
+      let items: Herb[] | Supplement[] | Symptom[] | Indication[] | Product[] = [];
       if (response.data) {
         // New API structure
         items = response.data[tab.toLowerCase()] || response.data || [];
@@ -837,6 +991,18 @@ export default function AdminContentPage() {
         defaultFormData.description = "";
       } else if (tab === "Symptoms") {
         defaultFormData.title = "";
+      } else if (tab === "Products") {
+        defaultFormData.name = "";
+        defaultFormData.description = "";
+        defaultFormData.merchantId = "";
+        defaultFormData.affiliateLink = "";
+        defaultFormData.price = "";
+        defaultFormData.currency = "USD";
+        defaultFormData.region = "";
+        defaultFormData.imageUrl = "";
+        defaultFormData.qualityScore = "";
+        defaultFormData.affiliateRate = "";
+        defaultFormData.affiliateYield = "";
       }
       
       setFormData(defaultFormData);
@@ -844,7 +1010,7 @@ export default function AdminContentPage() {
     }
   }
 
-  function openEditForm(item: Herb | Supplement | Symptom | Indication) {
+  function openEditForm(item: Herb | Supplement | Symptom | Indication | Product) {
     if (tab === "Indications") {
       setIndicationFormMode("edit");
       setIndicationFormData(item as Indication);
@@ -931,6 +1097,16 @@ export default function AdminContentPage() {
       cautions: processedItem.cautions || '',
       articles: processedItem.articles || '',
       associatedSymptoms: processedItem.associatedSymptoms || '',
+      // Product-specific fields
+      merchantId: processedItem.merchantId || '',
+      affiliateLink: processedItem.affiliateLink || '',
+      price: processedItem.price || '',
+      currency: processedItem.currency || 'USD',
+      region: processedItem.region || '',
+      imageUrl: processedItem.imageUrl || '',
+      qualityScore: processedItem.qualityScore || '',
+      affiliateRate: processedItem.affiliateRate || '',
+      affiliateYield: processedItem.affiliateYield || '',
     };
 
     // Remove any non-existent fields that might be present
@@ -975,38 +1151,44 @@ export default function AdminContentPage() {
     delete (processedData as any).selectedHerbs;
     delete (processedData as any).selectedSupplements;
     
+    // Remove herb-specific fields that don't exist in Prisma schema
+    delete (processedData as any).articles;
+    delete (processedData as any).associatedSymptoms;
+    
     // Convert references from simple format to JSON if present
     if (processedData.references && typeof processedData.references === 'string') {
       processedData.references = convertReferencesToJson(processedData.references as string);
     }
     
-                // Convert articles and associatedSymptoms from string to JSON if present
-            if (processedData.articles && typeof processedData.articles === 'string') {
-              try {
-                processedData.articles = JSON.parse(processedData.articles as string);
-              } catch {
-                // If it's not valid JSON, treat it as a simple string array and convert to JSON
-                const articlesString = processedData.articles as string;
-                const articlesArray = articlesString.split(',').map(item => item.trim()).filter(item => item.length > 0);
-                processedData.articles = articlesArray;
+                // Convert articles and associatedSymptoms from string to JSON if present (only for symptoms)
+            if (tab === "Symptoms") {
+              if (processedData.articles && typeof processedData.articles === 'string') {
+                try {
+                  processedData.articles = JSON.parse(processedData.articles as string);
+                } catch {
+                  // If it's not valid JSON, treat it as a simple string array and convert to JSON
+                  const articlesString = processedData.articles as string;
+                  const articlesArray = articlesString.split(',').map(item => item.trim()).filter(item => item.length > 0);
+                  processedData.articles = articlesArray;
+                }
+              } else if (!processedData.articles || processedData.articles === '') {
+                // Ensure empty strings are converted to empty arrays
+                processedData.articles = [];
               }
-            } else if (!processedData.articles || processedData.articles === '') {
-              // Ensure empty strings are converted to empty arrays
-              processedData.articles = [];
-            }
 
-            if (processedData.associatedSymptoms && typeof processedData.associatedSymptoms === 'string') {
-              try {
-                processedData.associatedSymptoms = JSON.parse(processedData.associatedSymptoms as string);
-              } catch {
-                // If it's not valid JSON, treat it as a simple string array and convert to JSON
-                const symptomsString = processedData.associatedSymptoms as string;
-                const symptomsArray = symptomsString.split(',').map(item => item.trim()).filter(item => item.length > 0);
-                processedData.associatedSymptoms = symptomsArray;
+              if (processedData.associatedSymptoms && typeof processedData.associatedSymptoms === 'string') {
+                try {
+                  processedData.associatedSymptoms = JSON.parse(processedData.associatedSymptoms as string);
+                } catch {
+                  // If it's not valid JSON, treat it as a simple string array and convert to JSON
+                  const symptomsString = processedData.associatedSymptoms as string;
+                  const symptomsArray = symptomsString.split(',').map(item => item.trim()).filter(item => item.length > 0);
+                  processedData.associatedSymptoms = symptomsArray;
+                }
+              } else if (!processedData.associatedSymptoms || processedData.associatedSymptoms === '') {
+                // Ensure empty strings are converted to empty arrays
+                processedData.associatedSymptoms = [];
               }
-            } else if (!processedData.associatedSymptoms || processedData.associatedSymptoms === '') {
-              // Ensure empty strings are converted to empty arrays
-              processedData.associatedSymptoms = [];
             }
     
     console.log('Submitting form data:', {
@@ -1128,6 +1310,20 @@ export default function AdminContentPage() {
         </tr>
       );
     }
+    if (tab === "Products") {
+      return (
+        <tr>
+          <th className="px-2 py-1 text-xs">Actions</th>
+          <th className="px-2 py-1 text-xs">ID</th>
+          {PRODUCT_FIELDS.map((f) => (
+            <th key={f.key} className="px-2 py-1 text-xs">{f.label}</th>
+          ))}
+          <th className="px-2 py-1 text-xs">Associated Herbs</th>
+          <th className="px-2 py-1 text-xs">Associated Supplements</th>
+          <th className="px-2 py-1 text-xs">Associated Symptoms</th>
+        </tr>
+      );
+    }
     // Fallback for other tabs (Symptoms)
     return (
       <tr>
@@ -1173,7 +1369,7 @@ export default function AdminContentPage() {
     );
   };
 
-  function renderTableRow(item: Herb | Supplement | Symptom, index: number) {
+  function renderTableRow(item: Herb | Supplement | Symptom | Product, index: number) {
     let itemAny: unknown;
     const isEven = index % 2 === 0;
     const rowBgClass = isEven ? "bg-gray-800" : "bg-gray-900";
@@ -1324,6 +1520,101 @@ export default function AdminContentPage() {
               </div>
             ) : (
               <span className="text-gray-500">No supplements</span>
+            )}
+          </td>
+        </tr>
+      );
+    }
+    if (tab === "Products") {
+      const productItem = item as Product;
+      return (
+        <tr key={item.id} className={`border-t border-gray-700 ${rowBgClass}`}>
+          <td className="px-2 py-1">
+            <div className="flex gap-1">
+              <button
+                className="px-1.5 py-0.5 bg-blue-500 rounded text-xs hover:bg-blue-600 transition-colors"
+                onClick={() => openEditForm(item)}
+              >
+                Edit
+              </button>
+              <button
+                className="px-1.5 py-0.5 bg-red-500 rounded text-xs hover:bg-red-600 transition-colors"
+                onClick={() => handleDelete(item.id)}
+              >
+                Delete
+              </button>
+            </div>
+          </td>
+          <td className="px-2 py-1 text-xs">{item.id}</td>
+          {PRODUCT_FIELDS.map((f) => {
+            const value = getProductFieldValue(productItem, f.key);
+            return (
+              <td key={f.key} className="px-2 py-1 text-xs max-w-[180px] truncate">
+                {f.key === "name"
+                  ? productItem.name || '—'
+                  : f.key === "merchantId"
+                  ? productItem.merchant?.name || `Merchant ${productItem.merchantId}`
+                  : f.key === "price"
+                  ? productItem.price ? `${productItem.price} ${productItem.currency}` : '—'
+                  : f.key === "affiliateRate"
+                  ? productItem.affiliateRate ? `${productItem.affiliateRate}%` : '—'
+                  : f.key === "qualityScore"
+                  ? productItem.qualityScore ? `${productItem.qualityScore}/10` : '—'
+                  : (typeof value === "string" || typeof value === "number" || typeof value === "boolean")
+                    ? value
+                    : value === true ? 'Yes' : value === false ? 'No' : '—'}
+              </td>
+            );
+          })}
+          <td className="px-2 py-1 text-xs">
+            {productItem.herbs && productItem.herbs.length > 0 ? (
+              <div className="max-w-[150px]">
+                <div className="font-semibold text-green-300">{productItem.herbs.length} herb(s)</div>
+                <div className="text-xs text-gray-400 max-h-12 overflow-y-auto">
+                  {productItem.herbs.slice(0, 3).map(herb => (
+                    <div key={herb.id} className="truncate">• {herb.name}</div>
+                  ))}
+                  {productItem.herbs.length > 3 && (
+                    <div className="text-gray-500">... and {productItem.herbs.length - 3} more</div>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <span className="text-gray-500">No herbs</span>
+            )}
+          </td>
+          <td className="px-2 py-1 text-xs">
+            {productItem.supplements && productItem.supplements.length > 0 ? (
+              <div className="max-w-[150px]">
+                <div className="font-semibold text-blue-300">{productItem.supplements.length} supplement(s)</div>
+                <div className="text-xs text-gray-400 max-h-12 overflow-y-auto">
+                  {productItem.supplements.slice(0, 3).map(supplement => (
+                    <div key={supplement.id} className="truncate">• {supplement.name}</div>
+                  ))}
+                  {productItem.supplements.length > 3 && (
+                    <div className="text-gray-500">... and {productItem.supplements.length - 3} more</div>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <span className="text-gray-500">No supplements</span>
+            )}
+          </td>
+          <td className="px-2 py-1 text-xs">
+            {productItem.symptoms && productItem.symptoms.length > 0 ? (
+              <div className="max-w-[150px]">
+                <div className="font-semibold text-purple-300">{productItem.symptoms.length} symptom(s)</div>
+                <div className="text-xs text-gray-400 max-h-12 overflow-y-auto">
+                  {productItem.symptoms.slice(0, 3).map(symptom => (
+                    <div key={symptom.id} className="truncate">• {symptom.title}</div>
+                  ))}
+                  {productItem.symptoms.length > 3 && (
+                    <div className="text-gray-500">... and {productItem.symptoms.length - 3} more</div>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <span className="text-gray-500">No symptoms</span>
             )}
           </td>
         </tr>
@@ -1860,6 +2151,170 @@ export default function AdminContentPage() {
       </>
     );
   }
+  if (tab === "Products") {
+    const productForm = formData as ProductForm;
+    return <>
+      {PRODUCT_FIELDS.map((f) => {
+        if (f.key === "description") {
+          return (
+            <div className="mb-4" key={f.key}>
+              <label className="block mb-1">{f.label}{f.required && <span className="text-red-400">*</span>}</label>
+              <textarea
+                className="w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600 h-32"
+                value={String(productForm[f.key] ?? '')}
+                onChange={e => setFormData({ ...productForm, [f.key]: e.target.value })}
+                placeholder="Product description..."
+              />
+            </div>
+          );
+        }
+        if (f.key === "merchantId") {
+          return (
+            <div className="mb-4" key={f.key}>
+              <label className="block mb-1">{f.label}{f.required && <span className="text-red-400">*</span>}</label>
+              <select
+                className="w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
+                value={String(productForm[f.key] ?? '')}
+                onChange={e => setFormData({ ...productForm, [f.key]: e.target.value })}
+                required={!!f.required}
+              >
+                <option value="">Select a merchant</option>
+                {allMerchants.map((merchant) => (
+                  <option key={merchant.id} value={merchant.id}>
+                    {merchant.name} ({merchant.region})
+                  </option>
+                ))}
+              </select>
+            </div>
+          );
+        }
+        if (f.key === "currency") {
+          return (
+            <div className="mb-4" key={f.key}>
+              <label className="block mb-1">{f.label}{f.required && <span className="text-red-400">*</span>}</label>
+              <select
+                className="w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
+                value={String(productForm[f.key] ?? 'USD')}
+                onChange={e => setFormData({ ...productForm, [f.key]: e.target.value })}
+                required={!!f.required}
+              >
+                <option value="USD">USD ($)</option>
+                <option value="EUR">EUR (€)</option>
+                <option value="GBP">GBP (£)</option>
+                <option value="CAD">CAD (C$)</option>
+                <option value="AUD">AUD (A$)</option>
+              </select>
+            </div>
+          );
+        }
+        return (
+          <div className="mb-4" key={f.key}>
+            <label className="block mb-1">{f.label}{f.required && <span className="text-red-400">*</span>}</label>
+            <input
+              className="w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
+              type={f.key === "price" || f.key === "qualityScore" || f.key === "affiliateRate" || f.key === "affiliateYield" ? "number" : "text"}
+              value={String(productForm[f.key] ?? '')}
+              onChange={e => setFormData({ ...productForm, [f.key]: e.target.value })}
+              required={!!f.required}
+              placeholder={f.key === "price" ? "0.00" : f.key === "qualityScore" ? "1-10" : f.key === "affiliateRate" ? "0.00" : f.key === "affiliateYield" ? "0.00" : ""}
+              step={f.key === "price" || f.key === "affiliateRate" || f.key === "affiliateYield" ? "0.01" : f.key === "qualityScore" ? "1" : undefined}
+              min={f.key === "qualityScore" ? "1" : f.key === "price" || f.key === "affiliateRate" || f.key === "affiliateYield" ? "0" : undefined}
+              max={f.key === "qualityScore" ? "10" : undefined}
+            />
+          </div>
+        );
+      })}
+
+      {/* Relationship Selection */}
+      <div className="mb-6 p-4 bg-blue-900/20 border border-blue-700 rounded-lg">
+        <h3 className="text-blue-300 font-semibold mb-4">Link to Content</h3>
+        
+        {/* Herbs Selection */}
+        <div className="mb-4">
+          <label className="block mb-2 text-gray-200">Associated Herbs</label>
+          <div className="max-h-32 overflow-y-auto border border-gray-600 rounded p-2 bg-gray-900">
+            {allHerbs.length > 0 ? allHerbs.map((herb) => (
+              <div key={herb.id} className="flex items-center mb-2">
+                <input
+                  type="checkbox"
+                  id={`herb-${herb.id}`}
+                  checked={productForm.selectedHerbs?.includes(herb.id) || false}
+                  onChange={(e) => {
+                    const selectedHerbs = productForm.selectedHerbs || [];
+                    if (e.target.checked) {
+                      setFormData({ ...productForm, selectedHerbs: [...selectedHerbs, herb.id] });
+                    } else {
+                      setFormData({ ...productForm, selectedHerbs: selectedHerbs.filter(id => id !== herb.id) });
+                    }
+                  }}
+                  className="mr-2"
+                />
+                <label htmlFor={`herb-${herb.id}`} className="text-gray-200 cursor-pointer">
+                  {herb.name} {herb.latinName && `(${herb.latinName})`}
+                </label>
+              </div>
+            )) : <div className="text-gray-400">Loading herbs...</div>}
+          </div>
+        </div>
+
+        {/* Supplements Selection */}
+        <div className="mb-4">
+          <label className="block mb-2 text-gray-200">Associated Supplements</label>
+          <div className="max-h-32 overflow-y-auto border border-gray-600 rounded p-2 bg-gray-900">
+            {allSupplements.length > 0 ? allSupplements.map((supp) => (
+              <div key={supp.id} className="flex items-center mb-2">
+                <input
+                  type="checkbox"
+                  id={`supp-${supp.id}`}
+                  checked={productForm.selectedSupplements?.includes(supp.id) || false}
+                  onChange={(e) => {
+                    const selectedSupplements = productForm.selectedSupplements || [];
+                    if (e.target.checked) {
+                      setFormData({ ...productForm, selectedSupplements: [...selectedSupplements, supp.id] });
+                    } else {
+                      setFormData({ ...productForm, selectedSupplements: selectedSupplements.filter(id => id !== supp.id) });
+                    }
+                  }}
+                  className="mr-2"
+                />
+                <label htmlFor={`supp-${supp.id}`} className="text-gray-200 cursor-pointer">
+                  {supp.name}
+                </label>
+              </div>
+            )) : <div className="text-gray-400">Loading supplements...</div>}
+          </div>
+        </div>
+
+        {/* Symptoms Selection */}
+        <div className="mb-4">
+          <label className="block mb-2 text-gray-200">Associated Symptoms</label>
+          <div className="max-h-32 overflow-y-auto border border-gray-600 rounded p-2 bg-gray-900">
+            {allSymptoms.length > 0 ? allSymptoms.map((symptom) => (
+              <div key={symptom.id} className="flex items-center mb-2">
+                <input
+                  type="checkbox"
+                  id={`symptom-${symptom.id}`}
+                  checked={productForm.selectedSymptoms?.includes(symptom.id) || false}
+                  onChange={(e) => {
+                    const selectedSymptoms = productForm.selectedSymptoms || [];
+                    if (e.target.checked) {
+                      setFormData({ ...productForm, selectedSymptoms: [...selectedSymptoms, symptom.id] });
+                    } else {
+                      setFormData({ ...productForm, selectedSymptoms: selectedSymptoms.filter(id => id !== symptom.id) });
+                    }
+                  }}
+                  className="mr-2"
+                />
+                <label htmlFor={`symptom-${symptom.id}`} className="text-gray-200 cursor-pointer">
+                  {symptom.title}
+                </label>
+              </div>
+            )) : <div className="text-gray-400">Loading symptoms...</div>}
+          </div>
+        </div>
+      </div>
+    </>;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -1909,7 +2364,7 @@ export default function AdminContentPage() {
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFile(e.target && e.target.files ? e.target.files[0] : null)}
                     className="border border-gray-300 px-3 py-2 rounded text-gray-900 bg-white"
                   />
-                  <span className="text-gray-600">or</span>
+                  <span className="text-gray-800">or</span>
                   <textarea
                     placeholder="Paste or write article content here (Markdown or plain text)"
                     className="border border-gray-300 px-3 py-2 rounded text-gray-900 bg-white placeholder-gray-500 w-full"
@@ -1932,8 +2387,8 @@ export default function AdminContentPage() {
                       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
                         <div>
                           <div className="font-bold text-lg text-gray-900">{article.title}</div>
-                          <div className="text-gray-600 text-sm">Uploaded: {article.uploadDate}</div>
-                          {article.adminNote && <div className="text-gray-600 text-sm italic">Note: {article.adminNote}</div>}
+                          <div className="text-gray-800 text-sm">Uploaded: {article.uploadDate}</div>
+                          {article.adminNote && <div className="text-gray-800 text-sm italic">Note: {article.adminNote}</div>}
                           {article.fileName && <div className="text-gray-500 text-xs">File: {article.fileName}</div>}
                         </div>
                         <div className="flex gap-2 mt-2 md:mt-0">
@@ -1993,12 +2448,30 @@ export default function AdminContentPage() {
               <div className="text-red-400">{error}</div>
             ) : (
               <div>
-                <button
-                  className="mb-4 px-4 py-2 bg-green-600 rounded hover:bg-green-700"
-                  onClick={openAddForm}
-                >
-                  + Add New {tab.slice(0, -1)}
-                </button>
+                {tab === "Products" && (
+                  <div className="mb-4 flex gap-2">
+                    <button
+                      className="px-4 py-2 bg-green-600 rounded hover:bg-green-700"
+                      onClick={() => setShowBatchImport(true)}
+                    >
+                      📥 Batch Import
+                    </button>
+                    <button
+                      className="px-4 py-2 bg-blue-600 rounded hover:bg-blue-700"
+                      onClick={openAddForm}
+                    >
+                      + Add New {tab.slice(0, -1)}
+                    </button>
+                  </div>
+                )}
+                {tab !== "Products" && (
+                  <button
+                    className="mb-4 px-4 py-2 bg-green-600 rounded hover:bg-green-700"
+                    onClick={openAddForm}
+                  >
+                    + Add New {tab.slice(0, -1)}
+                  </button>
+                )}
                 
                 {/* Indications Help Section */}
                 {tab === "Indications" && (
@@ -2057,6 +2530,65 @@ export default function AdminContentPage() {
           </>
         )}
       </div>
+
+      {/* Batch Import Modal */}
+      {showBatchImport && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
+          <div className="bg-gray-900 rounded shadow-lg w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
+            <div className="p-6 border-b border-gray-700">
+              <h2 className="text-2xl font-bold text-white">Batch Import Products</h2>
+            </div>
+            
+            <div className="p-6 overflow-y-auto flex-1">
+              <p className="text-gray-300 mb-4">
+                Enter product URLs (one per line) from supported merchants. The system will attempt to extract product information automatically.
+              </p>
+              <textarea
+                value={batchUrls}
+                onChange={(e) => setBatchUrls(e.target.value)}
+                placeholder="https://amazon.com/product1&#10;https://amazon.com/product2&#10;https://amazon.com/product3"
+                className="w-full h-32 p-2 border rounded mb-4 bg-gray-700 text-gray-100 border-gray-600"
+              />
+              <div className="mb-4">
+                <label className="flex items-center text-gray-300">
+                  <input
+                    type="checkbox"
+                    id="useScraping"
+                    className="mr-2"
+                    onChange={(e) => setUseScraping(e.target.checked)}
+                  />
+                  Enable web scraping for better data extraction (requires Puppeteer)
+                </label>
+              </div>
+              <div className="text-xs text-gray-400 mb-4">
+                <p>• Supported merchants: Amazon, iHerb, Vitacost, etc.</p>
+                <p>• Each URL should be on a separate line</p>
+                <p>• The system will create merchants automatically if they don't exist</p>
+                <p>• Web scraping extracts real product data (prices, images, descriptions)</p>
+              </div>
+            </div>
+            
+            <div className="p-6 border-t border-gray-700">
+              <div className="flex gap-4">
+                <button
+                  onClick={() => setShowBatchImport(false)}
+                  className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleBatchImport}
+                  disabled={importing || !batchUrls.trim()}
+                  className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50"
+                >
+                  {importing ? 'Importing...' : 'Import Products'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {showForm && (
         <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
           <div className="bg-gray-900 rounded shadow-lg w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">

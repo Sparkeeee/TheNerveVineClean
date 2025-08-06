@@ -148,14 +148,9 @@ export default function Header() {
             </div>
             <div className="absolute right-0 text-xs">
               <div className="flex items-center gap-2">
-                {status !== 'loading' && session ? (
-                  <>
-                    {session.user && (session.user as any).role === 'admin' ? (
-                      <span className="text-gray-600">Admin</span>
-                    ) : (
-                      <span className="text-gray-600">User</span>
-                    )}
-                                         <button 
+                                 {status !== 'loading' && session ? (
+                   <>
+                     <button 
                        onClick={async () => {
                          try {
                            localStorage.clear();
@@ -173,8 +168,8 @@ export default function Header() {
                      >
                        Logout
                      </button>
-                  </>
-                ) : (
+                   </>
+                 ) : (
                   <>
                     <Link 
                       href="/login"
@@ -229,8 +224,12 @@ export default function Header() {
                 <Link href="/about" className={`font-medium transition-colors ${isActivePath('/about') ? 'text-green-600 border-b-2 border-green-600' : 'text-gray-700 hover:text-green-600'}`}>
                   About
                 </Link>
-                {session && session.user && (session.user as any).role !== 'admin' && (
-                  <Link href="/my-list" className="px-3 py-2 rounded-md text-sm font-medium text-green-600 hover:text-green-700 hover:bg-gray-50">
+                {session && session.user && (session.user as any).role === 'admin' ? (
+                  <Link href="/admin" className={`font-medium transition-colors ${isActivePath('/admin') ? 'text-purple-600 border-b-2 border-purple-600' : 'text-purple-600 hover:text-purple-700'}`}>
+                    Admin
+                  </Link>
+                ) : session && (
+                  <Link href="/my-list" className="font-medium transition-colors text-green-600 hover:text-green-700">
                     My List
                   </Link>
                 )}
@@ -282,56 +281,46 @@ export default function Header() {
                 <Link href="/about" className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-green-600 hover:bg-gray-50">
                   About
                 </Link>
-                {session && session.user && (session.user as any).role !== 'admin' && (
+                {session && session.user && (session.user as any).role === 'admin' ? (
+                  <Link href="/admin" className="px-3 py-2 rounded-md text-sm font-medium text-purple-700 hover:text-purple-600 hover:bg-purple-50">
+                    Admin
+                  </Link>
+                ) : session && (
                   <Link href="/my-list" className="px-3 py-2 rounded-md text-sm font-medium text-green-600 hover:text-green-700 hover:bg-gray-50">
                     My List
                   </Link>
                 )}
                                  
-                {/* Admin Section - Mobile */}
-                {status !== 'loading' && session ? (
-                  <>
-                    <div className="border-t border-gray-200 pt-2 mt-2">
-                      {session.user && (session.user as any).role === 'admin' ? (
-                        <Link href="/admin" className="px-3 py-2 rounded-md text-sm font-medium text-purple-700 hover:text-purple-600 hover:bg-purple-50 flex items-center">
-                          <span className="mr-2">👤</span>
-                          Admin
-                        </Link>
-                      ) : (
-                        <Link href="/my-list" className="px-3 py-2 rounded-md text-sm font-medium text-green-600 hover:text-green-700 hover:bg-gray-50 flex items-center">
-                          <span className="mr-2">📋</span>
-                          My List
-                        </Link>
-                      )}
-                                             <button 
-                         onClick={async () => {
-                           try {
-                             localStorage.clear();
-                             sessionStorage.clear();
-                             await signOut({ callbackUrl: '/login', redirect: true });
-                             setTimeout(() => {
-                               window.location.href = '/login';
-                             }, 200);
-                           } catch (error) {
-                             console.error('SignOut error:', error)
-                           }
-                         }} 
-                         className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-red-600 hover:text-red-700 hover:bg-red-50 flex items-center"
-                       >
-                         <span className="mr-2">🚪</span>
-                         Logout
-                       </button>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div className="border-t border-gray-200 pt-2 mt-2">
-                      <Link href="/login" className="px-3 py-2 rounded-md text-sm font-medium text-blue-700 hover:text-blue-600 hover:bg-blue-50 flex items-center">
-                        <span className="mr-2">🔐</span>
-                        Login
-                      </Link>
-                    </div>
-                  </>
+                {/* Logout Section - Mobile */}
+                {status !== 'loading' && session && (
+                  <div className="border-t border-gray-200 pt-2 mt-2">
+                    <button 
+                      onClick={async () => {
+                        try {
+                          localStorage.clear();
+                          sessionStorage.clear();
+                          await signOut({ callbackUrl: '/login', redirect: true });
+                          setTimeout(() => {
+                            window.location.href = '/login';
+                          }, 200);
+                        } catch (error) {
+                          console.error('SignOut error:', error)
+                        }
+                      }} 
+                      className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-red-600 hover:text-red-700 hover:bg-red-50 flex items-center"
+                    >
+                      <span className="mr-2">🚪</span>
+                      Logout
+                    </button>
+                  </div>
+                )}
+                {status !== 'loading' && !session && (
+                  <div className="border-t border-gray-200 pt-2 mt-2">
+                    <Link href="/login" className="px-3 py-2 rounded-md text-sm font-medium text-blue-700 hover:text-blue-600 hover:bg-blue-50 flex items-center">
+                      <span className="mr-2">🔐</span>
+                      Login
+                    </Link>
+                  </div>
                 )}
               </nav>
             </div>

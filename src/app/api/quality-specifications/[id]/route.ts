@@ -14,46 +14,42 @@ export async function PUT(
     const body = await request.json();
     
     // Validate required fields
-    if (!body.productType || !body.formulationName) {
+    if (!body.productType) {
       return NextResponse.json(
-        { error: 'Product type and formulation name are required' },
+        { error: 'Product type is required' },
         { status: 400 }
       );
     }
 
-    // Convert arrays to JSON for storage
-    const specification = {
-      herbSlug: body.herbSlug || null,
-      supplementSlug: body.supplementSlug || null,
-      herbName: body.herbName || null,
-      supplementName: body.supplementName || null,
-      productType: body.productType,
-      formulationName: body.formulationName,
-      approach: body.approach || 'traditional',
-      requiredTerms: JSON.stringify(body.requiredTerms || []),
-      preferredTerms: JSON.stringify(body.preferredTerms || []),
-      avoidTerms: JSON.stringify(body.avoidTerms || []),
-      standardization: body.standardization ? JSON.stringify(body.standardization) : null,
-      alcoholSpecs: body.alcoholSpecs ? JSON.stringify(body.alcoholSpecs) : null,
-      dosageSpecs: body.dosageSpecs ? JSON.stringify(body.dosageSpecs) : null,
-      priceRange: JSON.stringify(body.priceRange || { min: 0, max: 100, currency: 'USD' }),
-      ratingThreshold: body.ratingThreshold || 4.0,
-      reviewCountThreshold: body.reviewCountThreshold || 50,
-      brandPreferences: body.brandPreferences ? JSON.stringify(body.brandPreferences) : null,
-      brandAvoid: body.brandAvoid ? JSON.stringify(body.brandAvoid) : null,
-      notes: body.notes || null
-    };
+    if (!body.herbSlug && !body.supplementSlug) {
+      return NextResponse.json(
+        { error: 'Either herb slug or supplement slug is required' },
+        { status: 400 }
+      );
+    }
 
     const updatedSpecification = await prisma.qualitySpecification.update({
       where: { id: parsedId },
       data: {
-        ...specification,
-        standardization: specification.standardization ? JSON.parse(specification.standardization) : undefined,
-        alcoholSpecs: specification.alcoholSpecs ? JSON.parse(specification.alcoholSpecs) : undefined,
-        dosageSpecs: specification.dosageSpecs ? JSON.parse(specification.dosageSpecs) : undefined,
-        priceRange: specification.priceRange ? JSON.parse(specification.priceRange) : undefined,
-        brandPreferences: specification.brandPreferences ? JSON.parse(specification.brandPreferences) : undefined,
-        brandAvoid: specification.brandAvoid ? JSON.parse(specification.brandAvoid) : undefined,
+        herbSlug: body.herbSlug || null,
+        herbName: body.herbName || null,
+        supplementSlug: body.supplementSlug || null,
+        supplementName: body.supplementName || null,
+        productType: body.productType,
+        formulationName: body.formulationName || null,
+        approach: body.approach || 'traditional',
+        requiredTerms: body.requiredTerms || [],
+        preferredTerms: body.preferredTerms || [],
+        avoidTerms: body.avoidTerms || [],
+        standardization: body.standardization || null,
+        alcoholSpecs: body.alcoholSpecs || null,
+        dosageSpecs: body.dosageSpecs || null,
+        priceRange: body.priceRange || { min: 0, max: 100, currency: 'USD' },
+        ratingThreshold: body.ratingThreshold || 4.0,
+        reviewCountThreshold: body.reviewCountThreshold || 50,
+        brandPreferences: body.brandPreferences || null,
+        brandAvoid: body.brandAvoid || null,
+        notes: body.notes || null
       }
     });
 

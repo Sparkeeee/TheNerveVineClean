@@ -4,7 +4,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
-import { getCachedSupplement } from '@/lib/database';
 
 interface PendingProduct {
   id: string;
@@ -44,10 +43,11 @@ export default function SupplementSubstancePage() {
 
   const fetchSupplementInfo = useCallback(async () => {
     try {
-      // Fetch real supplement data from database
-      const dbSupplement = await getCachedSupplement(slug);
+      // Fetch supplement data from API endpoint
+      const response = await fetch(`/api/supplements/${slug}`);
       
-      if (dbSupplement) {
+      if (response.ok) {
+        const dbSupplement = await response.json();
         const supplementInfo: SupplementInfo = {
           name: dbSupplement.name,
           slug: dbSupplement.slug,
@@ -67,6 +67,14 @@ export default function SupplementSubstancePage() {
       }
     } catch (error) {
       console.error('Error fetching supplement info:', error);
+      // Fallback on error
+      const supplementInfo: SupplementInfo = {
+        name: slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
+        slug: slug,
+        description: `Quality specifications and pending products for ${slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}.`,
+        dosage: undefined
+      };
+      setSupplementInfo(supplementInfo);
     }
   }, [slug]);
 
@@ -225,7 +233,7 @@ export default function SupplementSubstancePage() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600">Loading supplement information...</p>
+            <p className="mt-4 text-gray-800">Loading supplement information...</p>
           </div>
         </div>
       </div>
@@ -251,11 +259,11 @@ export default function SupplementSubstancePage() {
               <h1 className="text-3xl font-bold text-gray-900 mb-2">
                 {supplementInfo?.name}
               </h1>
-              <p className="text-gray-600 mt-2">{supplementInfo?.description}</p>
+              <p className="text-gray-800 mt-2">{supplementInfo?.description}</p>
             </div>
             
             <div className="text-right">
-              <p className="text-sm text-gray-600">Pending Products</p>
+              <p className="text-sm text-gray-800">Pending Products</p>
               <p className="text-3xl font-bold text-red-600">{pendingProducts.length}</p>
             </div>
           </div>
@@ -303,7 +311,7 @@ export default function SupplementSubstancePage() {
               </button>
               <button
                 onClick={() => setSelectedProducts([])}
-                className="text-gray-600 hover:text-gray-800 text-sm font-medium"
+                className="text-gray-800 hover:text-gray-800 text-sm font-medium"
               >
                 Clear Selection
               </button>
@@ -317,7 +325,7 @@ export default function SupplementSubstancePage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <p className="text-gray-600">No pending products for this supplement.</p>
+              <p className="text-gray-800">No pending products for this supplement.</p>
               <p className="text-sm text-gray-500 mt-2">All products have been reviewed.</p>
             </div>
           ) : (
@@ -344,7 +352,7 @@ export default function SupplementSubstancePage() {
                   <div className="space-y-3">
                     <div>
                       <h3 className="font-semibold text-lg text-gray-900">{product.name}</h3>
-                      <p className="text-sm text-gray-600">{product.brand}</p>
+                      <p className="text-sm text-gray-800">{product.brand}</p>
                     </div>
 
                     <div className="flex justify-between items-center">
@@ -352,7 +360,7 @@ export default function SupplementSubstancePage() {
                       <div className="flex items-center space-x-1">
                         <span className="text-yellow-500">★</span>
                         <span className="text-sm text-gray-700 font-medium">{product.rating}</span>
-                        <span className="text-xs text-gray-600">({product.reviewCount})</span>
+                        <span className="text-xs text-gray-800">({product.reviewCount})</span>
                       </div>
                     </div>
 

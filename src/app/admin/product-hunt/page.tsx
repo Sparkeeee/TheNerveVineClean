@@ -160,7 +160,7 @@ export default function ProductHuntDashboard() {
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
               Product Hunt Dashboard
             </h1>
-            <p className="text-gray-600">
+            <p className="text-gray-700">
               Review and approve products based on quality specifications and research criteria.
             </p>
           </div>
@@ -171,7 +171,7 @@ export default function ProductHuntDashboard() {
           <div className="bg-white rounded-lg shadow-md p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Pending Herbs</p>
+                <p className="text-sm font-medium text-gray-700">Total Pending Herbs</p>
                 <p className="text-3xl font-bold text-green-600">{totalPendingHerbs}</p>
               </div>
               <div className="p-3 bg-green-100 rounded-full">
@@ -185,7 +185,7 @@ export default function ProductHuntDashboard() {
           <div className="bg-white rounded-lg shadow-md p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Pending Supplements</p>
+                <p className="text-sm font-medium text-gray-700">Total Pending Supplements</p>
                 <p className="text-3xl font-bold text-blue-600">{totalPendingSupplements}</p>
               </div>
               <div className="p-3 bg-blue-100 rounded-full">
@@ -199,7 +199,7 @@ export default function ProductHuntDashboard() {
           <div className="bg-white rounded-lg shadow-md p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Pending</p>
+                <p className="text-sm font-medium text-gray-700">Total Pending</p>
                 <p className="text-3xl font-bold text-purple-600">{totalPendingHerbs + totalPendingSupplements}</p>
               </div>
               <div className="p-3 bg-purple-100 rounded-full">
@@ -214,7 +214,7 @@ export default function ProductHuntDashboard() {
         {loading ? (
           <div className="text-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600">Loading substances...</p>
+            <p className="mt-4 text-gray-700">Loading substances...</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -242,7 +242,7 @@ export default function ProductHuntDashboard() {
                       </div>
                       <div>
                         <h3 className="font-medium text-gray-900">{herb.name}</h3>
-                        <p className="text-sm text-gray-600">Slug: {herb.slug}</p>
+                        <p className="text-sm text-gray-700">Slug: {herb.slug}</p>
                       </div>
                     </div>
                     <div className="flex items-center space-x-2">
@@ -284,7 +284,7 @@ export default function ProductHuntDashboard() {
                       </div>
                       <div>
                         <h3 className="font-medium text-gray-900">{supplement.name}</h3>
-                        <p className="text-sm text-gray-600">Slug: {supplement.slug}</p>
+                        <p className="text-sm text-gray-700">Slug: {supplement.slug}</p>
                       </div>
                     </div>
                     <div className="flex items-center space-x-2">
