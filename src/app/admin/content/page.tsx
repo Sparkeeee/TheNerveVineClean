@@ -2563,7 +2563,7 @@ export default function AdminContentPage() {
               <div className="text-xs text-gray-400 mb-4">
                 <p>• Supported merchants: Amazon, iHerb, Vitacost, etc.</p>
                 <p>• Each URL should be on a separate line</p>
-                <p>• The system will create merchants automatically if they don't exist</p>
+                <p>• The system will create merchants automatically if they don&apos;t exist</p>
                 <p>• Web scraping extracts real product data (prices, images, descriptions)</p>
               </div>
             </div>

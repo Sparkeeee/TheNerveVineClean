@@ -13,7 +13,7 @@ export default function ContactPage() {
         
         <div className="text-center">
           <p className="text-gray-700 mb-8 text-lg">
-            Have questions, feedback, or need support? We'd love to hear from you.
+            Have questions, feedback, or need support? We&apos;d love to hear from you.
           </p>
           
           <div className="bg-blue-50 rounded-lg p-6 border border-blue-200">
