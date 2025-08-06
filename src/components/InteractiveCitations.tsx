@@ -702,94 +702,135 @@ export default function InteractiveCitations({ content }: InteractiveCitationsPr
     const handleCitationClick = (e: Event) => {
       const target = e.target as HTMLElement;
       if (target.classList.contains('citation-button')) {
-                 // Visual feedback (subtle)
-         target.style.backgroundColor = 'rgba(59, 130, 246, 0.1)';
-         setTimeout(() => {
-           target.style.backgroundColor = '';
-         }, 300);
+        // Visual feedback (subtle)
+        target.style.backgroundColor = 'rgba(59, 130, 246, 0.1)';
+        setTimeout(() => {
+          target.style.backgroundColor = '';
+        }, 300);
         
         const citationId = target.getAttribute('data-citation-id');
         const citationText = target.getAttribute('data-citation-text');
         
-                 if (citationId && citationText) {
-           const uniqueKey = `${citationId}-html`;
-           const isExpanded = expandedCitations.has(uniqueKey);
-           const newExpanded = new Set(expandedCitations);
-           
-           if (isExpanded) {
-             newExpanded.delete(uniqueKey);
-           } else {
-             newExpanded.add(uniqueKey);
-           }
-           setExpandedCitations(newExpanded);
-           
-                       // Remove existing dropdowns first
-            document.querySelectorAll('.citation-dropdown').forEach(d => d.remove());
-            
-            // Generate the correct reference for this specific citation
-            const correctReference = generateReference(citationText);
-            
-                         // Convert DOIs to clickable links in the reference text
-             const referenceWithLinks = correctReference.replace(
-               /(https:\/\/doi\.org\/10\.\d+\/[^\s<>]+?)(?=[\s<>]|$)/g,
-               '<a href="$1" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 underline">$1</a>'
-             );
-             
-             // Show dropdown with ONLY this reference
-             const dropdown = document.createElement('div');
-             dropdown.className = 'absolute z-50 mt-2 w-[32rem] bg-white border border-gray-200 rounded-lg shadow-lg p-4 citation-dropdown';
-             dropdown.innerHTML = `
-               <div class="flex justify-between items-start mb-2">
-                 <span class="text-xs text-gray-600 font-medium">Reference</span>
-                 <button class="text-gray-400 hover:text-gray-600 close-dropdown">×</button>
-               </div>
-               <div class="text-sm text-gray-800 leading-relaxed max-h-96 overflow-y-auto whitespace-normal">
-                 ${referenceWithLinks}
-               </div>
-             `;
-           
-           // Position dropdown with overflow detection
-           const rect = target.getBoundingClientRect();
-           const dropdownWidth = 512; // 32rem = 512px
-           const viewportWidth = window.innerWidth;
-           const rightEdge = rect.left + dropdownWidth;
-           
-           dropdown.style.position = 'fixed';
-           dropdown.style.top = `${rect.bottom + 5}px`;
-           dropdown.style.zIndex = '9999';
-           
-           // Check if dropdown would overflow right edge
-           if (rightEdge > viewportWidth - 20) { // 20px margin from edge
-             // Position from right edge instead
-             dropdown.style.right = '20px';
-             dropdown.style.left = 'auto';
-           } else {
-             // Normal left positioning
-             dropdown.style.left = `${rect.left}px`;
-             dropdown.style.right = 'auto';
-           }
-           
-           // Add close functionality
-           dropdown.querySelector('.close-dropdown')?.addEventListener('click', () => {
-             dropdown.remove();
-             const newExpanded = new Set(expandedCitations);
-             newExpanded.delete(uniqueKey);
-             setExpandedCitations(newExpanded);
-           });
-           
-           document.body.appendChild(dropdown);
-         }
+        if (citationId && citationText) {
+          const uniqueKey = `${citationId}-html`;
+          const isExpanded = expandedCitations.has(uniqueKey);
+          const newExpanded = new Set(expandedCitations);
+          
+          if (isExpanded) {
+            newExpanded.delete(uniqueKey);
+          } else {
+            newExpanded.add(uniqueKey);
+          }
+          setExpandedCitations(newExpanded);
+          
+          // Remove existing dropdowns first
+          document.querySelectorAll('.citation-dropdown').forEach(d => d.remove());
+          
+          // Generate the correct reference for this specific citation
+          const correctReference = generateReference(citationText);
+          
+          // Convert DOIs to clickable links in the reference text
+          const referenceWithLinks = correctReference.replace(
+            /(https:\/\/doi\.org\/10\.\d+\/[^\s<>]+?)(?=[\s<>]|$)/g,
+            '<a href="$1" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 underline">$1</a>'
+          );
+          
+          // Show dropdown with ONLY this reference
+          const dropdown = document.createElement('div');
+          dropdown.className = 'absolute z-50 mt-2 w-[32rem] bg-white border border-gray-200 rounded-lg shadow-lg p-4 citation-dropdown';
+          dropdown.innerHTML = `
+            <div class="flex justify-between items-start mb-2">
+              <span class="text-xs text-gray-600 font-medium">Reference</span>
+              <button class="text-gray-400 hover:text-gray-600 close-dropdown">×</button>
+            </div>
+            <div class="text-sm text-gray-800 leading-relaxed max-h-96 overflow-y-auto whitespace-normal">
+              ${referenceWithLinks}
+            </div>
+          `;
+        
+          // Position dropdown with overflow detection
+          const rect = target.getBoundingClientRect();
+          const dropdownWidth = 512; // 32rem = 512px
+          const viewportWidth = window.innerWidth;
+          const rightEdge = rect.left + dropdownWidth;
+          
+          dropdown.style.position = 'fixed';
+          dropdown.style.top = `${rect.bottom + 5}px`;
+          dropdown.style.zIndex = '9999';
+          
+          // Check if dropdown would overflow right edge
+          if (rightEdge > viewportWidth - 20) { // 20px margin from edge
+            // Position from right edge instead
+            dropdown.style.right = '20px';
+            dropdown.style.left = 'auto';
+          } else {
+            // Normal left positioning
+            dropdown.style.left = `${rect.left}px`;
+            dropdown.style.right = 'auto';
+          }
+          
+          // Add close functionality
+          dropdown.querySelector('.close-dropdown')?.addEventListener('click', () => {
+            dropdown.remove();
+            const newExpanded = new Set(expandedCitations);
+            newExpanded.delete(uniqueKey);
+            setExpandedCitations(newExpanded);
+          });
+          
+          document.body.appendChild(dropdown);
+        }
       }
     };
 
     // Add event listener to document
     document.addEventListener('click', handleCitationClick);
     
-    // Cleanup
+    // Cleanup function to remove all citation dropdowns
+    const cleanupDropdowns = () => {
+      document.querySelectorAll('.citation-dropdown').forEach(d => d.remove());
+    };
+    
+    // Cleanup on component unmount
     return () => {
       document.removeEventListener('click', handleCitationClick);
+      cleanupDropdowns();
     };
   }, [expandedCitations, setExpandedCitations, generateReference]);
+
+  // Additional cleanup effect to handle navigation
+  React.useEffect(() => {
+    // Cleanup function to remove all citation dropdowns
+    const cleanupDropdowns = () => {
+      document.querySelectorAll('.citation-dropdown').forEach(d => d.remove());
+    };
+    
+    // Handle navigation events (Next.js router events)
+    const handleRouteChange = () => {
+      cleanupDropdowns();
+    };
+    
+    // Listen for Next.js route changes
+    if (typeof window !== 'undefined') {
+      // Clean up on page unload
+      window.addEventListener('beforeunload', cleanupDropdowns);
+      
+      // Clean up on popstate (back/forward navigation)
+      window.addEventListener('popstate', cleanupDropdowns);
+      
+      // Clean up on hashchange
+      window.addEventListener('hashchange', cleanupDropdowns);
+    }
+    
+    // Clean up dropdowns when component unmounts or when expandedCitations changes
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('beforeunload', cleanupDropdowns);
+        window.removeEventListener('popstate', cleanupDropdowns);
+        window.removeEventListener('hashchange', cleanupDropdowns);
+      }
+      cleanupDropdowns();
+    };
+  }, [expandedCitations]);
   
   return (
     <div className="prose prose-lg max-w-none text-gray-900 leading-relaxed">

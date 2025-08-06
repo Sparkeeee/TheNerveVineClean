@@ -226,248 +226,358 @@ export default function HerbPage({ params }: { params: Promise<{ slug: string }>
       shareTitle={`${herb.name} - The NerveVine`}
     >
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Hero Image - Full Width Above Title */}
-        {herb.heroImageUrl && (
-          <div className="mb-8">
-            <Image
-              src={herb.heroImageUrl}
-              alt={herb.name}
-              width={1200}
-              height={400}
-              className="w-full h-64 md:h-80 object-cover rounded-lg shadow-lg"
-            />
-          </div>
-        )}
-
-        {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Content Area */}
-          <div className="lg:col-span-2">
-            {/* Header */}
-            <div className="text-center lg:text-left mb-8">
-              <h1 className="text-4xl font-bold text-gray-800 mb-4">
-                {herb.name}
-              </h1>
-              {herb.latinName && (
-                <p className="text-lg text-gray-700 italic mb-4">
-                  {herb.latinName}
-                </p>
-              )}
-              
-              {/* Save to My List Button */}
-              <div className="mb-6 flex justify-center lg:justify-start">
-                <SaveToListButton 
-                  type="herb" 
-                  slug={herb.slug} 
-                  name={herb.name}
-                  className="text-sm"
-                />
-              </div>
-              
-              {/* Overview Section */}
-              <div className="text-lg text-gray-800 max-w-2xl lg:max-w-none prose prose-lg text-justify mb-6">
-                {herb.description ? (
-                  <div 
-                    dangerouslySetInnerHTML={{ 
-                      __html: convertMarkdownToHtml(herb.description) 
-                    }} 
-                  />
-                ) : (
-                  <p className="text-justify">This herb supports overall wellness.</p>
-                )}
-              </div>
-
-                             {/* More Comprehensive Info Card */}
-               {(markdownArticle || (herb.references && herb.references.length > 0)) && (
-                 <div className="mb-8 bg-white rounded-lg shadow-lg p-6 border border-gray-200">
-                   <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-                     More Comprehensive Info
-                   </h2>
-                   <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
-                     <button
-                       onClick={() => setIsModalOpen(true)}
-                       className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors shadow-lg"
-                     >
-                       <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                       </svg>
-                       View Here
-                     </button>
-                                    <Link
-                 href={`/herbs/${herb.slug}/research`}
-                 target="_blank"
-                 rel="noopener noreferrer"
-                 className="inline-flex items-center px-6 py-3 bg-gray-600 text-white font-semibold rounded-lg hover:bg-gray-700 transition-colors shadow-lg"
-               >
-                 <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                 </svg>
-                 Full Page View
-               </Link>
-                   </div>
-                 </div>
-               )}
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          {/* Hero Image */}
+          {herb.heroImageUrl && (
+            <div className="mb-8">
+              <Image
+                src={herb.heroImageUrl}
+                alt={herb.name}
+                width={1200}
+                height={400}
+                className="w-full h-64 md:h-80 object-cover rounded-lg shadow-lg"
+              />
             </div>
+          )}
 
-            {/* Gallery Images */}
-            {herb.galleryImages && Array.isArray(herb.galleryImages) && herb.galleryImages.length > 0 && (
-              <div className="mb-8">
-                <h2 className="text-2xl font-bold text-gray-800 mb-4">Gallery</h2>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  {herb.galleryImages.map((image: string, index: number) => (
-                    <Image
-                      key={index}
-                      src={image}
-                      alt={`${herb.name} - Image ${index + 1}`}
-                      width={300}
-                      height={200}
-                      className="w-full h-48 object-cover rounded-lg shadow-md hover:shadow-lg transition-shadow"
-                    />
-                  ))}
+          {/* Main Content Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Main Content Area */}
+            <div className="lg:col-span-2">
+              {/* Header */}
+              <div className="text-center lg:text-left mb-8">
+                <h1 className="text-4xl font-bold text-gray-800 mb-4">
+                  {herb.name} - Traditional Uses & Modern Research
+                </h1>
+                {herb.latinName && (
+                  <p className="text-lg text-gray-700 italic mb-4">
+                    {herb.latinName}
+                  </p>
+                )}
+                
+                {/* Save to My List Button */}
+                <div className="mb-6 flex justify-center lg:justify-start">
+                  <SaveToListButton 
+                    type="herb" 
+                    slug={herb.slug} 
+                    name={herb.name}
+                    className="text-sm"
+                  />
                 </div>
-              </div>
-            )}
+                
+                {/* Brief Intro */}
+                <div className="text-lg text-gray-800 max-w-2xl lg:max-w-none prose prose-lg text-justify mb-6">
+                  {herb.description ? (
+                    <div 
+                      dangerouslySetInnerHTML={{ 
+                        __html: convertMarkdownToHtml(herb.description) 
+                      }} 
+                    />
+                  ) : (
+                    <p>This herb supports overall wellness.</p>
+                  )}
+                </div>
 
-            {/* Traditional Uses */}
-            {herb.traditionalUses && Array.isArray(herb.traditionalUses) && herb.traditionalUses.length > 0 && (
-              <div className="mb-8">
-                <h2 className="text-2xl font-bold text-gray-800 mb-4">Traditional Uses</h2>
-                <div className="bg-white rounded-lg shadow-lg p-6">
+                                 {/* Quick Reference */}
+                 <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
+                   <h2 className="text-2xl font-bold text-gray-800 mb-4">Quick Reference</h2>
+                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                     <div className="text-gray-800">
+                       <strong className="text-gray-900">Best for:</strong> {herb.traditionalUses && herb.traditionalUses.length > 0 ? herb.traditionalUses[0] : 'Overall wellness support'}
+                     </div>
+                     <div className="text-gray-800">
+                       <strong className="text-gray-900">Typical dose:</strong> Varies by formulation
+                     </div>
+                     <div className="text-gray-800">
+                       <strong className="text-gray-900">Duration:</strong> 4-8 weeks for full effects
+                     </div>
+                     <div className="text-gray-800">
+                       <strong className="text-gray-900">Cost range:</strong> $15-45 for 30-day supply
+                     </div>
+                   </div>
+                   
+                   {/* Indications Tags */}
+                   {herb.indicationTags && herb.indicationTags.length > 0 && (
+                     <div className="mt-6 pt-4 border-t border-gray-200">
+                       <h3 className="text-lg font-semibold text-gray-900 mb-3">Indications</h3>
+                       <div className="flex flex-wrap gap-2">
+                         {herb.indicationTags.map((indication: any) => (
+                           <Link
+                             key={indication.slug}
+                             href={`/symptoms/${indication.slug}`}
+                             className="inline-block px-3 py-1 text-sm bg-blue-100 text-blue-800 rounded-full hover:bg-blue-200 transition-colors"
+                           >
+                             {indication.name}
+                           </Link>
+                         ))}
+                       </div>
+                     </div>
+                   )}
+                 </div>
+
+                {/* Description */}
+                <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
+                  <h2 className="text-2xl font-bold text-gray-800 mb-4">Description</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="text-gray-800">
+                      <strong className="text-gray-900">Parts Used:</strong> {herb.partsUsed || 'Root and leaves'}
+                    </div>
+                    <div className="text-gray-800">
+                      <strong className="text-gray-900">Active Compounds:</strong> {herb.activeCompounds || 'Various bioactive compounds'}
+                    </div>
+                    <div className="text-gray-800">
+                      <strong className="text-gray-900">Taste:</strong> {herb.taste || 'Varies by preparation'}
+                    </div>
+                    <div className="text-gray-800">
+                      <strong className="text-gray-900">Energetics:</strong> {herb.energetics || 'Adaptogenic'}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Traditional Usage & Formulations */}
+                <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
+                  <h2 className="text-2xl font-bold text-gray-800 mb-4">Traditional Usage & Formulations</h2>
+                  
+                  <h3 className="text-xl font-bold text-gray-900 mt-6 mb-3">Traditional Uses</h3>
+                  {herb.traditionalUses && Array.isArray(herb.traditionalUses) && herb.traditionalUses.length > 0 ? (
+                    <ul className="list-disc list-inside space-y-2 text-gray-800 mb-6">
+                      {herb.traditionalUses.map((use: string, index: number) => (
+                        <li key={index}>{use}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-gray-800 mb-6">Traditional uses information coming soon.</p>
+                  )}
+
+                  <h3 className="text-xl font-bold text-gray-900 mt-6 mb-3">Traditional Formulations</h3>
                   <ul className="list-disc list-inside space-y-2 text-gray-800">
-                    {herb.traditionalUses.map((use: string, index: number) => (
-                      <li key={index} className="text-lg">{use}</li>
-                    ))}
+                    <li><strong>Tinctures:</strong> Alcohol-based extracts, typical dose 30-60 drops 2-3x daily</li>
+                    <li><strong>Teas:</strong> Traditional preparation using dried herb</li>
+                    <li><strong>Powders:</strong> Ground herb mixed with warm liquid</li>
+                    <li><strong>Traditional preparations:</strong> Various traditional methods</li>
                   </ul>
                 </div>
-              </div>
-            )}
 
-            {/* Cautions */}
-            {herb.cautions && (
-              <div className="mb-8">
-                <h2 className="text-2xl font-bold text-gray-800 mb-4">Cautions</h2>
-                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
-                  <div className="text-yellow-800">
-                    {herb.cautions.split('\n\n').map((paragraph: string, index: number) => (
-                      <p key={index} className="mb-4 last:mb-0">
-                        {paragraph}
-                      </p>
-                    ))}
+                {/* Key Research Areas & Modern Formulations */}
+                <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
+                  <h2 className="text-2xl font-bold text-gray-800 mb-4">Key Research Areas & Modern Formulations</h2>
+                  
+                  <h3 className="text-xl font-bold text-gray-900 mt-6 mb-3">Key Research Areas</h3>
+                  <ul className="list-disc list-inside space-y-2 text-gray-800 mb-6">
+                    <li><strong>Modern research:</strong> Ongoing studies on efficacy and safety</li>
+                    <li><strong>Clinical applications:</strong> Evidence-based therapeutic uses</li>
+                    <li><strong>Safety profile:</strong> Comprehensive safety evaluation</li>
+                    <li><strong>Quality standards:</strong> Modern quality control measures</li>
+                  </ul>
+
+                                     <h3 className="text-xl font-bold text-gray-900 mt-6 mb-3">Modern Formulations</h3>
+                   <ul className="list-disc list-inside space-y-2 text-gray-800 mb-6">
+                     <li><strong>Standardized Extracts:</strong> Consistent active compound content</li>
+                     <li><strong>Capsules:</strong> Convenient dosing and storage</li>
+                     <li><strong>Tablets:</strong> Precise dosing with excipients</li>
+                     <li><strong>Liquid extracts:</strong> Concentrated formulations</li>
+                   </ul>
+                 </div>
+
+                {/* Dive Deeper Here */}
+                <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
+                    <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+                      Dive Deeper Here
+                    </h2>
+                    <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+                      <button
+                        onClick={() => setIsModalOpen(true)}
+                        className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors shadow-lg"
+                      >
+                        <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                        </svg>
+                        Open Research Here
+                      </button>
+                      <Link
+                        href={`/herbs/${herb.slug}/research`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center px-6 py-3 bg-gray-600 text-white font-semibold rounded-lg hover:bg-gray-700 transition-colors shadow-lg"
+                      >
+                        <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                        Go to Research Page
+                      </Link>
+                    </div>
+                  </div>
+
+                {/* Cautions */}
+                {herb.cautions && (
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mb-8">
+                    <h2 className="text-2xl font-bold text-yellow-800 mb-4">Cautions</h2>
+                    <div className="text-yellow-800">
+                      {herb.cautions.split('\n\n').map((paragraph: string, index: number) => (
+                        <p key={index} className="mb-4 last:mb-0">
+                          {paragraph}
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Sustainability & Ethics */}
+                <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
+                  <h2 className="text-2xl font-bold text-gray-800 mb-4">Sustainability & Ethics</h2>
+                  <ul className="list-disc list-inside space-y-2 text-gray-800">
+                    <li><strong>Wild-harvested vs. cultivated:</strong> Sustainable sourcing practices</li>
+                    <li><strong>Organic certification:</strong> Important for quality and safety</li>
+                    <li><strong>Fair trade considerations:</strong> Supporting ethical supply chains</li>
+                    <li><strong>Environmental impact:</strong> Sustainable cultivation practices</li>
+                  </ul>
+                </div>
+
+                {/* Related Content */}
+                <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
+                  <h2 className="text-2xl font-bold text-gray-800 mb-4">Related Content</h2>
+                  <div className="space-y-4">
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-900 mb-2">Related Herbs:</h3>
+                      <div className="flex flex-wrap gap-2">
+                        <Link href="/herbs/rhodiola" className="text-blue-600 hover:text-blue-800">Rhodiola Rosea</Link>
+                        <Link href="/herbs/ginseng" className="text-blue-600 hover:text-blue-800">Ginseng</Link>
+                        <Link href="/herbs/holy-basil" className="text-blue-600 hover:text-blue-800">Holy Basil</Link>
+                      </div>
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-900 mb-2">Related Supplements:</h3>
+                      <div className="flex flex-wrap gap-2">
+                        <Link href="/supplements/l-theanine" className="text-blue-600 hover:text-blue-800">L-Theanine</Link>
+                        <Link href="/supplements/magnesium" className="text-blue-600 hover:text-blue-800">Magnesium</Link>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
 
-            {/* Back to Herbs Link */}
-            <div className="text-center lg:text-left">
-              <Link 
-                href="/herbs" 
-                className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                ← Back to All Herbs
-              </Link>
+                {/* Disclaimer */}
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 mb-8">
+                  <h2 className="text-2xl font-bold text-gray-800 mb-4">Disclaimer</h2>
+                  <p className="text-gray-700 text-sm leading-relaxed">
+                    This information is for educational purposes only and is not intended as medical advice. The traditional uses described are based on historical herbalism practices and should not be considered medical recommendations. Always consult with a qualified healthcare provider before using any herbal products, especially if you have medical conditions or are taking medications. Individual results may vary, and herbal products are not intended to diagnose, treat, cure, or prevent any disease.
+                  </p>
+                </div>
+
+                {/* Back to Herbs Link */}
+                <div className="text-center lg:text-left">
+                  <Link 
+                    href="/herbs" 
+                    className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
+                  >
+                    ← Back to All Herbs
+                  </Link>
+                </div>
+              </div>
             </div>
-          </div>
 
-          {/* Right Sidebar - Products */}
-          <div className="lg:col-span-1">
-            <div className="sticky top-8 space-y-8">
-              {/* Traditional Herbal Formulations */}
-              <div className="bg-white rounded-lg shadow-lg p-6">
-                <h3 className="text-xl font-bold text-gray-800 mb-4">Traditional Herbal Formulations</h3>
-                {traditionalProducts.length > 0 ? (
-                  <div className="space-y-4">
-                    {traditionalProducts.map((product: any, index: number) => (
-                      <div key={index} className="border border-lime-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-                        <h4 className="font-semibold text-lime-900 mb-2">{product.name}</h4>
-                        {product.description && (
-                          <p className="text-gray-700 text-sm mb-2">{product.description}</p>
-                        )}
-                        <Image 
-                          src={product.imageUrl || "/images/closed-medical-brown-glass-bottle-yellow-vitamins.png"} 
-                          alt={product.name} 
-                          width={80} 
-                          height={80} 
-                          className="w-20 h-20 object-contain mb-2" 
-                        />
-                        <div className="flex items-center justify-between">
-                          {product.price && (
-                            <span className="text-lg font-bold text-lime-900">${product.price}</span>
-                          )}
-                          {product.affiliateLink && (
-                            <a 
-                              href={product.affiliateLink} 
-                              target="_blank" 
-                              rel="noopener noreferrer" 
-                              className="px-3 py-1 bg-lime-700 text-white rounded hover:bg-lime-800 text-xs"
-                            >
-                              Buy Now
-                            </a>
-                          )}
-                        </div>
+            {/* Right Sidebar - Products */}
+            <div className="lg:col-span-1">
+              <div className="sticky top-8 space-y-8">
+                {/* Quality Products Available */}
+                <div className="bg-white rounded-lg shadow-lg p-6">
+                  <h3 className="text-xl font-bold text-gray-800 mb-4">Quality Products Available</h3>
+                  
+                  {/* Traditional Products */}
+                  {traditionalProducts.length > 0 && (
+                    <div className="mb-6">
+                      <h4 className="font-semibold text-gray-900 mb-3">Traditional Formulations</h4>
+                      <div className="space-y-4">
+                        {traditionalProducts.map((product: any, index: number) => (
+                          <div key={index} className="border border-lime-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                            <h5 className="font-semibold text-lime-900 mb-2">{product.name}</h5>
+                            {product.description && (
+                              <p className="text-gray-700 text-sm mb-2">{product.description}</p>
+                            )}
+                            <Image 
+                              src={product.imageUrl || "/images/closed-medical-brown-glass-bottle-yellow-vitamins.png"} 
+                              alt={product.name} 
+                              width={80} 
+                              height={80} 
+                              className="w-20 h-20 object-contain mb-2" 
+                            />
+                            <div className="flex items-center justify-between">
+                              {product.price && (
+                                <span className="text-lg font-bold text-lime-900">${product.price}</span>
+                              )}
+                              {product.affiliateLink && (
+                                <a 
+                                  href={product.affiliateLink} 
+                                  target="_blank" 
+                                  rel="noopener noreferrer" 
+                                  className="px-3 py-1 bg-lime-700 text-white rounded hover:bg-lime-800 text-xs"
+                                >
+                                  Buy Now
+                                </a>
+                              )}
+                            </div>
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-gray-500 text-sm">Traditional formulations coming soon.</p>
-                )}
-              </div>
+                    </div>
+                  )}
 
-              {/* Modern Herbal Formulations */}
-              <div className="bg-white rounded-lg shadow-lg p-6">
-                <h3 className="text-xl font-bold text-gray-800 mb-4">Modern Herbal Formulations</h3>
-                {modernProducts.length > 0 ? (
-                  <div className="space-y-4">
-                    {modernProducts.map((product: any, index: number) => (
-                      <div key={index} className="border border-lime-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-                        <h4 className="font-semibold text-lime-900 mb-2">{product.name}</h4>
-                        {product.description && (
-                          <p className="text-gray-700 text-sm mb-2">{product.description}</p>
-                        )}
-                        <Image 
-                          src={product.imageUrl || "/images/closed-medical-brown-glass-bottle-yellow-vitamins.png"} 
-                          alt={product.name} 
-                          width={80} 
-                          height={80} 
-                          className="w-20 h-20 object-contain mb-2" 
-                        />
-                        <div className="flex items-center justify-between">
-                          {product.price && (
-                            <span className="text-lg font-bold text-lime-900">${product.price}</span>
-                          )}
-                          {product.affiliateLink && (
-                            <a 
-                              href={product.affiliateLink} 
-                              target="_blank" 
-                              rel="noopener noreferrer" 
-                              className="px-3 py-1 bg-lime-700 text-white rounded hover:bg-lime-800 text-xs"
-                            >
-                              Buy Now
-                            </a>
-                          )}
-                        </div>
+                  {/* Modern Products */}
+                  {modernProducts.length > 0 && (
+                    <div>
+                      <h4 className="font-semibold text-gray-900 mb-3">Modern Formulations</h4>
+                      <div className="space-y-4">
+                        {modernProducts.map((product: any, index: number) => (
+                          <div key={index} className="border border-lime-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                            <h5 className="font-semibold text-lime-900 mb-2">{product.name}</h5>
+                            {product.description && (
+                              <p className="text-gray-700 text-sm mb-2">{product.description}</p>
+                            )}
+                            <Image 
+                              src={product.imageUrl || "/images/closed-medical-brown-glass-bottle-yellow-vitamins.png"} 
+                              alt={product.name} 
+                              width={80} 
+                              height={80} 
+                              className="w-20 h-20 object-contain mb-2" 
+                            />
+                            <div className="flex items-center justify-between">
+                              {product.price && (
+                                <span className="text-lg font-bold text-lime-900">${product.price}</span>
+                              )}
+                              {product.affiliateLink && (
+                                <a 
+                                  href={product.affiliateLink} 
+                                  target="_blank" 
+                                  rel="noopener noreferrer" 
+                                  className="px-3 py-1 bg-lime-700 text-white rounded hover:bg-lime-800 text-xs"
+                                >
+                                  Buy Now
+                                </a>
+                              )}
+                            </div>
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-gray-500 text-sm">Modern formulations coming soon.</p>
-                )}
+                    </div>
+                  )}
+
+                  {traditionalProducts.length === 0 && modernProducts.length === 0 && (
+                    <p className="text-gray-500 text-sm">Quality products coming soon.</p>
+                  )}
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-             {/* Science Modal */}
-       <ScienceModal
-         isOpen={isModalOpen}
-         onClose={() => setIsModalOpen(false)}
-         markdownArticle={markdownArticle}
-         references={herb.references || []}
-         herbName={herb.name}
-       />
-     </div>
-     </ContentProtection>
+        {/* Science Modal */}
+        <ScienceModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          markdownArticle={markdownArticle}
+          references={herb.references || []}
+          herbName={herb.name}
+        />
+      </div>
+    </ContentProtection>
    );
 }

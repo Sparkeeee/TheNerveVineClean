@@ -41,6 +41,7 @@ export async function GET(req: NextRequest) {
           latinName: true,
           slug: true,
           description: true,
+          heroImageUrl: true,
           cardImageUrl: true,
           references: true
         },

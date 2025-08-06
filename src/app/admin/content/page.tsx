@@ -1081,34 +1081,57 @@ export default function AdminContentPage() {
       }
     }
     
-    // Ensure all string fields are properly initialized
+    // Ensure all string fields are properly initialized based on tab
     const finalFormData = {
       ...processedItem,
-      heroImageUrl: processedItem.heroImageUrl || '',
-      cardImageUrl: processedItem.cardImageUrl || '',
+      // Common fields
       metaTitle: processedItem.metaTitle || '',
       metaDescription: processedItem.metaDescription || '',
-      galleryImages: processedItem.galleryImages || '',
-      name: processedItem.name || '',
-      latinName: processedItem.latinName || '',
       slug: processedItem.slug || '',
-      title: processedItem.title || '',
       description: processedItem.description || '',
       comprehensiveArticle: processedItem.comprehensiveArticle || '',
       cautions: processedItem.cautions || '',
-      articles: processedItem.articles || '',
-      associatedSymptoms: processedItem.associatedSymptoms || '',
-      // Product-specific fields
-      merchantId: processedItem.merchantId || '',
-      affiliateLink: processedItem.affiliateLink || '',
-      price: processedItem.price || '',
-      currency: processedItem.currency || 'USD',
-      region: processedItem.region || '',
-      imageUrl: processedItem.imageUrl || '',
-      qualityScore: processedItem.qualityScore || '',
-      affiliateRate: processedItem.affiliateRate || '',
-      affiliateYield: processedItem.affiliateYield || '',
+      references: processedItem.references || '',
     };
+
+    // Add tab-specific fields
+    if (tab === "Herbs") {
+      Object.assign(finalFormData, {
+        name: processedItem.name || '',
+        latinName: processedItem.latinName || '',
+        heroImageUrl: processedItem.heroImageUrl || '',
+        cardImageUrl: processedItem.cardImageUrl || '',
+        galleryImages: processedItem.galleryImages || '',
+        productFormulations: processedItem.productFormulations || [],
+      });
+    } else if (tab === "Supplements") {
+      Object.assign(finalFormData, {
+        name: processedItem.name || '',
+        heroImageUrl: processedItem.heroImageUrl || '',
+        cardImageUrl: processedItem.cardImageUrl || '',
+        galleryImages: processedItem.galleryImages || '',
+        productFormulations: processedItem.productFormulations || [],
+      });
+    } else if (tab === "Symptoms") {
+      Object.assign(finalFormData, {
+        title: processedItem.title || '',
+        articles: processedItem.articles || '',
+        associatedSymptoms: processedItem.associatedSymptoms || '',
+      });
+    } else if (tab === "Products") {
+      Object.assign(finalFormData, {
+        name: processedItem.name || '',
+        merchantId: processedItem.merchantId || '',
+        affiliateLink: processedItem.affiliateLink || '',
+        price: processedItem.price || '',
+        currency: processedItem.currency || 'USD',
+        region: processedItem.region || '',
+        imageUrl: processedItem.imageUrl || '',
+        qualityScore: processedItem.qualityScore || '',
+        affiliateRate: processedItem.affiliateRate || '',
+        affiliateYield: processedItem.affiliateYield || '',
+      });
+    }
 
     // Remove any non-existent fields that might be present
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
