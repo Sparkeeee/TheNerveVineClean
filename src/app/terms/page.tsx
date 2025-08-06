@@ -23,7 +23,7 @@ export default function TermsPage() {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">Use License</h2>
             <p className="text-gray-700 mb-4">
-              Permission is granted to temporarily download one copy of the materials (information or software) on The NerveVine's website for personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of title, and under this license you may not:
+              Permission is granted to temporarily download one copy of the materials (information or software) on The NerveVine&apos;s website for personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of title, and under this license you may not:
             </p>
             <ul className="list-disc pl-6 mb-4 text-gray-700">
               <li>Modify or copy the materials</li>
