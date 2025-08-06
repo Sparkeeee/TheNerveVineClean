@@ -540,7 +540,7 @@ export default function AdminContentPage() {
   };
 
   const [tab, setTab] = useState("Herbs");
-  const [data, setData] = useState<Herb[] | Supplement[] | Symptom[]>([]);
+  const [data, setData] = useState<Herb[] | Supplement[] | Symptom[] | Indication[] | Product[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [showForm, setShowForm] = useState(false);
