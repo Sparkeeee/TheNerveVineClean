@@ -112,7 +112,24 @@ export default async function HerbsPage() {
                 )}
               </div>
               <hr className="my-3 border-blue-100" />
-
+              
+              {/* Indications */}
+              {herb.indicationTags && herb.indicationTags.length > 0 && (
+                <div className="mt-3">
+                  <p className="text-xs text-gray-500 mb-2">Indications:</p>
+                  <div className="flex flex-wrap gap-1">
+                    {herb.indicationTags.map((indication: any) => (
+                      <Link
+                        key={indication.slug}
+                        href={`/symptoms/${indication.slug}`}
+                        className="inline-block px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full hover:bg-blue-200 transition-colors"
+                      >
+                        {indication.name}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
 
             </div>
           ))}

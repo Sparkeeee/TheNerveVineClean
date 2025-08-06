@@ -14,15 +14,11 @@ export async function POST(request: NextRequest) {
 
     const analyzer = new DatabaseQualityAnalyzer();
     
+    // Get database specs first
+    const dbSpecs = await analyzer.getQualitySpecifications(herbSlug, supplementSlug);
+    
     // Analyze product quality using database data
-    const qualityScore = await analyzer.analyzeProductQuality(
-      product, 
-      herbSlug, 
-      supplementSlug
-    );
-
-    // Get database specs for comparison
-    const dbSpecs = await analyzer.getQualitySpecsFromDatabase(herbSlug, supplementSlug);
+    const qualityScore = analyzer.analyzeProductQuality(product, dbSpecs);
 
     return NextResponse.json({
       qualityScore,
@@ -62,7 +58,7 @@ export async function GET(request: NextRequest) {
     const analyzer = new DatabaseQualityAnalyzer();
     
     // Get database specifications
-    const dbSpecs = await analyzer.getQualitySpecsFromDatabase(herbSlug || undefined, supplementSlug || undefined);
+    const dbSpecs = await analyzer.getQualitySpecifications(herbSlug || undefined, supplementSlug || undefined);
 
     if (!dbSpecs) {
       return NextResponse.json(

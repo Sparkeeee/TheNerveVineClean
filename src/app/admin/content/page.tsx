@@ -390,7 +390,9 @@ export default function AdminContentPage() {
   const [variantFormMode, setVariantFormMode] = useState<"add" | "edit">("add");
 
   // Add indications management state
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [indications, setIndications] = useState<Indication[]>([]);
+
   const [showIndicationForm, setShowIndicationForm] = useState(false);
   const [indicationFormMode, setIndicationFormMode] = useState<"add" | "edit">("add");
   const [indicationFormData, setIndicationFormData] = useState<Partial<Indication>>({});
@@ -614,7 +616,6 @@ export default function AdminContentPage() {
   // Add state for allHerbs and allSupplements
   const [allHerbs, setAllHerbs] = useState<Herb[]>([]);
   const [allSupplements, setAllSupplements] = useState<Supplement[]>([]);
-  const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [allMerchants, setAllMerchants] = useState<Merchant[]>([]);
   const [expandedDescriptions, setExpandedDescriptions] = useState<Set<number>>(new Set());
                   const [showBatchImport, setShowBatchImport] = useState(false);
@@ -1110,15 +1111,23 @@ export default function AdminContentPage() {
     };
 
     // Remove any non-existent fields that might be present
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     delete (finalFormData as any).strength;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     delete (finalFormData as any).formulation;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     delete (finalFormData as any).affiliatePercentage;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     delete (finalFormData as any).customerReviews;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     delete (finalFormData as any).organic;
     
     // Remove symptom-specific fields that don't exist in Prisma schema
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     delete (finalFormData as any).variants;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     delete (finalFormData as any).variantDescriptions;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     delete (finalFormData as any).products;
 
 
@@ -1138,21 +1147,33 @@ export default function AdminContentPage() {
     const processedData = { ...formData };
     
     // Remove any non-existent fields that might be present
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     delete (processedData as any).strength;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     delete (processedData as any).formulation;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     delete (processedData as any).affiliatePercentage;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     delete (processedData as any).customerReviews;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     delete (processedData as any).organic;
     
     // Remove symptom-specific fields that don't exist in Prisma schema
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     delete (processedData as any).variants;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     delete (processedData as any).variantDescriptions;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     delete (processedData as any).products;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     delete (processedData as any).selectedHerbs;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     delete (processedData as any).selectedSupplements;
     
     // Remove herb-specific fields that don't exist in Prisma schema
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     delete (processedData as any).articles;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     delete (processedData as any).associatedSymptoms;
     
     // Convert references from simple format to JSON if present
@@ -2084,7 +2105,7 @@ export default function AdminContentPage() {
                 <label className="block mb-2 font-semibold text-gray-200">Associated Herbs</label>
                 <div className="max-h-32 overflow-y-auto border border-gray-600 rounded p-2 bg-gray-900">
                   {indicationForm.herbs && indicationForm.herbs.length > 0 ? (
-                    indicationForm.herbs.map((herb, index) => (
+                    indicationForm.herbs.map((herb) => (
                       <div key={herb.id} className="flex items-center justify-between mb-1">
                         <span className="text-gray-200">{herb.name}</span>
                         <span className="text-xs text-gray-400">{herb.latinName}</span>
@@ -2101,7 +2122,7 @@ export default function AdminContentPage() {
                 <label className="block mb-2 font-semibold text-gray-200">Associated Supplements</label>
                 <div className="max-h-32 overflow-y-auto border border-gray-600 rounded p-2 bg-gray-900">
                   {indicationForm.supplements && indicationForm.supplements.length > 0 ? (
-                    indicationForm.supplements.map((supplement, index) => (
+                    indicationForm.supplements.map((supplement) => (
                       <div key={supplement.id} className="flex items-center justify-between mb-1">
                         <span className="text-gray-200">{supplement.name}</span>
                       </div>

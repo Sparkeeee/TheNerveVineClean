@@ -132,7 +132,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="font-sans flex flex-col min-h-screen">
+      <body className={`${lato.variable} ${merriweather.variable} font-sans flex flex-col min-h-screen`}>
         <SessionProviderWrapper>
           <Header />
           <main className="flex-grow">

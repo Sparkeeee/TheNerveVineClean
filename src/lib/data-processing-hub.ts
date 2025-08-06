@@ -252,7 +252,7 @@ export class DataProcessingHub {
         price: product.price,
         currency: product.currency || 'USD',
         commissionRate: this.getCommissionRate(product),
-        qualityScore: (await this.qualityAnalyzer.analyzeProductQuality(product)).score,
+        qualityScore: (await this.qualityAnalyzer.analyzeProductQuality(product, [])).score,
         rating: product.rating,
         reviewCount: product.reviewCount,
         affiliateUrl: product.affiliateUrl,

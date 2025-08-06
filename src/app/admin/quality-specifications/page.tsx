@@ -20,7 +20,11 @@ interface QualitySpecification {
   id?: number;
   herbSlug?: string;
   herbName?: string;
+  supplementSlug?: string;
+  supplementName?: string;
   productType: string;
+  formulationName?: string;
+  approach?: string;
   requiredTerms: string[];
   preferredTerms: string[];
   avoidTerms: string[];
@@ -48,6 +52,7 @@ interface QualitySpecification {
   reviewCountThreshold: number;
   brandPreferences?: string[];
   brandAvoid?: string[];
+  notes?: string;
 }
 
 export default function QualitySpecificationsPage() {

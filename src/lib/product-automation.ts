@@ -301,7 +301,7 @@ export class ProductAutomation {
   }
   
   private analyzeProductAgainstSpecs(product: Product, spec: any) {
-    const score = 0;
+    let score = 0;
     const reasons: string[] = [];
     const warnings: string[] = [];
     const matches = {

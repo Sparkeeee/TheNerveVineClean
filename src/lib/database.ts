@@ -224,7 +224,13 @@ export async function getCachedHerbs() {
         latinName: true,
         traditionalUses: true,
         cardImageUrl: true,
-        references: true
+        references: true,
+        indicationTags: {
+          select: {
+            name: true,
+            slug: true
+          }
+        }
       },
       orderBy: { name: 'asc' }
     });

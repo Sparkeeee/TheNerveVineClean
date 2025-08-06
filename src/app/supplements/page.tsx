@@ -1,64 +1,5 @@
 import Link from "next/link";
-import { getCachedSupplements, getCachedSymptoms } from '@/lib/database';
-
-// Helper functions for indication tags (same as herbs page)
-function getColorForSymptom(symptomName: string): string {
-  const colors = [
-    'bg-blue-100 text-blue-800 border-blue-200',
-    'bg-green-100 text-green-800 border-green-200',
-    'bg-purple-100 text-purple-800 border-purple-200',
-    'bg-orange-100 text-orange-800 border-orange-200',
-    'bg-red-100 text-red-800 border-red-200',
-    'bg-indigo-100 text-indigo-800 border-indigo-200',
-    'bg-pink-100 text-pink-800 border-pink-200',
-    'bg-yellow-100 text-yellow-800 border-yellow-200',
-    'bg-teal-100 text-teal-800 border-teal-200',
-    'bg-cyan-100 text-cyan-800 border-cyan-200'
-  ];
-  
-  // Simple hash function for consistent colors
-  let hash = 0;
-  for (let i = 0; i < symptomName.length; i++) {
-    hash = ((hash << 5) - hash) + symptomName.charCodeAt(i);
-    hash = hash & hash; // Convert to 32-bit integer
-  }
-  
-  return colors[Math.abs(hash) % colors.length];
-}
-
-function getSymptomTagClasses(symptomName: string): string {
-  return getColorForSymptom(symptomName);
-}
-
-function getSymptomTag(usedFor: string, symptoms: any[]) {
-  const indication = usedFor.toLowerCase().trim();
-  
-  // First try exact match (most precise)
-  let match = symptoms.find(s => s.title.toLowerCase() === indication);
-  if (match) return match;
-  
-  // Try word boundary matches (more precise than partial)
-  const indicationWords = indication.split(/\s+/);
-  match = symptoms.find(s => {
-    const symptomWords = s.title.toLowerCase().split(/\s+/);
-    // Check if all indication words are present in symptom title
-    return indicationWords.every(word => 
-      symptomWords.some((symptomWord: string) => 
-        symptomWord === word || symptomWord.startsWith(word) || word.startsWith(symptomWord)
-      )
-    );
-  });
-  if (match) return match;
-  
-  // Only if no word boundary match, try partial match
-  match = symptoms.find(s => s.title.toLowerCase().includes(indication));
-  if (match) return match;
-  
-  // Last resort: reverse partial match
-  match = symptoms.find(s => indication.includes(s.title.toLowerCase()));
-  
-  return match;
-}
+import { getCachedSupplements } from '@/lib/database';
 
 // Helper function to truncate description to ~2 lines
 function truncateDescription(description: string): string {
@@ -80,20 +21,13 @@ function truncateDescription(description: string): string {
 export const revalidate = 900; // 15 minutes - matches cache TTL
 
 export default async function SupplementsPage() {
-  // Fetch supplements and symptoms from database
+  // Fetch supplements from database
   let supplements = [];
-  let symptoms = [];
   
   try {
     supplements = await getCachedSupplements();
   } catch (error) {
     console.error('Error fetching supplements:', error);
-  }
-  
-  try {
-    symptoms = await getCachedSymptoms();
-  } catch (error) {
-    console.error('Error fetching symptoms:', error);
   }
   
   const sortedSupplements = supplements.sort((a: any, b: any) => (a.name || '').localeCompare(b.name || ''));
@@ -143,27 +77,23 @@ export default async function SupplementsPage() {
                 {truncateDescription(supplement.description)}
               </p>
               
-              {/* Indication tags */}
-              <div className="flex flex-wrap gap-2 mt-4">
-                {supplement.indicationTags && supplement.indicationTags.length > 0 && (() => {
-                  const uniqueTags = new Map();
-                  supplement.indicationTags.forEach((indication: any) => {
-                    const tag = getSymptomTag(indication.name, symptoms);
-                    if (tag && !uniqueTags.has(tag.slug)) {
-                      uniqueTags.set(tag.slug, tag);
-                    }
-                  });
-                  return Array.from(uniqueTags.values()).map((tag: any, i: number) => (
-                    <Link
-                      key={i}
-                      href={`/symptoms/${tag.slug}`}
-                      className={`inline-block px-3 py-1 rounded-full border text-xs font-semibold mr-2 mb-2 transition-colors duration-200 hover:brightness-110 ${getSymptomTagClasses(tag.name)}`}
-                    >
-                      {tag.name}
-                    </Link>
-                  ));
-                })()}
-              </div>
+              {/* Indications */}
+              {supplement.indicationTags && supplement.indicationTags.length > 0 && (
+                <div className="mt-3">
+                  <p className="text-xs text-gray-500 mb-2">Indications:</p>
+                  <div className="flex flex-wrap gap-1">
+                    {supplement.indicationTags.map((indication: any) => (
+                      <Link
+                        key={indication.slug}
+                        href={`/symptoms/${indication.slug}`}
+                        className="inline-block px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full hover:bg-blue-200 transition-colors"
+                      >
+                        {indication.name}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           ))}
         </div>
