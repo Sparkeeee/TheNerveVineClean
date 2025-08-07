@@ -1,0 +1,29 @@
+{
+    "security.workspace.trust.untrustedFiles": "open",
+    "terminal.integrated.defaultProfile.windows": "Command Prompt",
+    "files.autoSave": "afterDelay",
+    "git.autofetch": true,
+    "cursor.composer.shouldChimeAfterChatFinishes": true,
+    "diffEditor.maxComputationTime": 0,
+    "cursor.windowSwitcher.sidebarHoverCollapsed": true,
+    "terminal.integrated.enableMultiLinePasteWarning": "never",    
+    "window.commandCenter": true,
+    "workbench.statusBar.visible": false,
+    "git.branchProtection": [
+        "main "
+    ],
+    "mcpServers": {
+        "filesystem": {
+            "command": "npx",
+            "args": ["-y", "@modelcontextprotocol/server-filesystem", "--root", "."]
+        },
+        "sequentialthinking": {
+            "command": "npx",
+            "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]
+        },
+        "coderunner": {
+            "command": "npx",
+            "args": ["-y", "mcp-server-code-runner"]
+        }
+    }
+}

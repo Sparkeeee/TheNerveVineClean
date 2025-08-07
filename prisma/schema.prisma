@@ -157,7 +157,7 @@ model Product {
   description    String?
   merchantId     Int
   affiliateLink  String
-  price          Float?
+  price          String?
   currency       String
   region         String?
   imageUrl       String?

@@ -1,0 +1,26 @@
+{
+  "cursor.ai.enableTerminalCommands": true,
+  "cursor.ai.autoApproveSafeCommands": true,
+  "cursor.ai.allowFileOperations": true,
+  "cursor.ai.enableGitOperations": true,
+  "cursor.ai.autoCommitThreshold": 5,
+  "cursor.ai.enablePackageManagement": true,
+  "cursor.ai.safeCommands": [
+    "npm install",
+    "npm run dev",
+    "git add",
+    "git commit",
+    "git push",
+    "git pull",
+    "git status",
+    "git branch",
+    "git checkout"
+  ],
+  "cursor.ai.blockedCommands": [
+    "rm -rf",
+    "del /s",
+    "format c:",
+    "shutdown",
+    "restart"
+  ]
+}
