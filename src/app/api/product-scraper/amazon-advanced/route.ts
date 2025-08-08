@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
     
     console.log('Extracted ASIN:', asin);
 
-    const results = {
+    const results: any = {
       basic: null,
       enhanced: null,
       mobile: null,
@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
         hasPrice: html.includes('$') || html.includes('price') || html.includes('USD'),
         isBlocked: html.includes('continue shopping') || html.includes('captcha') || html.includes('robot')
       };
-    } catch (error) {
+    } catch (error: any) {
       results.basic = { error: error.message };
     }
 
@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
         hasPrice: html.includes('$') || html.includes('price') || html.includes('USD'),
         isBlocked: html.includes('continue shopping') || html.includes('captcha') || html.includes('robot')
       };
-    } catch (error) {
+    } catch (error: any) {
       results.enhanced = { error: error.message };
     }
 
@@ -91,7 +91,7 @@ export async function POST(request: NextRequest) {
         hasPrice: html.includes('$') || html.includes('price') || html.includes('USD'),
         isBlocked: html.includes('continue shopping') || html.includes('captcha') || html.includes('robot')
       };
-    } catch (error) {
+    } catch (error: any) {
       results.mobile = { error: error.message };
     }
 
@@ -113,7 +113,7 @@ export async function POST(request: NextRequest) {
           hasPrice: html.includes('$') || html.includes('price') || html.includes('USD'),
           isBlocked: html.includes('continue shopping') || html.includes('captcha') || html.includes('robot')
         };
-      } catch (error) {
+      } catch (error: any) {
         results.cleanUrl = { error: error.message };
       }
     }

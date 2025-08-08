@@ -49,4 +49,5 @@ export interface Symptom {
   quickActions?: { name: string; href: string; color: string }[];
   relatedSymptoms?: { name: string; href: string; color: string }[];
   emergencyNote?: string;
+  references?: any[];
 } 

@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
     
     // Look for script tags with JSON data
     const scriptRegex = /<script[^>]*>([^<]+)<\/script>/gi;
-    let scriptMatch;
+    let scriptMatch: RegExpExecArray | null;
     while ((scriptMatch = scriptRegex.exec(html)) !== null) {
       const scriptContent = scriptMatch[1];
       
@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
       /"stockStatus":\s*"([^"]+)"/g
     ];
 
-    const amazonData = [];
+    const amazonData: any[] = [];
     amazonDataPatterns.forEach((pattern, index) => {
       let match;
       while ((match = pattern.exec(html)) !== null) {

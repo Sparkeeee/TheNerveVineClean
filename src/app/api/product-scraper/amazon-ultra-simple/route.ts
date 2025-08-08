@@ -87,7 +87,7 @@ export async function POST(request: NextRequest) {
         const response = await fetch(targetUrl, {
           headers: {
             'User-Agent': approach.userAgent,
-            ...approach.headers
+            ...(approach.headers as Record<string, string>)
           }
         });
 

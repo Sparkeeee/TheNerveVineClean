@@ -409,7 +409,7 @@ export default function VariantSymptomPage({
                 <div className="mb-8 rounded-xl p-8 shadow-sm border-2 border-gray-300" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
                   <h2 className="text-2xl font-bold text-gray-800 mb-4">Important Notes</h2>
                   <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                    <p className="text-yellow-800">{symptom.cautions}</p>
+                    <p className="text-yellow-800">{symptom.cautions as string}</p>
                   </div>
                 </div>
               )}
@@ -530,7 +530,7 @@ export default function VariantSymptomPage({
         <ScienceModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          markdownArticle={markdownArticle}
+          markdownArticle={markdownArticle || null}
           references={symptom.references || []}
           symptomTitle={symptom.title}
         />

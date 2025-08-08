@@ -72,11 +72,11 @@ export async function POST(request: NextRequest) {
 
     const results = {
       htmlLength: html.length,
-      priceVariables: [],
-      amazonData: [],
-      dataAttributes: [],
-      functionCalls: [],
-      sampleScripts: []
+      priceVariables: [] as any[],
+      amazonData: [] as any[],
+      dataAttributes: [] as any[],
+      functionCalls: [] as any[],
+      sampleScripts: [] as any[]
     };
 
     // Extract price variables

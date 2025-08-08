@@ -29,17 +29,17 @@ export async function POST(request: NextRequest) {
       title: html.match(/<title[^>]*>([^<]+)<\/title>/i)?.[1]?.trim() || 'No title found',
       
       // Find all price-related content
-      priceMatches: [],
-      priceElements: [],
+      priceMatches: [] as any[],
+      priceElements: [] as any[],
       
       // Find all image URLs
-      imageUrls: [],
+      imageUrls: [] as any[],
       
       // Find JSON data
-      jsonData: [],
+      jsonData: [] as any[],
       
       // Sample HTML sections
-      sampleSections: []
+      sampleSections: [] as any[]
     };
 
     // Extract all price-related content

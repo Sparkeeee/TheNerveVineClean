@@ -91,7 +91,7 @@ export async function POST(request: NextRequest) {
 
     // Wait for content to load with error handling
     try {
-      await page.waitForTimeout(5000);
+      await new Promise(resolve => setTimeout(resolve, 5000));
     } catch (timeoutError) {
       console.log('Timeout waiting for content, proceeding anyway:', timeoutError);
     }

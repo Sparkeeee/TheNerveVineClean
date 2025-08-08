@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Try multiple approaches for Amazon
-    const results = {
+    const results: any = {
       basic: null,
       withHeaders: null,
       mobile: null,
@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
         hasProduct: html.includes('product') || html.includes('buy'),
         hasPrice: html.includes('$') || html.includes('price')
       };
-    } catch (error) {
+    } catch (error: any) {
       results.basic = { error: error.message };
     }
 
@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
         hasProduct: html.includes('product') || html.includes('buy'),
         hasPrice: html.includes('$') || html.includes('price')
       };
-    } catch (error) {
+    } catch (error: any) {
       results.withHeaders = { error: error.message };
     }
 
@@ -76,7 +76,7 @@ export async function POST(request: NextRequest) {
         hasProduct: html.includes('product') || html.includes('buy'),
         hasPrice: html.includes('$') || html.includes('price')
       };
-    } catch (error) {
+    } catch (error: any) {
       results.mobile = { error: error.message };
     }
 

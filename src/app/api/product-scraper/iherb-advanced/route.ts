@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
         
         const response = await fetch(url, {
           method: 'GET',
-          headers: approach.headers,
+          headers: approach.headers as Record<string, string>,
           redirect: 'follow'
         });
 

@@ -514,7 +514,7 @@ export default function ProductScraperPage() {
                     {debugInfo.analysis.imageUrls && debugInfo.analysis.imageUrls.length > 0 && (
                       <div className="mt-3">
                         <div className="font-semibold mb-1">Image URLs:</div>
-                        {debugInfo.analysis.imageUrls.slice(0, 3).map((img, index) => (
+                        {debugInfo.analysis.imageUrls.slice(0, 3).map((img: any, index: number) => (
                           <div key={index} className="mb-1 p-1 bg-blue-50 rounded text-xs">
                             <div><strong>Image {index + 1}:</strong> {img.url}</div>
                             <div className="text-gray-600">Context: {img.context}</div>
@@ -526,7 +526,7 @@ export default function ProductScraperPage() {
                                          {debugInfo.analysis.sampleSections && debugInfo.analysis.sampleSections.length > 0 && (
                        <div className="mt-3">
                          <div className="font-semibold mb-1">Sample HTML Sections:</div>
-                         {debugInfo.analysis.sampleSections.slice(0, 2).map((section, index) => (
+                         {debugInfo.analysis.sampleSections.slice(0, 2).map((section: any, index: number) => (
                            <div key={index} className="mb-2 p-2 bg-gray-50 rounded text-xs">
                              <div><strong>{section.type} Section {index + 1}:</strong></div>
                              <div className="text-gray-600 font-mono whitespace-pre-wrap overflow-x-auto">
@@ -551,7 +551,7 @@ export default function ProductScraperPage() {
                      {debugInfo.amazonData && debugInfo.amazonData.length > 0 && (
                        <div className="mt-3">
                          <div className="font-semibold mb-1">Amazon Data Found:</div>
-                         {debugInfo.amazonData.slice(0, 5).map((item, index) => (
+                         {debugInfo.amazonData.slice(0, 5).map((item: any, index: number) => (
                            <div key={index} className="mb-1 p-1 bg-green-50 rounded text-xs">
                              <div><strong>Pattern:</strong> {item.pattern}</div>
                              <div><strong>Match:</strong> {item.match}</div>
@@ -565,7 +565,7 @@ export default function ProductScraperPage() {
                      {debugInfo.jsonBlocks && debugInfo.jsonBlocks.length > 0 && (
                        <div className="mt-3">
                          <div className="font-semibold mb-1">JSON Blocks Found:</div>
-                         {debugInfo.jsonBlocks.slice(0, 3).map((block, index) => (
+                         {debugInfo.jsonBlocks.slice(0, 3).map((block: any, index: number) => (
                            <div key={index} className="mb-2 p-2 bg-yellow-50 rounded text-xs">
                              <div><strong>Type:</strong> {block.type}</div>
                              <div><strong>Data:</strong></div>
@@ -580,7 +580,7 @@ export default function ProductScraperPage() {
                      {debugInfo.dataAttributes && debugInfo.dataAttributes.length > 0 && (
                        <div className="mt-3">
                          <div className="font-semibold mb-1">Data Attributes Found:</div>
-                         {debugInfo.dataAttributes.slice(0, 5).map((attr, index) => (
+                         {debugInfo.dataAttributes.slice(0, 5).map((attr: any, index: number) => (
                            <div key={index} className="mb-1 p-1 bg-blue-50 rounded text-xs">
                              <div><strong>Attribute:</strong> {attr.attribute}</div>
                              <div><strong>Value:</strong> {attr.value}</div>
