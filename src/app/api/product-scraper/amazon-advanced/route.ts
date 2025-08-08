@@ -136,7 +136,7 @@ export async function POST(request: NextRequest) {
         bestApproach: bestApproach,
         workingApproaches: workingApproaches.length,
         totalApproaches: Object.keys(results).length,
-        isBlocked: Object.values(results).some(r => r && r.isBlocked),
+        isBlocked: Object.values(results).some(r => r && (r as any).isBlocked),
         recommendation: bestApproach !== 'none' ? 
           `Use ${bestApproach} approach` : 
           'All approaches blocked - need Puppeteer or proxy'
