@@ -1,0 +1,21 @@
+{
+  "mcpServers": {
+    "linear": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://mcp.linear.app/sse"],
+      "options": {
+        "retry": true,
+        "retryDelay": 2000,
+        "maxRetries": 5,
+        "ignoreErrors": ["SyntaxError"],
+        "debug": true,
+        "auth": {
+          "type": "oauth2",
+          "clientId": "linear-cli",
+          "redirectUri": "http://localhost:3000/callback",
+          "scopes": ["read:issues"]
+        }
+      }
+    }
+  }
+}

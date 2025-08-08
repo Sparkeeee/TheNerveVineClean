@@ -13,7 +13,7 @@ export async function getSymptomBySlug(slug: string): Promise<SymptomType | null
     console.log(`[DEBUG] Transforming variants for ${dbSymptom.title}:`, {
       hasVariants: !!dbSymptom.variants,
       variantsLength: dbSymptom.variants?.length || 0,
-      variantNames: dbSymptom.variants?.map(v => v.name) || []
+      variantNames: dbSymptom.variants?.map((v: any) => v.name) || []
     });
     
     const transformedVariants = dbSymptom.variants?.reduce((acc: Record<string, Variant>, variant: any) => {

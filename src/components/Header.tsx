@@ -193,7 +193,7 @@ export default function Header() {
       </div>
 
       {/* Main Header - White with Shadow */}
-      <header className="bg-white shadow border-b">
+      <header className="bg-white shadow border-b border-b-2 border-b-gray-300">
         <div className="container mx-auto px-4">
                        <div className="flex items-center justify-between py-4">
             {/* Left Side - Logo and Site Name */}
