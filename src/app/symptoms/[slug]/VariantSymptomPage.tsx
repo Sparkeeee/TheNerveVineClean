@@ -184,7 +184,7 @@ export default function VariantSymptomPage({
   
   // Determine current title and description
   const currentTitle = selectedVariant || symptom.title;
-  const currentDescription = selectedVariantData?.description || symptom.description;
+  const currentDescription = (selectedVariantData as any)?.description || symptom.description;
 
   // Common symptoms data (you can move this to database later)
   const getCommonSymptoms = (symptomTitle: string, variantName?: string): string[] => {
