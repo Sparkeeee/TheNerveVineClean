@@ -414,11 +414,14 @@ export default function VariantSymptomPage({
               </div>
 
               {/* More Comprehensive Info Card */}
-              <ComprehensiveInfoCard 
-                markdownArticle={markdownArticle}
-                symptom={symptom}
-                setIsModalOpen={setIsModalOpen}
-              />
+              {(() => {
+                const InfoCard = ComprehensiveInfoCard({ 
+                  markdownArticle,
+                  symptom,
+                  setIsModalOpen
+                });
+                return InfoCard as React.ReactNode;
+              })()}
 
               {/* Common Symptoms section temporarily removed due to TypeScript inference issue */}
 
