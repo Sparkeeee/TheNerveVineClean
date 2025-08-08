@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import ContentProtection from '@/components/ContentProtection';
+import InteractiveCitations from '@/components/InteractiveCitations';
 
 // Simple Markdown to HTML converter
 function convertMarkdownToHtml(markdown: string): string {
@@ -77,13 +78,10 @@ function ScienceModal({
           shareTitle={`Scientific Research: ${supplementName}`}
         >
           <div className="p-6">
-            {/* Comprehensive Article */}
+            {/* Comprehensive Article with interactive citations */}
             {markdownArticle && (
               <div className="mb-8">
-                <div 
-                  className="prose prose-lg max-w-none"
-                  dangerouslySetInnerHTML={{ __html: convertMarkdownToHtml(markdownArticle) }}
-                />
+                <InteractiveCitations content={markdownArticle} />
               </div>
             )}
 

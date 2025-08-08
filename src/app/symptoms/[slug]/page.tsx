@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import ContentProtection from '@/components/ContentProtection';
+import VariantButtons from './VariantButtons';
 
 // Simple Markdown to HTML converter
 function convertMarkdownToHtml(markdown: string): string {
@@ -112,6 +113,7 @@ export default function SymptomPage({ params }: { params: Promise<{ slug: string
   const [symptom, setSymptom] = React.useState<any>(null);
   const [markdownArticle, setMarkdownArticle] = React.useState<string | null>(null);
   const [loading, setLoading] = React.useState(true);
+  const [selectedVariant, setSelectedVariant] = useState<string | null>(null);
 
   React.useEffect(() => {
     async function loadData() {
@@ -179,6 +181,20 @@ export default function SymptomPage({ params }: { params: Promise<{ slug: string
   }
 
   const products = symptom.products || [];
+  
+  // Transform variants array to object format for frontend
+  const variantsObject = symptom.variants ? 
+    symptom.variants.reduce((acc: any, variant: any) => {
+      acc[variant.name] = {
+        description: variant.description,
+        herbs: variant.herbs || [],
+        supplements: variant.supplements || []
+      };
+      return acc;
+    }, {}) : {};
+  
+  const variantNames = Object.keys(variantsObject);
+  const selectedVariantData = selectedVariant && variantsObject && selectedVariant !== symptom.title ? variantsObject[selectedVariant] : null;
 
   return (
     <ContentProtection 
@@ -201,18 +217,45 @@ export default function SymptomPage({ params }: { params: Promise<{ slug: string
               {/* Header */}
               <div className="text-center mb-8 rounded-xl p-8 shadow-sm border border-gray-100" style={{background: 'linear-gradient(135deg, #f0f9ff 0%, #ecfdf5 50%, #f0fdf4 100%)'}}>
                 <h1 className="text-4xl font-bold text-gray-800 mb-4">
-                  {symptom.title as string}
+                  {selectedVariant || (symptom.title as string)}
                 </h1>
+                
+                {/* Variant Toggle Buttons */}
+                {variantNames.length > 0 && (
+                  <div className="mt-6">
+                    <VariantButtons 
+                      variantNames={variantNames}
+                      selectedVariant={selectedVariant}
+                      onVariantSelect={setSelectedVariant}
+                      mainSymptomTitle={symptom.title}
+                    />
+                  </div>
+                )}
+
+                
                 {/* Formatted description with proper paragraph spacing */}
-                <div className="text-lg text-gray-600 max-w-2xl mx-auto prose prose-lg text-justify">
-                  {symptom.description ? (
-                    symptom.description.split('\n\n').map((paragraph: string, index: number) => (
-                      <p key={index} className="mb-4 last:mb-0 text-justify">
-                        {paragraph}
-                      </p>
-                    ))
+                <div className="text-lg text-gray-600 max-w-2xl mx-auto prose prose-lg text-justify mt-6">
+                  {selectedVariantData ? (
+                    // Show variant-specific content
+                    <div>
+                      {selectedVariantData.description && (
+                        <div 
+                          className="text-gray-700 text-lg leading-relaxed mb-6"
+                          dangerouslySetInnerHTML={{ __html: convertMarkdownToHtml(selectedVariantData.description) }}
+                        />
+                      )}
+                    </div>
                   ) : (
-                    <p className="text-justify">Natural solutions for health and wellness.</p>
+                    // Show main symptom content (when no variant is selected or when main symptom is selected)
+                    symptom.description ? (
+                      symptom.description.split('\n\n').map((paragraph: string, index: number) => (
+                        <p key={index} className="text-gray-700 text-lg leading-relaxed mb-6 last:mb-0">
+                          {paragraph}
+                        </p>
+                      ))
+                    ) : (
+                      <p className="text-gray-500 italic">No description available.</p>
+                    )
                   )}
                 </div>
               </div>

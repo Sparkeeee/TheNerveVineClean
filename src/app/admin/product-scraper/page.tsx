@@ -197,7 +197,7 @@ export default function ProductScraperPage() {
              </button>
              <button 
                onClick={async () => {
-                 if (!url.trim() || !url.includes('amazon')) return;
+                 if (!url.trim()) return;
                  setIsScraping(true);
                  setError('');
                  setScrapedProduct(null);
@@ -214,20 +214,20 @@ export default function ProductScraperPage() {
                    const data = await response.json();
                    setScrapedProduct(data);
                  } catch (err) {
-                   setError(err instanceof Error ? err.message : 'Mobile Amazon scrape failed');
+                   setError(err instanceof Error ? err.message : 'Mobile scrape failed');
                  } finally {
                    setIsScraping(false);
                  }
                }}
-               disabled={isScraping || !url.trim() || !url.includes('amazon')}
+               disabled={isScraping || !url.trim()}
                className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
-               title="Use working mobile approach to scrape Amazon products"
+               title="Use mobile approach to scrape products (works well for many sites)"
              >
                Mobile Scrape
              </button>
              <button 
                onClick={async () => {
-                 if (!url.trim() || !url.includes('amazon')) return;
+                 if (!url.trim()) return;
                  setIsScraping(true);
                  setError('');
                  setDebugInfo(null);
@@ -245,7 +245,7 @@ export default function ProductScraperPage() {
                    setIsScraping(false);
                  }
                }}
-               disabled={isScraping || !url.trim() || !url.includes('amazon')}
+               disabled={isScraping || !url.trim()}
                className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
                title="Analyze HTML structure to find correct price and image patterns"
              >
@@ -253,7 +253,7 @@ export default function ProductScraperPage() {
              </button>
              <button 
                onClick={async () => {
-                 if (!url.trim() || !url.includes('amazon')) return;
+                 if (!url.trim()) return;
                  setIsScraping(true);
                  setError('');
                  setDebugInfo(null);
@@ -271,7 +271,7 @@ export default function ProductScraperPage() {
                    setIsScraping(false);
                  }
                }}
-               disabled={isScraping || !url.trim() || !url.includes('amazon')}
+               disabled={isScraping || !url.trim()}
                className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
                title="Analyze JSON data blocks to find price and product information"
              >
@@ -279,7 +279,7 @@ export default function ProductScraperPage() {
              </button>
              <button 
                onClick={async () => {
-                 if (!url.trim() || !url.includes('amazon')) return;
+                 if (!url.trim()) return;
                  setIsScraping(true);
                  setError('');
                  setDebugInfo(null);
@@ -297,7 +297,7 @@ export default function ProductScraperPage() {
                    setIsScraping(false);
                  }
                }}
-               disabled={isScraping || !url.trim() || !url.includes('amazon')}
+               disabled={isScraping || !url.trim()}
                className="px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
                title="Analyze JavaScript variables and functions for price data"
              >
@@ -305,7 +305,7 @@ export default function ProductScraperPage() {
              </button>
              <button 
                onClick={async () => {
-                 if (!url.trim() || !url.includes('amazon')) return;
+                 if (!url.trim()) return;
                  setIsScraping(true);
                  setError('');
                  setScrapedProduct(null);
@@ -322,20 +322,20 @@ export default function ProductScraperPage() {
                    const data = await response.json();
                    setScrapedProduct(data);
                  } catch (err) {
-                   setError(err instanceof Error ? err.message : 'Puppeteer Amazon scrape failed');
+                   setError(err instanceof Error ? err.message : 'Puppeteer scrape failed');
                  } finally {
                    setIsScraping(false);
                  }
                }}
-               disabled={isScraping || !url.trim() || !url.includes('amazon')}
+               disabled={isScraping || !url.trim()}
                className="px-4 py-2 bg-pink-600 text-white rounded-md hover:bg-pink-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
-               title="Use Puppeteer to handle dynamic content and bypass bot detection"
+               title="Use Puppeteer to handle dynamic content and bypass bot detection (works for most sites)"
              >
                Puppeteer
              </button>
              <button 
                onClick={async () => {
-                 if (!url.trim() || !url.includes('amazon')) return;
+                 if (!url.trim()) return;
                  setIsScraping(true);
                  setError('');
                  setScrapedProduct(null);
@@ -352,20 +352,20 @@ export default function ProductScraperPage() {
                    const data = await response.json();
                    setScrapedProduct(data);
                  } catch (err) {
-                   setError(err instanceof Error ? err.message : 'Simple Fallback Amazon scrape failed');
+                   setError(err instanceof Error ? err.message : 'Simple Fallback scrape failed');
                  } finally {
                    setIsScraping(false);
                  }
                }}
-               disabled={isScraping || !url.trim() || !url.includes('amazon')}
+               disabled={isScraping || !url.trim()}
                className="px-4 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
-               title="Use simple fetch with multiple user agents as fallback when Puppeteer fails"
+               title="Use simple fetch with multiple user agents as fallback (good for basic sites)"
              >
                Simple Fallback
              </button>
              <button 
                onClick={async () => {
-                 if (!url.trim() || !url.includes('amazon')) return;
+                 if (!url.trim()) return;
                  setIsScraping(true);
                  setError('');
                  setScrapedProduct(null);
@@ -382,16 +382,56 @@ export default function ProductScraperPage() {
                    const data = await response.json();
                    setScrapedProduct(data);
                  } catch (err) {
-                   setError(err instanceof Error ? err.message : 'Ultra Simple Amazon scrape failed');
+                   setError(err instanceof Error ? err.message : 'Ultra Simple scrape failed');
                  } finally {
                    setIsScraping(false);
                  }
                }}
-               disabled={isScraping || !url.trim() || !url.includes('amazon')}
+               disabled={isScraping || !url.trim()}
                className="px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
-               title="Ultra simple fetch-based scraper with ASIN extraction and multiple approaches"
+               title="Ultra simple fetch-based scraper with multiple approaches (excellent for Amazon)"
              >
                Ultra Simple
+             </button>
+             <button 
+               onClick={async () => {
+                 if (!url.trim() || !url.includes('iherb')) return;
+                 setIsScraping(true);
+                 setError('');
+                 setDebugInfo(null);
+                 
+                 try {
+                   const response = await fetch('/api/product-scraper/iherb-advanced', {
+                     method: 'POST',
+                     headers: { 'Content-Type': 'application/json' },
+                     body: JSON.stringify({ url })
+                   });
+                   
+                   const data = await response.json();
+                   
+                   if (data.success) {
+                     setScrapedProduct(data.product);
+                     setDebugInfo({
+                       url,
+                       hostname: new URL(url).hostname,
+                       status: '✅ Success',
+                       method: data.method,
+                       htmlLength: data.product.rawData?.html?.length || 'Unknown'
+                     });
+                   } else {
+                     setError(data.error || 'Failed to scrape product');
+                   }
+                 } catch (error) {
+                   setError('Failed to scrape product');
+                 } finally {
+                   setIsScraping(false);
+                 }
+               }}
+               disabled={isScraping || !url.trim() || !url.includes('iherb')}
+               className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+               title="Advanced iHerb scraper with sophisticated headers and multiple approaches"
+             >
+               iHerb Hacker
              </button>
            </div>
         </div>

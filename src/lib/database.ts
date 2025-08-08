@@ -110,6 +110,18 @@ export async function getCachedSymptom(slug: string) {
     // Temporarily bypass cache for debugging
     console.log(`[DEBUG] getCachedSymptom called with slug: ${slug}`);
     
+    // Check cache first
+    const cacheKey = `symptom:${slug}`;
+    const cached = cache.get(cacheKey);
+    
+    if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+      console.log(`[DEBUG] Returning cached symptom for: ${slug}`);
+      console.log(`[DEBUG] Cached variants count: ${cached.data.variants?.length || 0}`);
+      return cached.data;
+    }
+    
+    console.log(`[DEBUG] Fetching symptom from database: ${slug}`);
+    
     // Fetch from database
     const symptom = await prisma.symptom.findUnique({
       where: { slug },
@@ -135,6 +147,9 @@ export async function getCachedSymptom(slug: string) {
         variantNames: symptom.variants?.map(v => v.name) || [],
         isArray: Array.isArray(symptom.variants)
       });
+      
+      // Cache the result
+      cache.set(cacheKey, { data: symptom, timestamp: Date.now() });
       
       return symptom;
     }

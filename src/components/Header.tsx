@@ -63,13 +63,19 @@ export default function Header() {
             <div className="flex items-center justify-between py-4">
               {/* Left Side - Logo and Site Name */}
               <Link href="/" className="flex items-center space-x-2">
-                <Image 
-                  src="/images/nervevine smalllogo1.svg" 
-                  alt="The NerveVine Logo" 
-                  width={90} 
-                  height={90}
-                  className="h-10 sm:h-12 md:h-16 lg:h-20 w-auto"
-                />
+                <span className="relative nv-logo h-10 sm:h-12 md:h-16 lg:h-20 w-auto">
+                  <Image 
+                    src="/images/nervevine smalllogo1.svg" 
+                    alt="The NerveVine Logo" 
+                    width={90} 
+                    height={90}
+                    className="h-full w-auto"
+                    priority
+                  />
+                  <span className="nv-nucleus-flash" aria-hidden="true"></span>
+                  <span className="nv-band-out" aria-hidden="true"></span>
+                  <span className="nv-band-back" aria-hidden="true"></span>
+                </span>
                 <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900">The NerveVine</h1>
               </Link>
               
@@ -191,16 +197,22 @@ export default function Header() {
         <div className="container mx-auto px-4">
                        <div className="flex items-center justify-between py-4">
             {/* Left Side - Logo and Site Name */}
-                           <Link href="/" className="flex items-center space-x-2">
-              <Image 
-                src="/images/nervevine smalllogo1.svg" 
-                alt="The NerveVine Logo" 
-                width={90} 
-                height={90}
-                className="h-10 sm:h-12 md:h-16 lg:h-20 w-auto"
-              />
-                             <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900">The NerveVine</h1>
-            </Link>
+              <Link href="/" className="flex items-center space-x-2">
+                <span className="relative nv-logo h-10 sm:h-12 md:h-16 lg:h-20 w-auto">
+                  <Image 
+                    src="/images/nervevine smalllogo1.svg" 
+                    alt="The NerveVine Logo" 
+                    width={90} 
+                    height={90}
+                    className="h-full w-auto"
+                    priority
+                  />
+                  <span className="nv-nucleus-flash" aria-hidden="true"></span>
+                  <span className="nv-band-out" aria-hidden="true"></span>
+                  <span className="nv-band-back" aria-hidden="true"></span>
+                </span>
+                <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900">The NerveVine</h1>
+              </Link>
             
             {/* Right Side - Navigation and Search */}
             <div className="hidden lg:flex flex-col items-end space-y-3">

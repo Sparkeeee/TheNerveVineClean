@@ -40,18 +40,86 @@ export async function POST(request: NextRequest) {
     const html = await response.text();
     console.log('Fetched HTML length:', html.length);
 
-    // Basic extraction using regex (very limited but works for testing)
+    // Enhanced extraction with multiple patterns for better coverage
     const titleMatch = html.match(/<title[^>]*>([^<]+)<\/title>/i);
     const name = titleMatch ? titleMatch[1].trim() : 'Product name not found';
 
-    const priceMatch = html.match(/\$[\d,]+\.?\d*/);
-    const price = priceMatch ? priceMatch[0] : 'Price not found';
+    // Enhanced price extraction with multiple patterns
+    let price = 'Price not found';
+    
+    // Pattern 1: Target-specific JSON price extraction
+    const targetPriceMatch = html.match(/"formatted_current_price":"\$([\d,]+\.?\d*)"/);
+    if (targetPriceMatch) {
+      price = `$${targetPriceMatch[1]}`;
+    }
+    
+    // Pattern 2: HerbEra-style data attributes
+    if (price === 'Price not found') {
+      const herbEraPriceMatch = html.match(/<span[^>]*data-regular-price[^>]*>\s*\$([\d,]+\.?\d*)\s*<\/span>/i);
+      if (herbEraPriceMatch) {
+        price = `$${herbEraPriceMatch[1]}`;
+      }
+    }
+    
+    // Pattern 3: Price with price-item class
+    if (price === 'Price not found') {
+      const priceItemMatch = html.match(/<span[^>]*class="[^"]*price-item[^"]*"[^>]*>\s*\$([\d,]+\.?\d*)\s*<\/span>/i);
+      if (priceItemMatch) {
+        price = `$${priceItemMatch[1]}`;
+      }
+    }
+    
+    // Pattern 4: Standard price pattern (fallback)
+    if (price === 'Price not found') {
+      const priceMatch = html.match(/\$[\d,]+\.?\d*/);
+      if (priceMatch) {
+        price = priceMatch[0];
+      }
+    }
 
-    const imageMatch = html.match(/<img[^>]*src=["']([^"']*product[^"']*)["'][^>]*>/i);
-    const image = imageMatch ? imageMatch[1] : '';
+    // Enhanced image extraction with multiple patterns
+    let image = '';
+    
+    // Pattern 1: Target-specific image extraction (first product image)
+    const targetImageMatch = html.match(/<img[^>]*src=["']([^"']*target\.scene7\.com[^"']*)["'][^>]*alt=["'][^"']*1 of [^"']*["'][^>]*>/i);
+    if (targetImageMatch) {
+      image = targetImageMatch[1];
+    }
+    
+    // Pattern 2: Product images with width placeholder
+    if (!image) {
+      const productImageMatch = html.match(/<img[^>]*src=["']([^"']*\{width\}[^"']*)["'][^>]*>/i);
+      if (productImageMatch) {
+        image = productImageMatch[1].replace('{width}', '500'); // Use 500px width
+      }
+    }
+    
+    // Pattern 3: Standard product image
+    if (!image) {
+      const imageMatch = html.match(/<img[^>]*src=["']([^"']*product[^"']*)["'][^>]*>/i);
+      if (imageMatch) {
+        image = imageMatch[1];
+      }
+    }
+    
+    // Pattern 4: Any image with product-related alt text
+    if (!image) {
+      const altImageMatch = html.match(/<img[^>]*alt=["']([^"']*product[^"']*)["'][^>]*src=["']([^"']*)["'][^>]*>/i);
+      if (altImageMatch) {
+        image = altImageMatch[2];
+      }
+    }
 
     const descriptionMatch = html.match(/<meta[^>]*name=["']description["'][^>]*content=["']([^"']*)["']/i);
     const description = descriptionMatch ? descriptionMatch[1] : 'Description not found';
+
+    // Log extraction results for debugging
+    console.log('Enhanced extraction results:', {
+      name,
+      price,
+      image: image ? `${image.substring(0, 50)}...` : 'No image found',
+      description: description.substring(0, 100) + '...'
+    });
 
     const scrapedData: Partial<ScrapedProduct> = {
       name,
