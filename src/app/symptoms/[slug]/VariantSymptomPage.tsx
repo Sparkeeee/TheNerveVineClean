@@ -414,13 +414,11 @@ export default function VariantSymptomPage({
               </div>
 
               {/* More Comprehensive Info Card */}
-              {(markdownArticle || (symptom.references && Array.isArray(symptom.references) && symptom.references.length > 0)) ? 
-                <ComprehensiveInfoCard 
-                  markdownArticle={markdownArticle}
-                  symptom={symptom}
-                  setIsModalOpen={setIsModalOpen}
-                /> : null
-              }
+              <ComprehensiveInfoCard 
+                markdownArticle={markdownArticle}
+                symptom={symptom}
+                setIsModalOpen={setIsModalOpen}
+              />
 
               {/* Common Symptoms section temporarily removed due to TypeScript inference issue */}
 
