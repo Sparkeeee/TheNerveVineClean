@@ -365,7 +365,9 @@ export default function VariantSymptomPage({
               </div>
 
               {/* More Comprehensive Info Card */}
-              {(markdownArticle || (symptom.references && symptom.references.length > 0)) ? (
+              {(() => {
+                if (markdownArticle || (symptom.references && symptom.references.length > 0)) {
+                  return (
                 <div className="mb-8 bg-white rounded-lg shadow-lg p-6 border-2 border-gray-300">
                   <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
                     More Comprehensive Info
@@ -393,7 +395,10 @@ export default function VariantSymptomPage({
                     </Link>
                   </div>
                 </div>
-              ) : null}
+                  );
+                }
+                return null;
+              })()}
 
               {/* Common Symptoms section temporarily removed due to TypeScript inference issue */}
 
