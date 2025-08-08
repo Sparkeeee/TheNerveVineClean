@@ -38,7 +38,11 @@ function ComprehensiveInfoCard({
   symptom: any;
   setIsModalOpen: (open: boolean) => void;
 }): React.ReactElement | null {
-  if (!markdownArticle && !(symptom.references && symptom.references.length > 0)) {
+  // Type guard to ensure we have valid data for rendering
+  const hasMarkdownArticle = typeof markdownArticle === 'string' && markdownArticle.length > 0;
+  const hasReferences = symptom.references && Array.isArray(symptom.references) && symptom.references.length > 0;
+  
+  if (!hasMarkdownArticle && !hasReferences) {
     return null;
   }
 
