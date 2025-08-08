@@ -118,13 +118,13 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Analysis
-    const workingApproaches = Object.entries(results).filter(([key, result]) => 
-      result && !result.error && !result.isBlocked && result.hasProduct
+        // Analysis
+    const workingApproaches = Object.entries(results).filter(([key, result]) =>
+      result && !(result as any).error && !(result as any).isBlocked && (result as any).hasProduct
     );
 
     const bestApproach = workingApproaches.find(([key, result]) => 
-      result.hasPrice && result.hasProduct
+      (result as any).hasPrice && (result as any).hasProduct
     )?.[0] || 'none';
 
     return NextResponse.json({
