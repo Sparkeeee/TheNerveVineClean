@@ -502,7 +502,7 @@ export default function ProductScraperPage() {
                     {debugInfo.analysis.priceMatches && debugInfo.analysis.priceMatches.length > 0 && (
                       <div className="mt-3">
                         <div className="font-semibold mb-1">Price Matches:</div>
-                        {debugInfo.analysis.priceMatches.slice(0, 3).map((match: any, index) => (
+                        {debugInfo.analysis.priceMatches.slice(0, 3).map((match: any, index: number) => (
                           <div key={index} className="mb-1 p-1 bg-yellow-50 rounded text-xs">
                             <div><strong>Match {index + 1}:</strong> {match.match}</div>
                             <div className="text-gray-600">Context: {match.context}</div>
