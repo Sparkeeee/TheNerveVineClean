@@ -466,8 +466,8 @@ export default function ProductScraperPage() {
                                {debugInfo.results && (
                   <div className="mt-4">
                     <div className="font-semibold mb-2">Detailed Results:</div>
-                    {Object.entries(debugInfo.results).map(([approach, result]) => (
-                      result && (
+                    {Object.entries(debugInfo.results).map(([approach, result]) => 
+                      result ? (
                         <div key={approach} className="mb-2 p-2 bg-gray-50 rounded text-xs">
                           <div><strong>{approach}:</strong></div>
                           {result.error ? (
@@ -483,8 +483,8 @@ export default function ProductScraperPage() {
                             </>
                           )}
                         </div>
-                      )
-                    ))}
+                      ) : null
+                    )}
                   </div>
                 )}
                 {debugInfo.analysis && (
