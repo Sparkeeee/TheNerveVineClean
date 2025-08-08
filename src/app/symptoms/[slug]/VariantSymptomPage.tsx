@@ -391,7 +391,7 @@ export default function VariantSymptomPage({
                   );
                 }
                 return null;
-              })()}
+              })() as React.ReactNode}
 
               {/* Possible Causes */}
               {symptom.causes && symptom.causes.length > 0 && (
