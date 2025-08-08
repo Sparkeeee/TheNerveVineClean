@@ -36,7 +36,7 @@ export default function SymptomPage({ params }: { params: Promise<{ slug: string
             cautions: symptomData.cautions,
             references: symptomData.references,
             variants: symptomData.variants ? 
-              symptomData.variants.reduce((acc: any, variant: any) => {
+              symptomData.variants.reduce((acc: Record<string, unknown>, variant: { name: string; description?: string; herbs?: unknown[]; supplements?: unknown[] }) => {
                 acc[variant.name] = {
                   description: variant.description,
                   herbs: variant.herbs || [],

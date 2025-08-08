@@ -91,7 +91,7 @@ export async function PUT(req: NextRequest) {
   try {
     const data = await req.json();
     if (!data.id) return NextResponse.json({ error: 'ID required' }, { status: 400 });
-    const { id, ...herbData } = data;
+    const { id: _id, ...herbData } = data;
     const herb = await prisma.herb.update({
       where: { id: data.id },
       data: herbData,

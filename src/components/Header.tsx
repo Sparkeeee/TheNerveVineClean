@@ -76,7 +76,7 @@ export default function Header() {
                   <span className="nv-band-out" aria-hidden="true"></span>
                   <span className="nv-band-back" aria-hidden="true"></span>
                 </span>
-                <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900">The NerveVine</h1>
+                <h1 className="text-lg sm:text-xl lg:text-2xl font-lato font-bold italic text-gray-900 nv-site-name">The Nerve Vine</h1>
               </Link>
               
               {/* Right Side - Navigation and Search */}
@@ -211,7 +211,10 @@ export default function Header() {
                   <span className="nv-band-out" aria-hidden="true"></span>
                   <span className="nv-band-back" aria-hidden="true"></span>
                 </span>
-                <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900">The NerveVine</h1>
+                <h1 className="text-lg sm:text-xl lg:text-2xl font-lato font-bold italic text-gray-900 nv-site-name">
+                  The Nerve Vine
+                  <div className="nv-vertical-bar"></div>
+                </h1>
               </Link>
             
             {/* Right Side - Navigation and Search */}

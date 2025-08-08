@@ -158,13 +158,13 @@ export default function HerbPage({ params }: { params: Promise<{ slug: string }>
                 const article = await articleResponse.text();
                 setMarkdownArticle(article);
               }
-            } catch (error) {
+            } catch (_error) {
               console.log('No markdown article found for this herb');
             }
           }
         }
-      } catch (error) {
-        console.error('Error fetching herb data:', error);
+      } catch (_error) {
+        console.error('Error fetching herb data:', _error);
       }
       
       setLoading(false);
@@ -204,14 +204,14 @@ export default function HerbPage({ params }: { params: Promise<{ slug: string }>
   const products = herb.products || [];
 
   // Separate products into Traditional and Modern formulations
-  const traditionalProducts = products.filter((product: any) => 
+  const traditionalProducts = products.filter((product: { type?: string; formulation?: string; name?: string }) => 
     product.type === 'traditional' || product.formulation === 'traditional' || 
     product.name?.toLowerCase().includes('tincture') || 
     product.name?.toLowerCase().includes('tea') ||
     product.name?.toLowerCase().includes('powder')
   );
   
-  const modernProducts = products.filter((product: any) => 
+  const modernProducts = products.filter((product: { type?: string; formulation?: string; name?: string }) => 
     product.type === 'modern' || product.formulation === 'modern' ||
     product.name?.toLowerCase().includes('extract') ||
     product.name?.toLowerCase().includes('capsule') ||

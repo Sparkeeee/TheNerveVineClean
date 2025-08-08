@@ -220,7 +220,7 @@ h1, h2, h3, h4, h5, h6 {
   justify-content: center;
 }
 
-.nv-logo img { filter: drop-shadow(0 0 10px rgba(255,255,255,0.3)); animation: nv-neuralPulse 6s ease-in-out infinite; height: 100%; width: auto; display: block; position: relative; z-index: 0; }
+.nv-logo img { filter: drop-shadow(0 0 10px rgba(255,255,255,0.3)); animation: nv-neuralPulse 6.75s ease-in-out infinite; height: 100%; width: auto; display: block; position: relative; z-index: 0; }
 
 .nv-nucleus-flash,
 .nv-band-out,
@@ -239,7 +239,7 @@ h1, h2, h3, h4, h5, h6 {
   background: radial-gradient(circle,
     rgba(255,255,255,1) 0%, rgba(255,255,255,0.95) 15%, rgba(255,255,255,0.8) 30%,
     rgba(255,255,255,0.4) 50%, rgba(255,255,255,0.1) 70%, transparent 85%);
-  animation: nv-nucleusFlash 6s ease-in-out infinite;
+  animation: nv-nucleusFlash 6.75s ease-in-out infinite;
   z-index: 10;
 }
 
@@ -256,13 +256,33 @@ h1, h2, h3, h4, h5, h6 {
   visibility: hidden;
 }
 
-.nv-band-out { animation: nv-neuralBandOut 6s linear infinite; }
+.nv-band-out { animation: nv-neuralBandOut 6.75s linear infinite; }
 .nv-band-back { 
-  animation: nv-neuralBandBack 6s linear infinite; 
+  animation: nv-neuralBandBack 6.75s linear infinite; 
   /* 40% thinner than outward band */
   border-width: 2.016px; /* 3.36 * 0.6 */
   --band-thickness: 2.016px;
   --edge-blur: calc(var(--band-thickness) * 0.05);
+}
+
+/* Site Name Animation */
+.nv-site-name {
+  position: relative;
+  overflow: visible;
+}
+
+.nv-vertical-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.9), transparent);
+  box-shadow: 0 0 8px rgba(255,255,255,0.8);
+  z-index: 5;
+  opacity: 0;
+  animation: nv-verticalBar 6.75s linear infinite;
+  pointer-events: none;
 }
 
 @keyframes nv-neuralPulse {
@@ -296,6 +316,26 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+@keyframes nv-verticalBar {
+  /* 0-0.75s: Flash + expansion (no vertical bar) */
+  0% { opacity: 0; left: -20px; }
+  10% { opacity: 0; left: -20px; }
+  
+  /* 0.75-1.75s: Vertical bar flows from logo to right edge of site name */
+  10% { opacity: 0; left: -20px; }
+  11.11% { opacity: 1; left: -20px; }
+  23.33% { opacity: 1; left: calc(100% + 20px); }
+  
+  /* 1.75-2.75s: Vertical bar returns from right edge to left of site name */
+  23.33% { opacity: 1; left: calc(100% + 20px); }
+  36.67% { opacity: 1; left: -20px; }
+  36.67% { opacity: 0; left: -20px; }
+  
+  /* 2.75-6.75s: Blue neural pulsing (no vertical bar) */
+  36.67% { opacity: 0; left: -20px; }
+  100% { opacity: 0; left: -20px; }
+}
+
 @keyframes nv-nucleusFlash {
   0% { opacity: 0; transform: translate(-50%, -50%) scale(0.3); }
   2.5% { opacity: 0.7; transform: translate(-50%, -50%) scale(1.5); }
@@ -315,8 +355,8 @@ h1, h2, h3, h4, h5, h6 {
 
 @keyframes nv-neuralBandBack {
   0% { opacity: 0; visibility: hidden; transform: translate(-50%, -50%) scale(5.61); border-width: 0.672px; --band-thickness: 0.672px; }
-  20.83% { opacity: 1; visibility: visible; transform: translate(-50%, -50%) scale(5.61); border-width: 0.672px; --band-thickness: 0.672px; }
-  33.33% { opacity: 1; visibility: visible; transform: translate(-50%, -50%) scale(0.3); border-width: 2.016px; --band-thickness: 2.016px; }
+  20.83% { opacity: 0; visibility: hidden; transform: translate(-50%, -50%) scale(5.61); border-width: 0.672px; --band-thickness: 0.672px; }
+  33.33% { opacity: 0; visibility: hidden; transform: translate(-50%, -50%) scale(0.3); border-width: 2.016px; --band-thickness: 2.016px; }
   33.4% { opacity: 0; visibility: hidden; transform: translate(-50%, -50%) scale(0.3); border-width: 2.016px; --band-thickness: 2.016px; }
   100% { opacity: 0; visibility: hidden; transform: translate(-50%, -50%) scale(0.3); border-width: 2.016px; --band-thickness: 2.016px; }
 }

@@ -13,10 +13,10 @@ export async function getSymptomBySlug(slug: string): Promise<SymptomType | null
     console.log(`[DEBUG] Transforming variants for ${dbSymptom.title}:`, {
       hasVariants: !!dbSymptom.variants,
       variantsLength: dbSymptom.variants?.length || 0,
-      variantNames: dbSymptom.variants?.map((v: any) => v.name) || []
+      variantNames: dbSymptom.variants?.map((v: { name: string }) => v.name) || []
     });
     
-    const transformedVariants = dbSymptom.variants?.reduce((acc: Record<string, Variant>, variant: any) => {
+    const transformedVariants = dbSymptom.variants?.reduce((acc: Record<string, Variant>, variant: { name: string; description?: string; herbs?: Array<{ name: string; description: string }>; supplements?: Array<{ name: string; description: string }> }) => {
       // Use variant.name as the key for the object
       console.log(`[DEBUG] Processing variant: ${variant.name}`);
       acc[variant.name] = {
@@ -37,7 +37,7 @@ export async function getSymptomBySlug(slug: string): Promise<SymptomType | null
           affiliateLink: '#', // Will be sourced from real affiliate data when available
           image: '/images/closed-medical-brown-glass-bottle-yellow-vitamins.png'
         } : undefined,
-        topSupplements: variant.supplements?.slice(1).map((supp: any) => ({
+        topSupplements: variant.supplements?.slice(1).map((supp: { name: string; description: string }) => ({
           name: supp.name || '',
           description: supp.description || '',
           // PURGED: Removed static price/affiliate corruption - real data from Product table when available
@@ -66,7 +66,7 @@ export async function getSymptomBySlug(slug: string): Promise<SymptomType | null
       disclaimer: undefined, // Not in schema
       emergencyNote: undefined, // Not in schema
       variants: transformedVariants,
-      products: dbSymptom.products.map((product: any) => ({
+      products: dbSymptom.products.map((product: { name: string; description?: string; affiliateLink: string; price?: number; imageUrl?: string; merchant: { name: string }; qualityScore?: number; affiliateRate?: number }) => ({
         name: product.name,
         description: product.description || '',
         affiliateLink: product.affiliateLink,
@@ -89,7 +89,7 @@ export async function getSymptomBySlug(slug: string): Promise<SymptomType | null
 export async function getAllSymptomSlugs(): Promise<string[]> {
   try {
     const symptoms = await getCachedSymptoms();
-    return symptoms.map((s: any) => s.slug);
+    return symptoms.map((s: { slug: string }) => s.slug);
   } catch (error) {
     console.error('Error fetching symptom slugs:', error);
     return [];
@@ -100,7 +100,7 @@ export async function getAllSymptoms(): Promise<SymptomType[]> {
   try {
     const dbSymptoms = await getCachedSymptoms();
 
-    return dbSymptoms.map((dbSymptom: any) => ({
+    return dbSymptoms.map((dbSymptom: { title: string; description?: string }) => ({
       name: dbSymptom.title, // Use title as name since name doesn't exist in schema
       title: dbSymptom.title,
       description: dbSymptom.description || '',
