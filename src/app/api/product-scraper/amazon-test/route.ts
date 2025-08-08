@@ -86,10 +86,10 @@ export async function POST(request: NextRequest) {
       results: results,
       summary: {
         bestApproach: Object.entries(results).find(([key, result]) => 
-          result && !result.error && result.hasProduct && result.hasPrice
+          result && !(result as any).error && (result as any).hasProduct && (result as any).hasPrice
         )?.[0] || 'none',
         totalApproaches: Object.keys(results).length,
-        workingApproaches: Object.values(results).filter(r => r && !r.error).length
+        workingApproaches: Object.values(results).filter(r => r && !(r as any).error).length
       }
     });
 
