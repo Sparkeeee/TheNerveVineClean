@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
                 const parsed = JSON.parse(jsonStr);
                 jsonBlocks.push({
                   type: 'script-json',
-                  index: scriptMatch.index,
+                  index: scriptMatch?.index || 0,
                   data: parsed,
                   original: jsonStr.substring(0, 200) + '...'
                 });
@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
         const structuredData = JSON.parse(structuredMatch[1]);
         jsonBlocks.push({
           type: 'structured-data',
-          index: structuredMatch.index,
+          index: structuredMatch?.index || 0,
           data: structuredData,
           original: structuredMatch[1].substring(0, 200) + '...'
         });
