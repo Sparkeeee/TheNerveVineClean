@@ -266,7 +266,7 @@ export default function VariantSymptomPage({
     ];
   };
 
-  const commonSymptoms = getCommonSymptoms(symptom.title, selectedVariant);
+  const commonSymptoms = getCommonSymptoms(symptom.title, selectedVariant || undefined);
 
   return (
     <ContentProtection 
