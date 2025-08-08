@@ -470,16 +470,16 @@ export default function ProductScraperPage() {
                       result ? (
                         <div key={approach} className="mb-2 p-2 bg-gray-50 rounded text-xs">
                           <div><strong>{approach}:</strong></div>
-                          {result.error ? (
-                            <div className="text-red-600">Error: {result.error}</div>
+                          {(result as any).error ? (
+                            <div className="text-red-600">Error: {(result as any).error}</div>
                           ) : (
                             <>
-                              <div>Status: {result.status}</div>
-                              <div>Length: {result.length?.toLocaleString()}</div>
-                              <div>Title: {result.title}</div>
-                              <div>Has Product: {result.hasProduct ? '✅' : '❌'}</div>
-                              <div>Has Price: {result.hasPrice ? '✅' : '❌'}</div>
-                              <div>Blocked: {result.isBlocked ? '❌' : '✅'}</div>
+                              <div>Status: {(result as any).status}</div>
+                              <div>Length: {(result as any).length?.toLocaleString()}</div>
+                              <div>Title: {(result as any).title}</div>
+                              <div>Has Product: {(result as any).hasProduct ? '✅' : '❌'}</div>
+                              <div>Has Price: {(result as any).hasPrice ? '✅' : '❌'}</div>
+                              <div>Blocked: {(result as any).isBlocked ? '❌' : '✅'}</div>
                             </>
                           )}
                         </div>
