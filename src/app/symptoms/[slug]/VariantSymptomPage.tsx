@@ -374,19 +374,24 @@ export default function VariantSymptomPage({
                 </div>
               )}
 
-              {symptom.symptoms && Array.isArray(symptom.symptoms) && symptom.symptoms.length > 0 ? (
-                <div className="rounded-xl p-8 shadow-sm border-2 border-gray-300 mb-8" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
-                  <h2 className="text-2xl font-bold text-gray-900 mb-4">Common Symptoms</h2>
-                  <ul className="space-y-3">
-                    {(symptom.symptoms as string[]).map((symptomItem: string, index: number) => (
-                      <li key={index} className="flex items-start gap-3 text-gray-700">
-                        <span className="text-lime-500 font-semibold mt-1">•</span>
-                        <span className="text-lg">{symptomItem}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ) : null}
+              {(() => {
+                if (symptom.symptoms && Array.isArray(symptom.symptoms) && symptom.symptoms.length > 0) {
+                  return (
+                    <div className="rounded-xl p-8 shadow-sm border-2 border-gray-300 mb-8" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
+                      <h2 className="text-2xl font-bold text-gray-900 mb-4">Common Symptoms</h2>
+                      <ul className="space-y-3">
+                        {(symptom.symptoms as string[]).map((symptomItem: string, index: number) => (
+                          <li key={index} className="flex items-start gap-3 text-gray-700">
+                            <span className="text-lime-500 font-semibold mt-1">•</span>
+                            <span className="text-lg">{symptomItem}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  );
+                }
+                return null;
+              })()}
 
               {/* Possible Causes */}
               {symptom.causes && symptom.causes.length > 0 && (
