@@ -7,8 +7,65 @@ import { Symptom } from '../../../types/symptom';
 import VariantButtons from './VariantButtons';
 import ContentProtection from '@/components/ContentProtection';
 
-// Component to render common symptoms
-function CommonSymptomsSection({ symptoms }: { symptoms: unknown }): React.ReactElement | null {
+// Type definitions for better type safety
+interface Reference {
+  value: string;
+}
+
+interface Product {
+  name: string;
+  description?: string;
+  imageUrl?: string;
+  price?: string | number;
+  affiliateLink?: string;
+}
+
+// Separate component to avoid TypeScript inference issues
+function ComprehensiveInfoCard({ 
+  show, 
+  onModalOpen, 
+  symptomTitle 
+}: { 
+  show: boolean; 
+  onModalOpen: () => void; 
+  symptomTitle: string; 
+}): React.ReactElement | null {
+  if (!show) return null;
+  
+  return (
+    <div className="mb-8 bg-white rounded-lg shadow-lg p-6 border-2 border-gray-300">
+      <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+        More Comprehensive Info
+      </h2>
+      <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+        <button
+          onClick={onModalOpen}
+          className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors shadow-lg"
+        >
+          <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+          </svg>
+          Research
+        </button>
+        <Link
+          href={`/symptoms/${symptomTitle?.toLowerCase().replace(/\s+/g, '-')}/research`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center px-6 py-3 bg-gray-600 text-white font-semibold rounded-lg hover:bg-gray-700 transition-colors shadow-lg"
+        >
+          <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2v-4M14 4h6m0 0v6m0-6L10 14" />
+          </svg>
+          Full Page View
+        </Link>
+      </div>
+    </div>
+  );
+}
+
+// Component to render common symptoms (currently unused but kept for future use)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function CommonSymptomsSection({ symptoms }: { symptoms: string[] }): React.ReactElement | null {
   if (!symptoms || !Array.isArray(symptoms) || symptoms.length === 0) {
     return null;
   }
@@ -118,7 +175,7 @@ function ScienceModal({
   isOpen: boolean; 
   onClose: () => void; 
   markdownArticle: string | null; 
-  references: any[]; 
+  references: Reference[]; 
   symptomTitle: string;
 }) {
   if (!isOpen) return null;
@@ -171,7 +228,7 @@ function ScienceModal({
               <div className="border-t border-gray-200 pt-6">
                 <h3 className="text-xl font-bold text-gray-900 mb-4">References</h3>
                 <div className="space-y-3">
-                  {references.map((reference: any, index: number) => (
+                  {references.map((reference: Reference, index: number) => (
                     <div key={index} className="text-sm text-gray-800 leading-relaxed p-3 bg-gray-50 rounded">
                       {reference.value}
                     </div>
@@ -197,7 +254,7 @@ export default function VariantSymptomPage({
   selectedVariant?: string | null;
   onVariantSelect?: (variant: string | null) => void;
   markdownArticle?: string | null;
-  products?: any[];
+  products?: Product[];
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const variantNames = Object.keys(symptom.variants || {});
@@ -207,7 +264,18 @@ export default function VariantSymptomPage({
   
   // Determine current title and description
   const currentTitle = selectedVariant || symptom.title;
-  const currentDescription = (selectedVariantData as any)?.description || symptom.description;
+  const currentDescription = (selectedVariantData as { description?: string })?.description || symptom.description;
+  
+  // Check if we should show comprehensive info
+  const hasMarkdownArticle: boolean = Boolean(markdownArticle);
+  const hasReferences: boolean = Boolean(
+    symptom.references && 
+    Array.isArray(symptom.references) && 
+    symptom.references.length > 0
+  );
+  const shouldShowComprehensiveInfo: boolean = hasMarkdownArticle || hasReferences;
+  
+
 
   // Common symptoms data (you can move this to database later)
   const getCommonSymptoms = (symptomTitle: string, variantName?: string): string[] => {
@@ -289,7 +357,7 @@ export default function VariantSymptomPage({
     ];
   };
 
-  const commonSymptoms = getCommonSymptoms(symptom.title, selectedVariant || undefined);
+  const commonSymptoms = getCommonSymptoms(symptom.title ?? '', selectedVariant || undefined);
 
   return (
     <ContentProtection 
@@ -367,35 +435,63 @@ export default function VariantSymptomPage({
               </div>
 
               {/* More Comprehensive Info Card */}
-              {(markdownArticle || (symptom.references && Array.isArray(symptom.references) && symptom.references.length > 0)) && (
+              {shouldShowComprehensiveInfo ? (
                 <div className="mb-8 bg-white rounded-lg shadow-lg p-6 border-2 border-gray-300">
                   <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
                     More Comprehensive Info
                   </h2>
                   <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+                    
+                    {/* Research button */}
                     <button
                       onClick={() => setIsModalOpen(true)}
                       className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors shadow-lg"
                     >
-                      <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                      <svg
+                        className="w-5 h-5 mr-2"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                        />
                       </svg>
-                      View Here
+                      Research
                     </button>
+
+                    {/* Full page view link */}
                     <Link
-                      href={`/symptoms/${symptom.title?.toLowerCase().replace(/\s+/g, '-')}/research`}
+                      href={`/symptoms/${
+                        typeof symptom.title === "string"
+                          ? symptom.title.toLowerCase().replace(/\s+/g, "-")
+                          : ""
+                      }/research` as string}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center px-6 py-3 bg-gray-600 text-white font-semibold rounded-lg hover:bg-gray-700 transition-colors shadow-lg"
                     >
-                      <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      <svg
+                        className="w-5 h-5 mr-2"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2v-4M14 4h6m0 0v6m0-6L10 14"
+                        />
                       </svg>
                       Full Page View
                     </Link>
                   </div>
                 </div>
-              )}
+              ) : null}
 
               {/* Common Symptoms section temporarily removed due to TypeScript inference issue */}
 
@@ -432,7 +528,7 @@ export default function VariantSymptomPage({
                   <h3 className="text-xl font-bold text-gray-800 mb-4">Recommended Solutions</h3>
                   {products.length > 0 ? (
                     <div className="space-y-4">
-                      {products.map((product: any, index: number) => (
+                      {products.map((product: Product, index: number) => (
                         <div key={index} className="border border-lime-200 rounded-lg p-4 hover:shadow-md transition-shadow">
                           <h4 className="font-semibold text-lime-900 mb-2 text-sm">{product.name}</h4>
                           {product.description && (
@@ -541,8 +637,10 @@ export default function VariantSymptomPage({
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           markdownArticle={markdownArticle || null}
-          references={symptom.references || []}
-          symptomTitle={symptom.title}
+          references={(symptom.references || []).map(ref => 
+            typeof ref === 'string' ? { value: ref } : ref
+          )}
+          symptomTitle={symptom.title ?? ''}
         />
       </div>
     </ContentProtection>

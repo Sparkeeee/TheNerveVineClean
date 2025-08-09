@@ -22,17 +22,16 @@ export interface Variant {
   productFormulations?: Record<string, Product>;
   cautions?: string;
   relatedSymptoms?: { name: string; href: string; color: string }[];
-  herb?: unknown;
-  extract?: unknown;
-  supplements?: unknown;
-  related?: unknown;
-  faq?: unknown;
+  description?: string;
+  products?: Product[];
+  herbs?: Product[];
+  supplements?: Product[];
 }
 
 export interface Symptom {
   name?: string;
-  title: string;
-  description: string;
+  title?: string;
+  description?: string;
   paragraphs?: string[];
   variants?: Record<string, Variant>;
   disclaimer?: string;
@@ -40,14 +39,9 @@ export interface Symptom {
   causes?: string[];
   naturalSolutions?: Product[];
   products?: Product[];
-  herb?: unknown;
-  extract?: unknown;
-  supplements?: unknown;
-  cautions?: unknown;
-  related?: unknown;
-  faq?: unknown;
   quickActions?: { name: string; href: string; color: string }[];
   relatedSymptoms?: { name: string; href: string; color: string }[];
   emergencyNote?: string;
-  references?: any[];
+  references?: string[];
+  cautions?: string;
 } 

@@ -1,4 +1,4 @@
-import { getCachedSymptom, getCachedSymptoms } from './database';
+ import { getCachedSymptom, getCachedSymptoms } from './database';
 import { Symptom as SymptomType, Variant } from '../types/symptom';
 
 export async function getSymptomBySlug(slug: string): Promise<SymptomType | null> {
