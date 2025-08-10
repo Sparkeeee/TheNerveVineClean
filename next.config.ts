@@ -9,6 +9,26 @@ const nextConfig: NextConfig = {
     imageSizes: [16, 32, 48, 64, 96, 128, 256], // Reduced sizes
     dangerouslyAllowSVG: true, // Allow SVG optimization
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'm.media-amazon.com',
+        port: '',
+        pathname: '/images/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images-na.ssl-images-amazon.com',
+        port: '',
+        pathname: '/images/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'i5.walmartimages.com',
+        port: '',
+        pathname: '/**',
+      },
+    ],
   },
   
   // Aggressive compression

@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import ContentProtection from '@/components/ContentProtection';
+import InteractiveCitations from '@/components/InteractiveCitations';
 
 // Simple Markdown to HTML converter
 function convertMarkdownToHtml(markdown: string): string {
@@ -55,7 +56,7 @@ function ScienceModal({
         <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center z-10">
           <button
             onClick={onClose}
-            className="inline-flex items-center px-3 py-2 bg-gray-600 text-white font-semibold rounded-lg hover:bg-gray-700 transition-colors text-sm"
+            className="inline-flex items-center px-3 py-2 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-white text-gray-700 border-gray-300 hover:bg-amber-50 hover:border-gray-400 hover:text-gray-600 hover:shadow-gray-300 hover:shadow-lg hover:scale-105 text-sm"
           >
             <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -77,13 +78,10 @@ function ScienceModal({
           shareTitle={`Scientific Research: ${supplementName}`}
         >
           <div className="p-6">
-            {/* Comprehensive Article */}
+            {/* Comprehensive Article with interactive citations */}
             {markdownArticle && (
               <div className="mb-8">
-                <div 
-                  className="prose prose-lg max-w-none"
-                  dangerouslySetInnerHTML={{ __html: convertMarkdownToHtml(markdownArticle) }}
-                />
+                <InteractiveCitations content={markdownArticle} />
               </div>
             )}
 
@@ -205,8 +203,8 @@ export default function SupplementPage({ params }: { params: Promise<{ slug: str
             {/* Main Content */}
             <div className="flex-1">
               {/* Header */}
-              <div className="text-center mb-8">
-                <h1 className="text-4xl font-bold text-gray-800 mb-4">
+                             <div className="bg-white rounded-lg shadow-lg p-6 mb-8 border-2 border-gray-300 border-b-2 border-b-gray-300" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
+                <h1 className="text-4xl font-bold text-gray-800 mb-4 text-center">
                   {supplement.name}
                 </h1>
                 {/* Formatted description with proper paragraph spacing */}
@@ -225,14 +223,14 @@ export default function SupplementPage({ params }: { params: Promise<{ slug: str
 
               {/* More Comprehensive Info Card */}
               {(markdownArticle || (supplement.references && supplement.references.length > 0)) && (
-                <div className="mb-8 bg-white rounded-lg shadow-lg p-6 border border-gray-200">
+                <div className="mb-8 bg-white rounded-lg shadow-lg p-6 border-2 border-gray-300" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
                   <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
                     More Comprehensive Info
                   </h2>
                   <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
                     <button
                       onClick={() => setIsModalOpen(true)}
-                      className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors shadow-lg"
+                      className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-white text-gray-700 border-gray-300 hover:bg-amber-50 hover:border-gray-400 hover:text-gray-600 hover:shadow-gray-300 hover:shadow-lg hover:scale-105"
                     >
                       <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
@@ -243,7 +241,7 @@ export default function SupplementPage({ params }: { params: Promise<{ slug: str
                       href={`/supplements/${supplement.slug}/research`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center px-6 py-3 bg-gray-600 text-white font-semibold rounded-lg hover:bg-gray-700 transition-colors shadow-lg"
+                      className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-white text-gray-700 border-gray-300 hover:bg-amber-50 hover:border-gray-400 hover:text-gray-600 hover:shadow-gray-300 hover:shadow-lg hover:scale-105"
                     >
                       <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
@@ -287,7 +285,7 @@ export default function SupplementPage({ params }: { params: Promise<{ slug: str
               <div className="mb-8 max-w-2xl mx-auto">
                 <h2 className="text-2xl font-bold text-gray-800 mb-4">References</h2>
                 {supplement.references && Array.isArray(supplement.references) && supplement.references.length > 0 ? (
-                  <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                  <div className="bg-gray-50 border-2 border-gray-300 rounded-lg p-4" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
                     <ul className="list-disc list-inside space-y-2">
                       {supplement.references.map((reference: any, index: number) => (
                         <li key={index} className="text-gray-700 text-sm">
@@ -297,7 +295,7 @@ export default function SupplementPage({ params }: { params: Promise<{ slug: str
                     </ul>
                   </div>
                 ) : (
-                  <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                  <div className="bg-gray-50 border-2 border-gray-300 rounded-lg p-4" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
                     <p className="text-gray-500 text-center italic">
                       References will be added here as research becomes available.
                     </p>
@@ -309,7 +307,7 @@ export default function SupplementPage({ params }: { params: Promise<{ slug: str
               <div className="text-center">
                 <Link 
                   href="/supplements" 
-                  className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
+                  className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-white text-gray-700 border-gray-300 hover:bg-amber-50 hover:border-gray-400 hover:text-gray-600 hover:shadow-gray-300 hover:shadow-lg hover:scale-105"
                 >
                   ← Back to All Supplements
                 </Link>
@@ -319,7 +317,7 @@ export default function SupplementPage({ params }: { params: Promise<{ slug: str
             {/* Right Sidebar - Recommended Products */}
             <div className="lg:w-80 flex-shrink-0">
               <div className="sticky top-8">
-                <div className="bg-white rounded-lg shadow-lg p-6 border border-blue-100">
+                <div className="bg-white rounded-lg shadow-lg p-6 border-2 border-gray-300" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
                   <h3 className="text-xl font-bold text-gray-800 mb-4">Recommended Products</h3>
                   {products.length > 0 ? (
                     <div className="space-y-4">

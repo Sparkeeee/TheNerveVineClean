@@ -1,0 +1,213 @@
+generator client {
+  provider   = "prisma-client-js"
+  engineType = "binary"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Herb {
+  id                   Int              @id @default(autoincrement())
+  name                 String?
+  commonName           String?
+  latinName            String?
+  slug                 String?          @unique
+  description          String
+  metaTitle            String?
+  metaDescription      String?
+  heroImageUrl         String?
+  cardImageUrl         String?
+  galleryImages        Json?
+  cautions             String?
+  productFormulations  Json?
+  references           Json?
+  traditionalUses      Json?
+  comprehensiveArticle String?
+  indicationTags       Indication[]     @relation("HerbIndications")
+  products             Product[]        @relation("HerbProducts")
+  symptomVariants      SymptomVariant[] @relation("VariantHerbs")
+}
+
+model Symptom {
+  id                   Int              @id @default(autoincrement())
+  slug                 String           @unique
+  title                String
+  description          String?
+  articles             Json?
+  associatedSymptoms   Json?
+  cautions             String?
+  references           Json?
+  metaDescription      String?
+  metaTitle            String?
+  comprehensiveArticle String?
+  commonSymptoms       String[]
+  variants             SymptomVariant[]
+  products             Product[]        @relation("SymptomProducts")
+}
+
+model SymptomVariant {
+  id              Int          @id @default(autoincrement())
+  parentSymptomId Int
+  name            String
+  slug            String       @unique
+  description     String?
+  metaTitle       String?
+  metaDescription String?
+  cautions        String?
+  references      Json?
+  commonSymptoms  String[]
+  parentSymptom   Symptom      @relation(fields: [parentSymptomId], references: [id])
+  herbs           Herb[]       @relation("VariantHerbs")
+  supplements     Supplement[] @relation("VariantSupplements")
+
+  @@index([parentSymptomId])
+}
+
+model Supplement {
+  id                   Int              @id @default(autoincrement())
+  name                 String
+  slug                 String?          @unique
+  description          String
+  metaTitle            String?
+  metaDescription      String?
+  heroImageUrl         String?
+  cardImageUrl         String?
+  galleryImages        Json?
+  cautions             String?
+  productFormulations  Json?
+  references           Json?
+  tags                 Json?
+  comprehensiveArticle String?
+  indicationTags       Indication[]     @relation("SupplementIndications")
+  products             Product[]        @relation("SupplementProducts")
+  symptomVariants      SymptomVariant[] @relation("VariantSupplements")
+}
+
+model BlogPage {
+  id         Int      @id @default(autoincrement())
+  title      String
+  fileUrl    String?
+  uploadDate DateTime @default(now())
+  adminNote  String?
+  content    String?
+}
+
+model QualitySpecification {
+  id                   Int     @id @default(autoincrement())
+  herbSlug             String?
+  herbName             String?
+  supplementSlug       String?
+  supplementName       String?
+  productType          String
+  formulationName      String?
+  approach             String? @default("traditional")
+  requiredTerms        Json
+  preferredTerms       Json
+  avoidTerms           Json
+  standardization      Json?
+  alcoholSpecs         Json?
+  dosageSpecs          Json?
+  priceRange           Json
+  ratingThreshold      Float
+  reviewCountThreshold Int
+  brandPreferences     Json?
+  brandAvoid           Json?
+  notes                String?
+}
+
+model Merchant {
+  id                   Int              @id @default(autoincrement())
+  name                 String
+  apiSource            String?
+  logoUrl              String?
+  websiteUrl           String?
+  region               String
+  createdAt            DateTime         @default(now())
+  updatedAt            DateTime         @updatedAt
+  defaultAffiliateRate Float?
+  pendingProducts      PendingProduct[]
+  products             Product[]
+}
+
+model PendingProduct {
+  id             Int      @id @default(autoincrement())
+  name           String
+  description    String?
+  merchantId     Int
+  affiliateLink  String
+  price          Float?
+  currency       String
+  region         String?
+  imageUrl       String?
+  qualityScore   Int?
+  rawApiData     Json?
+  createdAt      DateTime @default(now())
+  expiresAt      DateTime
+  herbId         Int?
+  supplementId   Int?
+  symptomId      Int?
+  affiliateRate  Float?
+  affiliateYield Float?
+  merchant       Merchant @relation(fields: [merchantId], references: [id])
+}
+
+model Product {
+  id             Int          @id @default(autoincrement())
+  name           String
+  description    String?
+  merchantId     Int
+  affiliateLink  String
+  price          String?
+  currency       String
+  region         String?
+  imageUrl       String?
+  qualityScore   Int?
+  approvedBy     String?
+  approvedAt     DateTime?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  affiliateRate  Float?
+  affiliateYield Float?
+  merchant       Merchant     @relation(fields: [merchantId], references: [id])
+  herbs          Herb[]       @relation("HerbProducts")
+  supplements    Supplement[] @relation("SupplementProducts")
+  symptoms       Symptom[]    @relation("SymptomProducts")
+}
+
+model Indication {
+  id          Int          @id @default(autoincrement())
+  name        String       @unique
+  slug        String       @unique
+  description String?
+  color       String       @default("blue")
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  herbs       Herb[]       @relation("HerbIndications")
+  supplements Supplement[] @relation("SupplementIndications")
+}
+
+model User {
+  id               String        @id @default(cuid())
+  email            String        @unique
+  name             String?
+  createdAt        DateTime      @default(now())
+  savedHerbs       String[]
+  savedSupplements String[]
+  password         String
+  savedArticles    String[]
+  shoppingList     ShoppingList?
+}
+
+model ShoppingList {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  name      String   @default("My Shopping List")
+  items     Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+

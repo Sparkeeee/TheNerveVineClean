@@ -68,9 +68,9 @@ export default async function HerbsPage() {
       backgroundRepeat: "no-repeat",
       backgroundAttachment: "fixed"
     }}>
-      <div className="absolute inset-0 bg-green-100 opacity-50"></div>
+      <div className="absolute inset-0 bg-emerald-200 opacity-50"></div>
       <div className="relative max-w-6xl mx-auto px-6 py-8">
-        <div className="rounded-xl p-8 shadow-sm border border-gray-100 mb-8" style={{background: 'linear-gradient(135deg, #f0f9ff 0%, #ecfdf5 50%, #f0fdf4 100%)'}}>
+        <div className="rounded-xl p-8 shadow-sm border-2 border-gray-300 mb-8" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
           <h1 className="text-4xl font-bold text-gray-800 mb-6 text-center">Herbal Medicines</h1>
           <p className="text-lg text-gray-700 text-center max-w-3xl mx-auto">
             Discover the power of natural herbs for nervous system support, stress relief, 
@@ -81,8 +81,8 @@ export default async function HerbsPage() {
           {sortedHerbs.map((herb: any, index: number) => (
             <div
               key={index}
-              className="rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-200 hover:scale-105"
-              style={{background: 'linear-gradient(135deg, #f0f9ff 0%, #ecfdf5 50%, #f0fdf4 100%)'}}
+              className="rounded-xl p-6 shadow-sm border-2 border-gray-300 hover:shadow-xl transition-all duration-200 hover:scale-105"
+              style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}
             >
               <div className="flex items-start gap-4">
                 {/* Text content on the left */}
@@ -137,7 +137,7 @@ export default async function HerbsPage() {
         <div className="mt-12 text-center">
           <Link 
             href="/" 
-            className="inline-flex items-center px-6 py-3 bg-green-700 text-blue-50 font-semibold rounded-lg hover:bg-green-800 transition-colors"
+            className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-white text-gray-700 border-gray-300 hover:bg-amber-50 hover:border-gray-400 hover:text-gray-600 hover:shadow-gray-300 hover:shadow-lg hover:scale-105"
           >
             ← Back to NerveVine
           </Link>

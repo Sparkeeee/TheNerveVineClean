@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neural Pulse Animation - The NerveVine</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        
+        .controls {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .controls button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+        
+        .controls button:hover {
+            background: #2980b9;
+        }
+        
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 40px 0;
+            position: relative;
+        }
+        
+        .logo {
+            width: 90px;
+            height: 90px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+            animation: neuralPulse 6s ease-in-out infinite;
+        }
+        
+        .nucleus-flash {
+            position: absolute;
+            top: 45%;
+            left: 52%;
+            transform: translate(-50%, -50%);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: radial-gradient(circle, 
+                rgba(255, 255, 255, 1) 0%, 
+                rgba(255, 255, 255, 0.95) 15%, 
+                rgba(255, 255, 255, 0.8) 30%, 
+                rgba(255, 255, 255, 0.4) 50%, 
+                rgba(255, 255, 255, 0.1) 70%, 
+                transparent 85%);
+            pointer-events: none;
+            animation: nucleusFlash 6s ease-in-out infinite;
+            z-index: 1;
+        }
+        
+        .neural-band-out {
+            position: absolute;
+            top: 45%;
+            left: 52%;
+            transform: translate(-50%, -50%);
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 3.36px solid rgba(255, 255, 255, 1);
+            --band-thickness: 3.36px;
+            --edge-blur: calc(var(--band-thickness) * 0.05);
+            box-shadow: 0 0 var(--edge-blur) 0 rgba(255, 255, 255, 0.9), inset 0 0 var(--edge-blur) 0 rgba(255, 255, 255, 0.9);
+            pointer-events: none;
+            animation: neuralBandOut 6s linear infinite;
+            z-index: 2;
+            visibility: hidden;
+        }
+        
+        .neural-band-back {
+            position: absolute;
+            top: 45%;
+            left: 52%;
+            transform: translate(-50%, -50%);
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 3.36px solid rgba(255, 255, 255, 1);
+            --band-thickness: 3.36px;
+            --edge-blur: calc(var(--band-thickness) * 0.05);
+            box-shadow: 0 0 var(--edge-blur) 0 rgba(255, 255, 255, 0.9), inset 0 0 var(--edge-blur) 0 rgba(255, 255, 255, 0.9);
+            pointer-events: none;
+            animation: neuralBandBack 6s linear infinite;
+            z-index: 2;
+            visibility: hidden;
+        }
+        
+        .logo:hover img {
+            animation: glowPulse 1s ease-in-out infinite;
+        }
+        
+        /* Neural Pulse Animation */
+        @keyframes neuralPulse {
+            0% {
+                filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8)) 
+                        drop-shadow(0 0 10px rgba(255, 255, 255, 0.6))
+                        drop-shadow(0 0 15px rgba(255, 255, 255, 0.4));
+                transform: scale(1);
+            }
+            33.33% { /* 2s out of 6s = 33.33% - end of white bands phase */
+                filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8)) 
+                        drop-shadow(0 0 10px rgba(255, 255, 255, 0.6))
+                        drop-shadow(0 0 15px rgba(255, 255, 255, 0.4));
+                transform: scale(1);
+            }
+            45% {
+                filter: drop-shadow(0 0 5px rgba(0, 255, 255, 0.14)) 
+                        drop-shadow(0 0 8px rgba(0, 255, 255, 0.112))
+                        drop-shadow(0 0 12px rgba(0, 255, 255, 0.084));
+                transform: scale(1.0112);
+            }
+            60% {
+                filter: drop-shadow(0 0 2.4px rgba(0, 255, 255, 0.126)) 
+                        drop-shadow(0 0 4px rgba(0, 255, 255, 0.098))
+                        drop-shadow(0 0 6px rgba(0, 255, 255, 0.07));
+                transform: scale(1.0028);
+            }
+            75% {
+                filter: drop-shadow(0 0 6px rgba(0, 255, 255, 0.14)) 
+                        drop-shadow(0 0 10px rgba(0, 255, 255, 0.112))
+                        drop-shadow(0 0 14px rgba(0, 255, 255, 0.084));
+                transform: scale(1.014);
+            }
+            90% {
+                filter: drop-shadow(0 0 1.6px rgba(0, 255, 255, 0.112)) 
+                        drop-shadow(0 0 3px rgba(0, 255, 255, 0.084))
+                        drop-shadow(0 0 5px rgba(0, 255, 255, 0.056));
+                transform: scale(1);
+            }
+            100% {
+                filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8)) 
+                        drop-shadow(0 0 10px rgba(255, 255, 255, 0.6))
+                        drop-shadow(0 0 15px rgba(255, 255, 255, 0.4));
+                transform: scale(1);
+            }
+        }
+        
+        /* Nucleus Flash Animation (visible only in first 2s of 6s cycle) */
+        @keyframes nucleusFlash {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.3);
+            }
+            2.5% {
+                opacity: 0.7; /* 30% reduction */
+                transform: translate(-50%, -50%) scale(1.5);
+            }
+            7.5% {
+                opacity: 0.63; /* 30% reduction */
+                transform: translate(-50%, -50%) scale(2);
+            }
+            12.5% {
+                opacity: 0.42; /* 30% reduction */
+                transform: translate(-50%, -50%) scale(2.5);
+            }
+            20% {
+                opacity: 0.14; /* 30% reduction */
+                transform: translate(-50%, -50%) scale(3);
+            }
+            33.33% { /* end of white-band phase */
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(3.5);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(3.5);
+            }
+        }
+        
+        /* Neural Band Outward Animation (0-0.75s), then hidden */
+        @keyframes neuralBandOut {
+            0% {
+                opacity: 0;
+                visibility: visible;
+                transform: translate(-50%, -50%) scale(0.3);
+                border-width: 3.36px;
+                --band-thickness: 3.36px;
+            }
+            12.5% { /* 0.75s out of 6s */
+                opacity: 1;
+                visibility: visible;
+                transform: translate(-50%, -50%) scale(5.61);
+                border-width: 1.12px;
+                --band-thickness: 1.12px;
+            }
+            12.6% { /* hide for rest of cycle */
+                opacity: 0;
+                visibility: hidden;
+                transform: translate(-50%, -50%) scale(5.61);
+                border-width: 1.12px;
+                --band-thickness: 1.12px;
+            }
+            100% {
+                opacity: 0;
+                visibility: hidden;
+                transform: translate(-50%, -50%) scale(5.61);
+                border-width: 1.12px;
+                --band-thickness: 1.12px;
+            }
+        }
+        
+        /* Neural Band Return Animation (starts at 1.25s, ends at 2s), then hidden */
+        @keyframes neuralBandBack {
+            0% {
+                opacity: 0;
+                visibility: hidden;
+                transform: translate(-50%, -50%) scale(5.61);
+                border-width: 1.12px;
+                --band-thickness: 1.12px;
+            }
+            20.83% { /* 1.25s out of 6s */
+                opacity: 1;
+                visibility: visible;
+                transform: translate(-50%, -50%) scale(5.61);
+                border-width: 1.12px;
+                --band-thickness: 1.12px;
+            }
+            33.33% { /* 2s out of 6s */
+                opacity: 1;
+                visibility: visible;
+                transform: translate(-50%, -50%) scale(0.3);
+                border-width: 3.36px;
+                --band-thickness: 3.36px;
+            }
+            33.4% { /* hide for rest of cycle */
+                opacity: 0;
+                visibility: hidden;
+                transform: translate(-50%, -50%) scale(0.3);
+                border-width: 3.36px;
+                --band-thickness: 3.36px;
+            }
+            100% {
+                opacity: 0;
+                visibility: hidden;
+                transform: translate(-50%, -50%) scale(0.3);
+                border-width: 3.36px;
+                --band-thickness: 3.36px;
+            }
+        }
+        
+        /* Glow Pulse for Hover */
+        @keyframes glowPulse {
+            0%, 100% {
+                filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3))
+                        drop-shadow(0 0 20px rgba(255, 255, 255, 0.2))
+                        drop-shadow(0 0 30px rgba(255, 255, 255, 0.1));
+            }
+            50% {
+                filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.6))
+                        drop-shadow(0 0 40px rgba(255, 255, 255, 0.4))
+                        drop-shadow(0 0 60px rgba(255, 255, 255, 0.2));
+            }
+        }
+        
+        .description {
+            text-align: center;
+            color: #666;
+            margin-top: 30px;
+            line-height: 1.6;
+        }
+        
+        .status {
+            text-align: center;
+            margin-top: 20px;
+            font-weight: bold;
+            color: #3498db;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚡ Neural Pulse Animation - The NerveVine</h1>
+        
+        <div class="controls">
+            <button onclick="toggleAnimation()">Play/Pause Animation</button>
+            <button onclick="resetAnimation()">Reset Animation</button>
+            <button onclick="changeSpeed(0.5)">0.5x Speed</button>
+            <button onclick="changeSpeed(1)">1x Speed</button>
+            <button onclick="changeSpeed(1.5)">1.5x Speed</button>
+            <button onclick="changeSpeed(2)">2x Speed</button>
+        </div>
+        
+        <div class="logo-container">
+            <div class="logo" id="animatedLogo">
+                <img src="public/images/nervevine smalllogo1.svg" alt="The NerveVine Logo" style="width: 100%; height: 100%; object-fit: contain;">
+                <div class="nucleus-flash"></div>
+                <div class="neural-band-out"></div>
+                <div class="neural-band-back"></div>
+            </div>
+        </div>
+        
+        <div class="description">
+            <h3>Neural Pulse Animation</h3>
+            <p>This animation creates a subtle neural pulse effect that simulates electrical activity:</p>
+            <ul style="text-align: left; max-width: 500px; margin: 0 auto;">
+                <li><strong>Nucleus Flash:</strong> Bright white flash originating from the center of the logo</li>
+                <li><strong>Neural Band Out:</strong> White glowing ring that expands outward with steady speed</li>
+                <li><strong>Neural Band Back:</strong> White glowing ring that returns to the nucleus</li>
+                <li><strong>White Light Effect:</strong> Pure white light that appears to travel along the logo's branches</li>
+                <li><strong>Pulse Timing:</strong> 4-second cycle with natural breathing rhythm</li>
+                <li><strong>Subtle Scaling:</strong> Gentle scale changes enhance the pulse effect</li>
+                <li><strong>Hover Effect:</strong> Enhanced glow when you hover over the logo</li>
+            </ul>
+        </div>
+        
+        <div class="status" id="status">Animation Status: Running</div>
+    </div>
+
+    <script>
+        let animationPaused = false;
+        let animationSpeed = 1;
+        
+        function toggleAnimation() {
+            const logo = document.querySelector('.logo img');
+            const nucleusFlash = document.querySelector('.nucleus-flash');
+            const neuralBandOut = document.querySelector('.neural-band-out');
+            const neuralBandBack = document.querySelector('.neural-band-back');
+            
+            if (animationPaused) {
+                logo.style.animationPlayState = 'running';
+                nucleusFlash.style.animationPlayState = 'running';
+                neuralBandOut.style.animationPlayState = 'running';
+                neuralBandBack.style.animationPlayState = 'running';
+                animationPaused = false;
+                document.getElementById('status').textContent = 'Animation Status: Running';
+            } else {
+                logo.style.animationPlayState = 'paused';
+                nucleusFlash.style.animationPlayState = 'paused';
+                neuralBandOut.style.animationPlayState = 'paused';
+                neuralBandBack.style.animationPlayState = 'paused';
+                animationPaused = true;
+                document.getElementById('status').textContent = 'Animation Status: Paused';
+            }
+        }
+        
+        function resetAnimation() {
+            const logo = document.querySelector('.logo img');
+            const nucleusFlash = document.querySelector('.nucleus-flash');
+            const neuralBandOut = document.querySelector('.neural-band-out');
+            const neuralBandBack = document.querySelector('.neural-band-back');
+            
+            logo.style.animation = 'none';
+            logo.offsetHeight; // Trigger reflow
+            logo.style.animation = `neuralPulse ${6/animationSpeed}s ease-in-out infinite`;
+            
+            nucleusFlash.style.animation = 'none';
+            nucleusFlash.offsetHeight; // Trigger reflow
+            nucleusFlash.style.animation = `nucleusFlash ${6/animationSpeed}s ease-in-out infinite`;
+            
+            neuralBandOut.style.animation = 'none';
+            neuralBandOut.offsetHeight; // Trigger reflow
+            neuralBandOut.style.animation = `neuralBandOut ${6/animationSpeed}s linear infinite`;
+            
+            neuralBandBack.style.animation = 'none';
+            neuralBandBack.offsetHeight; // Trigger reflow
+            neuralBandBack.style.animation = `neuralBandBack ${6/animationSpeed}s linear infinite`;
+            
+            document.getElementById('status').textContent = 'Animation Status: Reset';
+        }
+        
+        function changeSpeed(speed) {
+            animationSpeed = speed;
+            const logo = document.querySelector('.logo img');
+            const nucleusFlash = document.querySelector('.nucleus-flash');
+            const neuralBandOut = document.querySelector('.neural-band-out');
+            const neuralBandBack = document.querySelector('.neural-band-back');
+            
+            logo.style.animationDuration = `${6/speed}s`;
+            nucleusFlash.style.animationDuration = `${6/speed}s`;
+            neuralBandOut.style.animationDuration = `${6/speed}s`;
+            neuralBandBack.style.animationDuration = `${6/speed}s`;
+            
+            document.getElementById('status').textContent = `Animation Status: Speed ${speed}x`;
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add some interactive effects
+            const logo = document.querySelector('.logo');
+            logo.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.05)';
+            });
+            
+            logo.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>

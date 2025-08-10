@@ -36,7 +36,7 @@ export default function Header() {
     return (
       <>
         {/* Trust Banner - Dark Blue - Hidden on mobile */}
-        <div className="hidden lg:block bg-blue-950 text-white py-2">
+        <div className="hidden lg:block bg-blue-950 text-white py-2 fixed top-0 left-0 right-0 z-50">
           <div className="container mx-auto px-4">
             <div className="flex justify-center items-center relative">
               <div className="flex items-center space-x-4 text-sm">
@@ -58,19 +58,25 @@ export default function Header() {
         </div>
 
         {/* Main Header - White with Shadow */}
-        <header className="bg-white shadow border-b">
+        <header className="bg-white shadow border-b fixed top-8 left-0 right-0 z-40">
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-between py-4">
               {/* Left Side - Logo and Site Name */}
               <Link href="/" className="flex items-center space-x-2">
-                <Image 
-                  src="/images/nervevine smalllogo1.svg" 
-                  alt="The NerveVine Logo" 
-                  width={90} 
-                  height={90}
-                  className="h-10 sm:h-12 md:h-16 lg:h-20 w-auto"
-                />
-                <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900">The NerveVine</h1>
+                <span className="relative nv-logo h-10 sm:h-12 md:h-16 lg:h-20 w-auto">
+                  <Image 
+                    src="/images/nervevine smalllogo1.svg" 
+                    alt="The NerveVine Logo" 
+                    width={90} 
+                    height={90}
+                    className="h-full w-auto"
+                    priority
+                  />
+                  <span className="nv-nucleus-flash" aria-hidden="true"></span>
+                  <span className="nv-band-out" aria-hidden="true"></span>
+                  <span className="nv-band-back" aria-hidden="true"></span>
+                </span>
+                <h1 className="text-lg sm:text-xl lg:text-2xl font-lato font-bold italic text-gray-900 nv-site-name">The Nerve Vine</h1>
               </Link>
               
               {/* Right Side - Navigation and Search */}
@@ -134,7 +140,7 @@ export default function Header() {
   return (
     <>
       {/* Trust Banner - Dark Blue - Hidden on mobile */}
-      <div className="hidden lg:block bg-blue-950 text-white py-2">
+      <div className="hidden lg:block bg-blue-950 text-white py-2 fixed top-0 left-0 right-0 z-50">
         <div className="container mx-auto px-4">
           <div className="flex justify-center items-center relative">
             <div className="flex items-center space-x-4 text-sm">
@@ -187,20 +193,29 @@ export default function Header() {
       </div>
 
       {/* Main Header - White with Shadow */}
-      <header className="bg-white shadow border-b">
+      <header className="bg-white shadow border-b border-b-2 border-b-gray-300 fixed top-8 left-0 right-0 z-40">
         <div className="container mx-auto px-4">
                        <div className="flex items-center justify-between py-4">
             {/* Left Side - Logo and Site Name */}
-                           <Link href="/" className="flex items-center space-x-2">
-              <Image 
-                src="/images/nervevine smalllogo1.svg" 
-                alt="The NerveVine Logo" 
-                width={90} 
-                height={90}
-                className="h-10 sm:h-12 md:h-16 lg:h-20 w-auto"
-              />
-                             <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900">The NerveVine</h1>
-            </Link>
+              <Link href="/" className="flex items-center space-x-2">
+                <span className="relative nv-logo h-10 sm:h-12 md:h-16 lg:h-20 w-auto">
+                  <Image 
+                    src="/images/nervevine smalllogo1.svg" 
+                    alt="The NerveVine Logo" 
+                    width={90} 
+                    height={90}
+                    className="h-full w-auto"
+                    priority
+                  />
+                  <span className="nv-nucleus-flash" aria-hidden="true"></span>
+                  <span className="nv-band-out" aria-hidden="true"></span>
+                  <span className="nv-band-back" aria-hidden="true"></span>
+                </span>
+                <h1 className="text-lg sm:text-xl lg:text-2xl font-lato font-bold italic text-gray-900 nv-site-name">
+                  The Nerve Vine
+                  <div className="nv-vertical-bar"></div>
+                </h1>
+              </Link>
             
             {/* Right Side - Navigation and Search */}
             <div className="hidden lg:flex flex-col items-end space-y-3">

@@ -86,17 +86,29 @@ export default function ContentProtection({
         break;
       case 'copy':
         try {
-          await navigator.clipboard.writeText(url);
-          alert('Link copied to clipboard!');
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(url);
+            alert('Link copied to clipboard!');
+          } else {
+            throw new Error('Clipboard API not supported');
+          }
         } catch (err) {
-          // Fallback for older browsers
-          const textArea = document.createElement('textarea');
-          textArea.value = url;
-          document.body.appendChild(textArea);
-          textArea.select();
-          document.execCommand('copy');
-          document.body.removeChild(textArea);
-          alert('Link copied to clipboard!');
+          // Fallback for older browsers or when clipboard API is not available
+          try {
+            const textArea = document.createElement('textarea');
+            textArea.value = url;
+            document.body.appendChild(textArea);
+            textArea.select();
+            const successful = document.execCommand('copy');
+            document.body.removeChild(textArea);
+            if (successful) {
+              alert('Link copied to clipboard!');
+            } else {
+              alert('Unable to copy to clipboard. Please copy manually: ' + url);
+            }
+          } catch (fallbackErr) {
+            alert('Unable to copy to clipboard. Please copy manually: ' + url);
+          }
         }
         break;
     }

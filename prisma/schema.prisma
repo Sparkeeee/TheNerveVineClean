@@ -42,6 +42,7 @@ model Symptom {
   metaDescription      String?
   metaTitle            String?
   comprehensiveArticle String?
+  commonSymptoms       String[]
   variants             SymptomVariant[]
   products             Product[]        @relation("SymptomProducts")
 }
@@ -56,6 +57,7 @@ model SymptomVariant {
   metaDescription String?
   cautions        String?
   references      Json?
+  commonSymptoms  String[]
   parentSymptom   Symptom      @relation(fields: [parentSymptomId], references: [id])
   herbs           Herb[]       @relation("VariantHerbs")
   supplements     Supplement[] @relation("VariantSupplements")
@@ -93,7 +95,7 @@ model BlogPage {
 }
 
 model QualitySpecification {
-  id                   Int    @id @default(autoincrement())
+  id                   Int     @id @default(autoincrement())
   herbSlug             String?
   herbName             String?
   supplementSlug       String?
@@ -157,7 +159,7 @@ model Product {
   description    String?
   merchantId     Int
   affiliateLink  String
-  price          Float?
+  price          String?
   currency       String
   region         String?
   imageUrl       String?

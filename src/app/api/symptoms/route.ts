@@ -154,8 +154,8 @@ export async function PUT(req: NextRequest) {
     if (!data.id) return createErrorResponse('ID required', 400);
     
     // Only include fields that can be updated directly on the Symptom model
-    const { id, ...updateData } = data;
-    const cleanedData: any = {};
+    const { id: _id, ...updateData } = data;
+    const cleanedData: Record<string, unknown> = {};
     
     // Only include the fields that exist in the Prisma Symptom model
     const allowedFields = [
@@ -184,8 +184,8 @@ export async function PUT(req: NextRequest) {
     console.error('Error stack:', (error as Error).stack);
     
     // Check if it's a Prisma error
-    if ((error as any).code) {
-      console.error('Prisma error code:', (error as any).code);
+    if ((error as { code?: string }).code) {
+      console.error('Prisma error code:', (error as { code?: string }).code);
     }
     
     return createErrorResponse('Failed to update symptom', 400);

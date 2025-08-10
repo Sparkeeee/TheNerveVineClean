@@ -76,7 +76,7 @@ export async function PUT(req: NextRequest) {
   try {
     const data = await req.json();
     if (!data.id) return NextResponse.json({ error: 'ID required' }, { status: 400 });
-    const { id, ...supplementData } = data;
+    const { id: _id, ...supplementData } = data;
     const supplement = await prisma.supplement.update({
       where: { id: data.id },
       data: supplementData,

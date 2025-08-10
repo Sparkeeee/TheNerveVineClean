@@ -100,19 +100,19 @@ async function addAllVariants() {
     if (stress) {
       const stressVariants = [
         {
-          name: 'Acute',
-          slug: 'stress-acute',
-          description: 'Acute stress is short-term stress that occurs in response to immediate challenges or threats. This type is normal and can be beneficial in small amounts.',
-          metaTitle: 'Acute Stress - Natural Solutions',
-          metaDescription: 'Learn about acute stress and natural remedies for short-term stress.',
+          name: 'Adrenal Overload',
+          slug: 'stress-adrenal-overload',
+          description: 'Adrenal overload occurs when the adrenal glands are overstimulated by chronic stress, leading to elevated cortisol levels and heightened stress responses. This type is characterized by feeling wired, anxious, and unable to relax.',
+          metaTitle: 'Adrenal Overload - Natural Solutions',
+          metaDescription: 'Learn about adrenal overload and natural remedies for overstimulated adrenal function.',
           cautions: 'Consult with a healthcare provider before starting any new supplement regimen, especially if you have existing medical conditions or are taking medications.'
         },
         {
-          name: 'Chronic',
-          slug: 'stress-chronic',
-          description: 'Chronic stress is long-term stress that persists over extended periods. This type can have significant negative impacts on physical and mental health.',
-          metaTitle: 'Chronic Stress - Natural Solutions',
-          metaDescription: 'Learn about chronic stress and natural remedies for long-term stress.',
+          name: 'Adrenal Exhaustion',
+          slug: 'stress-adrenal-exhaustion',
+          description: 'Adrenal exhaustion develops when the adrenal glands become depleted after prolonged periods of stress. This type is characterized by fatigue, low energy, difficulty handling stress, and feeling burned out.',
+          metaTitle: 'Adrenal Exhaustion - Natural Solutions',
+          metaDescription: 'Learn about adrenal exhaustion and natural remedies for depleted adrenal function.',
           cautions: 'Consult with a healthcare provider before starting any new supplement regimen, especially if you have existing medical conditions or are taking medications.'
         },
         {

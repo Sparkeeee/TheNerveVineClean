@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logo Animation Test</title>
+    <style>
+        body {
+            font-family: 'Lato', sans-serif;
+            background: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .header-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo-site-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            position: relative;
+        }
+
+        .nv-logo {
+            position: relative;
+            height: 60px;
+            width: 60px;
+            background: #4a90e2;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .nv-nucleus-flash,
+        .nv-band-out,
+        .nv-band-back {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+
+        .nv-nucleus-flash { 
+            width: 40%;
+            height: 40%;
+            border-radius: 50%;
+            background: radial-gradient(circle,
+                rgba(255,255,255,1) 0%, rgba(255,255,255,0.95) 15%, rgba(255,255,255,0.8) 30%,
+                rgba(255,255,255,0.4) 50%, rgba(255,255,255,0.1) 70%, transparent 85%);
+            animation: nv-nucleusFlash 7.5s ease-in-out infinite;
+            z-index: 10;
+        }
+
+        .nv-band-out,
+        .nv-band-back {
+            width: 20%;
+            height: 20%;
+            border-radius: 50%;
+            border: 3.36px solid rgba(255,255,255,1);
+            --band-thickness: 3.36px;
+            --edge-blur: calc(var(--band-thickness) * 0.05);
+            box-shadow: 0 0 var(--edge-blur) 0 rgba(255,255,255,0.9), inset 0 0 var(--edge-blur) 0 rgba(255,255,255,0.9);
+            z-index: 11;
+            visibility: hidden;
+        }
+
+        .nv-band-out { animation: nv-neuralBandOut 7.5s linear infinite; }
+        .nv-band-back { 
+            animation: nv-neuralBandBack 7.5s linear infinite; 
+            border-width: 2.016px;
+            --band-thickness: 2.016px;
+            --edge-blur: calc(var(--band-thickness) * 0.05);
+        }
+
+        .nv-site-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            font-style: italic;
+            color: #333;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nv-vertical-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.9), transparent);
+            box-shadow: 0 0 8px rgba(255,255,255,0.8);
+            z-index: 5;
+            opacity: 0;
+            animation: nv-verticalBar 7.5s linear infinite;
+        }
+
+        @keyframes nv-nucleusFlash {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.3); }
+            2.5% { opacity: 0.7; transform: translate(-50%, -50%) scale(1.5); }
+            7.5% { opacity: 0.63; transform: translate(-50%, -50%) scale(2); }
+            12.5% { opacity: 0.42; transform: translate(-50%, -50%) scale(2.5); }
+            20% { opacity: 0.14; transform: translate(-50%, -50%) scale(3); }
+            33.33% { opacity: 0; transform: translate(-50%, -50%) scale(3.5); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(3.5); }
+        }
+
+        @keyframes nv-neuralBandOut {
+            0% { opacity: 0; visibility: visible; transform: translate(-50%, -50%) scale(0.3); border-width: 3.36px; --band-thickness: 3.36px; }
+            12.5% { opacity: 1; visibility: visible; transform: translate(-50%, -50%) scale(5.61); border-width: 1.12px; --band-thickness: 1.12px; }
+            12.6% { opacity: 0; visibility: hidden; transform: translate(-50%, -50%) scale(5.61); border-width: 1.12px; --band-thickness: 1.12px; }
+            100% { opacity: 0; visibility: hidden; transform: translate(-50%, -50%) scale(5.61); border-width: 1.12px; --band-thickness: 1.12px; }
+        }
+
+        @keyframes nv-neuralBandBack {
+            0% { opacity: 0; visibility: hidden; transform: translate(-50%, -50%) scale(5.61); border-width: 0.672px; --band-thickness: 0.672px; }
+            20.83% { opacity: 1; visibility: visible; transform: translate(-50%, -50%) scale(5.61); border-width: 0.672px; --band-thickness: 0.672px; }
+            33.33% { opacity: 1; visibility: visible; transform: translate(-50%, -50%) scale(0.3); border-width: 2.016px; --band-thickness: 2.016px; }
+            100% { opacity: 0; visibility: hidden; transform: translate(-50%, -50%) scale(0.3); border-width: 2.016px; --band-thickness: 2.016px; }
+        }
+
+        @keyframes nv-verticalBar {
+            /* 0-0.75s: Flash + expansion (no vertical bar) */
+            0% { opacity: 0; left: -20px; }
+            10% { opacity: 0; left: -20px; }
+            
+            /* 0.75-1.75s: Vertical bar flows from logo to right edge of site name */
+            10% { opacity: 0; left: -20px; }
+            11% { opacity: 1; left: -20px; }
+            23.33% { opacity: 1; left: calc(100% + 20px); }
+            
+            /* 1.75-2.75s: Vertical bar returns from beyond right edge to right edge of logo */
+            23.33% { opacity: 1; left: calc(100% + 20px); }
+            36.67% { opacity: 1; left: -20px; }
+            36.67% { opacity: 0; left: -20px; }
+            
+            /* 2.75-3.5s: Return contracting band (no vertical bar) */
+            36.67% { opacity: 0; left: -20px; }
+            46.67% { opacity: 0; left: -20px; }
+            
+            /* 3.5-7.5s: Blue neural pulsing (no vertical bar) */
+            46.67% { opacity: 0; left: -20px; }
+            100% { opacity: 0; left: -20px; }
+        }
+
+        .controls {
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .controls button {
+            margin: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .controls button:hover {
+            background: #357abd;
+        }
+    </style>
+</head>
+<body>
+    <div class="header-container">
+        <div class="logo-site-container">
+            <div class="nv-logo">
+                NV
+                <span class="nv-nucleus-flash" aria-hidden="true"></span>
+                <span class="nv-band-out" aria-hidden="true"></span>
+                <span class="nv-band-back" aria-hidden="true"></span>
+            </div>
+            <div class="nv-site-name">
+                The Nerve Vine
+                <div class="nv-vertical-bar"></div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button onclick="location.reload()">Restart Animation</button>
+            <p>Animation cycle: 7.5 seconds</p>
+            <p>Timing: 0-0.75s flash, 0.75-1.75s bar out, 1.75-2.75s bar back, 2.75-3.5s contract, 3.5-7.5s pulse</p>
+        </div>
+    </div>
+</body>
+</html>
+

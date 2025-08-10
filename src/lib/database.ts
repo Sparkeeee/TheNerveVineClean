@@ -110,17 +110,48 @@ export async function getCachedSymptom(slug: string) {
     // Temporarily bypass cache for debugging
     console.log(`[DEBUG] getCachedSymptom called with slug: ${slug}`);
     
+    // Check cache first
+    const cacheKey = `symptom:v2:${slug}`;
+    const cached = cache.get(cacheKey);
+    
+    if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+      console.log(`[DEBUG] Returning cached symptom for: ${slug}`);
+      return cached.data;
+    }
+    
+    console.log(`[DEBUG] Fetching symptom from database: ${slug}`);
+    
     // Fetch from database
     const symptom = await prisma.symptom.findUnique({
       where: { slug },
-      include: {
+      select: {
+        id: true,
+        slug: true,
+        title: true,
+        description: true,
+        cautions: true,
+        references: true,
+        metaDescription: true,
+        metaTitle: true,
+        comprehensiveArticle: true,
+        commonSymptoms: true, // ✅ INCLUDE THE COMMON SYMPTOMS!
         products: {
           include: {
             merchant: true
           }
         },
         variants: {
-          include: {
+          select: {
+            id: true,
+            parentSymptomId: true,
+            name: true,
+            slug: true,
+            description: true,
+            metaTitle: true,
+            metaDescription: true,
+            cautions: true,
+            references: true,
+            commonSymptoms: true, // ✅ INCLUDE VARIANT COMMON SYMPTOMS TOO!
             herbs: true,
             supplements: true
           }
@@ -133,8 +164,13 @@ export async function getCachedSymptom(slug: string) {
       console.log(`[DEBUG] Raw variants data for ${slug}:`, {
         variantsCount: symptom.variants?.length || 0,
         variantNames: symptom.variants?.map(v => v.name) || [],
-        isArray: Array.isArray(symptom.variants)
+        isArray: Array.isArray(symptom.variants),
+        hasCommonSymptoms: !!symptom.commonSymptoms,
+        commonSymptomsData: symptom.commonSymptoms
       });
+      
+      // Cache the result with updated key
+      cache.set(cacheKey, { data: symptom, timestamp: Date.now() });
       
       return symptom;
     }

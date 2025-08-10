@@ -26,6 +26,9 @@ export default function AdminHomePage() {
             <Link href="/admin/quality-specifications" className="bg-indigo-700 text-white px-6 py-3 rounded shadow hover:bg-indigo-800 transition font-bold text-lg text-center">
               Quality Specifications
             </Link>
+            <Link href="/admin/product-scraper" className="bg-orange-700 text-white px-6 py-3 rounded shadow hover:bg-orange-800 transition font-bold text-lg text-center">
+              Product Data Scraper
+            </Link>
           </div>
         </div>
       </div>

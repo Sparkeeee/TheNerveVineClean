@@ -135,7 +135,7 @@ export default function RootLayout({
       <body className={`${lato.variable} ${merriweather.variable} font-sans flex flex-col min-h-screen`}>
         <SessionProviderWrapper>
           <Header />
-          <main className="flex-grow">
+          <main className="flex-grow pt-32">
             {children}
           </main>
           <Footer />

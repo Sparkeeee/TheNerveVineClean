@@ -212,17 +212,52 @@ export default function InteractiveCitations({ content }: InteractiveCitationsPr
           .filter(word => word.length > 1 && word !== 'et' && word !== 'al');
         const refTextLower = refText.toLowerCase();
         
+        let matchingAuthorWords: string[] = [];
+        
         // For "et al." citations, focus on first author's last name
         if (authors.toLowerCase().includes('et al')) {
-          const firstAuthor = authors.split(/[\s,]/)[0].toLowerCase();
-          if (firstAuthor.length > 1 && refTextLower.includes(firstAuthor)) {
-            score += 15; // Higher score for first author match in et al. citations
+          const firstAuthor = authors.split(/[\s,]/)[0].toLowerCase().trim();
+          // Try different variations of the author name
+          const authorVariations = [
+            firstAuthor,
+            firstAuthor.charAt(0).toUpperCase() + firstAuthor.slice(1), // Capitalized
+            firstAuthor + ',', // With comma
+            firstAuthor + ' ', // With space
+          ];
+          
+          let authorFound = false;
+          for (const variation of authorVariations) {
+            if (refTextLower.includes(variation.toLowerCase())) {
+              authorFound = true;
+              break;
+            }
+          }
+          
+          if (authorFound && firstAuthor.length > 1) {
+            score += 50; // Much higher score for first author match in et al. citations
+            matchingAuthorWords = [firstAuthor]; // For logging purposes
+          } else if (firstAuthor.length > 1) {
+            score += 10; // Still give some points for year match even if author doesn't match perfectly
+          }
+        } else {
+          // For non-et al. citations, be more flexible with author matching
+          matchingAuthorWords = authorWords.filter(word => {
+            // Try multiple variations of each word
+            const wordVariations = [
+              word,
+              word + ',',
+              word + '.',
+              word.charAt(0).toUpperCase() + word.slice(1)
+            ];
+            return wordVariations.some(variation => refTextLower.includes(variation.toLowerCase()));
+          });
+          
+          if (matchingAuthorWords.length > 0) {
+            score += matchingAuthorWords.length * 20; // Higher weight for author matches
+          } else {
+            score += 5; // Small score for year match even without author match
           }
         }
-        
-        // Count how many author words appear in the reference
-        const matchingAuthorWords = authorWords.filter(word => refTextLower.includes(word));
-        score += matchingAuthorWords.length * 5;
         
         if (process.env.NODE_ENV === 'development') {
           console.log(`Ref ${refNumber} score: ${score} (${matchingAuthorWords.length}/${authorWords.length} author words)`);
@@ -236,24 +271,17 @@ export default function InteractiveCitations({ content }: InteractiveCitationsPr
       }
     }
     
-    // Return the best match if found
-    if (bestMatch && bestScore > 0) {
+    // Return the best match if found and score is high enough
+    if (bestMatch && bestScore >= 10) { // Require minimum score of 10 for a valid match
       if (process.env.NODE_ENV === 'development') {
         console.log('Best match found with score:', bestScore);
       }
       return bestMatch;
     }
     
-    // If no good match found, try just by year (first one)
-    if (year) {
-      for (const [refNumber, refText] of references.entries()) {
-        if (refText.includes(year)) {
-          if (process.env.NODE_ENV === 'development') {
-            console.log('Found match by year only (first occurrence)');
-          }
-          return refText;
-        }
-      }
+    // If no good match found, don't fall back to year-only matching
+    if (process.env.NODE_ENV === 'development') {
+      console.log('No adequate match found. Best score was:', bestScore);
     }
     
     // If still no match, return a fallback message
@@ -701,7 +729,11 @@ export default function InteractiveCitations({ content }: InteractiveCitationsPr
   React.useEffect(() => {
     const handleCitationClick = (e: Event) => {
       const target = e.target as HTMLElement;
+      
       if (target.classList.contains('citation-button')) {
+        e.preventDefault();
+        e.stopPropagation();
+        
         // Visual feedback (subtle)
         target.style.backgroundColor = 'rgba(59, 130, 246, 0.1)';
         setTimeout(() => {
@@ -712,17 +744,6 @@ export default function InteractiveCitations({ content }: InteractiveCitationsPr
         const citationText = target.getAttribute('data-citation-text');
         
         if (citationId && citationText) {
-          const uniqueKey = `${citationId}-html`;
-          const isExpanded = expandedCitations.has(uniqueKey);
-          const newExpanded = new Set(expandedCitations);
-          
-          if (isExpanded) {
-            newExpanded.delete(uniqueKey);
-          } else {
-            newExpanded.add(uniqueKey);
-          }
-          setExpandedCitations(newExpanded);
-          
           // Remove existing dropdowns first
           document.querySelectorAll('.citation-dropdown').forEach(d => d.remove());
           
@@ -737,7 +758,7 @@ export default function InteractiveCitations({ content }: InteractiveCitationsPr
           
           // Show dropdown with ONLY this reference
           const dropdown = document.createElement('div');
-          dropdown.className = 'absolute z-50 mt-2 w-[32rem] bg-white border border-gray-200 rounded-lg shadow-lg p-4 citation-dropdown';
+          dropdown.className = 'citation-dropdown fixed z-[9999] mt-2 w-[32rem] bg-white border border-gray-200 rounded-lg shadow-lg p-4';
           dropdown.innerHTML = `
             <div class="flex justify-between items-start mb-2">
               <span class="text-xs text-gray-600 font-medium">Reference</span>
@@ -748,34 +769,76 @@ export default function InteractiveCitations({ content }: InteractiveCitationsPr
             </div>
           `;
         
-          // Position dropdown with overflow detection
+          // Position dropdown with comprehensive overflow detection
           const rect = target.getBoundingClientRect();
           const dropdownWidth = 512; // 32rem = 512px
+          const dropdownHeight = 300; // Estimated height (will auto-adjust with max-height)
           const viewportWidth = window.innerWidth;
-          const rightEdge = rect.left + dropdownWidth;
+          const viewportHeight = window.innerHeight;
+          const margin = 20; // Margin from viewport edges
           
-          dropdown.style.position = 'fixed';
-          dropdown.style.top = `${rect.bottom + 5}px`;
-          dropdown.style.zIndex = '9999';
+          // Calculate horizontal position
+          let leftPos = rect.left;
+          let rightPos = 'auto';
           
-          // Check if dropdown would overflow right edge
-          if (rightEdge > viewportWidth - 20) { // 20px margin from edge
-            // Position from right edge instead
-            dropdown.style.right = '20px';
-            dropdown.style.left = 'auto';
-          } else {
-            // Normal left positioning
-            dropdown.style.left = `${rect.left}px`;
-            dropdown.style.right = 'auto';
+          // Check right overflow
+          if (rect.left + dropdownWidth > viewportWidth - margin) {
+            // Try positioning from the right edge of the button
+            if (rect.right - dropdownWidth >= margin) {
+              leftPos = rect.right - dropdownWidth;
+            } else {
+              // Not enough space on either side, position from right viewport edge
+              leftPos = viewportWidth - dropdownWidth - margin;
+              rightPos = `${margin}px`;
+            }
           }
           
+          // Check left overflow
+          if (leftPos < margin) {
+            leftPos = margin;
+          }
+          
+          // Calculate vertical position
+          let topPos = rect.bottom + 5;
+          let maxHeight = '24rem'; // Default max-height
+          
+          // Check bottom overflow
+          if (rect.bottom + dropdownHeight > viewportHeight - margin) {
+            // Try positioning above the button
+            if (rect.top - dropdownHeight >= margin) {
+              topPos = rect.top - dropdownHeight - 5;
+            } else {
+              // Not enough space above or below, position at top and limit height
+              topPos = margin;
+              maxHeight = `${viewportHeight - margin * 2}px`;
+            }
+          }
+          
+          // Apply positioning
+          dropdown.style.left = rightPos === 'auto' ? `${leftPos}px` : 'auto';
+          dropdown.style.right = rightPos === 'auto' ? 'auto' : rightPos;
+          dropdown.style.top = `${topPos}px`;
+          dropdown.style.maxHeight = maxHeight;
+          
           // Add close functionality
-          dropdown.querySelector('.close-dropdown')?.addEventListener('click', () => {
+          dropdown.querySelector('.close-dropdown')?.addEventListener('click', (closeEvent) => {
+            closeEvent.preventDefault();
+            closeEvent.stopPropagation();
             dropdown.remove();
-            const newExpanded = new Set(expandedCitations);
-            newExpanded.delete(uniqueKey);
-            setExpandedCitations(newExpanded);
           });
+          
+          // Close on outside click
+          const handleOutsideClick = (outsideEvent: Event) => {
+            if (!dropdown.contains(outsideEvent.target as Node)) {
+              dropdown.remove();
+              document.removeEventListener('click', handleOutsideClick);
+            }
+          };
+          
+          // Add small delay to prevent immediate outside click
+          setTimeout(() => {
+            document.addEventListener('click', handleOutsideClick);
+          }, 100);
           
           document.body.appendChild(dropdown);
         }
@@ -783,19 +846,15 @@ export default function InteractiveCitations({ content }: InteractiveCitationsPr
     };
 
     // Add event listener to document
-    document.addEventListener('click', handleCitationClick);
-    
-    // Cleanup function to remove all citation dropdowns
-    const cleanupDropdowns = () => {
-      document.querySelectorAll('.citation-dropdown').forEach(d => d.remove());
-    };
+    document.addEventListener('click', handleCitationClick, true); // Use capture phase
     
     // Cleanup on component unmount
     return () => {
-      document.removeEventListener('click', handleCitationClick);
-      cleanupDropdowns();
+      document.removeEventListener('click', handleCitationClick, true);
+      // Remove any remaining dropdowns
+      document.querySelectorAll('.citation-dropdown').forEach(d => d.remove());
     };
-  }, [expandedCitations, setExpandedCitations, generateReference]);
+  }, [generateReference]); // Simplified dependencies
 
   // Additional cleanup effect to handle navigation
   React.useEffect(() => {

@@ -35,13 +35,20 @@ export default async function HerbResearchPage({ params }: { params: Promise<{ s
 
   if (!herb) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center">
-        <div className="text-center">
+      <div className="min-h-screen bg-white relative flex items-center justify-center" style={{
+        backgroundImage: "url('/images/WMherbsBG.PNG')",
+        backgroundSize: "110%",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        backgroundAttachment: "fixed"
+      }}>
+        <div className="absolute inset-0 bg-emerald-200 opacity-50"></div>
+        <div className="relative text-center">
           <h1 className="text-2xl font-bold text-gray-800 mb-4">Herb Not Found</h1>
           <p className="text-gray-600 mb-4">The herb could not be found.</p>
           <Link 
             href="/herbs" 
-            className="text-blue-600 hover:text-blue-800 transition-colors"
+            className="text-green-600 hover:text-green-800 transition-colors"
           >
             ← Back to Herbs
           </Link>
@@ -57,7 +64,14 @@ export default async function HerbResearchPage({ params }: { params: Promise<{ s
         shareUrl={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://thenervevine.com'}/herbs/${slug}/research`}
         shareTitle={`Scientific Research: ${herb.name}`}
       >
-        <div className="min-h-screen bg-[url('/images/WMherbsBG.PNG')] bg-cover bg-center bg-fixed bg-no-repeat">
+        <div className="min-h-screen bg-white relative" style={{
+          backgroundImage: "url('/images/WMherbsBG.PNG')",
+          backgroundSize: "110%",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          backgroundAttachment: "fixed"
+        }}>
+          <div className="absolute inset-0 bg-emerald-200 opacity-50"></div>
           {/* Sticky Back Button */}
           <div className="fixed top-4 right-4 z-50">
             <Link 
@@ -68,7 +82,7 @@ export default async function HerbResearchPage({ params }: { params: Promise<{ s
             </Link>
           </div>
 
-          <div className="flex justify-center">
+          <div className="relative flex justify-center">
             <div className="w-full max-w-[75vw] px-4 pt-20 pb-8 min-h-screen">
               {/* Header */}
               <div className="mb-8">

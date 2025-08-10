@@ -105,7 +105,7 @@ interface Product {
   description?: string;
   merchantId: number;
   affiliateLink: string;
-  price?: number;
+  price?: string;
   currency: string;
   region?: string;
   imageUrl?: string;
@@ -597,7 +597,7 @@ export default function AdminContentPage() {
     description?: string;
     merchantId: number;
     affiliateLink: string;
-    price?: number;
+    price?: string;
     currency: string;
     region?: string;
     imageUrl?: string;
@@ -2256,13 +2256,13 @@ export default function AdminContentPage() {
             <label className="block mb-1">{f.label}{f.required && <span className="text-red-400">*</span>}</label>
             <input
               className="w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
-              type={f.key === "price" || f.key === "qualityScore" || f.key === "affiliateRate" || f.key === "affiliateYield" ? "number" : "text"}
+              type={f.key === "qualityScore" || f.key === "affiliateRate" || f.key === "affiliateYield" ? "number" : "text"}
               value={String(productForm[f.key] ?? '')}
               onChange={e => setFormData({ ...productForm, [f.key]: e.target.value })}
               required={!!f.required}
-              placeholder={f.key === "price" ? "0.00" : f.key === "qualityScore" ? "1-10" : f.key === "affiliateRate" ? "0.00" : f.key === "affiliateYield" ? "0.00" : ""}
-              step={f.key === "price" || f.key === "affiliateRate" || f.key === "affiliateYield" ? "0.01" : f.key === "qualityScore" ? "1" : undefined}
-              min={f.key === "qualityScore" ? "1" : f.key === "price" || f.key === "affiliateRate" || f.key === "affiliateYield" ? "0" : undefined}
+              placeholder={f.key === "price" ? "14.00 - 70.50" : f.key === "qualityScore" ? "1-10" : f.key === "affiliateRate" ? "0.00" : f.key === "affiliateYield" ? "0.00" : ""}
+              step={f.key === "affiliateRate" || f.key === "affiliateYield" ? "0.01" : f.key === "qualityScore" ? "1" : undefined}
+              min={f.key === "qualityScore" ? "1" : f.key === "affiliateRate" || f.key === "affiliateYield" ? "0" : undefined}
               max={f.key === "qualityScore" ? "10" : undefined}
             />
           </div>
@@ -2635,15 +2635,17 @@ export default function AdminContentPage() {
 
       {showForm && (
         <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
-          <div className="bg-gray-900 rounded shadow-lg w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
-            <form id="add-edit-form" className="p-8 overflow-y-auto flex-1" onSubmit={handleFormSubmit}>
-              <h2 className="text-2xl font-bold mb-4 text-white">{formMode === "add" ? `Add New ${tab.slice(0, -1)}` : `Edit ${tab.slice(0, -1)}`}</h2>
-              {renderFormFields()}
-            </form>
-            <div className="p-8 pt-0 border-t border-gray-700">
+          <div className="bg-gray-900 rounded shadow-lg w-full max-w-2xl max-h-[90vh] flex flex-col">
+            <div className="p-8 overflow-y-auto flex-1">
+              <form id="add-edit-form" onSubmit={handleFormSubmit}>
+                <h2 className="text-2xl font-bold mb-4 text-white">{formMode === "add" ? `Add New ${tab.slice(0, -1)}` : `Edit ${tab.slice(0, -1)}`}</h2>
+                {renderFormFields()}
+              </form>
+            </div>
+            <div className="p-8 pt-0 border-t border-gray-700 bg-gray-900 flex-shrink-0">
               <div className="flex gap-4">
-                <button type="submit" form="add-edit-form" className="bg-green-700 text-white px-6 py-2 rounded font-bold">Save</button>
-                <button type="button" className="bg-gray-500 text-white px-6 py-2 rounded font-bold" onClick={() => setShowForm(false)}>Cancel</button>
+                <button type="submit" form="add-edit-form" className="bg-green-700 hover:bg-green-600 text-white px-6 py-2 rounded font-bold transition-colors">Save</button>
+                <button type="button" className="bg-gray-500 hover:bg-gray-400 text-white px-6 py-2 rounded font-bold transition-colors" onClick={() => setShowForm(false)}>Cancel</button>
               </div>
             </div>
           </div>
