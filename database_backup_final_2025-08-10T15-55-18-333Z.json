@@ -1,0 +1,35 @@
+{
+  "Herb": {
+    "error": "\nInvalid `prisma.$queryRaw()` invocation:\n\n\nRaw query failed. Code: `42P01`. Message: `relation \"$1\" does not exist`"
+  },
+  "Symptom": {
+    "error": "\nInvalid `prisma.$queryRaw()` invocation:\n\n\nRaw query failed. Code: `42P01`. Message: `relation \"$1\" does not exist`"
+  },
+  "SymptomVariant": {
+    "error": "\nInvalid `prisma.$queryRaw()` invocation:\n\n\nRaw query failed. Code: `42P01`. Message: `relation \"$1\" does not exist`"
+  },
+  "Supplement": {
+    "error": "\nInvalid `prisma.$queryRaw()` invocation:\n\n\nRaw query failed. Code: `42P01`. Message: `relation \"$1\" does not exist`"
+  },
+  "BlogPage": {
+    "error": "\nInvalid `prisma.$queryRaw()` invocation:\n\n\nRaw query failed. Code: `42P01`. Message: `relation \"$1\" does not exist`"
+  },
+  "QualitySpecification": {
+    "error": "\nInvalid `prisma.$queryRaw()` invocation:\n\n\nRaw query failed. Code: `42P01`. Message: `relation \"$1\" does not exist`"
+  },
+  "Merchant": {
+    "error": "\nInvalid `prisma.$queryRaw()` invocation:\n\n\nRaw query failed. Code: `42P01`. Message: `relation \"$1\" does not exist`"
+  },
+  "PendingProduct": {
+    "error": "\nInvalid `prisma.$queryRaw()` invocation:\n\n\nRaw query failed. Code: `42P01`. Message: `relation \"$1\" does not exist`"
+  },
+  "Product": {
+    "error": "\nInvalid `prisma.$queryRaw()` invocation:\n\n\nRaw query failed. Code: `42P01`. Message: `relation \"$1\" does not exist`"
+  },
+  "Indication": {
+    "error": "\nInvalid `prisma.$queryRaw()` invocation:\n\n\nRaw query failed. Code: `42P01`. Message: `relation \"$1\" does not exist`"
+  },
+  "ShoppingList": {
+    "error": "\nInvalid `prisma.$queryRaw()` invocation:\n\n\nRaw query failed. Code: `42P01`. Message: `relation \"$1\" does not exist`"
+  }
+}

@@ -34,11 +34,13 @@ export default function SymptomPage({ params }: { params: Promise<{ slug: string
             disclaimer: undefined,
             emergencyNote: undefined,
             cautions: symptomData.cautions,
+            commonSymptoms: symptomData.commonSymptoms, // ✅ COPY MAIN COMMON SYMPTOMS!
             references: symptomData.references,
             variants: symptomData.variants ? 
-              symptomData.variants.reduce((acc: Record<string, unknown>, variant: { name: string; description?: string; herbs?: unknown[]; supplements?: unknown[] }) => {
+              symptomData.variants.reduce((acc: Record<string, unknown>, variant: { name: string; description?: string; commonSymptoms?: string[]; herbs?: unknown[]; supplements?: unknown[] }) => {
                 acc[variant.name] = {
                   description: variant.description,
+                  commonSymptoms: variant.commonSymptoms, // ✅ COPY VARIANT COMMON SYMPTOMS!
                   herbs: variant.herbs || [],
                   supplements: variant.supplements || []
                 };

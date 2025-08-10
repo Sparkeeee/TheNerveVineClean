@@ -277,76 +277,41 @@ export default function VariantSymptomPage({
   
 
 
-  // Common symptoms data (you can move this to database later)
-  const getCommonSymptoms = (symptomTitle: string, variantName?: string): string[] => {
-    const title = (variantName || symptomTitle).toLowerCase();
-    
-    if (title.includes('anxiety') || title.includes('generalized')) {
-      return [
-        'Excessive worry about everyday situations',
-        'Restlessness or feeling on edge',
-        'Difficulty concentrating',
-        'Muscle tension and fatigue',
-        'Sleep disturbances',
-        'Irritability'
-      ];
-    } else if (title.includes('social')) {
-      return [
-        'Fear of social judgment',
-        'Avoidance of social situations',
-        'Physical symptoms in social settings',
-        'Self-consciousness in groups',
-        'Difficulty speaking in public',
-        'Fear of embarrassment'
-      ];
-    } else if (title.includes('panic')) {
-      return [
-        'Sudden onset of intense fear',
-        'Rapid heartbeat or palpitations',
-        'Shortness of breath',
-        'Chest pain or discomfort',
-        'Sweating and trembling',
-        'Fear of losing control'
-      ];
-    } else if (title.includes('depression')) {
-      return [
-        'Persistent sad or empty mood',
-        'Loss of interest in activities',
-        'Changes in appetite or weight',
-        'Sleep disturbances',
-        'Fatigue and low energy',
-        'Feelings of worthlessness'
-      ];
-    } else if (title.includes('stress') || title.includes('adrenal overload')) {
-      return [
-        'Feeling overwhelmed',
-        'Physical tension and headaches',
-        'Difficulty relaxing',
-        'Rapid heartbeat',
-        'Digestive issues',
-        'Mood swings'
-      ];
-    } else if (title.includes('adrenal exhaustion')) {
-      return [
-        'Chronic fatigue',
-        'Difficulty getting up in the morning',
-        'Craving salty or sweet foods',
-        'Low blood pressure',
-        'Difficulty handling stress',
-        'Brain fog and memory issues'
-      ];
-    } else if (title.includes('burnout')) {
-      return [
-        'Emotional exhaustion',
-        'Cynicism about work or life',
-        'Reduced sense of accomplishment',
-        'Physical and mental fatigue',
-        'Difficulty concentrating',
-        'Increased irritability'
-      ];
+  // DATABASE-DRIVEN common symptoms (NO MORE STATIC HERESY!)
+  const getCommonSymptomsFromDatabase = (): string[] => {
+    console.log('[DEBUG] Getting common symptoms...', {
+      selectedVariant,
+      hasVariants: !!symptom.variants,
+      mainSymptomCommonSymptoms: symptom.commonSymptoms,
+      mainSymptomCommonSymptomsType: typeof symptom.commonSymptoms,
+      mainSymptomCommonSymptomsLength: symptom.commonSymptoms?.length,
+      variantKeys: symptom.variants ? Object.keys(symptom.variants) : [],
+      fullSymptomObject: symptom
+    });
+
+    if (selectedVariant && symptom.variants && symptom.variants[selectedVariant]) {
+      // Use variant's commonSymptoms from database
+      const variant = symptom.variants[selectedVariant];
+      console.log('[DEBUG] Checking variant common symptoms:', {
+        variantName: selectedVariant,
+        hasCommonSymptoms: !!variant.commonSymptoms,
+        commonSymptoms: variant.commonSymptoms
+      });
+      
+      if (variant.commonSymptoms && Array.isArray(variant.commonSymptoms)) {
+        console.log('[DEBUG] Using variant common symptoms:', variant.commonSymptoms);
+        return variant.commonSymptoms;
+      }
     }
     
-    // Default symptoms for unknown conditions
+    // Use main symptom's commonSymptoms from database
+    if (symptom.commonSymptoms && Array.isArray(symptom.commonSymptoms)) {
+      console.log('[DEBUG] Using main symptom common symptoms:', symptom.commonSymptoms);
+      return symptom.commonSymptoms;
+    }
+    
+    // Fallback only if no database data exists
+    console.log('[DEBUG] Using fallback symptoms - DATABASE DATA MISSING!');
     return [
       'Varies by individual',
       'May include physical discomfort',
@@ -357,7 +322,7 @@ export default function VariantSymptomPage({
     ];
   };
 
-  const commonSymptoms = getCommonSymptoms(symptom.title ?? '', selectedVariant || undefined);
+  const commonSymptoms = getCommonSymptomsFromDatabase();
 
   return (
     <ContentProtection 

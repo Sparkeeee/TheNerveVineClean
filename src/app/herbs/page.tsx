@@ -68,7 +68,7 @@ export default async function HerbsPage() {
       backgroundRepeat: "no-repeat",
       backgroundAttachment: "fixed"
     }}>
-      <div className="absolute inset-0 bg-green-100 opacity-50"></div>
+      <div className="absolute inset-0 bg-emerald-200 opacity-50"></div>
       <div className="relative max-w-6xl mx-auto px-6 py-8">
         <div className="rounded-xl p-8 shadow-sm border-2 border-gray-300 mb-8" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
           <h1 className="text-4xl font-bold text-gray-800 mb-6 text-center">Herbal Medicines</h1>

@@ -36,7 +36,7 @@ export default function Header() {
     return (
       <>
         {/* Trust Banner - Dark Blue - Hidden on mobile */}
-        <div className="hidden lg:block bg-blue-950 text-white py-2">
+        <div className="hidden lg:block bg-blue-950 text-white py-2 fixed top-0 left-0 right-0 z-50">
           <div className="container mx-auto px-4">
             <div className="flex justify-center items-center relative">
               <div className="flex items-center space-x-4 text-sm">
@@ -58,7 +58,7 @@ export default function Header() {
         </div>
 
         {/* Main Header - White with Shadow */}
-        <header className="bg-white shadow border-b">
+        <header className="bg-white shadow border-b fixed top-8 left-0 right-0 z-40">
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-between py-4">
               {/* Left Side - Logo and Site Name */}
@@ -140,7 +140,7 @@ export default function Header() {
   return (
     <>
       {/* Trust Banner - Dark Blue - Hidden on mobile */}
-      <div className="hidden lg:block bg-blue-950 text-white py-2">
+      <div className="hidden lg:block bg-blue-950 text-white py-2 fixed top-0 left-0 right-0 z-50">
         <div className="container mx-auto px-4">
           <div className="flex justify-center items-center relative">
             <div className="flex items-center space-x-4 text-sm">
@@ -193,7 +193,7 @@ export default function Header() {
       </div>
 
       {/* Main Header - White with Shadow */}
-      <header className="bg-white shadow border-b border-b-2 border-b-gray-300">
+      <header className="bg-white shadow border-b border-b-2 border-b-gray-300 fixed top-8 left-0 right-0 z-40">
         <div className="container mx-auto px-4">
                        <div className="flex items-center justify-between py-4">
             {/* Left Side - Logo and Site Name */}

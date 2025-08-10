@@ -4,12 +4,16 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 
-export default function BodyMap() {
+interface BodyMapProps {
+  startLive?: boolean; // When true, skip the "Explore by Anatomy" button and start interactive immediately
+}
+
+export default function BodyMap({ startLive = false }: BodyMapProps) {
   const [hoveredArea, setHoveredArea] = useState<string | null>(null);
   const [screenWidth, setScreenWidth] = useState(1024);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(startLive); // Start open if startLive is true
   const searchParams = useSearchParams();
 
   // Detect touch device and screen size properly
@@ -413,15 +417,17 @@ export default function BodyMap() {
               )}
             </svg>
             
-            {/* Call to Action Button */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <button
-                onClick={openModal}
-                className="bg-lime-600 hover:bg-lime-700 text-white font-semibold py-3 px-8 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
-              >
-                🩺 Explore by Anatomy
-              </button>
-            </div>
+            {/* Call to Action Button - Only show if not starting live */}
+            {!startLive && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <button
+                  onClick={openModal}
+                  className="bg-lime-600 hover:bg-lime-700 text-white font-semibold py-3 px-8 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+                >
+                  🩺 Explore by Anatomy
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

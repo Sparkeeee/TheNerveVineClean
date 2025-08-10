@@ -175,9 +175,16 @@ export default function HerbPage({ params }: { params: Promise<{ slug: string }>
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+      <div className="min-h-screen bg-white relative flex items-center justify-center" style={{
+        backgroundImage: "url('/images/WMherbsBG.PNG')",
+        backgroundSize: "110%",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        backgroundAttachment: "fixed"
+      }}>
+        <div className="absolute inset-0 bg-emerald-200 opacity-50"></div>
+        <div className="relative text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading...</p>
         </div>
       </div>
@@ -186,13 +193,20 @@ export default function HerbPage({ params }: { params: Promise<{ slug: string }>
 
   if (!herb) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center">
-        <div className="text-center">
+      <div className="min-h-screen bg-white relative flex items-center justify-center" style={{
+        backgroundImage: "url('/images/WMherbsBG.PNG')",
+        backgroundSize: "110%",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        backgroundAttachment: "fixed"
+      }}>
+        <div className="absolute inset-0 bg-emerald-200 opacity-50"></div>
+        <div className="relative text-center">
           <h1 className="text-2xl font-bold text-gray-800 mb-4">Herb Not Found</h1>
           <p className="text-gray-600 mb-4">The herb could not be found.</p>
           <Link 
             href="/herbs" 
-            className="text-blue-600 hover:text-blue-800 transition-colors"
+            className="text-green-600 hover:text-green-800 transition-colors"
           >
             ← Back to Herbs
           </Link>
@@ -224,8 +238,15 @@ export default function HerbPage({ params }: { params: Promise<{ slug: string }>
       shareUrl={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://thenervevine.com'}/herbs/${herb.slug}`}
       shareTitle={`${herb.name} - The NerveVine`}
     >
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white">
-        <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="min-h-screen bg-white relative" style={{
+        backgroundImage: "url('/images/WMherbsBG.PNG')",
+        backgroundSize: "110%",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        backgroundAttachment: "fixed"
+      }}>
+        <div className="absolute inset-0 bg-emerald-200 opacity-50"></div>
+        <div className="relative max-w-7xl mx-auto px-4 py-8">
           {/* Hero Image */}
           {herb.heroImageUrl && (
             <div className="mb-8">

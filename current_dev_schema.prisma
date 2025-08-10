@@ -209,3 +209,5 @@ model ShoppingList {
   updatedAt DateTime @updatedAt
   user      User     @relation(fields: [userId], references: [id])
 }
+
+
