@@ -21,23 +21,28 @@ export default function AdminHomePage() {
           <h1 className="text-4xl font-bold mb-8 text-gray-800 text-center">Admin Dashboard</h1>
                      <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 w-full">
                          <Link href="/admin/content" 
-                   className="inline-flex items-center justify-center px-6 py-4 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-white text-gray-700 border-gray-300 hover:bg-amber-50 hover:border-gray-400 hover:text-gray-600 hover:shadow-gray-300 hover:shadow-lg hover:scale-105 text-center">
+                   className="inline-flex flex-col items-center justify-center px-6 py-4 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-white text-gray-700 border-gray-300 hover:bg-amber-50 hover:border-gray-400 hover:text-gray-600 hover:shadow-gray-300 hover:shadow-lg hover:scale-105 text-center">
+                                           <span className="material-symbols-outlined mb-2">stacks</span>
                Manage Herbs, Supplements & Symptoms
              </Link>
              <Link href="/admin/product-hunt" 
-                   className="inline-flex items-center justify-center px-6 py-4 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-white text-gray-700 border-gray-300 hover:bg-amber-50 hover:border-gray-400 hover:text-gray-600 hover:shadow-gray-300 hover:shadow-lg hover:scale-105 text-center">
+                   className="inline-flex flex-col items-center justify-center px-6 py-4 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-white text-gray-700 border-gray-300 hover:bg-amber-50 hover:border-gray-400 hover:text-gray-600 hover:shadow-gray-300 hover:shadow-lg hover:scale-105 text-center">
+                                           <span className="material-symbols-outlined mb-2">search</span>
                Product Hunt Dashboard
              </Link>
              <Link href="/admin/data-hub" 
-                   className="inline-flex items-center justify-center px-6 py-4 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-white text-gray-700 border-gray-300 hover:bg-amber-50 hover:border-gray-400 hover:text-gray-600 hover:shadow-gray-300 hover:shadow-lg hover:scale-105 text-center">
+                   className="inline-flex flex-col items-center justify-center px-6 py-4 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-white text-gray-700 border-gray-300 hover:bg-amber-50 hover:border-gray-400 hover:text-gray-600 hover:shadow-gray-300 hover:shadow-lg hover:scale-105 text-center">
+                                           <span className="material-symbols-outlined mb-2">database</span>
                Data Processing Hub
              </Link>
              <Link href="/admin/quality-specifications" 
-                   className="inline-flex items-center justify-center px-6 py-4 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-white text-gray-700 border-gray-300 hover:bg-amber-50 hover:border-gray-400 hover:text-gray-600 hover:shadow-gray-300 hover:shadow-lg hover:scale-105 text-center">
+                   className="inline-flex flex-col items-center justify-center px-6 py-4 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-white text-gray-700 border-gray-300 hover:bg-amber-50 hover:border-gray-400 hover:text-gray-600 hover:shadow-gray-300 hover:shadow-lg hover:scale-105 text-center">
+                                           <span className="material-symbols-outlined mb-2">verified</span>
                Quality Specifications
              </Link>
              <Link href="/admin/product-scraper" 
-                   className="inline-flex items-center justify-center px-6 py-4 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-white text-gray-700 border-gray-300 hover:bg-amber-50 hover:border-gray-400 hover:text-gray-600 hover:shadow-gray-300 hover:shadow-lg hover:scale-105 text-center">
+                   className="inline-flex flex-col items-center justify-center px-6 py-4 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-white text-gray-700 border-gray-300 hover:bg-amber-50 hover:border-gray-400 hover:text-gray-600 hover:shadow-gray-300 hover:shadow-lg hover:scale-105 text-center">
+                                           <span className="material-symbols-outlined mb-2">download</span>
                Product Data Scraper
              </Link>
           </div>

@@ -2300,7 +2300,7 @@ export default function AdminContentPage() {
         <div className="absolute inset-0 bg-pink-100 opacity-90"></div>
       </div>
       
-      <div className="h-12"></div>
+      <div className="h-10"></div>
       <div className="relative z-10 container-max px-6 pt-8 pb-8">
         <div className="mb-6">
           <Link href="/admin" 
@@ -2406,13 +2406,20 @@ export default function AdminContentPage() {
             <>
               {/* Action Buttons */}
               {tab === "Products" && (
-                <div className="mb-6 flex gap-4 flex-wrap">
+                <div className="mb-6 flex justify-between items-center">
+                  <button
+                    onClick={() => setTab("Herbs")}
+                    className="text-gray-600 hover:text-gray-800 transition-colors"
+                  >
+                    <span className="material-symbols-outlined text-2xl">keyboard_backspace</span>
+                  </button>
                   <button
                     className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-blue-600 text-white border-transparent hover:bg-blue-700 hover:border-blue-700 hover:shadow-lg hover:scale-105"
                     onClick={() => setShowBatchImport(true)}
                   >
                     📥 Batch Import
                   </button>
+                  <div className="w-10"></div>
                 </div>
               )}
               {tab !== "Products" && (
@@ -2672,7 +2679,7 @@ export default function AdminContentPage() {
 
       {/* Batch Import Modal */}
       {showBatchImport && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 p-6" style={{
+        <div className="fixed inset-0 flex items-start justify-center z-50 p-6 pt-32" style={{
           backgroundImage: "url('/images/RoseWPWM.PNG')",
           backgroundSize: "cover",
           backgroundPosition: "center",
@@ -2681,7 +2688,15 @@ export default function AdminContentPage() {
           <div className="absolute inset-0 bg-pink-100 opacity-90"></div>
           <div className="relative rounded-xl shadow-lg w-full max-w-2xl max-h-[80vh] overflow-hidden flex flex-col border-2 border-gray-300" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
             <div className="p-6 border-b border-gray-300 bg-gray-50">
-              <h2 className="text-2xl font-bold text-gray-800">Batch Import Products</h2>
+              <div className="flex items-center justify-between">
+                <button
+                  onClick={() => setShowBatchImport(false)}
+                  className="text-gray-600 hover:text-gray-800 transition-colors"
+                >
+                  <span className="material-symbols-outlined text-xl">keyboard_backspace</span>
+                </button>
+                <h2 className="text-2xl font-bold text-gray-800 absolute left-1/2 transform -translate-x-1/2">Batch Import Products</h2>
+              </div>
             </div>
             
             <div className="p-6 overflow-y-auto flex-1">
@@ -2735,7 +2750,7 @@ export default function AdminContentPage() {
       )}
 
       {showForm && tab !== "Products" && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 p-6" style={{
+        <div className="fixed inset-0 flex items-start justify-center z-50 p-6 pt-40" style={{
           backgroundImage: "url('/images/RoseWPWM.PNG')",
           backgroundSize: "cover",
           backgroundPosition: "center",
@@ -2743,9 +2758,19 @@ export default function AdminContentPage() {
         }}>
           <div className="absolute inset-0 bg-pink-100 opacity-90"></div>
           <div className="relative rounded-xl shadow-lg w-full max-w-4xl max-h-[80vh] flex flex-col border-2 border-gray-300" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
+            <div className="p-6 border-b border-gray-300 bg-gray-50">
+              <div className="flex items-center justify-between">
+                <button
+                  onClick={() => setShowForm(false)}
+                  className="text-gray-600 hover:text-gray-800 transition-colors"
+                >
+                  <span className="material-symbols-outlined text-xl">keyboard_backspace</span>
+                </button>
+                <h2 className="text-2xl font-bold text-gray-800 absolute left-1/2 transform -translate-x-1/2">{formMode === "add" ? `Add New ${tab.slice(0, -1)}` : `Edit ${tab.slice(0, -1)}`}</h2>
+              </div>
+            </div>
             <div className="p-6 overflow-y-auto flex-1">
               <form id="add-edit-form" onSubmit={handleFormSubmit}>
-                <h2 className="text-2xl font-bold mb-6 text-gray-800">{formMode === "add" ? `Add New ${tab.slice(0, -1)}` : `Edit ${tab.slice(0, -1)}`}</h2>
                 {renderFormFields()}
               </form>
             </div>
@@ -2768,7 +2793,7 @@ export default function AdminContentPage() {
 
       {/* Variant Management Modal */}
       {showVariantModal && selectedSymptom && (
-        <div className="fixed inset-0 bg-pink-100 bg-opacity-90 flex items-center justify-center z-50 p-4" style={{
+        <div className="fixed inset-0 bg-pink-100 bg-opacity-90 flex items-start justify-center z-50 p-4 pt-40" style={{
           backgroundImage: "url('/images/RoseWPWM.PNG')",
           backgroundSize: "cover",
           backgroundPosition: "center",
@@ -2778,7 +2803,13 @@ export default function AdminContentPage() {
           <div className="relative rounded-xl shadow-lg w-full max-w-6xl max-h-[90vh] overflow-hidden flex flex-col border-2 border-gray-300" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
             <div className="p-6 border-b border-gray-300 bg-gray-50">
               <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold text-gray-800">
+                <button
+                  onClick={() => setShowVariantModal(false)}
+                  className="text-gray-600 hover:text-gray-800 transition-colors"
+                >
+                  <span className="material-symbols-outlined text-xl">keyboard_backspace</span>
+                </button>
+                <h2 className="text-2xl font-bold text-gray-800 absolute left-1/2 transform -translate-x-1/2">
                   Manage Variants for: {selectedSymptom.title}
                 </h2>
                 <button
@@ -2866,7 +2897,7 @@ export default function AdminContentPage() {
 
       {/* Variant Form Modal */}
       {showVariantForm && selectedSymptom && (
-        <div className="fixed inset-0 bg-pink-100 bg-opacity-90 flex items-center justify-center z-50 p-4 overflow-y-auto" style={{
+        <div className="fixed inset-0 bg-pink-100 bg-opacity-90 flex items-start justify-center z-50 p-4 overflow-y-auto pt-32" style={{
           backgroundImage: "url('/images/RoseWPWM.PNG')",
           backgroundSize: "cover",
           backgroundPosition: "center",
@@ -2875,9 +2906,17 @@ export default function AdminContentPage() {
           <div className="absolute inset-0 bg-pink-100 opacity-90"></div>
           <div className="relative rounded-xl shadow-lg w-full max-w-2xl max-h-[95vh] flex flex-col border-2 border-gray-300 my-8" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
             <div className="p-6 border-b border-gray-300 bg-gray-50">
-              <h2 className="text-2xl font-bold text-gray-800">
-                {variantFormMode === "add" ? "Add New Variant" : "Edit Variant"}
-              </h2>
+              <div className="flex items-center justify-between">
+                <button
+                  onClick={() => setShowVariantForm(false)}
+                  className="text-gray-600 hover:text-gray-800 transition-colors"
+                >
+                  <span className="material-symbols-outlined text-xl">keyboard_backspace</span>
+                </button>
+                <h2 className="text-2xl font-bold text-gray-800 absolute left-1/2 transform -translate-x-1/2">
+                  {variantFormMode === "add" ? "Add New Variant" : "Edit Variant"}
+                </h2>
+              </div>
             </div>
             
             <form id="variant-form" onSubmit={handleVariantFormSubmit} className="p-6 overflow-y-auto flex-1">
@@ -2970,7 +3009,7 @@ export default function AdminContentPage() {
 
       {/* Indication Form Modal */}
       {showIndicationForm && (
-        <div className="fixed inset-0 bg-pink-100 bg-opacity-90 flex items-center justify-center z-50 p-4 overflow-y-auto" style={{
+        <div className="fixed inset-0 bg-pink-100 bg-opacity-90 flex items-start justify-center z-50 p-4 overflow-y-auto pt-40" style={{
           backgroundImage: "url('/images/RoseWPWM.PNG')",
           backgroundSize: "cover",
           backgroundPosition: "center",
@@ -2979,9 +3018,17 @@ export default function AdminContentPage() {
           <div className="absolute inset-0 bg-pink-100 opacity-90"></div>
           <div className="relative rounded-xl shadow-lg w-full max-w-2xl max-h-[95vh] flex flex-col border-2 border-gray-300 my-8" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
             <div className="p-6 border-b border-gray-300 bg-gray-50">
-              <h2 className="text-2xl font-bold text-gray-800">
-                {indicationFormMode === "add" ? "Add New Indication" : "Edit Indication"}
-              </h2>
+              <div className="flex items-center justify-between">
+                <button
+                  onClick={() => setShowIndicationForm(false)}
+                  className="text-gray-600 hover:text-gray-800 transition-colors"
+                >
+                  <span className="material-symbols-outlined text-xl">keyboard_backspace</span>
+                </button>
+                <h2 className="text-2xl font-bold text-gray-800 absolute left-1/2 transform -translate-x-1/2">
+                  {indicationFormMode === "add" ? "Add New Indication" : "Edit Indication"}
+                </h2>
+              </div>
             </div>
             
             <form id="indication-form" onSubmit={handleIndicationFormSubmit} className="p-6 overflow-y-auto flex-1">
@@ -3064,7 +3111,7 @@ export default function AdminContentPage() {
 
       {/* Content Preview Modal */}
       {showPreview && (
-        <div className="fixed inset-0 bg-pink-100 bg-opacity-90 flex items-center justify-center z-50 p-4" style={{
+        <div className="fixed inset-0 bg-pink-100 bg-opacity-90 flex items-start justify-center z-50 p-4 pt-32" style={{
           backgroundImage: "url('/images/RoseWPWM.PNG')",
           backgroundSize: "cover",
           backgroundPosition: "center",
@@ -3073,7 +3120,13 @@ export default function AdminContentPage() {
           <div className="absolute inset-0 bg-pink-100 opacity-90"></div>
           <div className="relative rounded-xl shadow-lg w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col border-2 border-gray-300" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
             <div className="p-6 border-b border-gray-300 bg-gray-50 flex justify-between items-center">
-              <h2 className="text-2xl font-bold text-gray-800">Content Preview</h2>
+              <button
+                onClick={() => setShowPreview(false)}
+                className="text-gray-600 hover:text-gray-800 transition-colors"
+              >
+                <span className="material-symbols-outlined text-xl">keyboard_backspace</span>
+              </button>
+              <h2 className="text-2xl font-bold text-gray-800 absolute left-1/2 transform -translate-x-1/2">Content Preview</h2>
               <button
                 type="button"
                 className="text-gray-500 hover:text-gray-700 text-2xl"

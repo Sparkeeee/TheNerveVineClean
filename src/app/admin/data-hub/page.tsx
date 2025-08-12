@@ -141,14 +141,17 @@ export default function DataHubAdminPage() {
       </div>
       
       <div className="relative z-10 container mx-auto px-6 pt-8 pb-6">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-8">
-          <Link href="/admin" 
-                className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-white text-gray-700 border-gray-300 hover:bg-amber-50 hover:border-gray-400 hover:text-gray-600 hover:shadow-gray-300 hover:shadow-lg hover:scale-105">
-            ← Admin Home
-          </Link>
-          <h1 className="text-3xl font-bold text-gray-800">Data Processing Hub</h1>
-        </div>
+                 {/* Header */}
+         <div className="mb-8">
+           <div className="flex items-center justify-between mb-4">
+             <Link href="/admin" 
+                   className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-white text-gray-700 border-gray-300 hover:bg-amber-50 hover:border-gray-400 hover:text-gray-600 hover:shadow-gray-300 hover:shadow-lg hover:scale-105">
+               ← Admin Home
+             </Link>
+             <div className="flex-1"></div>
+           </div>
+           <h1 className="text-3xl font-bold text-gray-800 text-center">Data Processing Hub</h1>
+         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Processing Criteria Panel */}

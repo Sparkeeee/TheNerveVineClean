@@ -296,7 +296,14 @@ export default function QualitySpecificationsPage() {
       <div className="relative max-w-6xl mx-auto px-6 pt-8 pb-8">
         {/* Hero Section */}
         <div className="rounded-xl p-8 shadow-sm border-2 border-gray-300 mb-8" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
-          <h1 className="text-4xl font-bold text-gray-800 mb-6 text-center">Quality Specifications Management</h1>
+          <div className="flex items-center justify-between mb-6">
+            <Link href="/admin" 
+                  className="text-gray-600 hover:text-gray-800 transition-colors">
+              <span className="material-symbols-outlined text-2xl">keyboard_backspace</span>
+            </Link>
+            <h1 className="text-4xl font-bold text-gray-800 flex-1 text-center">Quality Specifications Management</h1>
+            <div className="w-10"></div>
+          </div>
           <p className="text-lg text-gray-700 text-center max-w-3xl mx-auto">
             Define quality criteria for herbs and supplements to ensure only the best products are recommended.
           </p>
