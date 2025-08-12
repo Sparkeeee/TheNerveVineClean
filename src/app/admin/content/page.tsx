@@ -496,16 +496,19 @@ export default function AdminContentPage() {
     if (file) {
       const reader = new FileReader();
       reader.onload = (event: ProgressEvent<FileReader>) => {
-        setArticles((prev) => [
-          ...prev,
-          {
-            title,
-            adminNote,
-            uploadDate: new Date().toLocaleString(),
-            content: event.target?.result ?? null,
-            fileName: file ? file.name : null,
-          },
-        ]);
+        const content = event.target?.result;
+        if (typeof content === 'string') {
+          setArticles((prev) => [
+            ...prev,
+            {
+              title,
+              adminNote,
+              uploadDate: new Date().toLocaleString(),
+              content,
+              fileName: file ? file.name : null,
+            },
+          ]);
+        }
       };
       reader.readAsText(file);
     } else if (textContent.trim()) {

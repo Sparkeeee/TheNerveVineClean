@@ -177,7 +177,7 @@ export async function POST(req: NextRequest) {
         articles: cleanedData.articles as string | undefined,
         associatedSymptoms: cleanedData.associatedSymptoms as string | undefined,
         comprehensiveArticle: cleanedData.comprehensiveArticle as string | undefined,
-        commonSymptoms: cleanedData.commonSymptoms as string | undefined
+        commonSymptoms: Array.isArray(cleanedData.commonSymptoms) ? cleanedData.commonSymptoms as string[] : undefined
       }
     });
     return createApiResponse(symptom, 201);
