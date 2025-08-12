@@ -149,7 +149,7 @@ type Article = {
   title: string;
   adminNote: string;
   uploadDate: string;
-  content: string | ArrayBuffer | null;
+  content: string;
   fileName: string | null;
 };
 
@@ -615,6 +615,7 @@ export default function AdminContentPage() {
   // Add state for allHerbs and allSupplements
   const [allHerbs, setAllHerbs] = useState<Herb[]>([]);
   const [allSupplements, setAllSupplements] = useState<Supplement[]>([]);
+  const [allSymptoms, setAllSymptoms] = useState<Symptom[]>([]);
   const [allMerchants, setAllMerchants] = useState<Merchant[]>([]);
 
   const [expandedDescriptions, setExpandedDescriptions] = useState<Set<number>>(new Set());
@@ -669,6 +670,7 @@ export default function AdminContentPage() {
       fetchMerchants();
       fetchAllHerbs();
       fetchAllSupplements();
+      fetchAllSymptoms();
     }
      
   }, [tab]);
@@ -715,6 +717,24 @@ export default function AdminContentPage() {
       }
     } catch {
       setAllSupplements([]);
+    }
+  }
+
+  async function fetchAllSymptoms() {
+    try {
+      const res = await fetch("/api/symptoms?limit=1000");
+      if (!res.ok) throw new Error("Failed to fetch symptoms");
+      const response = await res.json();
+      // Handle the response structure: { success: true, data: { symptoms: [...], pagination: {...} } }
+      const symptomsArray = response.data?.symptoms || response.symptoms || response || [];
+      if (!Array.isArray(symptomsArray)) {
+        console.error('Symptoms data is not an array:', symptomsArray);
+        setAllSymptoms([]);
+      } else {
+        setAllSymptoms(symptomsArray);
+      }
+    } catch {
+      setAllSymptoms([]);
     }
   }
 
@@ -1220,7 +1240,7 @@ export default function AdminContentPage() {
     
     // Auto-generate slug for symptoms if not provided
     if (tab === "Symptoms" && formMode === "add" && !processedData.slug && processedData.title) {
-      let baseSlug = generateSlug(processedData.title as string);
+      const baseSlug = generateSlug(processedData.title as string);
       let finalSlug = baseSlug;
       let counter = 1;
       
@@ -1780,7 +1800,7 @@ export default function AdminContentPage() {
                     className={`w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${f.key === 'description' || f.key === 'references' || f.key === 'comprehensiveArticle' ? 'h-64' : ''}`}
                     value={f.key === 'references' ? (typeof herbForm[f.key] === 'string' ? herbForm[f.key] : '') : (typeof herbForm[f.key] === 'string' ? herbForm[f.key] : '')}
                     onChange={e => setFormData({ ...herbForm, [f.key]: e.target.value })}
-                    placeholder={f.key === 'references' ? 'Enter references separated by commas or numbered format (e.g., "1. Study A, 2. Study B")' : f.key === 'comprehensiveArticle' ? 'Enter comprehensive article content in Markdown format...' : undefined}
+                    placeholder={f.key === 'references' ? 'Enter references separated by commas or numbered format (e.g., &quot;1. Study A, 2. Study B&quot;)' : f.key === 'comprehensiveArticle' ? 'Enter comprehensive article content in Markdown format...' : undefined}
                   />
                 <button
                   type="button"
@@ -1811,12 +1831,12 @@ export default function AdminContentPage() {
                 {f.key === 'references' && (
                   <div className="mt-2 text-xs text-gray-600 bg-gray-50 p-3 rounded-lg border border-gray-200">
                     <p>Enter references separated by commas or numbered format. The system will automatically detect reference types (journal, book, doi, study).</p>
-                    <p className="mt-1">Example format: "1. Study A, 2. Study B" or "Journal Article•DOI 1. Study A, 2. Study B"</p>
+                    <p className="mt-1">Example format: &quot;1. Study A, 2. Study B&quot; or &quot;Journal Article•DOI 1. Study A, 2. Study B&quot;</p>
                   </div>
                 )}
                 {f.key === 'comprehensiveArticle' && (
                   <div className="mt-2 text-xs text-gray-600 bg-gray-50 p-3 rounded-lg border border-gray-200">
-                    <p>This content will appear in the "View Here" modal and "Full Page View" for comprehensive scientific research.</p>
+                    <p>This content will appear in the &quot;View Here&quot; modal and &quot;Full Page View&quot; for comprehensive scientific research.</p>
                     <p className="mt-1">Use Markdown format: # Headers, **bold**, - lists, etc. Include the main title in the content.</p>
                   </div>
                 )}
@@ -1850,7 +1870,7 @@ export default function AdminContentPage() {
                     className={`w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${f.key === 'description' || f.key === 'references' || f.key === 'comprehensiveArticle' ? 'h-64' : ''}`}
                     value={f.key === 'references' ? (typeof supplementForm[f.key] === 'string' ? supplementForm[f.key] : '') : (typeof supplementForm[f.key] === 'string' ? supplementForm[f.key] : '')}
                     onChange={e => setFormData({ ...supplementForm, [f.key]: e.target.value })}
-                    placeholder={f.key === 'references' ? 'Enter references separated by commas or numbered format (e.g., "1. Study A, 2. Study B")' : f.key === 'comprehensiveArticle' ? 'Enter comprehensive article content in Markdown format...' : undefined}
+                    placeholder={f.key === 'references' ? 'Enter references separated by commas or numbered format (e.g., &quot;1. Study A, 2. Study B&quot;)' : f.key === 'comprehensiveArticle' ? 'Enter comprehensive article content in Markdown format...' : undefined}
                   />
                 <button
                   type="button"
@@ -1881,12 +1901,12 @@ export default function AdminContentPage() {
                 {f.key === 'references' && (
                   <div className="mt-2 text-xs text-gray-600 bg-gray-50 p-3 rounded-lg border border-gray-200">
                     <p>Enter references separated by commas or numbered format. The system will automatically detect reference types (journal, book, doi, study).</p>
-                    <p className="mt-1">Example format: "1. Study A, 2. Study B" or "Journal Article•DOI 1. Study A, 2. Study B"</p>
+                    <p className="mt-1">Example format: &quot;1. Study A, 2. Study B&quot; or &quot;Journal Article•DOI 1. Study B&quot;</p>
                   </div>
                 )}
                 {f.key === 'comprehensiveArticle' && (
                   <div className="mt-2 text-xs text-gray-600 bg-gray-50 p-3 rounded-lg border border-gray-200">
-                    <p>This content will appear in the "View Here" modal and "Full Page View" for comprehensive scientific research.</p>
+                    <p>This content will appear in the &quot;View Here&quot; modal and &quot;Full Page View&quot; for comprehensive scientific research.</p>
                     <p className="mt-1">Use Markdown format: # Headers, **bold**, - lists, etc. Include the main title in the content.</p>
                   </div>
                 )}
@@ -2004,7 +2024,7 @@ export default function AdminContentPage() {
                     className={`w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${f.key === 'description' || f.key === 'references' || f.key === 'comprehensiveArticle' ? 'h-64' : ''}`}
                     value={f.key === 'references' ? (typeof symptomForm[f.key] === 'string' ? symptomForm[f.key] : '') : (typeof symptomForm[f.key] === 'string' ? symptomForm[f.key] : '')}
                     onChange={e => setFormData({ ...symptomForm, [f.key]: e.target.value })}
-                    placeholder={f.key === 'references' ? 'Enter references separated by commas or numbered format (e.g., "1. Study A, 2. Study B")' : f.key === 'comprehensiveArticle' ? 'Enter comprehensive article content in Markdown format...' : undefined}
+                    placeholder={f.key === 'references' ? 'Enter references separated by commas or numbered format (e.g., &quot;1. Study A, 2. Study B&quot;)' : f.key === 'comprehensiveArticle' ? 'Enter comprehensive article content in Markdown format...' : undefined}
                   />
                 <button
                   type="button"
@@ -2035,12 +2055,12 @@ export default function AdminContentPage() {
                 {f.key === 'references' && (
                   <div className="mt-2 text-xs text-gray-600 bg-gray-50 p-3 rounded-lg border border-gray-200">
                     <p>Enter references separated by commas or numbered format. The system will automatically detect reference types (journal, book, doi, study).</p>
-                    <p className="mt-1">Example format: "1. Study A, 2. Study B" or "Journal Article•DOI 1. Study A, 2. Study B"</p>
+                    <p className="mt-1">Example format: &quot;1. Study A, 2. Study B&quot; or &quot;Journal Article•DOI 1. Study A, 2. Study B&quot;</p>
                   </div>
                 )}
                 {f.key === 'comprehensiveArticle' && (
                   <div className="mt-2 text-xs text-gray-600 bg-gray-50 p-3 rounded-lg border border-gray-200">
-                    <p>This content will appear in the "View Here" modal and "Full Page View" for comprehensive scientific research.</p>
+                    <p>This content will appear in the &quot;View Here&quot; modal and &quot;Full Page View&quot; for comprehensive scientific research.</p>
                     <p className="mt-1">Use Markdown format: # Headers, **bold**, - lists, etc. Include the main title in the content.</p>
                   </div>
                 )}
@@ -2492,15 +2512,15 @@ export default function AdminContentPage() {
                               <input
                                 type="checkbox"
                                 id={`herb-${herb.id}`}
-                                checked={formData.selectedHerbs?.includes(herb.id) || false}
-                                onChange={(e) => {
-                                  const selectedHerbs = formData.selectedHerbs || [];
-                                  if (e.target.checked) {
-                                    setFormData({ ...formData, selectedHerbs: [...selectedHerbs, herb.id] });
-                                  } else {
-                                    setFormData({ ...formData, selectedHerbs: selectedHerbs.filter(id => id !== herb.id) });
-                                  }
-                                }}
+                                                                 checked={(formData as ProductForm).selectedHerbs?.includes(herb.id) || false}
+                                 onChange={(e) => {
+                                   const selectedHerbs = (formData as ProductForm).selectedHerbs || [];
+                                   if (e.target.checked) {
+                                     setFormData({ ...formData, selectedHerbs: [...selectedHerbs, herb.id] });
+                                   } else {
+                                     setFormData({ ...formData, selectedHerbs: selectedHerbs.filter((id: number) => id !== herb.id) });
+                                   }
+                                 }}
                                 className="mr-2 text-blue-600 focus:ring-blue-500"
                               />
                               <label htmlFor={`herb-${herb.id}`} className="text-gray-700 cursor-pointer">
@@ -2520,15 +2540,15 @@ export default function AdminContentPage() {
                               <input
                                 type="checkbox"
                                 id={`supp-${supp.id}`}
-                                checked={formData.selectedSupplements?.includes(supp.id) || false}
-                                onChange={(e) => {
-                                  const selectedSupplements = formData.selectedSupplements || [];
-                                  if (e.target.checked) {
-                                    setFormData({ ...formData, selectedSupplements: [...selectedSupplements, supp.id] });
-                                  } else {
-                                    setFormData({ ...formData, selectedSupplements: selectedSupplements.filter(id => id !== supp.id) });
-                                  }
-                                }}
+                                                                 checked={(formData as ProductForm).selectedSupplements?.includes(supp.id) || false}
+                                 onChange={(e) => {
+                                   const selectedSupplements = (formData as ProductForm).selectedSupplements || [];
+                                   if (e.target.checked) {
+                                     setFormData({ ...formData, selectedSupplements: [...selectedSupplements, supp.id] });
+                                   } else {
+                                     setFormData({ ...formData, selectedSupplements: selectedSupplements.filter((id: number) => id !== supp.id) });
+                                   }
+                                 }}
                                 className="mr-2 text-blue-600 focus:ring-blue-500"
                               />
                               <label htmlFor={`supp-${supp.id}`} className="text-gray-700 cursor-pointer">
@@ -2544,20 +2564,20 @@ export default function AdminContentPage() {
                         <label className="block mb-2 text-gray-700 font-semibold">Associated Symptoms</label>
                         <div className="max-h-32 overflow-y-auto border border-gray-300 rounded-lg p-3 bg-white">
                           {/* Get symptoms from data state when available */}
-                          {(tab === "Symptoms" ? (data as Symptom[]) : []).length > 0 ? (tab === "Symptoms" ? (data as Symptom[]) : []).map((symptom) => (
+                          {allSymptoms && allSymptoms.length > 0 ? allSymptoms.map((symptom) => (
                             <div key={symptom.id} className="flex items-center mb-2">
                               <input
                                 type="checkbox"
                                 id={`symptom-${symptom.id}`}
-                                checked={formData.selectedSymptoms?.includes(symptom.id) || false}
-                                onChange={(e) => {
-                                  const selectedSymptoms = formData.selectedSymptoms || [];
-                                  if (e.target.checked) {
-                                    setFormData({ ...formData, selectedSymptoms: [...selectedSymptoms, symptom.id] });
-                                  } else {
-                                    setFormData({ ...formData, selectedSymptoms: selectedSymptoms.filter(id => id !== symptom.id) });
-                                  }
-                                }}
+                                                                 checked={(formData as ProductForm).selectedSymptoms?.includes(symptom.id) || false}
+                                 onChange={(e) => {
+                                   const selectedSymptoms = (formData as ProductForm).selectedSymptoms || [];
+                                   if (e.target.checked) {
+                                     setFormData({ ...formData, selectedSymptoms: [...selectedSymptoms, symptom.id] });
+                                   } else {
+                                     setFormData({ ...formData, selectedSymptoms: selectedSymptoms.filter((id: number) => id !== symptom.id) });
+                                   }
+                                 }}
                                 className="mr-2 text-blue-600 focus:ring-blue-500"
                               />
                               <label htmlFor={`symptom-${symptom.id}`} className="text-gray-700 cursor-pointer">

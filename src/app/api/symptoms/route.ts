@@ -165,7 +165,21 @@ export async function POST(req: NextRequest) {
     
     console.log('POST symptoms cleaned data:', JSON.stringify(cleanedData, null, 2));
     
-    const symptom = await prisma.symptom.create({ data: cleanedData });
+    const symptom = await prisma.symptom.create({ 
+      data: {
+        title: cleanedData.title as string,
+        slug: cleanedData.slug as string,
+        description: cleanedData.description as string | undefined,
+        metaTitle: cleanedData.metaTitle as string | undefined,
+        metaDescription: cleanedData.metaDescription as string | undefined,
+        cautions: cleanedData.cautions as string | undefined,
+        references: cleanedData.references as string | undefined,
+        articles: cleanedData.articles as string | undefined,
+        associatedSymptoms: cleanedData.associatedSymptoms as string | undefined,
+        comprehensiveArticle: cleanedData.comprehensiveArticle as string | undefined,
+        commonSymptoms: cleanedData.commonSymptoms as string | undefined
+      }
+    });
     return createApiResponse(symptom, 201);
   } catch (error) {
     console.error('POST symptoms error:', error);
