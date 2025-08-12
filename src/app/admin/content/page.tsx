@@ -3009,14 +3009,14 @@ export default function AdminContentPage() {
 
       {/* Indication Form Modal */}
       {showIndicationForm && (
-        <div className="fixed inset-0 bg-pink-100 bg-opacity-90 flex items-start justify-center z-50 p-4 overflow-y-auto pt-40" style={{
+        <div className="fixed inset-0 flex items-start justify-center z-50 p-4 pt-40" style={{
           backgroundImage: "url('/images/RoseWPWM.PNG')",
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
         }}>
           <div className="absolute inset-0 bg-pink-100 opacity-90"></div>
-          <div className="relative rounded-xl shadow-lg w-full max-w-2xl max-h-[95vh] flex flex-col border-2 border-gray-300 my-8" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
+          <div className="relative rounded-xl shadow-lg w-full max-w-2xl max-h-[95vh] flex flex-col border-2 border-gray-300 overflow-hidden" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
             <div className="p-6 border-b border-gray-300 bg-gray-50">
               <div className="flex items-center justify-between">
                 <button
@@ -3031,7 +3031,7 @@ export default function AdminContentPage() {
               </div>
             </div>
             
-            <form id="indication-form" onSubmit={handleIndicationFormSubmit} className="p-6 overflow-y-auto flex-1">
+            <form id="indication-form" onSubmit={handleIndicationFormSubmit} className="p-6 flex-1">
               <div className="space-y-4">
                 <div>
                   <label className="block mb-1 text-gray-700 font-semibold">Name *</label>
