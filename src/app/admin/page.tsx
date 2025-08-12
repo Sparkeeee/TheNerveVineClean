@@ -1,8 +1,11 @@
 "use client";
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
+import InteractiveTreeDiagram from '@/components/InteractiveTreeDiagram';
 
 export default function AdminHomePage() {
+  const [showVineDiagram, setShowVineDiagram] = useState(false);
+
   return (
     <div className="min-h-screen relative">
       <div className="fixed inset-0 -z-10" style={{
@@ -46,8 +49,24 @@ export default function AdminHomePage() {
                Product Data Scraper
              </Link>
           </div>
+          
+          {/* The Nerve Vine Button */}
+          <div className="mt-8 flex justify-center">
+            <button 
+                  onClick={() => setShowVineDiagram(true)}
+                  className="inline-flex flex-col items-center justify-center px-6 py-4 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-white text-gray-700 border-gray-300 hover:bg-amber-50 hover:border-gray-400 hover:text-gray-600 hover:shadow-gray-300 hover:shadow-lg hover:scale-105 text-center">
+              <span className="material-symbols-outlined mb-2">account_tree</span>
+              The Nerve Vine
+            </button>
+          </div>
         </div>
       </div>
+      
+      {/* Interactive Tree Diagram Modal */}
+      <InteractiveTreeDiagram 
+        isOpen={showVineDiagram} 
+        onClose={() => setShowVineDiagram(false)} 
+      />
     </div>
   );
 } 

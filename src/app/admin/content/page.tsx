@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import React from 'react';
 import Link from 'next/link';
+import SymptomTree from '@/components/SymptomTree';
+import IndicationManager from '@/components/IndicationManager';
 
 // TypeScript interfaces
 interface Herb {
@@ -396,6 +398,12 @@ export default function AdminContentPage() {
   const [showIndicationForm, setShowIndicationForm] = useState(false);
   const [indicationFormMode, setIndicationFormMode] = useState<"add" | "edit">("add");
   const [indicationFormData, setIndicationFormData] = useState<Partial<Indication>>({});
+  
+  // Symptom tree integration
+  const [showSymptomTree, setShowSymptomTree] = useState(false);
+  const [treeSelectedSymptom, setTreeSelectedSymptom] = useState<any>(null);
+  const [treeSelectedVariant, setTreeSelectedVariant] = useState<any>(null);
+  const [showIndicationManager, setShowIndicationManager] = useState(false);
 
   // Add format preservation and preview functionality
   const [showPreview, setShowPreview] = useState(false);
@@ -946,6 +954,21 @@ export default function AdminContentPage() {
       });
     }
     setShowIndicationForm(true);
+  }
+
+  // Handle symptom selection from tree
+  function handleSymptomSelect(symptom: any, variant?: any) {
+    setTreeSelectedSymptom(symptom);
+    setTreeSelectedVariant(variant);
+    setShowSymptomTree(false);
+    setShowIndicationManager(true);
+  }
+
+  // Handle indication management
+  function handleManageIndications(symptom: any, variant?: any) {
+    setTreeSelectedSymptom(symptom);
+    setTreeSelectedVariant(variant);
+    setShowIndicationManager(true);
   }
 
   async function handleIndicationFormSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -2650,6 +2673,21 @@ export default function AdminContentPage() {
                       </ul>
                     </div>
                   </div>
+                  
+                  {/* Symptom Tree Button */}
+                  <div className="mt-6 pt-6 border-t border-gray-200">
+                    <h4 className="font-semibold text-gray-800 mb-3 text-base">Advanced Management:</h4>
+                    <p className="text-gray-700 text-sm mb-4">
+                      Use the symptom tree to manage indications by specific symptoms and variants for precise targeting.
+                    </p>
+                    <button
+                      onClick={() => setShowSymptomTree(true)}
+                      className="inline-flex items-center px-4 py-2 rounded-lg font-medium border-2 transition-all duration-200 shadow-sm bg-purple-600 text-white border-transparent hover:bg-purple-700 hover:border-purple-700 hover:shadow-lg hover:scale-105"
+                    >
+                      <span className="material-symbols-outlined mr-2">account_tree</span>
+                      Open Symptom Tree
+                    </button>
+                  </div>
                 </div>
               )}
 
@@ -3168,6 +3206,75 @@ export default function AdminContentPage() {
                   Close Preview
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Symptom Tree Modal */}
+      {showSymptomTree && (
+        <div className="fixed inset-0 flex items-start justify-center z-50 p-4 pt-40" style={{
+          backgroundImage: "url('/images/RoseWPWM.PNG')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}>
+          <div className="absolute inset-0 bg-pink-100 opacity-90"></div>
+          <div className="relative rounded-xl shadow-lg w-full max-w-6xl max-h-[95vh] flex flex-col border-2 border-gray-300 overflow-hidden" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
+            <div className="p-6 border-b border-gray-300 bg-gray-50">
+              <div className="flex items-center justify-between">
+                <button
+                  onClick={() => setShowSymptomTree(false)}
+                  className="text-gray-600 hover:text-gray-800 transition-colors"
+                >
+                  <span className="material-symbols-outlined text-xl">keyboard_backspace</span>
+                </button>
+                <h2 className="text-2xl font-bold text-gray-800 absolute left-1/2 transform -translate-x-1/2">
+                  Symptom Tree - Manage Indications
+                </h2>
+              </div>
+            </div>
+            
+            <div className="p-6 overflow-y-auto flex-1">
+              <SymptomTree
+                onSymptomSelect={handleSymptomSelect}
+                onManageIndications={handleManageIndications}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Indication Manager Modal */}
+      {showIndicationManager && treeSelectedSymptom && (
+        <div className="fixed inset-0 flex items-start justify-center z-50 p-4 pt-40" style={{
+          backgroundImage: "url('/images/RoseWPWM.PNG')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}>
+          <div className="absolute inset-0 bg-pink-100 opacity-90"></div>
+          <div className="relative rounded-xl shadow-lg w-full max-w-4xl max-h-[95vh] flex flex-col border-2 border-gray-300 overflow-hidden" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
+            <div className="p-6 border-b border-gray-300 bg-gray-50">
+              <div className="flex items-center justify-between">
+                <button
+                  onClick={() => setShowIndicationManager(false)}
+                  className="text-gray-600 hover:text-gray-800 transition-colors"
+                >
+                  <span className="material-symbols-outlined text-xl">keyboard_backspace</span>
+                </button>
+                <h2 className="text-2xl font-bold text-gray-800 absolute left-1/2 transform -translate-x-1/2">
+                  Manage Indications
+                </h2>
+              </div>
+            </div>
+            
+            <div className="p-6 overflow-y-auto flex-1">
+              <IndicationManager
+                symptom={treeSelectedSymptom}
+                variant={treeSelectedVariant}
+                onClose={() => setShowIndicationManager(false)}
+              />
             </div>
           </div>
         </div>
