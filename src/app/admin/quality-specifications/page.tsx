@@ -283,26 +283,27 @@ export default function QualitySpecificationsPage() {
   };
 
   return (
-    <div className="min-h-screen p-6 relative" style={{
-      backgroundImage: "url('/images/CapSize.jpg')",
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat',
-    }}>
-      {/* Overlay for readability */}
-      <div className="absolute inset-0 bg-white/50 pointer-events-none" />
-      <div className="relative max-w-6xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Quality Specifications Management
-          </h1>
-          <p className="text-gray-700">
+    <div className="min-h-screen relative">
+      <div className="fixed inset-0 -z-10" style={{
+        backgroundImage: "url('/images/RoseWPWM.PNG')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}>
+        <div className="absolute inset-0 bg-pink-100 opacity-90"></div>
+      </div>
+
+      <div className="relative max-w-6xl mx-auto px-6 pt-8 pb-8">
+        {/* Hero Section */}
+        <div className="rounded-xl p-8 shadow-sm border-2 border-gray-300 mb-8" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
+          <h1 className="text-4xl font-bold text-gray-800 mb-6 text-center">Quality Specifications Management</h1>
+          <p className="text-lg text-gray-700 text-center max-w-3xl mx-auto">
             Define quality criteria for herbs and supplements to ensure only the best products are recommended.
           </p>
         </div>
 
         {/* Form Section */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+        <div className="rounded-xl p-6 shadow-sm border-2 border-gray-300 mb-8" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
           <h2 className="text-2xl font-extrabold mb-4 text-gray-800 tracking-tight drop-shadow">
             {isEditing ? 'Edit Quality Specification' : 'Add New Quality Specification'}
           </h2>
@@ -319,16 +320,16 @@ export default function QualitySpecificationsPage() {
                   onChange={(e) => handleHerbChange(e.target.value)}
                   className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white"
                 >
-                                     <option value="" className="text-gray-900 bg-white">Choose a herb...</option>
-                   {!isLoading && Array.isArray(herbs) && herbs.length > 0 ? herbs.map(herb => (
-                     <option key={herb.id} value={herb.slug} className="text-gray-900 bg-white">
-                       {herb.name} {herb.latinName && `(${herb.latinName})`}
-                     </option>
-                   )) : (
-                     <option value="" className="text-gray-900 bg-white">
-                       {isLoading ? 'Loading herbs...' : 'No herbs available'}
-                     </option>
-                   )}
+                  <option value="" className="text-gray-900 bg-white">Choose a herb...</option>
+                  {!isLoading && Array.isArray(herbs) && herbs.length > 0 ? herbs.map(herb => (
+                    <option key={herb.id} value={herb.slug} className="text-gray-900 bg-white">
+                      {herb.name} {herb.latinName && `(${herb.latinName})`}
+                    </option>
+                  )) : (
+                    <option value="" className="text-gray-900 bg-white">
+                      {isLoading ? 'Loading herbs...' : 'No herbs available'}
+                    </option>
+                  )}
                 </select>
               </div>
 
@@ -341,16 +342,16 @@ export default function QualitySpecificationsPage() {
                   onChange={(e) => handleSupplementChange(e.target.value)}
                   className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white"
                 >
-                                     <option value="" className="text-gray-900 bg-white">Choose a supplement...</option>
-                   {!isLoading && Array.isArray(supplements) && supplements.length > 0 ? supplements.map(supplement => (
-                     <option key={supplement.id} value={supplement.slug} className="text-gray-900 bg-white">
-                       {supplement.name}
-                     </option>
-                   )) : (
-                     <option value="" className="text-gray-900 bg-white">
-                       {isLoading ? 'Loading supplements...' : 'No supplements available'}
-                     </option>
-                   )}
+                  <option value="" className="text-gray-900 bg-white">Choose a supplement...</option>
+                  {!isLoading && Array.isArray(supplements) && supplements.length > 0 ? supplements.map(supplement => (
+                    <option key={supplement.id} value={supplement.slug} className="text-gray-900 bg-white">
+                      {supplement.name}
+                    </option>
+                  )) : (
+                    <option value="" className="text-gray-900 bg-white">
+                      {isLoading ? 'Loading supplements...' : 'No supplements available'}
+                    </option>
+                  )}
                 </select>
               </div>
             </div>
@@ -381,14 +382,14 @@ export default function QualitySpecificationsPage() {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Formulation Name
                 </label>
-                                  <input
-                    type="text"
-                    value={formData.formulationName}
-                    onChange={(e) => handleInputChange('formulationName', e.target.value)}
-                    placeholder="e.g., Strong Traditional Tincture"
-                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white placeholder-gray-500"
-                    required
-                  />
+                <input
+                  type="text"
+                  value={formData.formulationName}
+                  onChange={(e) => handleInputChange('formulationName', e.target.value)}
+                  placeholder="e.g., Strong Traditional Tincture"
+                  className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white placeholder-gray-500"
+                  required
+                />
               </div>
 
               <div>
@@ -413,39 +414,39 @@ export default function QualitySpecificationsPage() {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Required Terms (comma-separated)
                 </label>
-                                  <input
-                    type="text"
-                    value={formData.requiredTerms.join(', ')}
-                    onChange={(e) => handleArrayInputChange('requiredTerms', e.target.value)}
-                    placeholder="e.g., organic, standardized, extract"
-                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white placeholder-gray-500"
-                  />
+                <input
+                  type="text"
+                  value={formData.requiredTerms.join(', ')}
+                  onChange={(e) => handleArrayInputChange('requiredTerms', e.target.value)}
+                  placeholder="e.g., organic, standardized, extract"
+                  className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white placeholder-gray-500"
+                />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Preferred Terms (comma-separated)
                 </label>
-                                  <input
-                    type="text"
-                    value={formData.preferredTerms.join(', ')}
-                    onChange={(e) => handleArrayInputChange('preferredTerms', e.target.value)}
-                    placeholder="e.g., wildcrafted, certified, third-party tested"
-                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white placeholder-gray-500"
-                  />
+                <input
+                  type="text"
+                  value={formData.preferredTerms.join(', ')}
+                  onChange={(e) => handleArrayInputChange('preferredTerms', e.target.value)}
+                  placeholder="e.g., wildcrafted, certified, third-party tested"
+                  className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white placeholder-gray-500"
+                />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Avoid Terms (comma-separated)
                 </label>
-                                  <input
-                    type="text"
-                    value={formData.avoidTerms.join(', ')}
-                    onChange={(e) => handleArrayInputChange('avoidTerms', e.target.value)}
-                    placeholder="e.g., proprietary blend, artificial, synthetic"
-                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white placeholder-gray-500"
-                  />
+                <input
+                  type="text"
+                  value={formData.avoidTerms.join(', ')}
+                  onChange={(e) => handleArrayInputChange('avoidTerms', e.target.value)}
+                  placeholder="e.g., proprietary blend, artificial, synthetic"
+                  className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white placeholder-gray-500"
+                />
               </div>
             </div>
 
@@ -670,7 +671,7 @@ export default function QualitySpecificationsPage() {
             <div className="flex gap-4">
               <button
                 type="submit"
-                className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition font-medium"
+                className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition-all duration-200 font-medium"
               >
                 {isEditing ? 'Update Specification' : 'Add Specification'}
               </button>
@@ -679,7 +680,7 @@ export default function QualitySpecificationsPage() {
                 <button
                   type="button"
                   onClick={resetForm}
-                  className="bg-gray-500 text-white px-6 py-3 rounded-md hover:bg-gray-600 transition font-medium"
+                  className="bg-gray-500 text-white px-6 py-3 rounded-md hover:bg-gray-600 transition-all duration-200 font-medium"
                 >
                   Cancel Edit
                 </button>
@@ -687,7 +688,7 @@ export default function QualitySpecificationsPage() {
                 <button
                   type="button"
                   onClick={resetForm}
-                  className="bg-gray-300 text-gray-700 px-6 py-3 rounded-md hover:bg-gray-400 transition font-medium"
+                  className="bg-gray-300 text-gray-700 px-6 py-3 rounded-md hover:bg-gray-400 transition-all duration-200 font-medium"
                 >
                   Clear Form
                 </button>
@@ -697,7 +698,7 @@ export default function QualitySpecificationsPage() {
         </div>
 
         {/* Specifications List */}
-        <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="rounded-xl p-6 shadow-sm border-2 border-gray-300" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
           <h2 className="text-xl font-semibold mb-4 text-gray-900">Quality Specifications</h2>
           
           <div className="overflow-x-auto">
@@ -724,8 +725,8 @@ export default function QualitySpecificationsPage() {
                   </th>
                 </tr>
               </thead>
-                             <tbody className="bg-white divide-y divide-gray-200">
-                 {Array.isArray(specifications) && specifications.map((spec) => (
+              <tbody className="bg-white divide-y divide-gray-200">
+                {Array.isArray(specifications) && specifications.map((spec) => (
                   <tr key={spec.id}>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-semibold text-gray-900">
@@ -758,7 +759,7 @@ export default function QualitySpecificationsPage() {
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <button
                         onClick={() => handleEdit(spec)}
-                        className="text-blue-600 hover:text-blue-900 mr-2"
+                        className="text-blue-600 hover:text-blue-900 mr-2 transition-all duration-200"
                         title="Edit specification"
                       >
                         Edit
@@ -778,14 +779,14 @@ export default function QualitySpecificationsPage() {
                             `Review Count: ${spec.reviewCountThreshold}+`
                           );
                         }}
-                        className="text-green-600 hover:text-green-900 mr-2"
+                        className="text-green-600 hover:text-green-900 mr-2 transition-all duration-200"
                         title="View details"
                       >
                         View
                       </button>
                       <button
                         onClick={() => handleDelete(spec.id!)}
-                        className="text-red-600 hover:text-red-900"
+                        className="text-red-600 hover:text-red-900 transition-all duration-200"
                         title="Delete specification"
                       >
                         Delete
@@ -802,13 +803,13 @@ export default function QualitySpecificationsPage() {
         <div className="mt-8 flex gap-4">
           <Link
             href="/admin"
-            className="bg-gray-600 text-white px-6 py-3 rounded-md hover:bg-gray-700 transition font-medium"
+            className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-white text-gray-700 border-gray-300 hover:bg-amber-50 hover:border-gray-400 hover:text-gray-600 hover:shadow-gray-300 hover:shadow-lg hover:scale-105"
           >
             Back to Admin
           </Link>
           <Link
             href="/admin/product-hunt"
-            className="bg-green-600 text-white px-6 py-3 rounded-md hover:bg-green-700 transition font-medium"
+            className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-white text-gray-700 border-gray-300 hover:bg-amber-50 hover:border-gray-400 hover:text-gray-600 hover:shadow-gray-300 hover:shadow-lg hover:scale-105"
           >
             Product Hunt Dashboard
           </Link>

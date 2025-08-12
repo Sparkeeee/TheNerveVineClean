@@ -4,31 +4,42 @@ import Link from 'next/link';
 
 export default function AdminHomePage() {
   return (
-    <div
-      className="min-h-screen bg-cover bg-center relative"
-      style={{
-        backgroundImage: "url('/images/Juggling.jpg')",
-      }}
-    >
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-6">
-        <div className="w-full max-w-md mx-auto rounded-lg" style={{background: 'rgba(255,255,255,0.75)'}}>
-          <h1 className="text-4xl font-bold mb-8 text-gray-900 text-center pt-8">Admin Home</h1>
-          <div className="flex flex-col gap-4 w-full max-w-md pb-8 px-8">
-            <Link href="/admin/content" className="bg-green-700 text-white px-6 py-3 rounded shadow hover:bg-green-800 transition font-bold text-lg text-center">
-              Manage Herbs, Supplements & Symptoms
-            </Link>
-            <Link href="/admin/product-hunt" className="bg-blue-700 text-white px-6 py-3 rounded shadow hover:bg-blue-800 transition font-bold text-lg text-center">
-              Go to Product Hunt Dashboard
-            </Link>
-            <Link href="/admin/data-hub" className="bg-purple-700 text-white px-6 py-3 rounded shadow hover:bg-purple-800 transition font-bold text-lg text-center">
-              Data Processing Hub
-            </Link>
-            <Link href="/admin/quality-specifications" className="bg-indigo-700 text-white px-6 py-3 rounded shadow hover:bg-indigo-800 transition font-bold text-lg text-center">
-              Quality Specifications
-            </Link>
-            <Link href="/admin/product-scraper" className="bg-orange-700 text-white px-6 py-3 rounded shadow hover:bg-orange-800 transition font-bold text-lg text-center">
-              Product Data Scraper
-            </Link>
+    <div className="min-h-screen relative">
+      <div className="fixed inset-0 -z-10" style={{
+        backgroundImage: "url('/images/RoseWPWM.PNG')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}>
+        <div className="absolute inset-0 bg-pink-100 opacity-90"></div>
+      </div>
+      
+      <div className="h-12"></div>
+      <div className="relative z-10 flex flex-col items-center p-6">
+        <div className="w-full max-w-6xl mx-auto rounded-xl p-8 shadow-sm border-2 border-gray-300" 
+             style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
+          <h1 className="text-4xl font-bold mb-8 text-gray-800 text-center">Admin Dashboard</h1>
+                     <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 w-full">
+                         <Link href="/admin/content" 
+                   className="inline-flex items-center justify-center px-6 py-4 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-white text-gray-700 border-gray-300 hover:bg-amber-50 hover:border-gray-400 hover:text-gray-600 hover:shadow-gray-300 hover:shadow-lg hover:scale-105 text-center">
+               Manage Herbs, Supplements & Symptoms
+             </Link>
+             <Link href="/admin/product-hunt" 
+                   className="inline-flex items-center justify-center px-6 py-4 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-white text-gray-700 border-gray-300 hover:bg-amber-50 hover:border-gray-400 hover:text-gray-600 hover:shadow-gray-300 hover:shadow-lg hover:scale-105 text-center">
+               Product Hunt Dashboard
+             </Link>
+             <Link href="/admin/data-hub" 
+                   className="inline-flex items-center justify-center px-6 py-4 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-white text-gray-700 border-gray-300 hover:bg-amber-50 hover:border-gray-400 hover:text-gray-600 hover:shadow-gray-300 hover:shadow-lg hover:scale-105 text-center">
+               Data Processing Hub
+             </Link>
+             <Link href="/admin/quality-specifications" 
+                   className="inline-flex items-center justify-center px-6 py-4 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-white text-gray-700 border-gray-300 hover:bg-amber-50 hover:border-gray-400 hover:text-gray-600 hover:shadow-gray-300 hover:shadow-lg hover:scale-105 text-center">
+               Quality Specifications
+             </Link>
+             <Link href="/admin/product-scraper" 
+                   className="inline-flex items-center justify-center px-6 py-4 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-white text-gray-700 border-gray-300 hover:bg-amber-50 hover:border-gray-400 hover:text-gray-600 hover:shadow-gray-300 hover:shadow-lg hover:scale-105 text-center">
+               Product Data Scraper
+             </Link>
           </div>
         </div>
       </div>

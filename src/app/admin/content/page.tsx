@@ -612,11 +612,11 @@ export default function AdminContentPage() {
 
   type FormDataType = HerbForm | SupplementForm | SymptomForm | ProductForm | Record<string, unknown>;
   const [formData, setFormData] = useState<FormDataType>({});
-  const [allSymptoms, setAllSymptoms] = useState<Symptom[]>([]);
   // Add state for allHerbs and allSupplements
   const [allHerbs, setAllHerbs] = useState<Herb[]>([]);
   const [allSupplements, setAllSupplements] = useState<Supplement[]>([]);
   const [allMerchants, setAllMerchants] = useState<Merchant[]>([]);
+
   const [expandedDescriptions, setExpandedDescriptions] = useState<Set<number>>(new Set());
                   const [showBatchImport, setShowBatchImport] = useState(false);
                 const [batchUrls, setBatchUrls] = useState('');
@@ -669,40 +669,18 @@ export default function AdminContentPage() {
       fetchMerchants();
       fetchAllHerbs();
       fetchAllSupplements();
-      fetchSymptoms();
     }
      
   }, [tab]);
 
-  useEffect(() => {
-    if (tab === "Herbs") {
-      fetchSymptoms();
-    }
-     
-  }, [tab]);
+
 
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line
   }, [tab]);
 
-  async function fetchSymptoms() {
-    try {
-      const res = await fetch("/api/symptoms");
-      if (!res.ok) throw new Error("Failed to fetch symptoms");
-      const response = await res.json();
-      // Handle the response structure: { success: true, data: { symptoms: [...], pagination: {...} } }
-      const symptomsArray = response.data?.symptoms || response.symptoms || response || [];
-      if (!Array.isArray(symptomsArray)) {
-        console.error('Symptoms data is not an array:', symptomsArray);
-        setAllSymptoms([]);
-      } else {
-        setAllSymptoms(symptomsArray);
-      }
-    } catch {
-      setAllSymptoms([]);
-    }
-  }
+
 
   async function fetchAllHerbs() {
     try {
@@ -794,7 +772,19 @@ export default function AdminContentPage() {
   async function fetchData() {
     setLoading(true);
     setError("");
-    const url = "/api/" + tab.toLowerCase();
+    
+    // Skip API call for Blog tab since it manages local state
+    if (tab === "Blog") {
+      setLoading(false);
+      return;
+    }
+    
+    // For symptoms, use a high limit to get all data
+    let url = "/api/" + tab.toLowerCase();
+    if (tab === "Symptoms") {
+      url += "?limit=1000";
+    }
+    
     try {
       const res = await fetch(url);
       if (!res.ok) throw new Error("Failed to fetch " + tab);
@@ -820,6 +810,11 @@ export default function AdminContentPage() {
       }
       
       setData(items);
+      
+      // Log when symptoms are fetched
+      if (tab === "Symptoms" && Array.isArray(items)) {
+        console.log(`✅ Fetched ${items.length} symptoms for admin`);
+      }
     } catch (error) {
       console.error('Error fetching data:', error);
       setError('An error occurred');
@@ -970,6 +965,16 @@ export default function AdminContentPage() {
     }
   }
 
+  // Function to generate a slug from a title
+  function generateSlug(title: string): string {
+    return title
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, '') // Remove special characters except spaces and hyphens
+      .replace(/\s+/g, '-') // Replace spaces with hyphens
+      .replace(/-+/g, '-') // Replace multiple hyphens with single hyphen
+      .trim(); // Remove leading/trailing hyphens
+  }
+
   function openAddForm() {
     setFormMode("add");
     if (tab === "Indications") {
@@ -980,6 +985,26 @@ export default function AdminContentPage() {
         color: "blue"
       });
       setShowIndicationForm(true);
+    } else if (tab === "Products") {
+      // Initialize with default values for Products
+      const defaultFormData: Record<string, unknown> = {
+        name: "",
+        description: "",
+        merchantId: "",
+        affiliateLink: "",
+        price: "",
+        currency: "USD",
+        region: "",
+        imageUrl: "",
+        qualityScore: "",
+        affiliateRate: "",
+        affiliateYield: "",
+        selectedHerbs: [],
+        selectedSupplements: [],
+        selectedSymptoms: []
+      };
+      setFormData(defaultFormData);
+      // Don't set showForm to true for Products since we have a separate form
     } else {
       // Initialize with default values for required fields
       const defaultFormData: Record<string, unknown> = {};
@@ -992,18 +1017,7 @@ export default function AdminContentPage() {
         defaultFormData.description = "";
       } else if (tab === "Symptoms") {
         defaultFormData.title = "";
-      } else if (tab === "Products") {
-        defaultFormData.name = "";
-        defaultFormData.description = "";
-        defaultFormData.merchantId = "";
-        defaultFormData.affiliateLink = "";
-        defaultFormData.price = "";
-        defaultFormData.currency = "USD";
-        defaultFormData.region = "";
-        defaultFormData.imageUrl = "";
-        defaultFormData.qualityScore = "";
-        defaultFormData.affiliateRate = "";
-        defaultFormData.affiliateYield = "";
+        defaultFormData.slug = ""; // Will be auto-generated from title
       }
       
       setFormData(defaultFormData);
@@ -1204,6 +1218,53 @@ export default function AdminContentPage() {
       processedData.references = convertReferencesToJson(processedData.references as string);
     }
     
+    // Auto-generate slug for symptoms if not provided
+    if (tab === "Symptoms" && formMode === "add" && !processedData.slug && processedData.title) {
+      let baseSlug = generateSlug(processedData.title as string);
+      let finalSlug = baseSlug;
+      let counter = 1;
+      
+      console.log('🔍 Slug generation debug:');
+      console.log('  - Title:', processedData.title);
+      console.log('  - Base slug:', baseSlug);
+      // Get symptoms from data state for slug uniqueness check
+      const currentSymptoms = tab === "Symptoms" ? (data as Symptom[]) : [];
+      
+      console.log('  - Current symptoms count:', currentSymptoms.length);
+      console.log('  - Existing slugs:', currentSymptoms.map(s => s.slug));
+      
+      // Check if slug already exists and make it unique
+      while (currentSymptoms.some(s => s.slug === finalSlug)) {
+        finalSlug = `${baseSlug}-${counter}`;
+        counter++;
+        console.log(`  - Slug ${baseSlug} exists, trying: ${finalSlug}`);
+      }
+      
+      processedData.slug = finalSlug;
+      console.log('✅ Final generated slug:', finalSlug);
+      
+      // Double-check: fetch fresh data to ensure we have the latest slugs
+      try {
+        console.log('🔄 Fetching fresh symptoms data for final verification...');
+        const freshSymptoms = await fetch('/api/symptoms').then(res => res.json());
+        if (freshSymptoms.success && freshSymptoms.data) {
+          const freshSlugs = freshSymptoms.data.map((s: any) => s.slug);
+          console.log('  - Fresh slugs from API:', freshSlugs);
+          
+          if (freshSlugs.includes(finalSlug)) {
+            console.log('⚠️  WARNING: Fresh API data shows slug still exists!');
+            // Generate a truly unique slug with timestamp
+            const timestamp = Date.now();
+            finalSlug = `${baseSlug}-${timestamp}`;
+            processedData.slug = finalSlug;
+            console.log('✅ Generated timestamped slug:', finalSlug);
+          }
+        }
+      } catch (error) {
+        console.log('⚠️  Could not fetch fresh data, using generated slug:', finalSlug);
+      }
+    }
+    
                 // Convert articles and associatedSymptoms from string to JSON if present (only for symptoms)
             if (tab === "Symptoms") {
               if (processedData.articles && typeof processedData.articles === 'string') {
@@ -1320,61 +1381,61 @@ export default function AdminContentPage() {
   function renderTableHeaders() {
     if (tab === "Herbs") {
       return (
-        <tr>
-          <th className="px-2 py-1 text-xs">Actions</th>
-          <th className="px-2 py-1 text-xs">ID</th>
+        <tr className="bg-gray-100 border-b-2 border-gray-300">
+          <th className="px-3 py-3 text-sm font-semibold text-gray-800">Actions</th>
+          <th className="px-3 py-3 text-sm font-semibold text-gray-800">ID</th>
           {HERB_FIELDS.map((f) => (
-            <th key={f.key} className="px-2 py-1 text-xs">{f.label}</th>
+            <th key={f.key} className="px-3 py-3 text-sm font-semibold text-gray-800">{f.label}</th>
           ))}
         </tr>
       );
     }
     if (tab === "Supplements") {
       return (
-        <tr>
-          <th className="px-2 py-1 text-xs">Actions</th>
-          <th className="px-2 py-1 text-xs">ID</th>
+        <tr className="bg-gray-100 border-b-2 border-gray-300">
+          <th className="px-3 py-3 text-sm font-semibold text-gray-800">Actions</th>
+          <th className="px-3 py-3 text-sm font-semibold text-gray-800">ID</th>
           {SUPPLEMENT_FIELDS.map((f) => (
-            <th key={f.key} className="px-2 py-1 text-xs">{f.label}</th>
+            <th key={f.key} className="px-3 py-3 text-sm font-semibold text-gray-800">{f.label}</th>
           ))}
         </tr>
       );
     }
     if (tab === "Indications") {
       return (
-        <tr>
-          <th className="px-2 py-1 text-xs">Actions</th>
-          <th className="px-2 py-1 text-xs">ID</th>
-          <th className="px-2 py-1 text-xs">Name</th>
-          <th className="px-2 py-1 text-xs">Slug</th>
-          <th className="px-2 py-1 text-xs">Description</th>
-          <th className="px-2 py-1 text-xs">Color</th>
-          <th className="px-2 py-1 text-xs">Associated Herbs</th>
-          <th className="px-2 py-1 text-xs">Associated Supplements</th>
+        <tr className="bg-gray-100 border-b-2 border-gray-300">
+          <th className="px-3 py-3 text-sm font-semibold text-gray-800">Actions</th>
+          <th className="px-3 py-3 text-sm font-semibold text-gray-800">ID</th>
+          <th className="px-3 py-3 text-sm font-semibold text-gray-800">Name</th>
+          <th className="px-3 py-3 text-sm font-semibold text-gray-800">Slug</th>
+          <th className="px-3 py-3 text-sm font-semibold text-gray-800">Description</th>
+          <th className="px-3 py-3 text-sm font-semibold text-gray-800">Color</th>
+          <th className="px-3 py-3 text-sm font-semibold text-gray-800">Associated Herbs</th>
+          <th className="px-3 py-3 text-sm font-semibold text-gray-800">Associated Supplements</th>
         </tr>
       );
     }
     if (tab === "Products") {
       return (
-        <tr>
-          <th className="px-2 py-1 text-xs">Actions</th>
-          <th className="px-2 py-1 text-xs">ID</th>
+        <tr className="bg-gray-100 border-b-2 border-gray-300">
+          <th className="px-3 py-3 text-sm font-semibold text-gray-800">Actions</th>
+          <th className="px-3 py-3 text-sm font-semibold text-gray-800">ID</th>
           {PRODUCT_FIELDS.map((f) => (
-            <th key={f.key} className="px-2 py-1 text-xs">{f.label}</th>
+            <th key={f.key} className="px-3 py-3 text-sm font-semibold text-gray-800">{f.label}</th>
           ))}
-          <th className="px-2 py-1 text-xs">Associated Herbs</th>
-          <th className="px-2 py-1 text-xs">Associated Supplements</th>
-          <th className="px-2 py-1 text-xs">Associated Symptoms</th>
+          <th className="px-3 py-3 text-sm font-semibold text-gray-800">Associated Herbs</th>
+          <th className="px-3 py-3 text-sm font-semibold text-gray-800">Associated Supplements</th>
+          <th className="px-3 py-3 text-sm font-semibold text-gray-800">Associated Symptoms</th>
         </tr>
       );
     }
     // Fallback for other tabs (Symptoms)
     return (
-      <tr>
-        <th className="px-2 py-1 text-xs">Actions</th>
-        <th className="px-2 py-1 text-xs">ID</th>
+      <tr className="bg-gray-100 border-b-2 border-gray-300">
+        <th className="px-3 py-3 text-sm font-semibold text-gray-800">Actions</th>
+        <th className="px-3 py-3 text-sm font-semibold text-gray-800">ID</th>
         {SYMPTOM_FIELDS.map((f) => (
-          <th key={f.key} className="px-2 py-1 text-xs">{f.label}</th>
+          <th key={f.key} className="px-3 py-3 text-sm font-semibold text-gray-800">{f.label}</th>
         ))}
       </tr>
     );
@@ -1397,14 +1458,14 @@ export default function AdminContentPage() {
     const truncatedText = description.length > 100 ? description.substring(0, 100) + '...' : description;
     
     return (
-      <div className="text-xs">
+      <div className="text-sm">
         <span className={isExpanded ? '' : 'line-clamp-2'}>
           {isExpanded ? description : truncatedText}
         </span>
         {description.length > 100 && (
           <button
             onClick={() => toggleDescription(id)}
-            className="ml-2 text-blue-400 hover:text-blue-300 text-xs underline"
+            className="ml-2 text-blue-600 hover:text-blue-700 text-sm underline hover:no-underline"
           >
             {isExpanded ? 'Show less' : 'Show more'}
           </button>
@@ -1416,33 +1477,33 @@ export default function AdminContentPage() {
   function renderTableRow(item: Herb | Supplement | Symptom | Product, index: number) {
     let itemAny: unknown;
     const isEven = index % 2 === 0;
-    const rowBgClass = isEven ? "bg-gray-800" : "bg-gray-900";
+    const rowBgClass = isEven ? "bg-white" : "bg-gray-50";
     
     if (tab === "Herbs") {
       const herbItem = item as Herb;
       return (
-        <tr key={item.id} className={`border-t border-gray-700 ${rowBgClass}`}>
-          <td className="px-2 py-1">
-            <div className="flex gap-1">
+        <tr key={item.id} className={`border-t border-gray-200 ${rowBgClass} hover:bg-gray-100 transition-colors`}>
+          <td className="px-3 py-2">
+            <div className="flex gap-2">
               <button
-                className="px-1.5 py-0.5 bg-blue-500 rounded text-xs hover:bg-blue-600 transition-colors"
+                className="inline-flex items-center px-3 py-1 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-blue-600 text-white border-transparent hover:bg-blue-700 hover:border-blue-700 hover:shadow-lg hover:scale-105 text-xs"
                 onClick={() => openEditForm(item)}
               >
                 Edit
               </button>
               <button
-                className="px-1.5 py-0.5 bg-red-500 rounded text-xs hover:bg-red-600 transition-colors"
+                className="inline-flex items-center px-3 py-1 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-red-600 text-white border-transparent hover:bg-red-700 hover:border-red-700 hover:shadow-lg hover:scale-105 text-xs"
                 onClick={() => handleDelete(item.id)}
               >
                 Delete
               </button>
             </div>
           </td>
-          <td className="px-2 py-1 text-xs">{item.id}</td>
+          <td className="px-3 py-2 text-sm text-gray-700">{item.id}</td>
           {HERB_FIELDS.map((f) => {
             const value = getHerbFieldValue(herbItem, f.key);
             return (
-              <td key={f.key} className="px-2 py-1 text-xs max-w-[180px] truncate">
+              <td key={f.key} className="px-3 py-2 text-sm text-gray-700 max-w-[180px] truncate">
                 {f.key === "name"
                   ? herbItem.name || '—'
                   : (typeof value === "string" || typeof value === "number" || typeof value === "boolean")
@@ -1458,28 +1519,28 @@ export default function AdminContentPage() {
     if (tab === "Supplements") {
       itemAny = item as Supplement;
       return (
-        <tr key={item.id} className={`border-t border-gray-700 ${rowBgClass}`}>
-          <td className="px-2 py-1">
-            <div className="flex gap-1">
+        <tr key={item.id} className={`border-t border-gray-200 ${rowBgClass} hover:bg-gray-100 transition-colors`}>
+          <td className="px-3 py-2">
+            <div className="flex gap-2">
               <button
-                className="px-1.5 py-0.5 bg-blue-500 rounded text-xs hover:bg-blue-600 transition-colors"
+                className="inline-flex items-center px-3 py-1 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-blue-600 text-white border-transparent hover:bg-blue-700 hover:border-blue-700 hover:shadow-lg hover:scale-105 text-xs"
                 onClick={() => openEditForm(item)}
               >
                 Edit
               </button>
               <button
-                className="px-1.5 py-0.5 bg-red-500 rounded text-xs hover:bg-red-600 transition-colors"
+                className="inline-flex items-center px-3 py-1 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-red-600 text-white border-transparent hover:bg-red-700 hover:border-red-700 hover:shadow-lg hover:scale-105 text-xs"
                 onClick={() => handleDelete(item.id)}
               >
                 Delete
               </button>
             </div>
           </td>
-          <td className="px-2 py-1 text-xs">{item.id}</td>
+          <td className="px-3 py-2 text-sm text-gray-700">{item.id}</td>
           {SUPPLEMENT_FIELDS.map((f) => {
             const value = getSupplementFieldValue(itemAny as Supplement, f.key);
             return (
-              <td key={f.key} className="px-2 py-1 text-xs max-w-[180px] truncate">
+              <td key={f.key} className="px-3 py-2 text-sm text-gray-700 max-w-[180px] truncate">
                 {(typeof value === "string" || typeof value === "number" || typeof value === "boolean")
                   ? value
                   : value === true ? 'Yes' : value === false ? 'No' : '—'}
@@ -1492,38 +1553,30 @@ export default function AdminContentPage() {
     if (tab === "Indications") {
       const indicationItem = item as Indication;
       return (
-        <tr key={item.id} className={`border-t border-gray-700 ${rowBgClass}`}>
-          <td className="px-2 py-1">
-            <div className="flex gap-1">
+        <tr key={item.id} className={`border-t border-gray-200 ${rowBgClass} hover:bg-gray-100 transition-colors`}>
+          <td className="px-3 py-2">
+            <div className="flex gap-2">
               <button
-                className="px-1.5 py-0.5 bg-blue-500 rounded text-xs hover:bg-blue-600 transition-colors"
+                className="inline-flex items-center px-3 py-1 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-blue-600 text-white border-transparent hover:bg-blue-700 hover:border-blue-700 hover:shadow-lg hover:scale-105 text-xs"
                 onClick={() => openIndicationForm("edit", indicationItem)}
               >
                 Edit
               </button>
               <button
-                className="px-1.5 py-0.5 bg-red-500 rounded text-xs hover:bg-red-600 transition-colors"
+                className="inline-flex items-center px-3 py-1 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-red-600 text-white border-transparent hover:bg-red-700 hover:border-red-700 hover:shadow-lg hover:scale-105 text-xs"
                 onClick={() => handleIndicationDelete(item.id)}
               >
                 Delete
               </button>
             </div>
           </td>
-          <td className="px-2 py-1 text-xs">{item.id}</td>
-          <td className="px-2 py-1 text-xs">
-            <div className="flex items-center gap-2">
-              <span className="font-semibold">{indicationItem.name}</span>
-              <div 
-                className={`w-3 h-3 rounded-full bg-${indicationItem.color || 'blue'}-500`}
-                style={{ backgroundColor: indicationItem.color || '#3b82f6' }}
-              ></div>
-            </div>
-          </td>
-          <td className="px-2 py-1 text-xs text-gray-400">{indicationItem.slug}</td>
-          <td className="px-2 py-1 text-xs max-w-[200px] truncate">
+          <td className="px-3 py-2 text-sm text-gray-700">{item.id}</td>
+          <td className="px-3 py-2 text-sm text-gray-700">{indicationItem.name}</td>
+          <td className="px-3 py-2 text-sm text-gray-700">{indicationItem.slug}</td>
+          <td className="px-3 py-2 text-sm text-gray-700 max-w-[200px] truncate">
             {renderDescription(indicationItem.description, item.id)}
           </td>
-          <td className="px-2 py-1 text-xs">
+          <td className="px-3 py-2 text-sm text-gray-700">
             <div className="flex items-center gap-2">
               <div 
                 className={`w-4 h-4 rounded-full bg-${indicationItem.color || 'blue'}-500`}
@@ -1532,7 +1585,7 @@ export default function AdminContentPage() {
               <span className="capitalize">{indicationItem.color || 'blue'}</span>
             </div>
           </td>
-          <td className="px-2 py-1 text-xs">
+          <td className="px-3 py-2 text-sm text-gray-700">
             {indicationItem.herbs && indicationItem.herbs.length > 0 ? (
               <div className="max-w-[150px]">
                 <div className="font-semibold text-green-300">{indicationItem.herbs.length} herb(s)</div>
@@ -1549,7 +1602,7 @@ export default function AdminContentPage() {
               <span className="text-gray-500">No herbs</span>
             )}
           </td>
-          <td className="px-2 py-1 text-xs">
+          <td className="px-3 py-2 text-sm text-gray-700">
             {indicationItem.supplements && indicationItem.supplements.length > 0 ? (
               <div className="max-w-[150px]">
                 <div className="font-semibold text-blue-300">{indicationItem.supplements.length} supplement(s)</div>
@@ -1572,28 +1625,28 @@ export default function AdminContentPage() {
     if (tab === "Products") {
       const productItem = item as Product;
       return (
-        <tr key={item.id} className={`border-t border-gray-700 ${rowBgClass}`}>
-          <td className="px-2 py-1">
-            <div className="flex gap-1">
+        <tr key={item.id} className={`border-t border-gray-200 ${rowBgClass} hover:bg-gray-100 transition-colors`}>
+          <td className="px-3 py-2">
+            <div className="flex gap-2">
               <button
-                className="px-1.5 py-0.5 bg-blue-500 rounded text-xs hover:bg-blue-600 transition-colors"
+                className="inline-flex items-center px-3 py-1 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-blue-600 text-white border-transparent hover:bg-blue-700 hover:border-blue-700 hover:shadow-lg hover:scale-105 text-xs"
                 onClick={() => openEditForm(item)}
               >
                 Edit
               </button>
               <button
-                className="px-1.5 py-0.5 bg-red-500 rounded text-xs hover:bg-red-600 transition-colors"
+                className="inline-flex items-center px-3 py-1 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-red-600 text-white border-transparent hover:bg-red-700 hover:border-red-700 hover:shadow-lg hover:scale-105 text-xs"
                 onClick={() => handleDelete(item.id)}
               >
                 Delete
               </button>
             </div>
           </td>
-          <td className="px-2 py-1 text-xs">{item.id}</td>
+          <td className="px-3 py-2 text-sm text-gray-700">{item.id}</td>
           {PRODUCT_FIELDS.map((f) => {
             const value = getProductFieldValue(productItem, f.key);
             return (
-              <td key={f.key} className="px-2 py-1 text-xs max-w-[180px] truncate">
+              <td key={f.key} className="px-3 py-2 text-sm text-gray-700 max-w-[180px] truncate">
                 {f.key === "name"
                   ? productItem.name || '—'
                   : f.key === "merchantId"
@@ -1610,7 +1663,7 @@ export default function AdminContentPage() {
               </td>
             );
           })}
-          <td className="px-2 py-1 text-xs">
+          <td className="px-3 py-2 text-sm text-gray-700">
             {productItem.herbs && productItem.herbs.length > 0 ? (
               <div className="max-w-[150px]">
                 <div className="font-semibold text-green-300">{productItem.herbs.length} herb(s)</div>
@@ -1627,7 +1680,7 @@ export default function AdminContentPage() {
               <span className="text-gray-500">No herbs</span>
             )}
           </td>
-          <td className="px-2 py-1 text-xs">
+          <td className="px-3 py-2 text-sm text-gray-700">
             {productItem.supplements && productItem.supplements.length > 0 ? (
               <div className="max-w-[150px]">
                 <div className="font-semibold text-blue-300">{productItem.supplements.length} supplement(s)</div>
@@ -1644,7 +1697,7 @@ export default function AdminContentPage() {
               <span className="text-gray-500">No supplements</span>
             )}
           </td>
-          <td className="px-2 py-1 text-xs">
+          <td className="px-3 py-2 text-sm text-gray-700">
             {productItem.symptoms && productItem.symptoms.length > 0 ? (
               <div className="max-w-[150px]">
                 <div className="font-semibold text-purple-300">{productItem.symptoms.length} symptom(s)</div>
@@ -1668,34 +1721,34 @@ export default function AdminContentPage() {
     const symptomItem = item as Symptom;
     
     return (
-      <tr key={item.id} className={`border-t border-gray-700 ${rowBgClass}`}>
-        <td className="px-2 py-1">
-          <div className="flex gap-1">
+      <tr key={item.id} className={`border-t border-gray-200 ${rowBgClass} hover:bg-gray-100 transition-colors`}>
+        <td className="px-3 py-2">
+          <div className="flex gap-2">
             <button
-              className="px-1.5 py-0.5 bg-blue-500 rounded text-xs hover:bg-blue-600 transition-colors"
+              className="inline-flex items-center px-3 py-1 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-blue-600 text-white border-transparent hover:bg-blue-700 hover:border-blue-700 hover:shadow-lg hover:scale-105 text-xs"
               onClick={() => openEditForm(item)}
             >
               Edit
             </button>
-                    <button
-          className="px-1.5 py-0.5 bg-red-500 rounded text-xs hover:bg-red-600 transition-colors"
-          onClick={() => handleDelete(item.id)}
-        >
-          Delete
-        </button>
-        <button
-          className="px-1.5 py-0.5 bg-green-500 rounded text-xs hover:bg-green-600 transition-colors"
-          onClick={() => openVariantModal(symptomItem)}
-        >
-          Variants
-        </button>
+            <button
+              className="inline-flex items-center px-3 py-1 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-red-600 text-white border-transparent hover:bg-red-700 hover:border-red-700 hover:shadow-lg hover:scale-105 text-xs"
+              onClick={() => handleDelete(item.id)}
+            >
+              Delete
+            </button>
+            <button
+              className="inline-flex items-center px-3 py-1 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-green-600 text-white border-transparent hover:bg-green-700 hover:border-green-700 hover:shadow-lg hover:scale-105 text-xs"
+              onClick={() => openVariantModal(symptomItem)}
+            >
+              Variants
+            </button>
           </div>
         </td>
-        <td className="px-2 py-1 text-xs">{item.id}</td>
+        <td className="px-3 py-2 text-sm text-gray-700">{item.id}</td>
         {SYMPTOM_FIELDS.map((f) => {
           const value = getSymptomFieldValue(symptomItem, f.key);
           return (
-            <td key={f.key} className="px-2 py-1 text-xs max-w-[180px] truncate">
+            <td key={f.key} className="px-3 py-2 text-sm text-gray-700 max-w-[180px] truncate">
               {f.key === "title"
                 ? symptomItem.title || '—'
                 : f.key === "description"
@@ -1722,23 +1775,23 @@ export default function AdminContentPage() {
           if (f.key === "description" || f.key === "cautions" || f.key === "references" || f.key === "comprehensiveArticle") {
             return (
               <div className="mb-4" key={f.key}>
-                <label className="block mb-1">{f.label}{f.required && <span className="text-red-400">*</span>}</label>
+                <label className="block mb-1 text-gray-700 font-semibold">{f.label}{f.required && <span className="text-red-500">*</span>}</label>
                                   <textarea
-                    className={`w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600 ${f.key === 'description' || f.key === 'references' || f.key === 'comprehensiveArticle' ? 'h-64' : ''}`}
+                    className={`w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${f.key === 'description' || f.key === 'references' || f.key === 'comprehensiveArticle' ? 'h-64' : ''}`}
                     value={f.key === 'references' ? (typeof herbForm[f.key] === 'string' ? herbForm[f.key] : '') : (typeof herbForm[f.key] === 'string' ? herbForm[f.key] : '')}
                     onChange={e => setFormData({ ...herbForm, [f.key]: e.target.value })}
-                    placeholder={f.key === 'references' ? 'Enter references separated by commas or numbered format (e.g., &quot;1. Study A, 2. Study B&quot;)' : f.key === 'comprehensiveArticle' ? 'Enter comprehensive article content in Markdown format...' : undefined}
+                    placeholder={f.key === 'references' ? 'Enter references separated by commas or numbered format (e.g., "1. Study A, 2. Study B")' : f.key === 'comprehensiveArticle' ? 'Enter comprehensive article content in Markdown format...' : undefined}
                   />
                 <button
                   type="button"
-                  className="mt-2 px-3 py-1 rounded bg-green-600 text-white hover:bg-green-700 mr-2"
+                  className="mt-2 inline-flex items-center px-4 py-2 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-green-600 text-white border-transparent hover:bg-green-700 hover:border-green-700 hover:shadow-lg hover:scale-105 mr-2"
                   onClick={() => document.getElementById(`herb-file-${f.key}`)?.click()}
                 >
                   Import from File
                 </button>
                 <button
                   type="button"
-                  className="mt-2 px-3 py-1 rounded bg-blue-600 text-white hover:bg-blue-700"
+                  className="mt-2 inline-flex items-center px-4 py-2 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-blue-600 text-white border-transparent hover:bg-blue-700 hover:border-blue-700 hover:shadow-lg hover:scale-105"
                   onClick={showContentPreview}
                 >
                   Preview
@@ -1754,16 +1807,16 @@ export default function AdminContentPage() {
                     await handleFileUploadWithPreservation(file, f.key);
                   }}
                 />
-                <span className="text-xs text-gray-400">Upload .txt, .html, or .md to import content</span>
+                <span className="text-xs text-gray-600 mt-2 block">Upload .txt, .html, or .md to import content</span>
                 {f.key === 'references' && (
-                  <div className="mt-2 text-xs text-gray-400">
+                  <div className="mt-2 text-xs text-gray-600 bg-gray-50 p-3 rounded-lg border border-gray-200">
                     <p>Enter references separated by commas or numbered format. The system will automatically detect reference types (journal, book, doi, study).</p>
-                    <p className="mt-1">Example format: &quot;1. Study A, 2. Study B&quot; or &quot;Journal Article•DOI 1. Study A, 2. Study B&quot;</p>
+                    <p className="mt-1">Example format: "1. Study A, 2. Study B" or "Journal Article•DOI 1. Study A, 2. Study B"</p>
                   </div>
                 )}
                 {f.key === 'comprehensiveArticle' && (
-                  <div className="mt-2 text-xs text-gray-400">
-                    <p>This content will appear in the &quot;View Here&quot; modal and &quot;Full Page View&quot; for comprehensive scientific research.</p>
+                  <div className="mt-2 text-xs text-gray-600 bg-gray-50 p-3 rounded-lg border border-gray-200">
+                    <p>This content will appear in the "View Here" modal and "Full Page View" for comprehensive scientific research.</p>
                     <p className="mt-1">Use Markdown format: # Headers, **bold**, - lists, etc. Include the main title in the content.</p>
                   </div>
                 )}
@@ -1772,9 +1825,9 @@ export default function AdminContentPage() {
           }
           return (
             <div className="mb-4" key={f.key}>
-              <label className="block mb-1">{f.label}{f.required && <span className="text-red-400">*</span>}</label>
+              <label className="block mb-1 text-gray-700 font-semibold">{f.label}{f.required && <span className="text-red-500">*</span>}</label>
               <input
-                className="w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
+                className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 value={String(herbForm[f.key] ?? '')}
                 onChange={e => setFormData({ ...herbForm, [f.key]: e.target.value })}
                 required={!!f.required}
@@ -1792,23 +1845,23 @@ export default function AdminContentPage() {
           if (f.key === "description" || f.key === "cautions" || f.key === "references" || f.key === "comprehensiveArticle") {
             return (
               <div className="mb-4" key={f.key}>
-                <label className="block mb-1">{f.label}{f.required && <span className="text-red-400">*</span>}</label>
+                <label className="block mb-1 text-gray-700 font-semibold">{f.label}{f.required && <span className="text-red-500">*</span>}</label>
                                   <textarea
-                    className={`w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600 ${f.key === 'description' || f.key === 'references' || f.key === 'comprehensiveArticle' ? 'h-64' : ''}`}
+                    className={`w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${f.key === 'description' || f.key === 'references' || f.key === 'comprehensiveArticle' ? 'h-64' : ''}`}
                     value={f.key === 'references' ? (typeof supplementForm[f.key] === 'string' ? supplementForm[f.key] : '') : (typeof supplementForm[f.key] === 'string' ? supplementForm[f.key] : '')}
                     onChange={e => setFormData({ ...supplementForm, [f.key]: e.target.value })}
-                    placeholder={f.key === 'references' ? 'Enter references separated by commas or numbered format (e.g., &quot;1. Study A, 2. Study B&quot;)' : f.key === 'comprehensiveArticle' ? 'Enter comprehensive article content in Markdown format...' : undefined}
+                    placeholder={f.key === 'references' ? 'Enter references separated by commas or numbered format (e.g., "1. Study A, 2. Study B")' : f.key === 'comprehensiveArticle' ? 'Enter comprehensive article content in Markdown format...' : undefined}
                   />
                 <button
                   type="button"
-                  className="mt-2 px-3 py-1 rounded bg-green-600 text-white hover:bg-green-700 mr-2"
+                  className="mt-2 inline-flex items-center px-4 py-2 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-green-600 text-white border-transparent hover:bg-green-700 hover:border-green-700 hover:shadow-lg hover:scale-105 mr-2"
                   onClick={() => document.getElementById(`supplement-file-${f.key}`)?.click()}
                 >
                   Import from File
                 </button>
                 <button
                   type="button"
-                  className="mt-2 px-3 py-1 rounded bg-blue-600 text-white hover:bg-blue-700"
+                  className="mt-2 inline-flex items-center px-4 py-2 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-blue-600 text-white border-transparent hover:bg-blue-700 hover:border-blue-700 hover:shadow-lg hover:scale-105"
                   onClick={showContentPreview}
                 >
                   Preview
@@ -1824,16 +1877,16 @@ export default function AdminContentPage() {
                     await handleFileUploadWithPreservation(file, f.key);
                   }}
                 />
-                <span className="text-xs text-gray-400">Upload .txt, .html, or .md to import content</span>
+                <span className="text-xs text-gray-600 mt-2 block">Upload .txt, .html, or .md to import content</span>
                 {f.key === 'references' && (
-                  <div className="mt-2 text-xs text-gray-400">
+                  <div className="mt-2 text-xs text-gray-600 bg-gray-50 p-3 rounded-lg border border-gray-200">
                     <p>Enter references separated by commas or numbered format. The system will automatically detect reference types (journal, book, doi, study).</p>
-                    <p className="mt-1">Example format: &quot;1. Study A, 2. Study B&quot; or &quot;Journal Article•DOI 1. Study A, 2. Study B&quot;</p>
+                    <p className="mt-1">Example format: "1. Study A, 2. Study B" or "Journal Article•DOI 1. Study A, 2. Study B"</p>
                   </div>
                 )}
                 {f.key === 'comprehensiveArticle' && (
-                  <div className="mt-2 text-xs text-gray-400">
-                    <p>This content will appear in the &quot;View Here&quot; modal and &quot;Full Page View&quot; for comprehensive scientific research.</p>
+                  <div className="mt-2 text-xs text-gray-600 bg-gray-50 p-3 rounded-lg border border-gray-200">
+                    <p>This content will appear in the "View Here" modal and "Full Page View" for comprehensive scientific research.</p>
                     <p className="mt-1">Use Markdown format: # Headers, **bold**, - lists, etc. Include the main title in the content.</p>
                   </div>
                 )}
@@ -1843,9 +1896,9 @@ export default function AdminContentPage() {
 
           return (
             <div className="mb-4" key={f.key}>
-              <label className="block mb-1">{f.label}{f.required && <span className="text-red-400">*</span>}</label>
+              <label className="block mb-1 text-gray-700 font-semibold">{f.label}{f.required && <span className="text-red-500">*</span>}</label>
               <input
-                className="w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
+                className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 value={String(supplementForm[f.key] ?? '')}
                 onChange={e => setFormData({ ...supplementForm, [f.key]: e.target.value })}
                 required={!!f.required}
@@ -1855,11 +1908,11 @@ export default function AdminContentPage() {
         })}
         {((tab as string) === "Herbs" || (tab as string) === "Supplements") && (
           <div className="mb-4">
-            <label className="block mb-1">Product Formulations</label>
+            <label className="block mb-1 text-gray-700 font-semibold">Product Formulations</label>
             {(supplementForm.productFormulations || []).map((form: ProductFormulation, index: number) => (
-              <div key={index} className="border border-gray-600 rounded p-3 mb-2 bg-gray-900">
+              <div key={index} className="border border-gray-300 rounded-lg p-4 mb-3 bg-gray-50">
                 <input
-                  className="w-full p-2 mb-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
+                  className="w-full p-3 mb-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Name"
                   value={form.name || ""}
                   onChange={e => {
@@ -1869,7 +1922,7 @@ export default function AdminContentPage() {
                   }}
                 />
                 <input
-                  className="w-full p-2 mb-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
+                  className="w-full p-3 mb-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Type (e.g. tincture, extract, cream)"
                   value={form.type || ""}
                   onChange={e => {
@@ -1879,7 +1932,7 @@ export default function AdminContentPage() {
                   }}
                 />
                 <input
-                  className="w-full p-2 mb-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
+                  className="w-full p-3 mb-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Affiliate Link"
                   value={form.affiliateLink || ""}
                   onChange={e => {
@@ -1889,7 +1942,7 @@ export default function AdminContentPage() {
                   }}
                 />
                 <input
-                  className="w-full p-2 mb-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
+                  className="w-full p-3 mb-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Price"
                   value={form.price || ""}
                   onChange={e => {
@@ -1899,7 +1952,7 @@ export default function AdminContentPage() {
                   }}
                 />
                 <input
-                  className="w-full p-2 mb-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
+                  className="w-full p-3 mb-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Quality Criteria (free text)"
                   value={form.qualityCriteria || ""}
                   onChange={e => {
@@ -1909,7 +1962,7 @@ export default function AdminContentPage() {
                   }}
                 />
                 <input
-                  className="w-full p-2 mb-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
+                  className="w-full p-3 mb-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Tags (comma separated, e.g. organic, >4 stars)"
                   value={Array.isArray(form.tags) ? form.tags.join(', ') : ''}
                   onChange={e => {
@@ -1920,7 +1973,7 @@ export default function AdminContentPage() {
                 />
                 <button
                   type="button"
-                  className="px-2 py-1 bg-red-700 rounded hover:bg-red-800 text-xs"
+                  className="inline-flex items-center px-3 py-2 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-red-600 text-white border-transparent hover:bg-red-700 hover:border-red-700 hover:shadow-lg hover:scale-105 text-sm"
                   onClick={() => {
                     const arr = [...(supplementForm.productFormulations || [])];
                     arr.splice(index, 1);
@@ -1931,7 +1984,7 @@ export default function AdminContentPage() {
             ))}
             <button
               type="button"
-              className="px-3 py-1 bg-green-700 rounded hover:bg-green-800 text-xs mt-2"
+              className="inline-flex items-center px-4 py-2 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-green-600 text-white border-transparent hover:bg-green-700 hover:border-green-700 hover:shadow-lg hover:scale-105 text-sm"
               onClick={() => setFormData({ ...supplementForm, productFormulations: [...(supplementForm.productFormulations || []), { type: '', qualityCriteria: '', tags: [], affiliateLink: '', price: '', name: '' }] })}
             >+ Add Product Formulation</button>
           </div>
@@ -1946,23 +1999,23 @@ export default function AdminContentPage() {
           if (f.key === "description" || f.key === "cautions" || f.key === "references" || f.key === "comprehensiveArticle") {
             return (
               <div className="mb-4" key={f.key}>
-                <label className="block mb-1">{f.label}{f.required && <span className="text-red-400">*</span>}</label>
+                <label className="block mb-1 text-gray-700 font-semibold">{f.label}{f.required && <span className="text-red-500">*</span>}</label>
                                   <textarea
-                    className={`w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600 ${f.key === 'description' || f.key === 'references' || f.key === 'comprehensiveArticle' ? 'h-64' : ''}`}
+                    className={`w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${f.key === 'description' || f.key === 'references' || f.key === 'comprehensiveArticle' ? 'h-64' : ''}`}
                     value={f.key === 'references' ? (typeof symptomForm[f.key] === 'string' ? symptomForm[f.key] : '') : (typeof symptomForm[f.key] === 'string' ? symptomForm[f.key] : '')}
                     onChange={e => setFormData({ ...symptomForm, [f.key]: e.target.value })}
-                    placeholder={f.key === 'references' ? 'Enter references separated by commas or numbered format (e.g., &quot;1. Study A, 2. Study B&quot;)' : f.key === 'comprehensiveArticle' ? 'Enter comprehensive article content in Markdown format...' : undefined}
+                    placeholder={f.key === 'references' ? 'Enter references separated by commas or numbered format (e.g., "1. Study A, 2. Study B")' : f.key === 'comprehensiveArticle' ? 'Enter comprehensive article content in Markdown format...' : undefined}
                   />
                 <button
                   type="button"
-                  className="mt-2 px-3 py-1 rounded bg-green-600 text-white hover:bg-green-700 mr-2"
+                  className="mt-2 inline-flex items-center px-4 py-2 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-green-600 text-white border-transparent hover:bg-green-700 hover:border-green-700 hover:shadow-lg hover:scale-105 mr-2"
                   onClick={() => document.getElementById(`symptom-file-${f.key}`)?.click()}
                 >
                   Import from File
                 </button>
                 <button
                   type="button"
-                  className="mt-2 px-3 py-1 rounded bg-blue-600 text-white hover:bg-blue-700"
+                  className="mt-2 inline-flex items-center px-4 py-2 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-blue-600 text-white border-transparent hover:bg-blue-700 hover:border-blue-700 hover:shadow-lg hover:scale-105"
                   onClick={showContentPreview}
                 >
                   Preview
@@ -1978,16 +2031,16 @@ export default function AdminContentPage() {
                     await handleFileUploadWithPreservation(file, f.key);
                   }}
                 />
-                <span className="text-xs text-gray-400">Upload .txt, .html, or .md to import content</span>
+                <span className="text-xs text-gray-600 mt-2 block">Upload .txt, .html, or .md to import content</span>
                 {f.key === 'references' && (
-                  <div className="mt-2 text-xs text-gray-400">
+                  <div className="mt-2 text-xs text-gray-600 bg-gray-50 p-3 rounded-lg border border-gray-200">
                     <p>Enter references separated by commas or numbered format. The system will automatically detect reference types (journal, book, doi, study).</p>
-                    <p className="mt-1">Example format: &quot;1. Study A, 2. Study B&quot; or &quot;Journal Article•DOI 1. Study A, 2. Study B&quot;</p>
+                    <p className="mt-1">Example format: "1. Study A, 2. Study B" or "Journal Article•DOI 1. Study A, 2. Study B"</p>
                   </div>
                 )}
                 {f.key === 'comprehensiveArticle' && (
-                  <div className="mt-2 text-xs text-gray-400">
-                    <p>This content will appear in the &quot;View Here&quot; modal and &quot;Full Page View&quot; for comprehensive scientific research.</p>
+                  <div className="mt-2 text-xs text-gray-600 bg-gray-50 p-3 rounded-lg border border-gray-200">
+                    <p>This content will appear in the "View Here" modal and "Full Page View" for comprehensive scientific research.</p>
                     <p className="mt-1">Use Markdown format: # Headers, **bold**, - lists, etc. Include the main title in the content.</p>
                   </div>
                 )}
@@ -1996,9 +2049,9 @@ export default function AdminContentPage() {
           }
           return (
             <div className="mb-4" key={f.key}>
-              <label className="block mb-1">{f.label}{f.required && <span className="text-red-400">*</span>}</label>
+              <label className="block mb-1 text-gray-700 font-semibold">{f.label}{f.required && <span className="text-red-500">*</span>}</label>
               <input
-                className="w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
+                className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 value={String(symptomForm[f.key] ?? '')}
                 onChange={e => setFormData({ ...symptomForm, [f.key]: e.target.value })}
                 required={!!f.required}
@@ -2053,57 +2106,74 @@ export default function AdminContentPage() {
       return (
         <>
           {/* Help text */}
-          <div className="mb-6 p-4 bg-blue-900/20 border border-blue-700 rounded-lg">
-            <h3 className="text-blue-300 font-semibold mb-2">How to Use Indications</h3>
-            <p className="text-blue-200 text-sm mb-2">
-              Indications are tags that describe what herbs and supplements are used for (e.g., &quot;Stress&quot;, &quot;Anxiety&quot;, &quot;Insomnia&quot;). 
-              They help users find relevant products and create a consistent tagging system across your site.
+          <div className="mb-6 p-6 bg-gray-50 border-2 border-gray-300 rounded-xl shadow-sm">
+            <h3 className="text-gray-800 font-semibold mb-3 text-lg">What are Indications?</h3>
+            <p className="text-gray-700 text-base mb-4">
+              Indications are tags that describe what herbs and supplements are used for. They help users find relevant products 
+              and create a consistent tagging system across your site.
             </p>
-            <p className="text-blue-200 text-sm">
-              <strong>Examples:</strong> Stress, Anxiety, Sleep, Focus, Energy, Mood, Pain Relief, Digestive Support
-            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-base">
+              <div>
+                <h4 className="font-semibold text-gray-800 mb-2">Examples:</h4>
+                <ul className="text-gray-700 space-y-2">
+                  <li>• Stress, Anxiety, Sleep Support</li>
+                  <li>• Focus, Memory, Cognitive Health</li>
+                  <li>• Energy, Vitality, Fatigue</li>
+                  <li>• Pain Relief, Inflammation</li>
+                </ul>
+              </div>
+              <div>
+                <h4 className="font-semibold text-gray-800 mb-2">How to Use:</h4>
+                <ul className="text-gray-700 space-y-2">
+                  <li>• Create indications here first</li>
+                  <li>• Then assign them to herbs/supplements</li>
+                  <li>• They appear as colored tags on cards</li>
+                  <li>• Users can click tags to see related items</li>
+                </ul>
+              </div>
+            </div>
           </div>
 
           <div className="mb-4">
-            <label className="block mb-1">Name *</label>
+            <label className="block mb-1 text-gray-700 font-semibold">Name *</label>
             <input
-              className="w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
+              className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               value={indicationForm.name || ""}
               onChange={e => setFormData({ ...indicationForm, name: e.target.value })}
               placeholder="e.g., Stress, Anxiety, Sleep Support"
               required
             />
-            <p className="text-xs text-gray-400 mt-1">The display name for this indication tag</p>
+            <p className="text-xs text-gray-500 mt-1">The display name for this indication tag</p>
           </div>
 
           <div className="mb-4">
-            <label className="block mb-1">Slug *</label>
+            <label className="block mb-1 text-gray-700 font-semibold">Slug *</label>
             <input
-              className="w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
+              className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               value={indicationForm.slug || ""}
               onChange={e => setFormData({ ...indicationForm, slug: e.target.value })}
               placeholder="e.g., stress, anxiety, sleep-support"
               required
             />
-            <p className="text-xs text-gray-400 mt-1">URL-friendly version of the name (lowercase, hyphens instead of spaces)</p>
+            <p className="text-xs text-gray-500 mt-1">URL-friendly version of the name (lowercase, hyphens instead of spaces)</p>
           </div>
 
           <div className="mb-4">
-            <label className="block mb-1">Description</label>
+            <label className="block mb-1 text-gray-700 font-semibold">Description</label>
             <textarea
-              className="w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
+              className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               rows={3}
               value={indicationForm.description || ""}
               onChange={e => setFormData({ ...indicationForm, description: e.target.value })}
               placeholder="Brief description of what this indication covers..."
             />
-            <p className="text-xs text-gray-400 mt-1">Optional description to help clarify what this indication means</p>
+            <p className="text-xs text-gray-500 mt-1">Optional description to help clarify what this indication means</p>
           </div>
 
           <div className="mb-6">
-            <label className="block mb-1">Color</label>
+            <label className="block mb-1 text-gray-700 font-semibold">Color</label>
             <select
-              className="w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
+              className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               value={indicationForm.color || "blue"}
               onChange={e => setFormData({ ...indicationForm, color: e.target.value })}
             >
@@ -2118,43 +2188,43 @@ export default function AdminContentPage() {
               <option value="orange">Orange (Immune, Energy)</option>
               <option value="teal">Teal (Detox, Cleansing)</option>
             </select>
-            <p className="text-xs text-gray-400 mt-1">Color used for this indication tag on the website</p>
+            <p className="text-xs text-gray-500 mt-1">Color used for this indication tag on the website</p>
           </div>
 
           {/* Show associated herbs and supplements if editing */}
           {indicationFormMode === "edit" && indicationForm.id && (
             <>
               <div className="mb-4">
-                <label className="block mb-2 font-semibold text-gray-200">Associated Herbs</label>
-                <div className="max-h-32 overflow-y-auto border border-gray-600 rounded p-2 bg-gray-900">
+                <label className="block mb-2 font-semibold text-gray-700">Associated Herbs</label>
+                <div className="max-h-32 overflow-y-auto border border-gray-300 rounded-lg p-3 bg-gray-50">
                   {indicationForm.herbs && indicationForm.herbs.length > 0 ? (
                     indicationForm.herbs.map((herb) => (
                       <div key={herb.id} className="flex items-center justify-between mb-1">
-                        <span className="text-gray-200">{herb.name}</span>
-                        <span className="text-xs text-gray-400">{herb.latinName}</span>
+                        <span className="text-gray-700">{herb.name}</span>
+                        <span className="text-xs text-gray-500">{herb.latinName}</span>
                       </div>
                     ))
                   ) : (
-                    <div className="text-gray-400 text-sm">No herbs associated with this indication yet</div>
+                    <div className="text-gray-500 text-sm">No herbs associated with this indication yet</div>
                   )}
                 </div>
-                <p className="text-xs text-gray-400 mt-1">Herbs that use this indication tag</p>
+                <p className="text-xs text-gray-500 mt-1">Herbs that use this indication tag</p>
               </div>
 
               <div className="mb-4">
-                <label className="block mb-2 font-semibold text-gray-200">Associated Supplements</label>
-                <div className="max-h-32 overflow-y-auto border border-gray-600 rounded p-2 bg-gray-900">
+                <label className="block mb-2 font-semibold text-gray-700">Associated Supplements</label>
+                <div className="max-h-32 overflow-y-auto border border-gray-300 rounded-lg p-3 bg-gray-50">
                   {indicationForm.supplements && indicationForm.supplements.length > 0 ? (
                     indicationForm.supplements.map((supplement) => (
                       <div key={supplement.id} className="flex items-center justify-between mb-1">
-                        <span className="text-gray-200">{supplement.name}</span>
+                        <span className="text-gray-700">{supplement.name}</span>
                       </div>
                     ))
                   ) : (
-                    <div className="text-gray-400 text-sm">No supplements associated with this indication yet</div>
+                    <div className="text-gray-500 text-sm">No supplements associated with this indication yet</div>
                   )}
                 </div>
-                <p className="text-xs text-gray-400 mt-1">Supplements that use this indication tag</p>
+                <p className="text-xs text-gray-500 mt-1">Supplements that use this indication tag</p>
               </div>
             </>
           )}
@@ -2176,18 +2246,18 @@ export default function AdminContentPage() {
     return (
       <>
         <div className="mb-4">
-          <label className="block mb-1">Name</label>
+          <label className="block mb-1 text-gray-700 font-semibold">Name</label>
           <input
-            className="w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
+            className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             value={(formData as { name?: string }).name || ""}
             onChange={e => setFormData({ ...formData, name: e.target.value })}
             required
           />
         </div>
         <div className="mb-4">
-          <label className="block mb-1">Description</label>
+          <label className="block mb-1 text-gray-700 font-semibold">Description</label>
           <textarea
-            className="w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
+            className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             value={(formData as { description?: string }).description || ""}
             onChange={e => setFormData({ ...formData, description: e.target.value })}
           />
@@ -2195,185 +2265,35 @@ export default function AdminContentPage() {
       </>
     );
   }
-  if (tab === "Products") {
-    const productForm = formData as ProductForm;
-    return <>
-      {PRODUCT_FIELDS.map((f) => {
-        if (f.key === "description") {
-          return (
-            <div className="mb-4" key={f.key}>
-              <label className="block mb-1">{f.label}{f.required && <span className="text-red-400">*</span>}</label>
-              <textarea
-                className="w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600 h-32"
-                value={String(productForm[f.key] ?? '')}
-                onChange={e => setFormData({ ...productForm, [f.key]: e.target.value })}
-                placeholder="Product description..."
-              />
-            </div>
-          );
-        }
-        if (f.key === "merchantId") {
-          return (
-            <div className="mb-4" key={f.key}>
-              <label className="block mb-1">{f.label}{f.required && <span className="text-red-400">*</span>}</label>
-              <select
-                className="w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
-                value={String(productForm[f.key] ?? '')}
-                onChange={e => setFormData({ ...productForm, [f.key]: e.target.value })}
-                required={!!f.required}
-              >
-                <option value="">Select a merchant</option>
-                {allMerchants.map((merchant) => (
-                  <option key={merchant.id} value={merchant.id}>
-                    {merchant.name} ({merchant.region})
-                  </option>
-                ))}
-              </select>
-            </div>
-          );
-        }
-        if (f.key === "currency") {
-          return (
-            <div className="mb-4" key={f.key}>
-              <label className="block mb-1">{f.label}{f.required && <span className="text-red-400">*</span>}</label>
-              <select
-                className="w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
-                value={String(productForm[f.key] ?? 'USD')}
-                onChange={e => setFormData({ ...productForm, [f.key]: e.target.value })}
-                required={!!f.required}
-              >
-                <option value="USD">USD ($)</option>
-                <option value="EUR">EUR (€)</option>
-                <option value="GBP">GBP (£)</option>
-                <option value="CAD">CAD (C$)</option>
-                <option value="AUD">AUD (A$)</option>
-              </select>
-            </div>
-          );
-        }
-        return (
-          <div className="mb-4" key={f.key}>
-            <label className="block mb-1">{f.label}{f.required && <span className="text-red-400">*</span>}</label>
-            <input
-              className="w-full p-2 rounded bg-gray-700 text-gray-100 border border-gray-600"
-              type={f.key === "qualityScore" || f.key === "affiliateRate" || f.key === "affiliateYield" ? "number" : "text"}
-              value={String(productForm[f.key] ?? '')}
-              onChange={e => setFormData({ ...productForm, [f.key]: e.target.value })}
-              required={!!f.required}
-              placeholder={f.key === "price" ? "14.00 - 70.50" : f.key === "qualityScore" ? "1-10" : f.key === "affiliateRate" ? "0.00" : f.key === "affiliateYield" ? "0.00" : ""}
-              step={f.key === "affiliateRate" || f.key === "affiliateYield" ? "0.01" : f.key === "qualityScore" ? "1" : undefined}
-              min={f.key === "qualityScore" ? "1" : f.key === "affiliateRate" || f.key === "affiliateYield" ? "0" : undefined}
-              max={f.key === "qualityScore" ? "10" : undefined}
-            />
-          </div>
-        );
-      })}
-
-      {/* Relationship Selection */}
-      <div className="mb-6 p-4 bg-blue-900/20 border border-blue-700 rounded-lg">
-        <h3 className="text-blue-300 font-semibold mb-4">Link to Content</h3>
-        
-        {/* Herbs Selection */}
-        <div className="mb-4">
-          <label className="block mb-2 text-gray-200">Associated Herbs</label>
-          <div className="max-h-32 overflow-y-auto border border-gray-600 rounded p-2 bg-gray-900">
-            {allHerbs.length > 0 ? allHerbs.map((herb) => (
-              <div key={herb.id} className="flex items-center mb-2">
-                <input
-                  type="checkbox"
-                  id={`herb-${herb.id}`}
-                  checked={productForm.selectedHerbs?.includes(herb.id) || false}
-                  onChange={(e) => {
-                    const selectedHerbs = productForm.selectedHerbs || [];
-                    if (e.target.checked) {
-                      setFormData({ ...productForm, selectedHerbs: [...selectedHerbs, herb.id] });
-                    } else {
-                      setFormData({ ...productForm, selectedHerbs: selectedHerbs.filter(id => id !== herb.id) });
-                    }
-                  }}
-                  className="mr-2"
-                />
-                <label htmlFor={`herb-${herb.id}`} className="text-gray-200 cursor-pointer">
-                  {herb.name} {herb.latinName && `(${herb.latinName})`}
-                </label>
-              </div>
-            )) : <div className="text-gray-400">Loading herbs...</div>}
-          </div>
-        </div>
-
-        {/* Supplements Selection */}
-        <div className="mb-4">
-          <label className="block mb-2 text-gray-200">Associated Supplements</label>
-          <div className="max-h-32 overflow-y-auto border border-gray-600 rounded p-2 bg-gray-900">
-            {allSupplements.length > 0 ? allSupplements.map((supp) => (
-              <div key={supp.id} className="flex items-center mb-2">
-                <input
-                  type="checkbox"
-                  id={`supp-${supp.id}`}
-                  checked={productForm.selectedSupplements?.includes(supp.id) || false}
-                  onChange={(e) => {
-                    const selectedSupplements = productForm.selectedSupplements || [];
-                    if (e.target.checked) {
-                      setFormData({ ...productForm, selectedSupplements: [...selectedSupplements, supp.id] });
-                    } else {
-                      setFormData({ ...productForm, selectedSupplements: selectedSupplements.filter(id => id !== supp.id) });
-                    }
-                  }}
-                  className="mr-2"
-                />
-                <label htmlFor={`supp-${supp.id}`} className="text-gray-200 cursor-pointer">
-                  {supp.name}
-                </label>
-              </div>
-            )) : <div className="text-gray-400">Loading supplements...</div>}
-          </div>
-        </div>
-
-        {/* Symptoms Selection */}
-        <div className="mb-4">
-          <label className="block mb-2 text-gray-200">Associated Symptoms</label>
-          <div className="max-h-32 overflow-y-auto border border-gray-600 rounded p-2 bg-gray-900">
-            {allSymptoms.length > 0 ? allSymptoms.map((symptom) => (
-              <div key={symptom.id} className="flex items-center mb-2">
-                <input
-                  type="checkbox"
-                  id={`symptom-${symptom.id}`}
-                  checked={productForm.selectedSymptoms?.includes(symptom.id) || false}
-                  onChange={(e) => {
-                    const selectedSymptoms = productForm.selectedSymptoms || [];
-                    if (e.target.checked) {
-                      setFormData({ ...productForm, selectedSymptoms: [...selectedSymptoms, symptom.id] });
-                    } else {
-                      setFormData({ ...productForm, selectedSymptoms: selectedSymptoms.filter(id => id !== symptom.id) });
-                    }
-                  }}
-                  className="mr-2"
-                />
-                <label htmlFor={`symptom-${symptom.id}`} className="text-gray-200 cursor-pointer">
-                  {symptom.title}
-                </label>
-              </div>
-            )) : <div className="text-gray-400">Loading symptoms...</div>}
-          </div>
-        </div>
-      </div>
-    </>;
-  }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container-max py-8">
+    <div className="min-h-screen relative">
+      <div className="fixed inset-0 -z-10" style={{
+        backgroundImage: "url('/images/RoseWPWM.PNG')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}>
+        <div className="absolute inset-0 bg-pink-100 opacity-90"></div>
+      </div>
+      
+      <div className="h-12"></div>
+      <div className="relative z-10 container-max px-6 pt-8 pb-8">
         <div className="mb-6">
-          <Link href="/admin" className="cta-button px-4 py-2 rounded shadow hover:bg-green-700 transition font-bold">&larr; Admin Home</Link>
+          <Link href="/admin" 
+                className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-white text-gray-700 border-gray-300 hover:bg-amber-50 hover:border-gray-400 hover:text-gray-600 hover:shadow-gray-300 hover:shadow-lg hover:scale-105">
+            ← Admin Home
+          </Link>
         </div>
 
       {/* Tabs for Herbs, Supplements, Symptoms */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 mb-8">
-        <div className="flex border-b border-gray-200">
+      <div className="rounded-xl shadow-sm border-2 border-gray-300 mb-8" 
+           style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
+        <div className="flex border-b border-gray-300">
           {TABS.map((t) => (
             <button
               key={t}
-              className={`px-6 py-4 font-semibold text-gray-700 border-b-2 transition-colors ${tab === t ? 'border-green-600 text-green-700 bg-green-50' : 'border-transparent hover:text-green-700 hover:bg-gray-50'}`}
+              className={`px-6 py-4 font-semibold text-gray-700 border-b-2 transition-colors ${tab === t ? 'border-blue-600 text-blue-700 bg-blue-50' : 'border-transparent hover:text-blue-700 hover:bg-gray-50'}`}
               onClick={() => setTab(t)}
             >
               {t}
@@ -2385,19 +2305,19 @@ export default function AdminContentPage() {
           <div>
             {/* Blog/Article Upload Section */}
             <section className="mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">Upload Blog/Article</h2>
+              <h2 className="text-2xl font-bold text-gray-800 mb-4">Upload Blog/Article</h2>
               <form className="flex flex-col gap-4" onSubmit={handleUpload}>
                 <input
                   type="text"
                   placeholder="Title"
-                  className="border border-gray-300 px-3 py-2 rounded text-gray-900 bg-white placeholder-gray-500"
+                  className="border border-gray-300 px-3 py-2 rounded-lg text-gray-700 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   required
                 />
                 <textarea
                   placeholder="Admin Note (optional)"
-                  className="border border-gray-300 px-3 py-2 rounded text-gray-900 bg-white placeholder-gray-500"
+                  className="border border-gray-300 px-3 py-2 rounded-lg text-gray-700 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   value={adminNote}
                   onChange={(e) => setAdminNote(e.target.value)}
                 />
@@ -2406,195 +2326,353 @@ export default function AdminContentPage() {
                     type="file"
                     accept=".pdf,.docx,.md,.txt"
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFile(e.target && e.target.files ? e.target.files[0] : null)}
-                    className="border border-gray-300 px-3 py-2 rounded text-gray-900 bg-white"
+                    className="border border-gray-300 px-3 py-2 rounded-lg text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
-                  <span className="text-gray-800">or</span>
+                  <span className="text-gray-700">or</span>
                   <textarea
                     placeholder="Paste or write article content here (Markdown or plain text)"
-                    className="border border-gray-300 px-3 py-2 rounded text-gray-900 bg-white placeholder-gray-500 w-full"
+                    className="border border-gray-300 px-3 py-2 rounded-lg text-gray-700 bg-white placeholder-gray-500 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     value={textContent}
                     onChange={(e) => setTextContent(e.target.value)}
                     rows={4}
                   />
                 </div>
-                <button type="submit" className="cta-button px-6 py-2 rounded shadow hover:bg-green-700 transition font-bold w-40">Upload</button>
+                <button type="submit" 
+                        className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-green-600 text-white border-transparent hover:bg-green-700 hover:border-green-700 hover:shadow-lg hover:scale-105 w-40">
+                  Upload
+                </button>
               </form>
             </section>
 
-            {/* Uploaded Articles List */}
-            {articles.length > 0 && (
-              <section>
-                <h2 className="text-xl font-bold text-gray-900 mb-4">Uploaded Articles</h2>
-                <ul className="divide-y divide-gray-200">
-                  {articles.map((article, index) => (
-                    <li key={index} className="py-4">
-                      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
-                        <div>
-                          <div className="font-bold text-lg text-gray-900">{article.title}</div>
-                          <div className="text-gray-800 text-sm">Uploaded: {article.uploadDate}</div>
-                          {article.adminNote && <div className="text-gray-800 text-sm italic">Note: {article.adminNote}</div>}
-                          {article.fileName && <div className="text-gray-500 text-xs">File: {article.fileName}</div>}
-                        </div>
-                        <div className="flex gap-2 mt-2 md:mt-0">
-                          <button
-                            className="bg-blue-600 text-white px-3 py-1 rounded shadow hover:bg-blue-700 transition font-bold"
-                            onClick={() => {
-                              setEditingIndex(index);
-                              setEditContent(article.content as string);
-                            }}
-                          >
-                            Edit
-                          </button>
-                          <button
-                            className="bg-red-600 text-white px-3 py-1 rounded shadow hover:bg-red-700 transition font-bold"
-                            onClick={() => handleArticleDelete(index)}
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      </div>
-                      {/* Article Content Editor */}
-                      {editingIndex === index ? (
-                        <div className="mt-4">
-                          <textarea
-                            className="border border-gray-300 px-3 py-2 rounded text-gray-900 bg-white w-full"
-                            value={editContent}
-                            onChange={(e) => setEditContent(e.target.value)}
-                            rows={8}
-                          />
-                          <div className="flex gap-2 mt-2">
-                            <button
-                              className="cta-button px-4 py-1 rounded shadow hover:bg-green-700 transition font-bold"
-                              onClick={() => handleEditSave(index)}
-                            >
-                              Save
-                            </button>
-                            <button
-                              className="bg-gray-300 text-gray-800 px-4 py-1 rounded shadow hover:bg-gray-400 transition font-bold"
-                              onClick={() => setEditingIndex(null)}
-                            >
-                              Cancel
-                            </button>
-                          </div>
-                        </div>
-                      ) : null}
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            )}
-          </div>
-        ) : (
-          <>
-            {loading ? (
-              <div>Loading {tab}...</div>
-            ) : error ? (
-              <div className="text-red-400">{error}</div>
-            ) : (
-              <div>
-                {tab === "Products" && (
-                  <div className="mb-4 flex gap-2">
-                    <button
-                      className="px-4 py-2 bg-green-600 rounded hover:bg-green-700"
-                      onClick={() => setShowBatchImport(true)}
-                    >
-                      📥 Batch Import
-                    </button>
-                    <button
-                      className="px-4 py-2 bg-blue-600 rounded hover:bg-blue-700"
-                      onClick={openAddForm}
-                    >
-                      + Add New {tab.slice(0, -1)}
-                    </button>
-                  </div>
-                )}
-                {tab !== "Products" && (
-                  <button
-                    className="mb-4 px-4 py-2 bg-green-600 rounded hover:bg-green-700"
-                    onClick={openAddForm}
-                  >
-                    + Add New {tab.slice(0, -1)}
-                  </button>
-                )}
-                
-                {/* Indications Help Section */}
-                {tab === "Indications" && (
-                  <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                    <h3 className="text-blue-800 font-semibold mb-2">What are Indications?</h3>
-                    <p className="text-blue-700 text-sm mb-3">
-                      Indications are tags that describe what herbs and supplements are used for. They help users find relevant products 
-                      and create a consistent tagging system across your site.
-                    </p>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                      <div>
-                        <h4 className="font-semibold text-blue-800 mb-1">Examples:</h4>
-                        <ul className="text-blue-700 space-y-1">
-                          <li>• Stress, Anxiety, Sleep Support</li>
-                          <li>• Focus, Memory, Cognitive Health</li>
-                          <li>• Energy, Vitality, Fatigue</li>
-                          <li>• Pain Relief, Inflammation</li>
-                        </ul>
-                      </div>
-                      <div>
-                        <h4 className="font-semibold text-blue-800 mb-1">How to Use:</h4>
-                        <ul className="text-blue-700 space-y-1">
-                          <li>• Create indications here first</li>
-                          <li>• Then assign them to herbs/supplements</li>
-                          <li>• They appear as colored tags on cards</li>
-                          <li>• Users can click tags to see related items</li>
-                        </ul>
-                      </div>
+            {/* Articles List */}
+            <section>
+              <h2 className="text-2xl font-bold text-gray-800 mb-4">Uploaded Articles</h2>
+              <div className="space-y-4">
+                {articles.map((article, index) => (
+                  <div key={index} className="p-4 border border-gray-300 rounded-lg bg-white">
+                    <h3 className="font-semibold text-gray-800">{article.title}</h3>
+                    {article.adminNote && <p className="text-sm text-gray-600 mt-1">Note: {article.adminNote}</p>}
+                    <p className="text-sm text-gray-500 mt-1">Uploaded: {article.uploadDate}</p>
+                    <div className="mt-2 flex gap-2">
+                      <button
+                        onClick={() => {
+                          setEditingIndex(index);
+                          setEditContent(article.content);
+                        }}
+                        className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => {
+                          const newArticles = [...articles];
+                          newArticles.splice(index, 1);
+                          setArticles(newArticles);
+                        }}
+                        className="px-3 py-1 bg-red-600 text-white text-sm rounded hover:bg-red-700"
+                      >
+                        Delete
+                      </button>
                     </div>
                   </div>
-                )}
-                
-                <div className="border border-gray-700 rounded bg-gray-800">
-                  <div className="overflow-x-auto">
-                    <div className="max-h-[60vh] overflow-y-auto">
-                      <table className="w-full text-left min-w-full">
-                        <thead className="sticky top-0 bg-gray-800 z-10">{renderTableHeaders()}</thead>
-                        <tbody>
-                          {[...data].sort((a, b) => {
-                            const aName = 'name' in a ? a.name : 'title' in a ? a.title : '';
-                            const bName = 'name' in b ? b.name : 'title' in b ? b.title : '';
-                            return aName.localeCompare(bName);
-                          }).map((item, index) => renderTableRow(item, index))}
-                          {data.length === 0 && (
-                            <tr>
-                              <td colSpan={tab === "Herbs" ? HERB_FIELDS.length + 2 : tab === "Supplements" ? SUPPLEMENT_FIELDS.length + 1 : SYMPTOM_FIELDS.length + 1} className="p-4 text-center text-gray-400">No {tab.toLowerCase()} found.</td>
-                            </tr>
-                          )}
-                        </tbody>
-                      </table>
+                ))}
+              </div>
+            </section>
+          </div>
+          ) : (
+            <>
+              {/* Action Buttons */}
+              {tab === "Products" && (
+                <div className="mb-6 flex gap-4 flex-wrap">
+                  <button
+                    className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-blue-600 text-white border-transparent hover:bg-blue-700 hover:border-blue-700 hover:shadow-lg hover:scale-105"
+                    onClick={() => setShowBatchImport(true)}
+                  >
+                    📥 Batch Import
+                  </button>
+                </div>
+              )}
+              {tab !== "Products" && (
+                <button
+                  className="mb-4 inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-green-600 text-white border-transparent hover:bg-green-700 hover:border-green-700 hover:shadow-lg hover:scale-105"
+                  onClick={openAddForm}
+                >
+                  + Add New {tab.slice(0, -1)}
+                </button>
+              )}
+
+              {/* Products Form - Always Visible When Products Tab is Selected */}
+              {tab === "Products" && (
+                <div className="mb-8 rounded-xl shadow-sm border-2 border-gray-300 p-6" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
+                  <h2 className="text-2xl font-bold mb-6 text-gray-800">Add New Product</h2>
+                  
+                  <form onSubmit={handleFormSubmit} className="space-y-6">
+                    {/* Product Fields */}
+                    {PRODUCT_FIELDS.map((f) => {
+                      if (f.key === "description") {
+                        return (
+                          <div className="mb-4" key={f.key}>
+                            <label className="block mb-1 text-gray-700 font-semibold">{f.label}{f.required && <span className="text-red-500">*</span>}</label>
+                            <textarea
+                              className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent h-32"
+                              value={String((formData as ProductForm)[f.key] ?? '')}
+                              onChange={e => setFormData({ ...(formData as ProductForm), [f.key]: e.target.value })}
+                              placeholder="Product description..."
+                            />
+                          </div>
+                        );
+                      }
+                      if (f.key === "merchantId") {
+                        return (
+                          <div className="mb-4" key={f.key}>
+                            <label className="block mb-1 text-gray-700 font-semibold">{f.label}{f.required && <span className="text-red-500">*</span>}</label>
+                            <select
+                              className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                              value={String((formData as ProductForm)[f.key] ?? '')}
+                              onChange={e => setFormData({ ...(formData as ProductForm), [f.key]: e.target.value })}
+                              required={!!f.required}
+                            >
+                              <option value="">Select a merchant</option>
+                              {allMerchants.map((merchant) => (
+                                <option key={merchant.id} value={merchant.id}>
+                                  {merchant.name} ({merchant.region})
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        );
+                      }
+                      if (f.key === "currency") {
+                        return (
+                          <div className="mb-4" key={f.key}>
+                            <label className="block mb-1 text-gray-700 font-semibold">{f.label}{f.required && <span className="text-red-500">*</span>}</label>
+                            <select
+                              className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                              value={String((formData as ProductForm)[f.key] ?? 'USD')}
+                              onChange={e => setFormData({ ...(formData as ProductForm), [f.key]: e.target.value })}
+                              required={!!f.required}
+                            >
+                              <option value="USD">USD ($)</option>
+                              <option value="EUR">EUR (€)</option>
+                              <option value="GBP">GBP (£)</option>
+                              <option value="CAD">CAD (C$)</option>
+                              <option value="AUD">AUD (A$)</option>
+                            </select>
+                          </div>
+                        );
+                      }
+                      return (
+                        <div className="mb-4" key={f.key}>
+                          <label className="block mb-1 text-gray-700 font-semibold">{f.label}{f.required && <span className="text-red-500">*</span>}</label>
+                          <input
+                            className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            type={f.key === "qualityScore" || f.key === "affiliateRate" || f.key === "affiliateYield" ? "number" : "text"}
+                            value={String((formData as ProductForm)[f.key] ?? '')}
+                            onChange={e => setFormData({ ...(formData as ProductForm), [f.key]: e.target.value })}
+                            required={!!f.required}
+                            placeholder={f.key === "price" ? "14.00 - 70.50" : f.key === "qualityScore" ? "1-10" : f.key === "affiliateRate" ? "0.00" : f.key === "affiliateYield" ? "0.00" : ""}
+                            step={f.key === "affiliateRate" || f.key === "affiliateYield" ? "0.01" : f.key === "qualityScore" ? "1" : undefined}
+                            min={f.key === "qualityScore" ? "1" : f.key === "affiliateRate" || f.key === "affiliateYield" ? "0" : undefined}
+                            max={f.key === "qualityScore" ? "10" : undefined}
+                          />
+                        </div>
+                      );
+                    })}
+
+                    {/* Relationship Selection */}
+                    <div className="mb-6 p-6 bg-gray-50 border-2 border-gray-300 rounded-xl shadow-sm">
+                      <h3 className="text-gray-800 font-semibold mb-4 text-lg">Link to Content</h3>
+                      
+                      {/* Herbs Selection */}
+                      <div className="mb-4">
+                        <label className="block mb-2 text-gray-700 font-semibold">Associated Herbs</label>
+                        <div className="max-h-32 overflow-y-auto border border-gray-300 rounded-lg p-3 bg-white">
+                          {allHerbs.length > 0 ? allHerbs.map((herb) => (
+                            <div key={herb.id} className="flex items-center mb-2">
+                              <input
+                                type="checkbox"
+                                id={`herb-${herb.id}`}
+                                checked={formData.selectedHerbs?.includes(herb.id) || false}
+                                onChange={(e) => {
+                                  const selectedHerbs = formData.selectedHerbs || [];
+                                  if (e.target.checked) {
+                                    setFormData({ ...formData, selectedHerbs: [...selectedHerbs, herb.id] });
+                                  } else {
+                                    setFormData({ ...formData, selectedHerbs: selectedHerbs.filter(id => id !== herb.id) });
+                                  }
+                                }}
+                                className="mr-2 text-blue-600 focus:ring-blue-500"
+                              />
+                              <label htmlFor={`herb-${herb.id}`} className="text-gray-700 cursor-pointer">
+                                {herb.name} {herb.latinName && `(${herb.latinName})`}
+                              </label>
+                            </div>
+                          )) : <div className="text-gray-500">Loading herbs...</div>}
+                        </div>
+                      </div>
+
+                      {/* Supplements Selection */}
+                      <div className="mb-4">
+                        <label className="block mb-2 text-gray-700 font-semibold">Associated Supplements</label>
+                        <div className="max-h-32 overflow-y-auto border border-gray-300 rounded-lg p-3 bg-white">
+                          {allSupplements.length > 0 ? allSupplements.map((supp) => (
+                            <div key={supp.id} className="flex items-center mb-2">
+                              <input
+                                type="checkbox"
+                                id={`supp-${supp.id}`}
+                                checked={formData.selectedSupplements?.includes(supp.id) || false}
+                                onChange={(e) => {
+                                  const selectedSupplements = formData.selectedSupplements || [];
+                                  if (e.target.checked) {
+                                    setFormData({ ...formData, selectedSupplements: [...selectedSupplements, supp.id] });
+                                  } else {
+                                    setFormData({ ...formData, selectedSupplements: selectedSupplements.filter(id => id !== supp.id) });
+                                  }
+                                }}
+                                className="mr-2 text-blue-600 focus:ring-blue-500"
+                              />
+                              <label htmlFor={`supp-${supp.id}`} className="text-gray-700 cursor-pointer">
+                                {supp.name}
+                              </label>
+                            </div>
+                          )) : <div className="text-gray-500">Loading supplements...</div>}
+                        </div>
+                      </div>
+
+                      {/* Symptoms Selection */}
+                      <div className="mb-4">
+                        <label className="block mb-2 text-gray-700 font-semibold">Associated Symptoms</label>
+                        <div className="max-h-32 overflow-y-auto border border-gray-300 rounded-lg p-3 bg-white">
+                          {/* Get symptoms from data state when available */}
+                          {(tab === "Symptoms" ? (data as Symptom[]) : []).length > 0 ? (tab === "Symptoms" ? (data as Symptom[]) : []).map((symptom) => (
+                            <div key={symptom.id} className="flex items-center mb-2">
+                              <input
+                                type="checkbox"
+                                id={`symptom-${symptom.id}`}
+                                checked={formData.selectedSymptoms?.includes(symptom.id) || false}
+                                onChange={(e) => {
+                                  const selectedSymptoms = formData.selectedSymptoms || [];
+                                  if (e.target.checked) {
+                                    setFormData({ ...formData, selectedSymptoms: [...selectedSymptoms, symptom.id] });
+                                  } else {
+                                    setFormData({ ...formData, selectedSymptoms: selectedSymptoms.filter(id => id !== symptom.id) });
+                                  }
+                                }}
+                                className="mr-2 text-blue-600 focus:ring-blue-500"
+                              />
+                              <label htmlFor={`symptom-${symptom.id}`} className="text-gray-700 cursor-pointer">
+                                {symptom.title}
+                              </label>
+                            </div>
+                          )) : <div className="text-gray-500">Loading symptoms...</div>}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Form Actions */}
+                    <div className="flex gap-4 flex-wrap">
+                      <button 
+                        type="submit" 
+                        className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-green-600 text-white border-transparent hover:bg-green-700 hover:border-green-700 hover:shadow-lg hover:scale-105"
+                      >
+                        Save Product
+                      </button>
+                      <button 
+                        type="button" 
+                        className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-gray-600 text-white border-transparent hover:bg-gray-700 hover:border-gray-700 hover:shadow-lg hover:scale-105"
+                        onClick={() => {
+                          setFormData({});
+                          setFormMode("add");
+                        }}
+                      >
+                        Clear Form
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              )}
+
+              {/* Indications Help Section */}
+              {tab === "Indications" && (
+                <div className="mb-6 p-6 bg-gray-50 border-2 border-gray-300 rounded-xl shadow-sm">
+                  <h3 className="text-gray-800 font-semibold mb-3 text-lg">What are Indications?</h3>
+                  <p className="text-gray-700 text-base mb-4">
+                    Indications are tags that describe what herbs and supplements are used for. They help users find relevant products 
+                    and create a consistent tagging system across your site.
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-base">
+                    <div>
+                      <h4 className="font-semibold text-gray-800 mb-2">Examples:</h4>
+                      <ul className="text-gray-700 space-y-2">
+                        <li>• Stress, Anxiety, Sleep Support</li>
+                        <li>• Focus, Memory, Cognitive Health</li>
+                        <li>• Energy, Vitality, Fatigue</li>
+                        <li>• Pain Relief, Inflammation</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-800 mb-2">How to Use:</h4>
+                      <ul className="text-gray-700 space-y-2">
+                        <li>• Create indications here first</li>
+                        <li>• Then assign them to herbs/supplements</li>
+                        <li>• They appear as colored tags on cards</li>
+                        <li>• Users can click tags to see related items</li>
+                      </ul>
                     </div>
                   </div>
                 </div>
+              )}
+
+              <div className="rounded-xl shadow-sm border-2 border-gray-300 bg-white">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left min-w-full">
+                    <thead className="sticky top-0 z-10">{renderTableHeaders()}</thead>
+                    <tbody>
+                      {[...data].sort((a, b) => {
+                        const aName = 'name' in a ? a.name : 'title' in a ? a.title : '';
+                        const bName = 'name' in b ? b.name : 'title' in b ? b.title : '';
+                        return aName.localeCompare(bName);
+                      }).map((item, index) => renderTableRow(item, index))}
+                      {data.length === 0 && (
+                        <tr>
+                          <td colSpan={tab === "Herbs" ? HERB_FIELDS.length + 2 : tab === "Supplements" ? SUPPLEMENT_FIELDS.length + 1 : SYMPTOM_FIELDS.length + 1} className="p-4 text-center text-gray-500">No {tab.toLowerCase()} found.</td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
               </div>
-            )}
-          </>
-        )}
+            </>
+          )}
+        </div>
       </div>
 
       {/* Batch Import Modal */}
       {showBatchImport && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
-          <div className="bg-gray-900 rounded shadow-lg w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
-            <div className="p-6 border-b border-gray-700">
-              <h2 className="text-2xl font-bold text-white">Batch Import Products</h2>
+        <div className="fixed inset-0 flex items-center justify-center z-50 p-6" style={{
+          backgroundImage: "url('/images/RoseWPWM.PNG')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}>
+          <div className="absolute inset-0 bg-pink-100 opacity-90"></div>
+          <div className="relative rounded-xl shadow-lg w-full max-w-2xl max-h-[80vh] overflow-hidden flex flex-col border-2 border-gray-300" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
+            <div className="p-6 border-b border-gray-300 bg-gray-50">
+              <h2 className="text-2xl font-bold text-gray-800">Batch Import Products</h2>
             </div>
             
             <div className="p-6 overflow-y-auto flex-1">
-              <p className="text-gray-300 mb-4">
+              <p className="text-gray-700 mb-4">
                 Enter product URLs (one per line) from supported merchants. The system will attempt to extract product information automatically.
               </p>
               <textarea
                 value={batchUrls}
                 onChange={(e) => setBatchUrls(e.target.value)}
                 placeholder="https://amazon.com/product1&#10;https://amazon.com/product2&#10;https://amazon.com/product3"
-                className="w-full h-32 p-2 border rounded mb-4 bg-gray-700 text-gray-100 border-gray-600"
+                className="w-full h-32 p-3 border border-gray-300 rounded-lg mb-4 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
               <div className="mb-4">
-                <label className="flex items-center text-gray-300">
+                <label className="flex items-center text-gray-700">
                   <input
                     type="checkbox"
                     id="useScraping"
@@ -2604,7 +2682,7 @@ export default function AdminContentPage() {
                   Enable web scraping for better data extraction (requires Puppeteer)
                 </label>
               </div>
-              <div className="text-xs text-gray-400 mb-4">
+              <div className="text-xs text-gray-600 mb-4 bg-gray-50 p-3 rounded-lg border border-gray-200">
                 <p>• Supported merchants: Amazon, iHerb, Vitacost, etc.</p>
                 <p>• Each URL should be on a separate line</p>
                 <p>• The system will create merchants automatically if they don&apos;t exist</p>
@@ -2612,18 +2690,18 @@ export default function AdminContentPage() {
               </div>
             </div>
             
-            <div className="p-6 border-t border-gray-700">
+            <div className="p-6 border-t border-gray-300 bg-gray-50">
               <div className="flex gap-4">
                 <button
                   onClick={() => setShowBatchImport(false)}
-                  className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+                  className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-gray-600 text-white border-transparent hover:bg-gray-700 hover:border-gray-700 hover:shadow-lg hover:scale-105"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleBatchImport}
                   disabled={importing || !batchUrls.trim()}
-                  className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50"
+                  className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-green-600 text-white border-transparent hover:bg-green-700 hover:border-green-700 hover:shadow-lg hover:scale-105 disabled:bg-gray-400 disabled:opacity-70 disabled:cursor-not-allowed"
                 >
                   {importing ? 'Importing...' : 'Import Products'}
                 </button>
@@ -2633,19 +2711,32 @@ export default function AdminContentPage() {
         </div>
       )}
 
-      {showForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
-          <div className="bg-gray-900 rounded shadow-lg w-full max-w-2xl max-h-[90vh] flex flex-col">
-            <div className="p-8 overflow-y-auto flex-1">
+      {showForm && tab !== "Products" && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 p-6" style={{
+          backgroundImage: "url('/images/RoseWPWM.PNG')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}>
+          <div className="absolute inset-0 bg-pink-100 opacity-90"></div>
+          <div className="relative rounded-xl shadow-lg w-full max-w-4xl max-h-[80vh] flex flex-col border-2 border-gray-300" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
+            <div className="p-6 overflow-y-auto flex-1">
               <form id="add-edit-form" onSubmit={handleFormSubmit}>
-                <h2 className="text-2xl font-bold mb-4 text-white">{formMode === "add" ? `Add New ${tab.slice(0, -1)}` : `Edit ${tab.slice(0, -1)}`}</h2>
+                <h2 className="text-2xl font-bold mb-6 text-gray-800">{formMode === "add" ? `Add New ${tab.slice(0, -1)}` : `Edit ${tab.slice(0, -1)}`}</h2>
                 {renderFormFields()}
               </form>
             </div>
-            <div className="p-8 pt-0 border-t border-gray-700 bg-gray-900 flex-shrink-0">
-              <div className="flex gap-4">
-                <button type="submit" form="add-edit-form" className="bg-green-700 hover:bg-green-600 text-white px-6 py-2 rounded font-bold transition-colors">Save</button>
-                <button type="button" className="bg-gray-500 hover:bg-gray-400 text-white px-6 py-2 rounded font-bold transition-colors" onClick={() => setShowForm(false)}>Cancel</button>
+            <div className="p-6 pt-0 border-t border-gray-300 bg-gray-50 flex-shrink-0">
+              <div className="flex gap-4 flex-wrap">
+                <button type="submit" form="add-edit-form" 
+                        className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-green-600 text-white border-transparent hover:bg-green-700 hover:border-green-700 hover:shadow-lg hover:scale-105">
+                  Save
+                </button>
+                <button type="button" 
+                        className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-gray-600 text-white border-transparent hover:bg-gray-700 hover:border-gray-700 hover:shadow-lg hover:scale-105" 
+                        onClick={() => setShowForm(false)}>
+                  Cancel
+                </button>
               </div>
             </div>
           </div>
@@ -2654,15 +2745,21 @@ export default function AdminContentPage() {
 
       {/* Variant Management Modal */}
       {showVariantModal && selectedSymptom && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
-          <div className="bg-gray-900 rounded shadow-lg w-full max-w-6xl max-h-[90vh] overflow-hidden flex flex-col">
-            <div className="p-6 border-b border-gray-700">
+        <div className="fixed inset-0 bg-pink-100 bg-opacity-90 flex items-center justify-center z-50 p-4" style={{
+          backgroundImage: "url('/images/RoseWPWM.PNG')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}>
+          <div className="absolute inset-0 bg-pink-100 opacity-90"></div>
+          <div className="relative rounded-xl shadow-lg w-full max-w-6xl max-h-[90vh] overflow-hidden flex flex-col border-2 border-gray-300" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
+            <div className="p-6 border-b border-gray-300 bg-gray-50">
               <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold text-white">
+                <h2 className="text-2xl font-bold text-gray-800">
                   Manage Variants for: {selectedSymptom.title}
                 </h2>
                 <button
-                  className="text-gray-400 hover:text-white"
+                  className="text-gray-500 hover:text-gray-700"
                   onClick={() => setShowVariantModal(false)}
                 >
                   ✕
@@ -2673,7 +2770,7 @@ export default function AdminContentPage() {
             <div className="p-6 overflow-y-auto flex-1">
               <div className="mb-4 flex justify-between items-center">
                 <button
-                  className="px-4 py-2 bg-green-600 rounded hover:bg-green-700 text-white font-bold"
+                  className="inline-flex items-center px-4 py-2 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-green-600 text-white border-transparent hover:bg-green-700 hover:border-green-700 hover:shadow-lg hover:scale-105"
                   onClick={() => openVariantForm("add")}
                 >
                   + Add New Variant
@@ -2681,56 +2778,56 @@ export default function AdminContentPage() {
               </div>
 
               {/* Variants Table */}
-              <div className="border border-gray-700 rounded bg-gray-800">
+              <div className="rounded-xl shadow-sm border-2 border-gray-300 bg-white">
                 <div className="overflow-x-auto">
                   <table className="w-full text-left">
-                    <thead className="bg-gray-800">
+                    <thead className="bg-gray-100 border-b-2 border-gray-300">
                       <tr>
-                        <th className="px-4 py-2 text-white">Actions</th>
-                        <th className="px-4 py-2 text-white">ID</th>
-                        <th className="px-4 py-2 text-white">Name</th>
-                        <th className="px-4 py-2 text-white">Slug</th>
-                        <th className="px-4 py-2 text-white">Description</th>
-                        <th className="px-4 py-2 text-white">Meta Title</th>
-                        <th className="px-4 py-2 text-white">Cautions</th>
+                        <th className="px-4 py-3 text-sm font-semibold text-gray-800">Actions</th>
+                        <th className="px-4 py-3 text-sm font-semibold text-gray-800">ID</th>
+                        <th className="px-4 py-3 text-sm font-semibold text-gray-800">Name</th>
+                        <th className="px-4 py-3 text-sm font-semibold text-gray-800">Slug</th>
+                        <th className="px-4 py-3 text-sm font-semibold text-gray-800">Description</th>
+                        <th className="px-4 py-3 text-sm font-semibold text-gray-800">Meta Title</th>
+                        <th className="px-4 py-3 text-sm font-semibold text-gray-800">Cautions</th>
                       </tr>
                     </thead>
                     <tbody>
                       {variants.map((variant) => (
-                        <tr key={variant.id} className="border-t border-gray-700">
+                        <tr key={variant.id} className="border-t border-gray-200 hover:bg-gray-50 transition-colors">
                           <td className="px-4 py-2">
-                            <div className="flex gap-1">
+                            <div className="flex gap-2">
                               <button
-                                className="px-2 py-1 bg-blue-500 rounded text-xs hover:bg-blue-600 transition-colors"
+                                className="inline-flex items-center px-3 py-1 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-blue-600 text-white border-transparent hover:bg-blue-700 hover:border-blue-700 hover:shadow-lg hover:scale-105 text-xs"
                                 onClick={() => openVariantForm("edit", variant)}
                               >
                                 Edit
                               </button>
                               <button
-                                className="px-2 py-1 bg-red-500 rounded text-xs hover:bg-red-600 transition-colors"
+                                className="inline-flex items-center px-3 py-1 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-red-600 text-white border-transparent hover:bg-red-700 hover:border-red-700 hover:shadow-lg hover:scale-105 text-xs"
                                 onClick={() => handleVariantDelete(variant.id)}
                               >
                                 Delete
                               </button>
                             </div>
                           </td>
-                          <td className="px-4 py-2 text-white text-sm">{variant.id}</td>
-                          <td className="px-4 py-2 text-white text-sm">{variant.name}</td>
-                          <td className="px-4 py-2 text-white text-sm">{variant.slug}</td>
-                          <td className="px-4 py-2 text-white text-sm max-w-[200px] truncate">
+                          <td className="px-4 py-2 text-gray-700 text-sm">{variant.id}</td>
+                          <td className="px-4 py-2 text-gray-700 text-sm">{variant.name}</td>
+                          <td className="px-4 py-2 text-gray-700 text-sm">{variant.slug}</td>
+                          <td className="px-4 py-2 text-gray-700 text-sm max-w-[200px] truncate">
                             {variant.description || '—'}
                           </td>
-                          <td className="px-4 py-2 text-white text-sm max-w-[200px] truncate">
+                          <td className="px-4 py-2 text-gray-700 text-sm max-w-[200px] truncate">
                             {variant.metaTitle || '—'}
                           </td>
-                          <td className="px-4 py-2 text-white text-sm max-w-[200px] truncate">
+                          <td className="px-4 py-2 text-gray-700 text-sm max-w-[200px] truncate">
                             {variant.cautions || '—'}
                           </td>
                         </tr>
                       ))}
                       {variants.length === 0 && (
                         <tr>
-                          <td colSpan={7} className="p-4 text-center text-gray-400">
+                          <td colSpan={7} className="p-4 text-center text-gray-500">
                             No variants found for this symptom.
                           </td>
                         </tr>
@@ -2746,10 +2843,16 @@ export default function AdminContentPage() {
 
       {/* Variant Form Modal */}
       {showVariantForm && selectedSymptom && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
-          <div className="bg-gray-900 rounded shadow-lg w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
-            <div className="p-6 border-b border-gray-700">
-              <h2 className="text-2xl font-bold text-white">
+        <div className="fixed inset-0 bg-pink-100 bg-opacity-90 flex items-center justify-center z-50 p-4 overflow-y-auto" style={{
+          backgroundImage: "url('/images/RoseWPWM.PNG')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}>
+          <div className="absolute inset-0 bg-pink-100 opacity-90"></div>
+          <div className="relative rounded-xl shadow-lg w-full max-w-2xl max-h-[95vh] flex flex-col border-2 border-gray-300 my-8" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
+            <div className="p-6 border-b border-gray-300 bg-gray-50">
+              <h2 className="text-2xl font-bold text-gray-800">
                 {variantFormMode === "add" ? "Add New Variant" : "Edit Variant"}
               </h2>
             </div>
@@ -2757,10 +2860,10 @@ export default function AdminContentPage() {
             <form id="variant-form" onSubmit={handleVariantFormSubmit} className="p-6 overflow-y-auto flex-1">
               <div className="space-y-4">
                 <div>
-                  <label className="block mb-1 text-white">Name *</label>
+                  <label className="block mb-1 text-gray-700 font-semibold">Name *</label>
                   <input
                     type="text"
-                    className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600"
+                    className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     value={variantFormData.name || ""}
                     onChange={(e) => setVariantFormData({ ...variantFormData, name: e.target.value })}
                     required
@@ -2768,10 +2871,10 @@ export default function AdminContentPage() {
                 </div>
                 
                 <div>
-                  <label className="block mb-1 text-white">Slug *</label>
+                  <label className="block mb-1 text-gray-700 font-semibold">Slug *</label>
                   <input
                     type="text"
-                    className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600"
+                    className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     value={variantFormData.slug || ""}
                     onChange={(e) => setVariantFormData({ ...variantFormData, slug: e.target.value })}
                     required
@@ -2779,9 +2882,9 @@ export default function AdminContentPage() {
                 </div>
                 
                 <div>
-                  <label className="block mb-1 text-white">Description</label>
+                  <label className="block mb-1 text-gray-700 font-semibold">Description</label>
                   <textarea
-                    className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600"
+                    className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     rows={4}
                     value={variantFormData.description || ""}
                     onChange={(e) => setVariantFormData({ ...variantFormData, description: e.target.value })}
@@ -2789,19 +2892,19 @@ export default function AdminContentPage() {
                 </div>
                 
                 <div>
-                  <label className="block mb-1 text-white">Meta Title</label>
+                  <label className="block mb-1 text-gray-700 font-semibold">Meta Title</label>
                   <input
                     type="text"
-                    className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600"
+                    className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     value={variantFormData.metaTitle || ""}
                     onChange={(e) => setVariantFormData({ ...variantFormData, metaTitle: e.target.value })}
                   />
                 </div>
                 
                 <div>
-                  <label className="block mb-1 text-white">Meta Description</label>
+                  <label className="block mb-1 text-gray-700 font-semibold">Meta Description</label>
                   <textarea
-                    className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600"
+                    className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     rows={2}
                     value={variantFormData.metaDescription || ""}
                     onChange={(e) => setVariantFormData({ ...variantFormData, metaDescription: e.target.value })}
@@ -2809,9 +2912,9 @@ export default function AdminContentPage() {
                 </div>
                 
                 <div>
-                  <label className="block mb-1 text-white">Cautions</label>
+                  <label className="block mb-1 text-gray-700 font-semibold">Cautions</label>
                   <textarea
-                    className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600"
+                    className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     rows={3}
                     value={variantFormData.cautions || ""}
                     onChange={(e) => setVariantFormData({ ...variantFormData, cautions: e.target.value })}
@@ -2820,18 +2923,18 @@ export default function AdminContentPage() {
               </div>
             </form>
             
-            <div className="p-6 border-t border-gray-700">
-              <div className="flex gap-4">
+            <div className="p-6 border-t border-gray-300 bg-gray-50">
+              <div className="flex gap-4 flex-wrap">
                 <button
                   type="submit"
                   form="variant-form"
-                  className="bg-green-700 text-white px-6 py-2 rounded font-bold"
+                  className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-green-600 text-white border-transparent hover:bg-green-700 hover:border-green-700 hover:shadow-lg hover:scale-105"
                 >
                   Save
                 </button>
                 <button
                   type="button"
-                  className="bg-gray-500 text-white px-6 py-2 rounded font-bold"
+                  className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-gray-600 text-white border-transparent hover:bg-gray-700 hover:border-gray-700 hover:shadow-lg hover:scale-105"
                   onClick={() => setShowVariantForm(false)}
                 >
                   Cancel
@@ -2844,10 +2947,16 @@ export default function AdminContentPage() {
 
       {/* Indication Form Modal */}
       {showIndicationForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
-          <div className="bg-gray-900 rounded shadow-lg w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
-            <div className="p-6 border-b border-gray-700">
-              <h2 className="text-2xl font-bold text-white">
+        <div className="fixed inset-0 bg-pink-100 bg-opacity-90 flex items-center justify-center z-50 p-4 overflow-y-auto" style={{
+          backgroundImage: "url('/images/RoseWPWM.PNG')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}>
+          <div className="absolute inset-0 bg-pink-100 opacity-90"></div>
+          <div className="relative rounded-xl shadow-lg w-full max-w-2xl max-h-[95vh] flex flex-col border-2 border-gray-300 my-8" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
+            <div className="p-6 border-b border-gray-300 bg-gray-50">
+              <h2 className="text-2xl font-bold text-gray-800">
                 {indicationFormMode === "add" ? "Add New Indication" : "Edit Indication"}
               </h2>
             </div>
@@ -2855,10 +2964,10 @@ export default function AdminContentPage() {
             <form id="indication-form" onSubmit={handleIndicationFormSubmit} className="p-6 overflow-y-auto flex-1">
               <div className="space-y-4">
                 <div>
-                  <label className="block mb-1 text-white">Name *</label>
+                  <label className="block mb-1 text-gray-700 font-semibold">Name *</label>
                   <input
                     type="text"
-                    className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600"
+                    className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     value={indicationFormData.name || ""}
                     onChange={(e) => setIndicationFormData({ ...indicationFormData, name: e.target.value })}
                     required
@@ -2866,10 +2975,10 @@ export default function AdminContentPage() {
                 </div>
                 
                 <div>
-                  <label className="block mb-1 text-white">Slug *</label>
+                  <label className="block mb-1 text-gray-700 font-semibold">Slug *</label>
                   <input
                     type="text"
-                    className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600"
+                    className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     value={indicationFormData.slug || ""}
                     onChange={(e) => setIndicationFormData({ ...indicationFormData, slug: e.target.value })}
                     required
@@ -2877,9 +2986,9 @@ export default function AdminContentPage() {
                 </div>
                 
                 <div>
-                  <label className="block mb-1 text-white">Description</label>
+                  <label className="block mb-1 text-gray-700 font-semibold">Description</label>
                   <textarea
-                    className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600"
+                    className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     rows={4}
                     value={indicationFormData.description || ""}
                     onChange={(e) => setIndicationFormData({ ...indicationFormData, description: e.target.value })}
@@ -2887,9 +2996,9 @@ export default function AdminContentPage() {
                 </div>
                 
                 <div>
-                  <label className="block mb-1 text-white">Color</label>
+                  <label className="block mb-1 text-gray-700 font-semibold">Color</label>
                   <select
-                    className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600"
+                    className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     value={indicationFormData.color || "blue"}
                     onChange={(e) => setIndicationFormData({ ...indicationFormData, color: e.target.value })}
                   >
@@ -2908,18 +3017,18 @@ export default function AdminContentPage() {
               </div>
             </form>
             
-            <div className="p-6 border-t border-gray-700">
-              <div className="flex gap-4">
+            <div className="p-6 border-t border-gray-300 bg-gray-50">
+              <div className="flex gap-4 flex-wrap">
                 <button
                   type="submit"
                   form="indication-form"
-                  className="bg-green-700 text-white px-6 py-2 rounded font-bold"
+                  className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-green-600 text-white border-transparent hover:bg-green-700 hover:border-green-700 hover:shadow-lg hover:scale-105"
                 >
                   Save
                 </button>
                 <button
                   type="button"
-                  className="bg-gray-500 text-white px-6 py-2 rounded font-bold"
+                  className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-gray-600 text-white border-transparent hover:bg-gray-700 hover:border-gray-700 hover:shadow-lg hover:scale-105"
                   onClick={() => setShowIndicationForm(false)}
                 >
                   Cancel
@@ -2932,13 +3041,19 @@ export default function AdminContentPage() {
 
       {/* Content Preview Modal */}
       {showPreview && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
-          <div className="bg-gray-900 rounded shadow-lg w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
-            <div className="p-6 border-b border-gray-700 flex justify-between items-center">
-              <h2 className="text-2xl font-bold text-white">Content Preview</h2>
+        <div className="fixed inset-0 bg-pink-100 bg-opacity-90 flex items-center justify-center z-50 p-4" style={{
+          backgroundImage: "url('/images/RoseWPWM.PNG')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}>
+          <div className="absolute inset-0 bg-pink-100 opacity-90"></div>
+          <div className="relative rounded-xl shadow-lg w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col border-2 border-gray-300" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
+            <div className="p-6 border-b border-gray-300 bg-gray-50 flex justify-between items-center">
+              <h2 className="text-2xl font-bold text-gray-800">Content Preview</h2>
               <button
                 type="button"
-                className="text-gray-400 hover:text-white text-2xl"
+                className="text-gray-500 hover:text-gray-700 text-2xl"
                 onClick={() => setShowPreview(false)}
               >
                 ×
@@ -2967,11 +3082,11 @@ export default function AdminContentPage() {
               </div>
             </div>
             
-            <div className="p-6 border-t border-gray-700">
+            <div className="p-6 border-t border-gray-300 bg-gray-50">
               <div className="flex gap-4">
                 <button
                   type="button"
-                  className="bg-gray-500 text-white px-6 py-2 rounded font-bold"
+                  className="bg-gray-600 text-white px-6 py-2 rounded font-bold hover:bg-gray-700 transition-all duration-200"
                   onClick={() => setShowPreview(false)}
                 >
                   Close Preview
@@ -2981,7 +3096,6 @@ export default function AdminContentPage() {
           </div>
         </div>
       )}
-    </div>
     </div>
     </div>
   );

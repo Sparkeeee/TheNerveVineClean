@@ -6,9 +6,10 @@ import { useSearchParams } from "next/navigation";
 
 interface BodyMapProps {
   startLive?: boolean; // When true, skip the "Explore by Anatomy" button and start interactive immediately
+  onClose?: () => void; // Callback when modal is closed
 }
 
-export default function BodyMap({ startLive = false }: BodyMapProps) {
+export default function BodyMap({ startLive = false, onClose }: BodyMapProps) {
   const [hoveredArea, setHoveredArea] = useState<string | null>(null);
   const [screenWidth, setScreenWidth] = useState(1024);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -332,12 +333,16 @@ export default function BodyMap({ startLive = false }: BodyMapProps) {
   const closeModal = () => {
     setIsModalOpen(false);
     sessionStorage.removeItem('bodyMapModalOpen');
+    if (onClose) {
+      onClose();
+    }
   };
 
   return (
     <>
-      {/* Clean Interactive Body Map */}
-      <div className="w-full max-w-4xl mx-auto">
+      {/* Clean Interactive Body Map - Only show when modal is open or when not startLive */}
+      {(isModalOpen || !startLive) && (
+        <div className="w-full max-w-4xl mx-auto">
         <div className="bg-white rounded-xl p-8 shadow-lg border border-gray-200">
           <div className="text-center mb-6">
             <h3 className="text-2xl font-semibold text-gray-900 mb-2">Interactive Body Map</h3>
@@ -431,6 +436,7 @@ export default function BodyMap({ startLive = false }: BodyMapProps) {
           </div>
         </div>
       </div>
+      )}
 
       {/* Modal with Full Interactive Body Map */}
       {isModalOpen && (

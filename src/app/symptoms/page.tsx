@@ -110,35 +110,27 @@ export default function SymptomsPage() {
 
   const fetchSymptoms = async () => {
     try {
-      const response = await fetch('/api/symptoms');
+      // Use the hierarchy API to get all symptoms with variants
+      const response = await fetch('/api/symptoms/hierarchy');
       if (response.ok) {
         const result = await response.json();
-        console.log('API Response:', result); // Debug log
+        console.log('Hierarchy API Response:', result); // Debug log
         
-        // Handle the API response format: { success: true, data: { symptoms: [...], pagination: {...} } }
-        if (result.success && result.data) {
-          if (result.data.symptoms && Array.isArray(result.data.symptoms)) {
-            setSymptoms(result.data.symptoms);
-          } else if (Array.isArray(result.data)) {
-            // Fallback if data is array directly
-            setSymptoms(result.data);
-          } else {
-            console.error('Unexpected data format in successful response:', result.data);
-            setSymptoms([]);
-          }
+        if (result.success && result.data && Array.isArray(result.data)) {
+          setSymptoms(result.data);
         } else if (Array.isArray(result)) {
-          // Fallback if API returns array directly (old format)
+          // Fallback if API returns array directly
           setSymptoms(result);
         } else {
-          console.error('API response not successful or unexpected format:', result);
+          console.error('Unexpected data format in hierarchy response:', result);
           setSymptoms([]);
         }
       } else {
-        console.error('API response not OK:', response.status, response.statusText);
+        console.error('Hierarchy API response not OK:', response.status, response.statusText);
         setSymptoms([]);
       }
     } catch (error) {
-      console.error('Error fetching symptoms:', error);
+      console.error('Error fetching symptoms from hierarchy:', error);
       setSymptoms([]);
     } finally {
       setLoading(false);
@@ -317,7 +309,10 @@ export default function SymptomsPage() {
 
         {/* BodyMap Modal */}
         {showBodyMap && (
-          <BodyMap startLive={true} />
+          <BodyMap 
+            startLive={true} 
+            onClose={() => setShowBodyMap(false)}
+          />
         )}
       </div>
     </div>

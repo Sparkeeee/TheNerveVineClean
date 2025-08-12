@@ -97,19 +97,29 @@ export default function ProductHuntDashboard() {
   };
 
   return (
-    <div className="min-h-screen p-6 relative" style={{
-      backgroundImage: "url('/images/Archery_Arrows_in_Paper_Target.jpg')",
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat',
-    }}>
-      {/* Overlay for readability */}
-      <div className="absolute inset-0 bg-white/60 pointer-events-none" />
-      <div className="relative max-w-7xl mx-auto">
+    <div className="min-h-screen relative">
+      <div className="fixed inset-0 -z-10" style={{
+        backgroundImage: "url('/images/RoseWPWM.PNG')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}>
+        <div className="absolute inset-0 bg-pink-100 opacity-90"></div>
+      </div>
+
+      <div className="relative max-w-7xl mx-auto px-6 pt-8 pb-8">
+        {/* Hero Section */}
+        <div className="rounded-xl p-8 shadow-sm border-2 border-gray-300 mb-8" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
+          <h1 className="text-4xl font-bold text-gray-800 mb-6 text-center">Product Hunt Dashboard</h1>
+          <p className="text-lg text-gray-700 text-center max-w-3xl mx-auto">
+            Review and approve products based on quality specifications and research criteria.
+          </p>
+        </div>
+
         {/* Hunt Controls */}
-        <div className="mb-8">
-          <div className="bg-white rounded-lg shadow border border-gray-200 p-6 flex flex-wrap items-center gap-4">
-            <button className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded shadow">
+        <div className="rounded-xl p-6 shadow-sm border-2 border-gray-300 mb-8" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
+          <div className="flex flex-wrap items-center gap-4">
+            <button className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded shadow transition-all duration-200">
               Start New Product Hunt
             </button>
             <label className="font-semibold text-gray-800 flex items-center gap-2">
@@ -129,11 +139,11 @@ export default function ProductHuntDashboard() {
               Start Date:
               <input type="date" id="start-date" name="startDate" className="border border-gray-300 rounded px-2 py-1" defaultValue={today} />
             </label>
-            <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-6 rounded shadow">
+            <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-6 rounded shadow transition-all duration-200">
               Save
             </button>
             <button
-              className="bg-green-700 hover:bg-green-800 text-white font-bold py-2 px-6 rounded shadow"
+              className="bg-green-700 hover:bg-green-800 text-white font-bold py-2 px-6 rounded shadow transition-all duration-200"
               type="button"
               onClick={handleTriggerHuntNow}
             >
@@ -141,34 +151,26 @@ export default function ProductHuntDashboard() {
             </button>
           </div>
         </div>
+
         {/* Search and Filter Controls */}
-        <div className="flex flex-wrap gap-4 mb-8">
-          <input type="text" id="product-search" name="productSearch" placeholder="Search by product name..." className="border border-gray-400 rounded px-4 py-2 bg-white/80 text-gray-900 placeholder-gray-500 shadow" />
-          <select id="merchant-filter" name="merchantFilter" className="border border-gray-400 rounded px-4 py-2 bg-white/80 text-gray-900 shadow">
-            <option>All Merchants</option>
-          </select>
-          <select id="region-filter" name="regionFilter" className="border border-gray-400 rounded px-4 py-2 bg-white/80 text-gray-900 shadow">
-            <option>All Regions</option>
-          </select>
-          <select id="quality-filter" name="qualityFilter" className="border border-gray-400 rounded px-4 py-2 bg-white/80 text-gray-900 shadow">
-            <option>All Quality Scores</option>
-          </select>
-        </div>
-        {/* Header */}
-        <div className="mb-8">
-          <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Product Hunt Dashboard
-            </h1>
-            <p className="text-gray-700">
-              Review and approve products based on quality specifications and research criteria.
-            </p>
+        <div className="rounded-xl p-6 shadow-sm border-2 border-gray-300 mb-8" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
+          <div className="flex flex-wrap gap-4">
+            <input type="text" id="product-search" name="productSearch" placeholder="Search by product name..." className="border border-gray-400 rounded px-4 py-2 bg-white/80 text-gray-900 placeholder-gray-500 shadow" />
+            <select id="merchant-filter" name="merchantFilter" className="border border-gray-400 rounded px-4 py-2 bg-white/80 text-gray-900 shadow">
+              <option>All Merchants</option>
+            </select>
+            <select id="region-filter" name="regionFilter" className="border border-gray-400 rounded px-4 py-2 bg-white/80 text-gray-900 shadow">
+              <option>All Regions</option>
+            </select>
+            <select id="quality-filter" name="qualityFilter" className="border border-gray-400 rounded px-4 py-2 bg-white/80 text-gray-900 shadow">
+              <option>All Quality Scores</option>
+            </select>
           </div>
         </div>
 
         {/* Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white rounded-lg shadow-md p-6">
+          <div className="rounded-xl p-6 shadow-sm border-2 border-gray-300" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-700">Total Pending Herbs</p>
@@ -182,7 +184,7 @@ export default function ProductHuntDashboard() {
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow-md p-6">
+          <div className="rounded-xl p-6 shadow-sm border-2 border-gray-300" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-700">Total Pending Supplements</p>
@@ -196,7 +198,7 @@ export default function ProductHuntDashboard() {
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow-md p-6">
+          <div className="rounded-xl p-6 shadow-sm border-2 border-gray-300" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-700">Total Pending</p>
@@ -212,14 +214,14 @@ export default function ProductHuntDashboard() {
         </div>
 
         {loading ? (
-          <div className="text-center py-12">
+          <div className="rounded-xl p-12 shadow-sm border-2 border-gray-300 text-center" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
             <p className="mt-4 text-gray-700">Loading substances...</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Herbs Section */}
-            <div className="bg-white rounded-lg shadow-md p-6">
+            <div className="rounded-xl p-6 shadow-sm border-2 border-gray-300" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-semibold text-gray-900">Herbs ({herbs.length})</h2>
                 <span className="px-3 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-full">
@@ -232,7 +234,7 @@ export default function ProductHuntDashboard() {
                   <Link
                     key={herb.id}
                     href={`/admin/product-hunt/herbs/${herb.slug}`}
-                    className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                    className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-amber-50 hover:border-gray-400 transition-all duration-200"
                   >
                     <div className="flex items-center space-x-3">
                       <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
@@ -261,7 +263,7 @@ export default function ProductHuntDashboard() {
             </div>
 
             {/* Supplements Section */}
-            <div className="bg-white rounded-lg shadow-md p-6">
+            <div className="rounded-xl p-6 shadow-sm border-2 border-gray-300" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-semibold text-gray-900">Supplements ({supplements.length})</h2>
                 <span className="px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full">
@@ -274,7 +276,7 @@ export default function ProductHuntDashboard() {
                   <Link
                     key={supplement.id}
                     href={`/admin/product-hunt/supplements/${supplement.slug}`}
-                    className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                    className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-amber-50 hover:border-gray-400 transition-all duration-200"
                   >
                     <div className="flex items-center space-x-3">
                       <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
@@ -308,27 +310,28 @@ export default function ProductHuntDashboard() {
         <div className="mt-8 flex gap-4">
           <Link
             href="/admin"
-            className="bg-gray-600 text-white px-6 py-3 rounded-md hover:bg-gray-700 transition font-medium"
+            className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-white text-gray-700 border-gray-300 hover:bg-amber-50 hover:border-gray-400 hover:text-gray-600 hover:shadow-gray-300 hover:shadow-lg hover:scale-105"
           >
             Back to Admin
           </Link>
           <Link
             href="/admin/quality-specifications"
-            className="bg-indigo-600 text-white px-6 py-3 rounded-md hover:bg-indigo-700 transition font-medium"
+            className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-white text-gray-700 border-gray-300 hover:bg-amber-50 hover:border-gray-400 hover:text-gray-600 hover:shadow-gray-300 hover:shadow-lg hover:scale-105"
           >
             Manage Quality Specs
           </Link>
           <Link
             href="/admin/data-hub"
-            className="bg-purple-600 text-white px-6 py-3 rounded-md hover:bg-purple-700 transition font-medium"
+            className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-white text-gray-700 border-gray-300 hover:bg-amber-50 hover:border-gray-400 hover:text-gray-600 hover:shadow-gray-300 hover:shadow-lg hover:scale-105"
           >
             Data Processing Hub
           </Link>
         </div>
+
         {/* Clear All Pending Button */}
         <div className="flex justify-end mt-8">
           <button
-            className="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded shadow"
+            className="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded shadow transition-all duration-200"
             type="button"
             onClick={() => {
               if (window.confirm('Are you sure you want to clear ALL pending products? This action cannot be undone.')) {
