@@ -8,7 +8,6 @@ interface ScrapedProduct {
   price: string;
   image: string;
   description: string;
-  availability: string;
   url: string;
   rawData: any;
 }
@@ -138,6 +137,85 @@ export default function ProductScraperPage() {
               >
                 {isScraping ? 'Scraping...' : 'Extract Product Data'}
               </button>
+              
+              <button
+                onClick={async () => {
+                  if (!url.trim() || !url.includes('vitacost')) return;
+                  setIsScraping(true);
+                  setError('');
+                  setScrapedProduct(null);
+                  try {
+                    const response = await fetch('/api/product-scraper/vitacost-refined', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify({ url }),
+                    });
+
+                    if (!response.ok) {
+                      const errorData = await response.json();
+                      throw new Error(errorData.error || 'Failed to scrape product');
+                    }
+
+                    const data = await response.json();
+                    setScrapedProduct(data);
+                  } catch (err) {
+                    setError(err instanceof Error ? err.message : 'An error occurred');
+                  } finally {
+                    setIsScraping(false);
+                  }
+                }}
+                disabled={isScraping || !url.trim() || !url.includes('vitacost')}
+                className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all duration-200"
+                title="Refined Vitacost scraper with better price detection, image URL fixing, and description targeting"
+              >
+                Vitacost Refined
+              </button>
+              
+              <button
+                onClick={async () => {
+                  console.log('🔍 Target Refined button clicked');
+                  console.log('🔍 URL being sent:', url);
+                  if (!url.trim() || !url.includes('target')) return;
+                  setIsScraping(true);
+                  setError('');
+                  setScrapedProduct(null);
+                  try {
+                    console.log('🔍 Calling /api/product-scraper/target-refined');
+                    const response = await fetch('/api/product-scraper/target-refined', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify({ url }),
+                    });
+
+                    console.log('🔍 Response status:', response.status);
+                    if (!response.ok) {
+                      const errorData = await response.json();
+                      console.log('🔍 Error response:', errorData);
+                      throw new Error(errorData.error || 'Failed to scrape product');
+                    }
+
+                    const data = await response.json();
+                    console.log('🔍 Success response:', data);
+                    setScrapedProduct(data);
+                  } catch (err) {
+                    setError(err instanceof Error ? err.message : 'An error occurred');
+                  } finally {
+                    setIsScraping(false);
+                  }
+                }}
+                disabled={isScraping || !url.trim() || !url.includes('target')}
+                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all duration-200"
+                title="Refined Target scraper with comprehensive filtering and Target-specific extraction patterns"
+              >
+                Target Refined
+              </button>
+              
+
+              
               <button 
                 onClick={async () => {
                   if (!url.trim()) return;
@@ -413,46 +491,7 @@ export default function ProductScraperPage() {
               >
                 Ultra Simple
               </button>
-              <button 
-                onClick={async () => {
-                  if (!url.trim() || !url.includes('iherb')) return;
-                  setIsScraping(true);
-                  setError('');
-                  setDebugInfo(null);
-                  
-                  try {
-                    const response = await fetch('/api/product-scraper/iherb-advanced', {
-                      method: 'POST',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({ url })
-                    });
-                    
-                    const data = await response.json();
-                    
-                    if (data.success) {
-                      setScrapedProduct(data.product);
-                      setDebugInfo({
-                        url,
-                        hostname: new URL(url).hostname,
-                        status: '✅ Success',
-                        method: data.method,
-                        htmlLength: data.product.rawData?.html?.length || 'Unknown'
-                      });
-                    } else {
-                      setError(data.error || 'Failed to scrape product');
-                    }
-                  } catch (error) {
-                    setError('Failed to scrape product');
-                  } finally {
-                    setIsScraping(false);
-                  }
-                }}
-                disabled={isScraping || !url.trim() || !url.includes('iherb')}
-                className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all duration-200"
-                title="Advanced iHerb scraper with sophisticated headers and multiple approaches"
-              >
-                iHerb Hacker
-              </button>
+
             </div>
           </div>
         </div>
@@ -695,17 +734,32 @@ export default function ProductScraperPage() {
                 />
               </div>
 
-              <div>
-                <label htmlFor="availability" className="block text-sm font-medium text-gray-900 mb-1">
-                  Availability
-                </label>
-                <input
-                  id="availability"
-                  value={scrapedProduct.availability}
-                  onChange={(e) => setScrapedProduct({...scrapedProduct, availability: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
-                />
-              </div>
+              {/* Debug Information */}
+              {scrapedProduct.rawData?.debug && (
+                <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                  <h4 className="font-semibold text-yellow-800 mb-3">🔍 Debug Information</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                    <div>
+                      <p><strong>Found $18.19:</strong> {scrapedProduct.rawData.debug.foundPrice18_19 ? '✅ Yes' : '❌ No'}</p>
+                      <p><strong>Found data-test="product-price":</strong> {scrapedProduct.rawData.debug.foundDataTestProductPrice ? '✅ Yes' : '❌ No'}</p>
+                      <p><strong>Found "About this item":</strong> {scrapedProduct.rawData.debug.foundAboutThisItem ? '✅ Yes' : '❌ No'}</p>
+                    </div>
+                    <div>
+                      <p><strong>Total Price Patterns:</strong> {scrapedProduct.rawData.debug.totalPricePatterns}</p>
+                      <p><strong>Price Patterns Found:</strong> {scrapedProduct.rawData.debug.pricePatterns?.join(', ') || 'None'}</p>
+                      <p><strong>Data Test Elements:</strong> {scrapedProduct.rawData.debug.dataTestElements?.length || 0}</p>
+                    </div>
+                  </div>
+                  {scrapedProduct.rawData.debug.dataTestElements && scrapedProduct.rawData.debug.dataTestElements.length > 0 && (
+                    <div className="mt-3">
+                      <p className="font-semibold text-yellow-800">Data Test Elements:</p>
+                      {scrapedProduct.rawData.debug.dataTestElements.map((el: string, index: number) => (
+                        <p key={index} className="text-xs bg-white p-2 rounded mt-1 border border-yellow-200">{el}</p>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
 
               <div className="flex gap-2">
                 <button 

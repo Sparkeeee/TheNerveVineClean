@@ -6,7 +6,7 @@ interface ScrapedProduct {
   price: string;
   image: string;
   description: string;
-  availability: string;
+  availability?: string; // Make optional since scrapers don't always provide it
   url: string;
   rawData: any;
 }
@@ -23,8 +23,40 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Handle missing availability field
+    if (!productData.availability) {
+      productData.availability = 'Unknown'; // Default value
+    }
+
+    // Decode HTML entities for cleaner product names and descriptions
+    const decodeHtmlEntities = (text: string): string => {
+      if (!text) return text;
+      return text
+        .replace(/&#39;/g, "'")        // apostrophe
+        .replace(/&amp;/g, "&")       // ampersand
+        .replace(/&quot;/g, '"')      // quote
+        .replace(/&lt;/g, "<")        // less than
+        .replace(/&gt;/g, ">")        // greater than
+        .replace(/&nbsp;/g, " ")      // non-breaking space
+        .replace(/&rsquo;/g, "'")     // right single quote
+        .replace(/&lsquo;/g, "'")     // left single quote
+        .replace(/&rdquo;/g, '"')     // right double quote
+        .replace(/&ldquo;/g, '"');    // left double quote
+    };
+
+    // Clean up product data
+    const cleanProductData = {
+      ...productData,
+      name: decodeHtmlEntities(productData.name),
+      description: decodeHtmlEntities(productData.description)
+    };
+
+    console.log('🔍 Cleaned product name:', cleanProductData.name);
+    console.log('🔍 Cleaned description preview:', cleanProductData.description?.substring(0, 100));
+
     // Extract domain for merchant identification
     const domain = new URL(productData.url).hostname;
+    console.log('🔍 Extracted domain:', domain);
     
     // Create or find merchant
     let merchant = await prisma.merchant.findFirst({
@@ -35,6 +67,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (!merchant) {
+      console.log('🔍 Creating new merchant for domain:', domain);
       merchant = await prisma.merchant.create({
         data: {
           name: domain.replace('www.', ''),
@@ -42,21 +75,35 @@ export async function POST(request: NextRequest) {
           apiSource: 'scraper'
         }
       });
+      console.log('✅ Merchant created:', merchant.id, merchant.name);
+    } else {
+      console.log('✅ Found existing merchant:', merchant.id, merchant.name);
     }
 
     // Create product
+    console.log('🔍 Creating product with data:', {
+      name: cleanProductData.name,
+      description: cleanProductData.description?.substring(0, 100) + '...',
+      price: cleanProductData.price,
+      imageUrl: cleanProductData.image,
+      affiliateLink: cleanProductData.url,
+      merchantId: merchant.id
+    });
+    
     const product = await prisma.product.create({
       data: {
-        name: productData.name,
-        description: productData.description,
-        price: productData.price,
+        name: cleanProductData.name,
+        description: cleanProductData.description,
+        price: cleanProductData.price,
         currency: 'USD',
         region: 'US',
-        imageUrl: productData.image,
-        affiliateLink: productData.url,
+        imageUrl: cleanProductData.image,
+        affiliateLink: cleanProductData.url,
         merchantId: merchant.id
       }
     });
+    
+    console.log('✅ Product created successfully:', product.id);
 
     return NextResponse.json({
       success: true,
@@ -70,8 +117,9 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('Save product error:', error);
+    console.error('Product data received:', JSON.stringify(productData, null, 2));
     return NextResponse.json(
-      { error: 'Failed to save product data' },
+      { error: `Failed to save product data: ${error instanceof Error ? error.message : 'Unknown error'}` },
       { status: 500 }
     );
   }

@@ -9,11 +9,11 @@ datasource db {
 }
 
 model Herb {
-  id                   Int              @id @default(autoincrement())
+  id                   Int                   @id @default(autoincrement())
   name                 String?
   commonName           String?
   latinName            String?
-  slug                 String?          @unique
+  slug                 String?               @unique
   description          String
   metaTitle            String?
   metaDescription      String?
@@ -25,9 +25,10 @@ model Herb {
   references           Json?
   traditionalUses      Json?
   comprehensiveArticle String?
-  indicationTags       Indication[]     @relation("HerbIndications")
-  products             Product[]        @relation("HerbProducts")
-  symptomVariants      SymptomVariant[] @relation("VariantHerbs")
+  HerbIndicationScore  HerbIndicationScore[]
+  indicationTags       Indication[]          @relation("HerbIndications")
+  products             Product[]             @relation("HerbProducts")
+  symptomVariants      SymptomVariant[]      @relation("VariantHerbs")
 }
 
 model Symptom {
@@ -43,6 +44,8 @@ model Symptom {
   metaTitle            String?
   comprehensiveArticle String?
   commonSymptoms       String[]
+  herbs                Json?
+  supplements          Json?
   variants             SymptomVariant[]
   products             Product[]        @relation("SymptomProducts")
 }
@@ -98,11 +101,7 @@ model QualitySpecification {
   id                   Int     @id @default(autoincrement())
   herbSlug             String?
   herbName             String?
-  supplementSlug       String?
-  supplementName       String?
   productType          String
-  formulationName      String?
-  approach             String? @default("traditional")
   requiredTerms        Json
   preferredTerms       Json
   avoidTerms           Json
@@ -114,7 +113,11 @@ model QualitySpecification {
   reviewCountThreshold Int
   brandPreferences     Json?
   brandAvoid           Json?
+  approach             String? @default("traditional")
+  formulationName      String?
   notes                String?
+  supplementName       String?
+  supplementSlug       String?
 }
 
 model Merchant {
@@ -177,15 +180,16 @@ model Product {
 }
 
 model Indication {
-  id          Int          @id @default(autoincrement())
-  name        String       @unique
-  slug        String       @unique
-  description String?
-  color       String       @default("blue")
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  herbs       Herb[]       @relation("HerbIndications")
-  supplements Supplement[] @relation("SupplementIndications")
+  id                  Int                   @id @default(autoincrement())
+  name                String                @unique
+  slug                String                @unique
+  description         String?
+  color               String                @default("blue")
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  HerbIndicationScore HerbIndicationScore[]
+  herbs               Herb[]                @relation("HerbIndications")
+  supplements         Supplement[]          @relation("SupplementIndications")
 }
 
 model User {
@@ -208,4 +212,23 @@ model ShoppingList {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   user      User     @relation(fields: [userId], references: [id])
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model HerbIndicationScore {
+  id               Int        @id @default(autoincrement())
+  herbId           Int
+  indicationId     Int
+  traditionalScore Int        @db.SmallInt
+  researchScore    Int        @db.SmallInt
+  totalScore       Decimal    @db.Decimal(3, 1)
+  notes            String?
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @default(now())
+  Herb             Herb       @relation(fields: [herbId], references: [id], onDelete: Cascade)
+  Indication       Indication @relation(fields: [indicationId], references: [id], onDelete: Cascade)
+
+  @@unique([herbId, indicationId])
+  @@index([herbId])
+  @@index([indicationId, totalScore(sort: Desc)])
 }

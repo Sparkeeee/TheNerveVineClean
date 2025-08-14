@@ -264,7 +264,8 @@ export async function getCachedHerbs() {
         indicationTags: {
           select: {
             name: true,
-            slug: true
+            slug: true,
+            color: true
           }
         }
       },
@@ -348,7 +349,8 @@ export async function getCachedSupplements() {
         indicationTags: {
           select: {
             name: true,
-            slug: true
+            slug: true,
+            color: true
           }
         }
       }

@@ -2,43 +2,6 @@ import Link from "next/link";
 import { getCachedHerbs } from '@/lib/database';
 import HerbImage from '@/components/HerbImage';
 
-// Helper function to truncate description to ~2 lines
-function truncateDescription(description: string): string {
-  if (!description) return '';
-  
-  // Check if content is HTML
-  const isHtml = /<[^>]*>/.test(description);
-  
-  if (isHtml) {
-    // For HTML content, strip tags and get plain text
-    const plainText = description
-      .replace(/<[^>]*>/g, '') // Remove all HTML tags
-      .replace(/&nbsp;/g, ' ') // Replace HTML entities
-      .replace(/&amp;/g, '&')
-      .replace(/&lt;/g, '<')
-      .replace(/&gt;/g, '>')
-      .trim();
-    
-    // Truncate the plain text
-    if (plainText.length > 150) {
-      return plainText.substring(0, 150).trim() + '...';
-    }
-    
-    return plainText;
-  } else {
-    // For plain text, use the original logic
-    const sentences = description.split(/[.!?]+/).filter(s => s.trim().length > 0);
-    const firstTwoSentences = sentences.slice(0, 2).join('. ');
-    
-    // If it's still too long, truncate to ~150 characters
-    if (firstTwoSentences.length > 150) {
-      return firstTwoSentences.substring(0, 150).trim() + '...';
-    }
-    
-    return firstTwoSentences + (sentences.length > 2 ? '...' : '');
-  }
-}
-
 // Use ISR for optimal caching with database updates
 export const revalidate = 900; // 15 minutes - matches cache TTL
 
@@ -94,10 +57,6 @@ export default async function HerbsPage() {
                   <p className="text-gray-500 text-sm italic mb-2">
                     {herb.latinName || getLatinName(herb.description || '')}
                   </p>
-                  {/* Truncated description */}
-                  <p className="text-gray-600 text-sm mb-4 leading-relaxed">
-                    {truncateDescription(herb.description)}
-                  </p>
                 </div>
                 
                 {/* Herb image on the right */}
@@ -111,26 +70,29 @@ export default async function HerbsPage() {
                   </div>
                 )}
               </div>
-              <hr className="my-3 border-blue-100" />
               
-              {/* Indications */}
+              {/* Indication Tags */}
               {herb.indicationTags && herb.indicationTags.length > 0 && (
-                <div className="mt-3">
-                  <p className="text-xs text-gray-500 mb-2">Indications:</p>
-                  <div className="flex flex-wrap gap-1">
+                <div className="mt-4">
+                  <div className="flex flex-wrap gap-2">
                     {herb.indicationTags.map((indication: any) => (
-                      <Link
+                      <span
                         key={indication.slug}
-                        href={`/symptoms/${indication.slug}`}
-                        className="inline-block px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full hover:bg-blue-200 transition-colors"
+                        className={`inline-block px-3 py-1 text-xs font-medium rounded-full border transition-colors ${
+                          indication.color === 'blue' ? 'bg-blue-100 text-blue-800 border-blue-200' :
+                          indication.color === 'green' ? 'bg-green-100 text-green-800 border-green-200' :
+                          indication.color === 'red' ? 'bg-red-100 text-red-800 border-red-200' :
+                          indication.color === 'purple' ? 'bg-purple-100 text-purple-800 border-purple-200' :
+                          indication.color === 'orange' ? 'bg-orange-100 text-orange-800 border-orange-200' :
+                          'bg-gray-100 text-gray-800 border-gray-200'
+                        }`}
                       >
                         {indication.name}
-                      </Link>
+                      </span>
                     ))}
                   </div>
                 </div>
               )}
-
             </div>
           ))}
         </div>

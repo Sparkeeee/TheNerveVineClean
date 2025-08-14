@@ -754,7 +754,7 @@ export default function AdminContentPage() {
       const res = await fetch("/api/indications");
       if (!res.ok) throw new Error("Failed to fetch indications");
       const response = await res.json();
-      const indicationsArray = response.data?.indications || response.indications || response || [];
+      const indicationsArray = response.data || response.indications || response || [];
       if (!Array.isArray(indicationsArray)) {
         console.error('Indications data is not an array:', indicationsArray);
         setIndications([]);
@@ -2313,973 +2313,984 @@ export default function AdminContentPage() {
   }
 
   return (
-    <div className="min-h-screen relative">
-      <div className="fixed inset-0 -z-10" style={{
-        backgroundImage: "url('/images/RoseWPWM.PNG')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-      }}>
-        <div className="absolute inset-0 bg-pink-100 opacity-90"></div>
-      </div>
-      
-      <div className="h-10"></div>
-      <div className="relative z-10 container-max px-6 pt-8 pb-8">
-        <div className="mb-6">
-          <Link href="/admin" 
-                className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-white text-gray-700 border-gray-300 hover:bg-amber-50 hover:border-gray-400 hover:text-gray-600 hover:shadow-gray-300 hover:shadow-lg hover:scale-105">
-            ← Admin Home
-          </Link>
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 to-yellow-50 p-6">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="bg-white rounded-xl shadow-sm border-2 border-gray-300 p-6 mb-6">
+          <h1 className="text-3xl font-bold text-gray-800">Content Management</h1>
+          <p className="text-gray-600 mt-2">
+            Manage symptoms, variants, herbs, supplements, and indications
+          </p>
         </div>
 
-      {/* Tabs for Herbs, Supplements, Symptoms */}
-      <div className="rounded-xl shadow-sm border-2 border-gray-300 mb-8" 
-           style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
-        <div className="flex border-b border-gray-300">
-          {TABS.map((t) => (
-            <button
-              key={t}
-              className={`px-6 py-4 font-semibold text-gray-700 border-b-2 transition-colors ${tab === t ? 'border-blue-600 text-blue-700 bg-blue-50' : 'border-transparent hover:text-blue-700 hover:bg-gray-50'}`}
-              onClick={() => setTab(t)}
+        {/* Navigation */}
+        <div className="bg-white rounded-xl shadow-sm border-2 border-gray-300 p-6 mb-6">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">Admin Tools</h2>
+          <div className="flex flex-wrap gap-4">
+
+            <Link
+              href="/admin/symptom-tree"
+              className="px-6 py-3 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition-colors"
             >
-              {t}
-            </button>
-          ))}
-        </div>
-        <div className="p-6">
-          {tab === "Blog" ? (
-          <div>
-            {/* Blog/Article Upload Section */}
-            <section className="mb-8">
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">Upload Blog/Article</h2>
-              <form className="flex flex-col gap-4" onSubmit={handleUpload}>
-                <input
-                  type="text"
-                  placeholder="Title"
-                  className="border border-gray-300 px-3 py-2 rounded-lg text-gray-700 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  required
-                />
-                <textarea
-                  placeholder="Admin Note (optional)"
-                  className="border border-gray-300 px-3 py-2 rounded-lg text-gray-700 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  value={adminNote}
-                  onChange={(e) => setAdminNote(e.target.value)}
-                />
-                <div className="flex flex-col md:flex-row gap-4 items-center">
-                  <input
-                    type="file"
-                    accept=".pdf,.docx,.md,.txt"
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFile(e.target && e.target.files ? e.target.files[0] : null)}
-                    className="border border-gray-300 px-3 py-2 rounded-lg text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                  <span className="text-gray-700">or</span>
-                  <textarea
-                    placeholder="Paste or write article content here (Markdown or plain text)"
-                    className="border border-gray-300 px-3 py-2 rounded-lg text-gray-700 bg-white placeholder-gray-500 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    value={textContent}
-                    onChange={(e) => setTextContent(e.target.value)}
-                    rows={4}
-                  />
-                </div>
-                <button type="submit" 
-                        className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-green-600 text-white border-transparent hover:bg-green-700 hover:border-green-700 hover:shadow-lg hover:scale-105 w-40">
-                  Upload
-                </button>
-              </form>
-            </section>
-
-            {/* Articles List */}
-            <section>
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">Uploaded Articles</h2>
-              <div className="space-y-4">
-                {articles.map((article, index) => (
-                  <div key={index} className="p-4 border border-gray-300 rounded-lg bg-white">
-                    <h3 className="font-semibold text-gray-800">{article.title}</h3>
-                    {article.adminNote && <p className="text-sm text-gray-600 mt-1">Note: {article.adminNote}</p>}
-                    <p className="text-sm text-gray-500 mt-1">Uploaded: {article.uploadDate}</p>
-                    <div className="mt-2 flex gap-2">
-                      <button
-                        onClick={() => {
-                          setEditingIndex(index);
-                          setEditContent(article.content);
-                        }}
-                        className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => {
-                          const newArticles = [...articles];
-                          newArticles.splice(index, 1);
-                          setArticles(newArticles);
-                        }}
-                        className="px-3 py-1 bg-red-600 text-white text-sm rounded hover:bg-red-700"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </section>
+              🌳 Symptom Tree
+            </Link>
+            <Link
+              href="/admin/product-hunt"
+              className="px-6 py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-700 transition-colors"
+            >
+              🎯 Product Hunt
+            </Link>
           </div>
-          ) : (
-            <>
-              {/* Action Buttons */}
-              {tab === "Products" && (
-                <div className="mb-6 flex justify-between items-center">
-                  <button
-                    onClick={() => setTab("Herbs")}
-                    className="text-gray-600 hover:text-gray-800 transition-colors"
-                  >
-                    <span className="material-symbols-outlined text-2xl">keyboard_backspace</span>
-                  </button>
-                  <button
-                    className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-blue-600 text-white border-transparent hover:bg-blue-700 hover:border-blue-700 hover:shadow-lg hover:scale-105"
-                    onClick={() => setShowBatchImport(true)}
-                  >
-                    📥 Batch Import
-                  </button>
-                  <div className="w-10"></div>
-                </div>
-              )}
-              {tab !== "Products" && (
-                <button
-                  className="mb-4 inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-green-600 text-white border-transparent hover:bg-green-700 hover:border-green-700 hover:shadow-lg hover:scale-105"
-                  onClick={openAddForm}
-                >
-                  + Add New {tab.slice(0, -1)}
-                </button>
-              )}
+        </div>
 
-              {/* Products Form - Always Visible When Products Tab is Selected */}
-              {tab === "Products" && (
-                <div className="mb-8 rounded-xl shadow-sm border-2 border-gray-300 p-6" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
-                  <h2 className="text-2xl font-bold mb-6 text-gray-800">Add New Product</h2>
-                  
-                  <form onSubmit={handleFormSubmit} className="space-y-6">
-                    {/* Product Fields */}
-                    {PRODUCT_FIELDS.map((f) => {
-                      if (f.key === "description") {
+        {/* Tabs for Herbs, Supplements, Symptoms */}
+        <div className="rounded-xl shadow-sm border-2 border-gray-300 mb-8" 
+             style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
+          <div className="flex border-b border-gray-300">
+            {TABS.map((t) => (
+              <button
+                key={t}
+                className={`px-6 py-4 font-semibold text-gray-700 border-b-2 transition-colors ${tab === t ? 'border-blue-600 text-blue-700 bg-blue-50' : 'border-transparent hover:text-blue-700 hover:bg-gray-50'}`}
+                onClick={() => setTab(t)}
+              >
+                {t}
+              </button>
+            ))}
+          </div>
+          <div className="p-6">
+            {tab === "Blog" ? (
+            <div>
+              {/* Blog/Article Upload Section */}
+              <section className="mb-8">
+                <h2 className="text-2xl font-bold text-gray-800 mb-4">Upload Blog/Article</h2>
+                <form className="flex flex-col gap-4" onSubmit={handleUpload}>
+                  <input
+                    type="text"
+                    placeholder="Title"
+                    className="border border-gray-300 px-3 py-2 rounded-lg text-gray-700 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    required
+                  />
+                  <textarea
+                    placeholder="Admin Note (optional)"
+                    className="border border-gray-300 px-3 py-2 rounded-lg text-gray-700 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    value={adminNote}
+                    onChange={(e) => setAdminNote(e.target.value)}
+                  />
+                  <div className="flex flex-col md:flex-row gap-4 items-center">
+                    <input
+                      type="file"
+                      accept=".pdf,.docx,.md,.txt"
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFile(e.target && e.target.files ? e.target.files[0] : null)}
+                      className="border border-gray-300 px-3 py-2 rounded-lg text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                    <span className="text-gray-700">or</span>
+                    <textarea
+                      placeholder="Paste or write article content here (Markdown or plain text)"
+                      className="border border-gray-300 px-3 py-2 rounded-lg text-gray-700 bg-white placeholder-gray-500 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      value={textContent}
+                      onChange={(e) => setTextContent(e.target.value)}
+                      rows={4}
+                    />
+                  </div>
+                  <button type="submit" 
+                          className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-green-600 text-white border-transparent hover:bg-green-700 hover:border-green-700 hover:shadow-lg hover:scale-105 w-40">
+                    Upload
+                  </button>
+                </form>
+              </section>
+
+              {/* Articles List */}
+              <section>
+                <h2 className="text-2xl font-bold text-gray-800 mb-4">Uploaded Articles</h2>
+                <div className="space-y-4">
+                  {articles.map((article, index) => (
+                    <div key={index} className="p-4 border border-gray-300 rounded-lg bg-white">
+                      <h3 className="font-semibold text-gray-800">{article.title}</h3>
+                      {article.adminNote && <p className="text-sm text-gray-600 mt-1">Note: {article.adminNote}</p>}
+                      <p className="text-sm text-gray-500 mt-1">Uploaded: {article.uploadDate}</p>
+                      <div className="mt-2 flex gap-2">
+                        <button
+                          onClick={() => {
+                            setEditingIndex(index);
+                            setEditContent(article.content);
+                          }}
+                          className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => {
+                            const newArticles = [...articles];
+                            newArticles.splice(index, 1);
+                            setArticles(newArticles);
+                          }}
+                          className="px-3 py-1 bg-red-600 text-white text-sm rounded hover:bg-red-700"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            </div>
+            ) : (
+              <>
+                {/* Action Buttons */}
+                {tab === "Products" && (
+                  <div className="mb-6 flex justify-between items-center">
+                    <button
+                      onClick={() => setTab("Herbs")}
+                      className="text-gray-600 hover:text-gray-800 transition-colors"
+                    >
+                      <span className="material-symbols-outlined text-2xl">keyboard_backspace</span>
+                    </button>
+                    <button
+                      className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-blue-600 text-white border-transparent hover:bg-blue-700 hover:border-blue-700 hover:shadow-lg hover:scale-105"
+                      onClick={() => setShowBatchImport(true)}
+                    >
+                      📥 Batch Import
+                    </button>
+                    <div className="w-10"></div>
+                  </div>
+                )}
+                {tab !== "Products" && (
+                  <button
+                    className="mb-4 inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-green-600 text-white border-transparent hover:bg-green-700 hover:border-green-700 hover:shadow-lg hover:scale-105"
+                    onClick={openAddForm}
+                  >
+                    + Add New {tab.slice(0, -1)}
+                  </button>
+                )}
+
+                {/* Products Form - Always Visible When Products Tab is Selected */}
+                {tab === "Products" && (
+                  <div className="mb-8 rounded-xl shadow-sm border-2 border-gray-300 p-6" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
+                    <h2 className="text-2xl font-bold mb-6 text-gray-800">Add New Product</h2>
+                    
+                    <form onSubmit={handleFormSubmit} className="space-y-6">
+                      {/* Product Fields */}
+                      {PRODUCT_FIELDS.map((f) => {
+                        if (f.key === "description") {
+                          return (
+                            <div className="mb-4" key={f.key}>
+                              <label className="block mb-1 text-gray-700 font-semibold">{f.label}{f.required && <span className="text-red-500">*</span>}</label>
+                              <textarea
+                                className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent h-32"
+                                value={String((formData as ProductForm)[f.key] ?? '')}
+                                onChange={e => setFormData({ ...(formData as ProductForm), [f.key]: e.target.value })}
+                                placeholder="Product description..."
+                              />
+                            </div>
+                          );
+                        }
+                        if (f.key === "merchantId") {
+                          return (
+                            <div className="mb-4" key={f.key}>
+                              <label className="block mb-1 text-gray-700 font-semibold">{f.label}{f.required && <span className="text-red-500">*</span>}</label>
+                              <select
+                                className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                value={String((formData as ProductForm)[f.key] ?? '')}
+                                onChange={e => setFormData({ ...(formData as ProductForm), [f.key]: e.target.value })}
+                                required={!!f.required}
+                              >
+                                <option value="">Select a merchant</option>
+                                {allMerchants.map((merchant) => (
+                                  <option key={merchant.id} value={merchant.id}>
+                                    {merchant.name} ({merchant.region})
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
+                          );
+                        }
+                        if (f.key === "currency") {
+                          return (
+                            <div className="mb-4" key={f.key}>
+                              <label className="block mb-1 text-gray-700 font-semibold">{f.label}{f.required && <span className="text-red-500">*</span>}</label>
+                              <select
+                                className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                value={String((formData as ProductForm)[f.key] ?? 'USD')}
+                                onChange={e => setFormData({ ...(formData as ProductForm), [f.key]: e.target.value })}
+                                required={!!f.required}
+                              >
+                                <option value="USD">USD ($)</option>
+                                <option value="EUR">EUR (€)</option>
+                                <option value="GBP">GBP (£)</option>
+                                <option value="CAD">CAD (C$)</option>
+                                <option value="AUD">AUD (A$)</option>
+                              </select>
+                            </div>
+                          );
+                        }
                         return (
                           <div className="mb-4" key={f.key}>
                             <label className="block mb-1 text-gray-700 font-semibold">{f.label}{f.required && <span className="text-red-500">*</span>}</label>
-                            <textarea
-                              className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent h-32"
+                            <input
+                              className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                              type={f.key === "qualityScore" || f.key === "affiliateRate" || f.key === "affiliateYield" ? "number" : "text"}
                               value={String((formData as ProductForm)[f.key] ?? '')}
                               onChange={e => setFormData({ ...(formData as ProductForm), [f.key]: e.target.value })}
-                              placeholder="Product description..."
+                              required={!!f.required}
+                              placeholder={f.key === "price" ? "14.00 - 70.50" : f.key === "qualityScore" ? "1-10" : f.key === "affiliateRate" ? "0.00" : f.key === "affiliateYield" ? "0.00" : ""}
+                              step={f.key === "affiliateRate" || f.key === "affiliateYield" ? "0.01" : f.key === "qualityScore" ? "1" : undefined}
+                              min={f.key === "qualityScore" ? "1" : f.key === "affiliateRate" || f.key === "affiliateYield" ? "0" : undefined}
+                              max={f.key === "qualityScore" ? "10" : undefined}
                             />
                           </div>
                         );
-                      }
-                      if (f.key === "merchantId") {
-                        return (
-                          <div className="mb-4" key={f.key}>
-                            <label className="block mb-1 text-gray-700 font-semibold">{f.label}{f.required && <span className="text-red-500">*</span>}</label>
-                            <select
-                              className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                              value={String((formData as ProductForm)[f.key] ?? '')}
-                              onChange={e => setFormData({ ...(formData as ProductForm), [f.key]: e.target.value })}
-                              required={!!f.required}
-                            >
-                              <option value="">Select a merchant</option>
-                              {allMerchants.map((merchant) => (
-                                <option key={merchant.id} value={merchant.id}>
-                                  {merchant.name} ({merchant.region})
-                                </option>
-                              ))}
-                            </select>
-                          </div>
-                        );
-                      }
-                      if (f.key === "currency") {
-                        return (
-                          <div className="mb-4" key={f.key}>
-                            <label className="block mb-1 text-gray-700 font-semibold">{f.label}{f.required && <span className="text-red-500">*</span>}</label>
-                            <select
-                              className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                              value={String((formData as ProductForm)[f.key] ?? 'USD')}
-                              onChange={e => setFormData({ ...(formData as ProductForm), [f.key]: e.target.value })}
-                              required={!!f.required}
-                            >
-                              <option value="USD">USD ($)</option>
-                              <option value="EUR">EUR (€)</option>
-                              <option value="GBP">GBP (£)</option>
-                              <option value="CAD">CAD (C$)</option>
-                              <option value="AUD">AUD (A$)</option>
-                            </select>
-                          </div>
-                        );
-                      }
-                      return (
-                        <div className="mb-4" key={f.key}>
-                          <label className="block mb-1 text-gray-700 font-semibold">{f.label}{f.required && <span className="text-red-500">*</span>}</label>
-                          <input
-                            className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            type={f.key === "qualityScore" || f.key === "affiliateRate" || f.key === "affiliateYield" ? "number" : "text"}
-                            value={String((formData as ProductForm)[f.key] ?? '')}
-                            onChange={e => setFormData({ ...(formData as ProductForm), [f.key]: e.target.value })}
-                            required={!!f.required}
-                            placeholder={f.key === "price" ? "14.00 - 70.50" : f.key === "qualityScore" ? "1-10" : f.key === "affiliateRate" ? "0.00" : f.key === "affiliateYield" ? "0.00" : ""}
-                            step={f.key === "affiliateRate" || f.key === "affiliateYield" ? "0.01" : f.key === "qualityScore" ? "1" : undefined}
-                            min={f.key === "qualityScore" ? "1" : f.key === "affiliateRate" || f.key === "affiliateYield" ? "0" : undefined}
-                            max={f.key === "qualityScore" ? "10" : undefined}
-                          />
-                        </div>
-                      );
-                    })}
+                      })}
 
-                    {/* Relationship Selection */}
-                    <div className="mb-6 p-6 bg-gray-50 border-2 border-gray-300 rounded-xl shadow-sm">
-                      <h3 className="text-gray-800 font-semibold mb-4 text-lg">Link to Content</h3>
-                      
-                      {/* Herbs Selection */}
-                      <div className="mb-4">
-                        <label className="block mb-2 text-gray-700 font-semibold">Associated Herbs</label>
-                        <div className="max-h-32 overflow-y-auto border border-gray-300 rounded-lg p-3 bg-white">
-                          {allHerbs.length > 0 ? allHerbs.map((herb) => (
-                            <div key={herb.id} className="flex items-center mb-2">
-                              <input
-                                type="checkbox"
-                                id={`herb-${herb.id}`}
+                      {/* Relationship Selection */}
+                      <div className="mb-6 p-6 bg-gray-50 border-2 border-gray-300 rounded-xl shadow-sm">
+                        <h3 className="text-gray-800 font-semibold mb-4 text-lg">Link to Content</h3>
+                        
+                        {/* Herbs Selection */}
+                        <div className="mb-4">
+                          <label className="block mb-2 text-gray-700 font-semibold">Associated Herbs</label>
+                          <div className="max-h-32 overflow-y-auto border border-gray-300 rounded-lg p-3 bg-white">
+                            {allHerbs.length > 0 ? allHerbs.map((herb) => (
+                              <div key={herb.id} className="flex items-center mb-2">
+                                <input
+                                  type="checkbox"
+                                  id={`herb-${herb.id}`}
                                                                  checked={(formData as ProductForm).selectedHerbs?.includes(herb.id) || false}
-                                 onChange={(e) => {
-                                   const selectedHerbs = (formData as ProductForm).selectedHerbs || [];
-                                   if (e.target.checked) {
-                                     setFormData({ ...formData, selectedHerbs: [...selectedHerbs, herb.id] });
-                                   } else {
-                                     setFormData({ ...formData, selectedHerbs: selectedHerbs.filter((id: number) => id !== herb.id) });
-                                   }
-                                 }}
-                                className="mr-2 text-blue-600 focus:ring-blue-500"
-                              />
-                              <label htmlFor={`herb-${herb.id}`} className="text-gray-700 cursor-pointer">
-                                {herb.name} {herb.latinName && `(${herb.latinName})`}
-                              </label>
-                            </div>
-                          )) : <div className="text-gray-500">Loading herbs...</div>}
+                                   onChange={(e) => {
+                                     const selectedHerbs = (formData as ProductForm).selectedHerbs || [];
+                                     if (e.target.checked) {
+                                       setFormData({ ...formData, selectedHerbs: [...selectedHerbs, herb.id] });
+                                     } else {
+                                       setFormData({ ...formData, selectedHerbs: selectedHerbs.filter((id: number) => id !== herb.id) });
+                                     }
+                                   }}
+                                  className="mr-2 text-blue-600 focus:ring-blue-500"
+                                />
+                                <label htmlFor={`herb-${herb.id}`} className="text-gray-700 cursor-pointer">
+                                  {herb.name} {herb.latinName && `(${herb.latinName})`}
+                                </label>
+                              </div>
+                            )) : <div className="text-gray-500">Loading herbs...</div>}
+                          </div>
                         </div>
-                      </div>
 
-                      {/* Supplements Selection */}
-                      <div className="mb-4">
-                        <label className="block mb-2 text-gray-700 font-semibold">Associated Supplements</label>
-                        <div className="max-h-32 overflow-y-auto border border-gray-300 rounded-lg p-3 bg-white">
-                          {allSupplements.length > 0 ? allSupplements.map((supp) => (
-                            <div key={supp.id} className="flex items-center mb-2">
-                              <input
-                                type="checkbox"
-                                id={`supp-${supp.id}`}
+                        {/* Supplements Selection */}
+                        <div className="mb-4">
+                          <label className="block mb-2 text-gray-700 font-semibold">Associated Supplements</label>
+                          <div className="max-h-32 overflow-y-auto border border-gray-300 rounded-lg p-3 bg-white">
+                            {allSupplements.length > 0 ? allSupplements.map((supp) => (
+                              <div key={supp.id} className="flex items-center mb-2">
+                                <input
+                                  type="checkbox"
+                                  id={`supp-${supp.id}`}
                                                                  checked={(formData as ProductForm).selectedSupplements?.includes(supp.id) || false}
-                                 onChange={(e) => {
-                                   const selectedSupplements = (formData as ProductForm).selectedSupplements || [];
-                                   if (e.target.checked) {
-                                     setFormData({ ...formData, selectedSupplements: [...selectedSupplements, supp.id] });
-                                   } else {
-                                     setFormData({ ...formData, selectedSupplements: selectedSupplements.filter((id: number) => id !== supp.id) });
-                                   }
-                                 }}
-                                className="mr-2 text-blue-600 focus:ring-blue-500"
-                              />
-                              <label htmlFor={`supp-${supp.id}`} className="text-gray-700 cursor-pointer">
-                                {supp.name}
-                              </label>
-                            </div>
-                          )) : <div className="text-gray-500">Loading supplements...</div>}
+                                   onChange={(e) => {
+                                     const selectedSupplements = (formData as ProductForm).selectedSupplements || [];
+                                     if (e.target.checked) {
+                                       setFormData({ ...formData, selectedSupplements: [...selectedSupplements, supp.id] });
+                                     } else {
+                                       setFormData({ ...formData, selectedSupplements: selectedSupplements.filter((id: number) => id !== supp.id) });
+                                     }
+                                   }}
+                                  className="mr-2 text-blue-600 focus:ring-blue-500"
+                                />
+                                <label htmlFor={`supp-${supp.id}`} className="text-gray-700 cursor-pointer">
+                                  {supp.name}
+                                </label>
+                              </div>
+                            )) : <div className="text-gray-500">Loading supplements...</div>}
+                          </div>
                         </div>
-                      </div>
 
-                      {/* Symptoms Selection */}
-                      <div className="mb-4">
-                        <label className="block mb-2 text-gray-700 font-semibold">Associated Symptoms</label>
-                        <div className="max-h-32 overflow-y-auto border border-gray-300 rounded-lg p-3 bg-white">
-                          {/* Get symptoms from data state when available */}
-                          {allSymptoms && allSymptoms.length > 0 ? allSymptoms.map((symptom) => (
-                            <div key={symptom.id} className="flex items-center mb-2">
-                              <input
-                                type="checkbox"
-                                id={`symptom-${symptom.id}`}
+                        {/* Symptoms Selection */}
+                        <div className="mb-4">
+                          <label className="block mb-2 text-gray-700 font-semibold">Associated Symptoms</label>
+                          <div className="max-h-32 overflow-y-auto border border-gray-300 rounded-lg p-3 bg-white">
+                            {/* Get symptoms from data state when available */}
+                            {allSymptoms && allSymptoms.length > 0 ? allSymptoms.map((symptom) => (
+                              <div key={symptom.id} className="flex items-center mb-2">
+                                <input
+                                  type="checkbox"
+                                  id={`symptom-${symptom.id}`}
                                                                  checked={(formData as ProductForm).selectedSymptoms?.includes(symptom.id) || false}
-                                 onChange={(e) => {
-                                   const selectedSymptoms = (formData as ProductForm).selectedSymptoms || [];
-                                   if (e.target.checked) {
-                                     setFormData({ ...formData, selectedSymptoms: [...selectedSymptoms, symptom.id] });
-                                   } else {
-                                     setFormData({ ...formData, selectedSymptoms: selectedSymptoms.filter((id: number) => id !== symptom.id) });
-                                   }
-                                 }}
-                                className="mr-2 text-blue-600 focus:ring-blue-500"
-                              />
-                              <label htmlFor={`symptom-${symptom.id}`} className="text-gray-700 cursor-pointer">
-                                {symptom.title}
-                              </label>
-                            </div>
-                          )) : <div className="text-gray-500">Loading symptoms...</div>}
+                                   onChange={(e) => {
+                                     const selectedSymptoms = (formData as ProductForm).selectedSymptoms || [];
+                                     if (e.target.checked) {
+                                       setFormData({ ...formData, selectedSymptoms: [...selectedSymptoms, symptom.id] });
+                                     } else {
+                                       setFormData({ ...formData, selectedSymptoms: selectedSymptoms.filter((id: number) => id !== symptom.id) });
+                                     }
+                                   }}
+                                  className="mr-2 text-blue-600 focus:ring-blue-500"
+                                />
+                                <label htmlFor={`symptom-${symptom.id}`} className="text-gray-700 cursor-pointer">
+                                  {symptom.title}
+                                </label>
+                              </div>
+                            )) : <div className="text-gray-500">Loading symptoms...</div>}
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    {/* Form Actions */}
-                    <div className="flex gap-4 flex-wrap">
-                      <button 
-                        type="submit" 
-                        className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-green-600 text-white border-transparent hover:bg-green-700 hover:border-green-700 hover:shadow-lg hover:scale-105"
+                      {/* Form Actions */}
+                      <div className="flex gap-4 flex-wrap">
+                        <button 
+                          type="submit" 
+                          className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-green-600 text-white border-transparent hover:bg-green-700 hover:border-green-700 hover:shadow-lg hover:scale-105"
+                        >
+                          Save Product
+                        </button>
+                        <button 
+                          type="button" 
+                          className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-gray-600 text-white border-transparent hover:bg-gray-700 hover:border-gray-700 hover:shadow-lg hover:scale-105"
+                          onClick={() => {
+                            setFormData({});
+                            setFormMode("add");
+                          }}
+                        >
+                          Clear Form
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                )}
+
+                {/* Indications Help Section */}
+                {tab === "Indications" && (
+                  <div className="mb-6 p-6 bg-gray-50 border-2 border-gray-300 rounded-xl shadow-sm">
+                    <h3 className="text-gray-800 font-semibold mb-3 text-lg">What are Indications?</h3>
+                    <p className="text-gray-700 text-base mb-4">
+                      Indications are tags that describe what herbs and supplements are used for. They help users find relevant products 
+                      and create a consistent tagging system across your site.
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-base">
+                      <div>
+                        <h4 className="font-semibold text-gray-800 mb-2">Examples:</h4>
+                        <ul className="text-gray-700 space-y-2">
+                          <li>• Stress, Anxiety, Sleep Support</li>
+                          <li>• Focus, Memory, Cognitive Health</li>
+                          <li>• Energy, Vitality, Fatigue</li>
+                          <li>• Pain Relief, Inflammation</li>
+                        </ul>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-gray-800 mb-2">How to Use:</h4>
+                        <ul className="text-gray-700 space-y-2">
+                          <li>• Create indications here first</li>
+                          <li>• Then assign them to herbs/supplements</li>
+                          <li>• They appear as colored tags on cards</li>
+                          <li>• Users can click tags to see related items</li>
+                        </ul>
+                      </div>
+                    </div>
+                    
+                    {/* Symptom Tree Button */}
+                    <div className="mt-6 pt-6 border-t border-gray-200">
+                      <h4 className="font-semibold text-gray-800 mb-3 text-base">Advanced Management:</h4>
+                      <p className="text-gray-700 text-sm mb-4">
+                        Use the symptom tree to manage indications by specific symptoms and variants for precise targeting.
+                      </p>
+                      <button
+                        onClick={() => setShowSymptomTree(true)}
+                        className="inline-flex items-center px-4 py-2 rounded-lg font-medium border-2 transition-all duration-200 shadow-sm bg-purple-600 text-white border-transparent hover:bg-purple-700 hover:border-purple-700 hover:shadow-lg hover:scale-105"
                       >
-                        Save Product
-                      </button>
-                      <button 
-                        type="button" 
-                        className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-gray-600 text-white border-transparent hover:bg-gray-700 hover:border-gray-700 hover:shadow-lg hover:scale-105"
-                        onClick={() => {
-                          setFormData({});
-                          setFormMode("add");
-                        }}
-                      >
-                        Clear Form
+                        <span className="material-symbols-outlined mr-2">account_tree</span>
+                        Open Symptom Tree
                       </button>
                     </div>
-                  </form>
+                  </div>
+                )}
+
+                <div className="rounded-xl shadow-sm border-2 border-gray-300 bg-white">
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left min-w-full">
+                      <thead className="sticky top-0 z-10">{renderTableHeaders()}</thead>
+                      <tbody>
+                        {[...data].sort((a, b) => {
+                          const aName = 'name' in a ? a.name : 'title' in a ? a.title : '';
+                          const bName = 'name' in b ? b.name : 'title' in b ? b.title : '';
+                          return aName.localeCompare(bName);
+                        }).map((item, index) => renderTableRow(item, index))}
+                        {data.length === 0 && (
+                          <tr>
+                            <td colSpan={tab === "Herbs" ? HERB_FIELDS.length + 2 : tab === "Supplements" ? SUPPLEMENT_FIELDS.length + 1 : SYMPTOM_FIELDS.length + 1} className="p-4 text-center text-gray-500">No {tab.toLowerCase()} found.</td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
-              )}
+              </>
+            )}
+          </div>
+        </div>
 
-              {/* Indications Help Section */}
-              {tab === "Indications" && (
-                <div className="mb-6 p-6 bg-gray-50 border-2 border-gray-300 rounded-xl shadow-sm">
-                  <h3 className="text-gray-800 font-semibold mb-3 text-lg">What are Indications?</h3>
-                  <p className="text-gray-700 text-base mb-4">
-                    Indications are tags that describe what herbs and supplements are used for. They help users find relevant products 
-                    and create a consistent tagging system across your site.
-                  </p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-base">
-                    <div>
-                      <h4 className="font-semibold text-gray-800 mb-2">Examples:</h4>
-                      <ul className="text-gray-700 space-y-2">
-                        <li>• Stress, Anxiety, Sleep Support</li>
-                        <li>• Focus, Memory, Cognitive Health</li>
-                        <li>• Energy, Vitality, Fatigue</li>
-                        <li>• Pain Relief, Inflammation</li>
-                      </ul>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-gray-800 mb-2">How to Use:</h4>
-                      <ul className="text-gray-700 space-y-2">
-                        <li>• Create indications here first</li>
-                        <li>• Then assign them to herbs/supplements</li>
-                        <li>• They appear as colored tags on cards</li>
-                        <li>• Users can click tags to see related items</li>
-                      </ul>
-                    </div>
+        {/* Batch Import Modal */}
+        {showBatchImport && (
+          <div className="fixed inset-0 flex items-start justify-center z-50 p-6 pt-32" style={{
+            backgroundImage: "url('/images/RoseWPWM.PNG')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+          }}>
+            <div className="absolute inset-0 bg-pink-100 opacity-90"></div>
+            <div className="relative rounded-xl shadow-lg w-full max-w-2xl max-h-[80vh] overflow-hidden flex flex-col border-2 border-gray-300" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
+              <div className="p-6 border-b border-gray-300 bg-gray-50">
+                <div className="flex items-center justify-between">
+                  <button
+                    onClick={() => setShowBatchImport(false)}
+                    className="text-gray-600 hover:text-gray-800 transition-colors"
+                  >
+                    <span className="material-symbols-outlined text-xl">keyboard_backspace</span>
+                  </button>
+                  <h2 className="text-2xl font-bold text-gray-800 absolute left-1/2 transform -translate-x-1/2">Batch Import Products</h2>
+                </div>
+              </div>
+              
+              <div className="p-6 overflow-y-auto flex-1">
+                <p className="text-gray-700 mb-4">
+                  Enter product URLs (one per line) from supported merchants. The system will attempt to extract product information automatically.
+                </p>
+                <textarea
+                  value={batchUrls}
+                  onChange={(e) => setBatchUrls(e.target.value)}
+                  placeholder="https://amazon.com/product1&#10;https://amazon.com/product2&#10;https://amazon.com/product3"
+                  className="w-full h-32 p-3 border border-gray-300 rounded-lg mb-4 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+                <div className="mb-4">
+                  <label className="flex items-center text-gray-700">
+                    <input
+                      type="checkbox"
+                      id="useScraping"
+                      className="mr-2"
+                      onChange={(e) => setUseScraping(e.target.checked)}
+                    />
+                    Enable web scraping for better data extraction (requires Puppeteer)
+                  </label>
+                </div>
+                <div className="text-xs text-gray-600 mb-4 bg-gray-50 p-3 rounded-lg border border-gray-200">
+                  <p>• Supported merchants: Amazon, iHerb, Vitacost, etc.</p>
+                  <p>• Each URL should be on a separate line</p>
+                  <p>• The system will create merchants automatically if they don&apos;t exist</p>
+                  <p>• Web scraping extracts real product data (prices, images, descriptions)</p>
+                </div>
+              </div>
+              
+              <div className="p-6 border-t border-gray-300 bg-gray-50">
+                <div className="flex gap-4">
+                  <button
+                    onClick={() => setShowBatchImport(false)}
+                    className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-gray-600 text-white border-transparent hover:bg-gray-700 hover:border-gray-700 hover:shadow-lg hover:scale-105"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleBatchImport}
+                    disabled={importing || !batchUrls.trim()}
+                    className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-green-600 text-white border-transparent hover:bg-green-700 hover:border-green-700 hover:shadow-lg hover:scale-105 disabled:bg-gray-400 disabled:opacity-70 disabled:cursor-not-allowed"
+                  >
+                    {importing ? 'Importing...' : 'Import Products'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {showForm && tab !== "Products" && (
+          <div className="fixed inset-0 flex items-start justify-center z-50 p-6 pt-40" style={{
+            backgroundImage: "url('/images/RoseWPWM.PNG')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+          }}>
+            <div className="absolute inset-0 bg-pink-100 opacity-90"></div>
+            <div className="relative rounded-xl shadow-lg w-full max-w-4xl max-h-[80vh] flex flex-col border-2 border-gray-300" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
+              <div className="p-6 border-b border-gray-300 bg-gray-50">
+                <div className="flex items-center justify-between">
+                  <button
+                    onClick={() => setShowForm(false)}
+                    className="text-gray-600 hover:text-gray-800 transition-colors"
+                  >
+                    <span className="material-symbols-outlined text-xl">keyboard_backspace</span>
+                  </button>
+                  <h2 className="text-2xl font-bold text-gray-800 absolute left-1/2 transform -translate-x-1/2">{formMode === "add" ? `Add New ${tab.slice(0, -1)}` : `Edit ${tab.slice(0, -1)}`}</h2>
+                </div>
+              </div>
+              <div className="p-6 overflow-y-auto flex-1">
+                <form id="add-edit-form" onSubmit={handleFormSubmit}>
+                  {renderFormFields()}
+                </form>
+              </div>
+              <div className="p-6 pt-0 border-t border-gray-300 bg-gray-50 flex-shrink-0">
+                <div className="flex gap-4 flex-wrap">
+                  <button type="submit" form="add-edit-form" 
+                          className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-green-600 text-white border-transparent hover:bg-green-700 hover:border-green-700 hover:shadow-lg hover:scale-105">
+                    Save
+                  </button>
+                  <button type="button" 
+                          className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-gray-600 text-white border-transparent hover:bg-gray-700 hover:border-gray-700 hover:shadow-lg hover:scale-105" 
+                          onClick={() => setShowForm(false)}>
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Variant Management Modal */}
+        {showVariantModal && selectedSymptom && (
+          <div className="fixed inset-0 bg-pink-100 bg-opacity-90 flex items-start justify-center z-50 p-4 pt-40" style={{
+            backgroundImage: "url('/images/RoseWPWM.PNG')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+          }}>
+            <div className="absolute inset-0 bg-pink-100 opacity-90"></div>
+            <div className="relative rounded-xl shadow-lg w-full max-w-6xl max-h-[90vh] overflow-hidden flex flex-col border-2 border-gray-300" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
+              <div className="p-6 border-b border-gray-300 bg-gray-50">
+                <div className="flex justify-between items-center">
+                  <button
+                    onClick={() => setShowVariantModal(false)}
+                    className="text-gray-600 hover:text-gray-800 transition-colors"
+                  >
+                    <span className="material-symbols-outlined text-xl">keyboard_backspace</span>
+                  </button>
+                  <h2 className="text-2xl font-bold text-gray-800 absolute left-1/2 transform -translate-x-1/2">
+                    Manage Variants for: {selectedSymptom.title}
+                  </h2>
+                  <button
+                    className="text-gray-500 hover:text-gray-700"
+                    onClick={() => setShowVariantModal(false)}
+                  >
+                    ✕
+                  </button>
+                </div>
+              </div>
+              
+              <div className="p-6 overflow-y-auto flex-1">
+                <div className="mb-4 flex justify-between items-center">
+                  <button
+                    className="inline-flex items-center px-4 py-2 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-green-600 text-white border-transparent hover:bg-green-700 hover:border-green-700 hover:shadow-lg hover:scale-105"
+                    onClick={() => openVariantForm("add")}
+                  >
+                    + Add New Variant
+                  </button>
+                </div>
+
+                {/* Variants Table */}
+                <div className="rounded-xl shadow-sm border-2 border-gray-300 bg-white">
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left">
+                      <thead className="bg-gray-100 border-b-2 border-gray-300">
+                        <tr>
+                          <th className="px-4 py-3 text-sm font-semibold text-gray-800">Actions</th>
+                          <th className="px-4 py-3 text-sm font-semibold text-gray-800">ID</th>
+                          <th className="px-4 py-3 text-sm font-semibold text-gray-800">Name</th>
+                          <th className="px-4 py-3 text-sm font-semibold text-gray-800">Slug</th>
+                          <th className="px-4 py-3 text-sm font-semibold text-gray-800">Description</th>
+                          <th className="px-4 py-3 text-sm font-semibold text-gray-800">Meta Title</th>
+                          <th className="px-4 py-3 text-sm font-semibold text-gray-800">Cautions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {variants.map((variant) => (
+                          <tr key={variant.id} className="border-t border-gray-200 hover:bg-gray-50 transition-colors">
+                            <td className="px-4 py-2">
+                              <div className="flex gap-2">
+                                <button
+                                  className="inline-flex items-center px-3 py-1 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-blue-600 text-white border-transparent hover:bg-blue-700 hover:border-blue-700 hover:shadow-lg hover:scale-105 text-xs"
+                                  onClick={() => openVariantForm("edit", variant)}
+                                >
+                                  Edit
+                                </button>
+                                <button
+                                  className="inline-flex items-center px-3 py-1 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-red-600 text-white border-transparent hover:bg-red-700 hover:border-red-700 hover:shadow-lg hover:scale-105 text-xs"
+                                  onClick={() => handleVariantDelete(variant.id)}
+                                >
+                                  Delete
+                                </button>
+                              </div>
+                            </td>
+                            <td className="px-4 py-2 text-gray-700 text-sm">{variant.id}</td>
+                            <td className="px-4 py-2 text-gray-700 text-sm">{variant.name}</td>
+                            <td className="px-4 py-2 text-gray-700 text-sm">{variant.slug}</td>
+                            <td className="px-4 py-2 text-gray-700 text-sm max-w-[200px] truncate">
+                              {variant.description || '—'}
+                            </td>
+                            <td className="px-4 py-2 text-gray-700 text-sm max-w-[200px] truncate">
+                              {variant.metaTitle || '—'}
+                            </td>
+                            <td className="px-4 py-2 text-gray-700 text-sm max-w-[200px] truncate">
+                              {variant.cautions || '—'}
+                            </td>
+                          </tr>
+                        ))}
+                        {variants.length === 0 && (
+                          <tr>
+                            <td colSpan={7} className="p-4 text-center text-gray-500">
+                              No variants found for this symptom.
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Variant Form Modal */}
+        {showVariantForm && selectedSymptom && (
+          <div className="fixed inset-0 bg-pink-100 bg-opacity-90 flex items-start justify-center z-50 p-4 overflow-y-auto pt-32" style={{
+            backgroundImage: "url('/images/RoseWPWM.PNG')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+          }}>
+            <div className="absolute inset-0 bg-pink-100 opacity-90"></div>
+            <div className="relative rounded-xl shadow-lg w-full max-w-2xl max-h-[95vh] flex flex-col border-2 border-gray-300 my-8" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
+              <div className="p-6 border-b border-gray-300 bg-gray-50">
+                <div className="flex items-center justify-between">
+                  <button
+                    onClick={() => setShowVariantForm(false)}
+                    className="text-gray-600 hover:text-gray-800 transition-colors"
+                  >
+                    <span className="material-symbols-outlined text-xl">keyboard_backspace</span>
+                  </button>
+                  <h2 className="text-2xl font-bold text-gray-800 absolute left-1/2 transform -translate-x-1/2">
+                    {variantFormMode === "add" ? "Add New Variant" : "Edit Variant"}
+                  </h2>
+                </div>
+              </div>
+              
+              <form id="variant-form" onSubmit={handleVariantFormSubmit} className="p-6 overflow-y-auto flex-1">
+                <div className="space-y-4">
+                  <div>
+                    <label className="block mb-1 text-gray-700 font-semibold">Name *</label>
+                    <input
+                      type="text"
+                      className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      value={variantFormData.name || ""}
+                      onChange={(e) => setVariantFormData({ ...variantFormData, name: e.target.value })}
+                      required
+                    />
                   </div>
                   
-                  {/* Symptom Tree Button */}
-                  <div className="mt-6 pt-6 border-t border-gray-200">
-                    <h4 className="font-semibold text-gray-800 mb-3 text-base">Advanced Management:</h4>
-                    <p className="text-gray-700 text-sm mb-4">
-                      Use the symptom tree to manage indications by specific symptoms and variants for precise targeting.
-                    </p>
-                    <button
-                      onClick={() => setShowSymptomTree(true)}
-                      className="inline-flex items-center px-4 py-2 rounded-lg font-medium border-2 transition-all duration-200 shadow-sm bg-purple-600 text-white border-transparent hover:bg-purple-700 hover:border-purple-700 hover:shadow-lg hover:scale-105"
-                    >
-                      <span className="material-symbols-outlined mr-2">account_tree</span>
-                      Open Symptom Tree
-                    </button>
+                  <div>
+                    <label className="block mb-1 text-gray-700 font-semibold">Slug *</label>
+                    <input
+                      type="text"
+                      className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      value={variantFormData.slug || ""}
+                      onChange={(e) => setVariantFormData({ ...variantFormData, slug: e.target.value })}
+                      required
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block mb-1 text-gray-700 font-semibold">Description</label>
+                    <textarea
+                      className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      rows={4}
+                      value={variantFormData.description || ""}
+                      onChange={(e) => setVariantFormData({ ...variantFormData, description: e.target.value })}
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block mb-1 text-gray-700 font-semibold">Meta Title</label>
+                    <input
+                      type="text"
+                      className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      value={variantFormData.metaTitle || ""}
+                      onChange={(e) => setVariantFormData({ ...variantFormData, metaTitle: e.target.value })}
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block mb-1 text-gray-700 font-semibold">Meta Description</label>
+                    <textarea
+                      className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      rows={2}
+                      value={variantFormData.metaDescription || ""}
+                      onChange={(e) => setVariantFormData({ ...variantFormData, metaDescription: e.target.value })}
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block mb-1 text-gray-700 font-semibold">Cautions</label>
+                    <textarea
+                      className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      rows={3}
+                      value={variantFormData.cautions || ""}
+                      onChange={(e) => setVariantFormData({ ...variantFormData, cautions: e.target.value })}
+                    />
                   </div>
                 </div>
-              )}
-
-              <div className="rounded-xl shadow-sm border-2 border-gray-300 bg-white">
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left min-w-full">
-                    <thead className="sticky top-0 z-10">{renderTableHeaders()}</thead>
-                    <tbody>
-                      {[...data].sort((a, b) => {
-                        const aName = 'name' in a ? a.name : 'title' in a ? a.title : '';
-                        const bName = 'name' in b ? b.name : 'title' in b ? b.title : '';
-                        return aName.localeCompare(bName);
-                      }).map((item, index) => renderTableRow(item, index))}
-                      {data.length === 0 && (
-                        <tr>
-                          <td colSpan={tab === "Herbs" ? HERB_FIELDS.length + 2 : tab === "Supplements" ? SUPPLEMENT_FIELDS.length + 1 : SYMPTOM_FIELDS.length + 1} className="p-4 text-center text-gray-500">No {tab.toLowerCase()} found.</td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </>
-          )}
-        </div>
-      </div>
-
-      {/* Batch Import Modal */}
-      {showBatchImport && (
-        <div className="fixed inset-0 flex items-start justify-center z-50 p-6 pt-32" style={{
-          backgroundImage: "url('/images/RoseWPWM.PNG')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-        }}>
-          <div className="absolute inset-0 bg-pink-100 opacity-90"></div>
-          <div className="relative rounded-xl shadow-lg w-full max-w-2xl max-h-[80vh] overflow-hidden flex flex-col border-2 border-gray-300" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
-            <div className="p-6 border-b border-gray-300 bg-gray-50">
-              <div className="flex items-center justify-between">
-                <button
-                  onClick={() => setShowBatchImport(false)}
-                  className="text-gray-600 hover:text-gray-800 transition-colors"
-                >
-                  <span className="material-symbols-outlined text-xl">keyboard_backspace</span>
-                </button>
-                <h2 className="text-2xl font-bold text-gray-800 absolute left-1/2 transform -translate-x-1/2">Batch Import Products</h2>
-              </div>
-            </div>
-            
-            <div className="p-6 overflow-y-auto flex-1">
-              <p className="text-gray-700 mb-4">
-                Enter product URLs (one per line) from supported merchants. The system will attempt to extract product information automatically.
-              </p>
-              <textarea
-                value={batchUrls}
-                onChange={(e) => setBatchUrls(e.target.value)}
-                placeholder="https://amazon.com/product1&#10;https://amazon.com/product2&#10;https://amazon.com/product3"
-                className="w-full h-32 p-3 border border-gray-300 rounded-lg mb-4 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-              <div className="mb-4">
-                <label className="flex items-center text-gray-700">
-                  <input
-                    type="checkbox"
-                    id="useScraping"
-                    className="mr-2"
-                    onChange={(e) => setUseScraping(e.target.checked)}
-                  />
-                  Enable web scraping for better data extraction (requires Puppeteer)
-                </label>
-              </div>
-              <div className="text-xs text-gray-600 mb-4 bg-gray-50 p-3 rounded-lg border border-gray-200">
-                <p>• Supported merchants: Amazon, iHerb, Vitacost, etc.</p>
-                <p>• Each URL should be on a separate line</p>
-                <p>• The system will create merchants automatically if they don&apos;t exist</p>
-                <p>• Web scraping extracts real product data (prices, images, descriptions)</p>
-              </div>
-            </div>
-            
-            <div className="p-6 border-t border-gray-300 bg-gray-50">
-              <div className="flex gap-4">
-                <button
-                  onClick={() => setShowBatchImport(false)}
-                  className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-gray-600 text-white border-transparent hover:bg-gray-700 hover:border-gray-700 hover:shadow-lg hover:scale-105"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleBatchImport}
-                  disabled={importing || !batchUrls.trim()}
-                  className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-green-600 text-white border-transparent hover:bg-green-700 hover:border-green-700 hover:shadow-lg hover:scale-105 disabled:bg-gray-400 disabled:opacity-70 disabled:cursor-not-allowed"
-                >
-                  {importing ? 'Importing...' : 'Import Products'}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {showForm && tab !== "Products" && (
-        <div className="fixed inset-0 flex items-start justify-center z-50 p-6 pt-40" style={{
-          backgroundImage: "url('/images/RoseWPWM.PNG')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-        }}>
-          <div className="absolute inset-0 bg-pink-100 opacity-90"></div>
-          <div className="relative rounded-xl shadow-lg w-full max-w-4xl max-h-[80vh] flex flex-col border-2 border-gray-300" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
-            <div className="p-6 border-b border-gray-300 bg-gray-50">
-              <div className="flex items-center justify-between">
-                <button
-                  onClick={() => setShowForm(false)}
-                  className="text-gray-600 hover:text-gray-800 transition-colors"
-                >
-                  <span className="material-symbols-outlined text-xl">keyboard_backspace</span>
-                </button>
-                <h2 className="text-2xl font-bold text-gray-800 absolute left-1/2 transform -translate-x-1/2">{formMode === "add" ? `Add New ${tab.slice(0, -1)}` : `Edit ${tab.slice(0, -1)}`}</h2>
-              </div>
-            </div>
-            <div className="p-6 overflow-y-auto flex-1">
-              <form id="add-edit-form" onSubmit={handleFormSubmit}>
-                {renderFormFields()}
               </form>
-            </div>
-            <div className="p-6 pt-0 border-t border-gray-300 bg-gray-50 flex-shrink-0">
-              <div className="flex gap-4 flex-wrap">
-                <button type="submit" form="add-edit-form" 
-                        className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-green-600 text-white border-transparent hover:bg-green-700 hover:border-green-700 hover:shadow-lg hover:scale-105">
-                  Save
-                </button>
-                <button type="button" 
-                        className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-gray-600 text-white border-transparent hover:bg-gray-700 hover:border-gray-700 hover:shadow-lg hover:scale-105" 
-                        onClick={() => setShowForm(false)}>
-                  Cancel
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Variant Management Modal */}
-      {showVariantModal && selectedSymptom && (
-        <div className="fixed inset-0 bg-pink-100 bg-opacity-90 flex items-start justify-center z-50 p-4 pt-40" style={{
-          backgroundImage: "url('/images/RoseWPWM.PNG')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-        }}>
-          <div className="absolute inset-0 bg-pink-100 opacity-90"></div>
-          <div className="relative rounded-xl shadow-lg w-full max-w-6xl max-h-[90vh] overflow-hidden flex flex-col border-2 border-gray-300" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
-            <div className="p-6 border-b border-gray-300 bg-gray-50">
-              <div className="flex justify-between items-center">
-                <button
-                  onClick={() => setShowVariantModal(false)}
-                  className="text-gray-600 hover:text-gray-800 transition-colors"
-                >
-                  <span className="material-symbols-outlined text-xl">keyboard_backspace</span>
-                </button>
-                <h2 className="text-2xl font-bold text-gray-800 absolute left-1/2 transform -translate-x-1/2">
-                  Manage Variants for: {selectedSymptom.title}
-                </h2>
-                <button
-                  className="text-gray-500 hover:text-gray-700"
-                  onClick={() => setShowVariantModal(false)}
-                >
-                  ✕
-                </button>
-              </div>
-            </div>
-            
-            <div className="p-6 overflow-y-auto flex-1">
-              <div className="mb-4 flex justify-between items-center">
-                <button
-                  className="inline-flex items-center px-4 py-2 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-green-600 text-white border-transparent hover:bg-green-700 hover:border-green-700 hover:shadow-lg hover:scale-105"
-                  onClick={() => openVariantForm("add")}
-                >
-                  + Add New Variant
-                </button>
-              </div>
-
-              {/* Variants Table */}
-              <div className="rounded-xl shadow-sm border-2 border-gray-300 bg-white">
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left">
-                    <thead className="bg-gray-100 border-b-2 border-gray-300">
-                      <tr>
-                        <th className="px-4 py-3 text-sm font-semibold text-gray-800">Actions</th>
-                        <th className="px-4 py-3 text-sm font-semibold text-gray-800">ID</th>
-                        <th className="px-4 py-3 text-sm font-semibold text-gray-800">Name</th>
-                        <th className="px-4 py-3 text-sm font-semibold text-gray-800">Slug</th>
-                        <th className="px-4 py-3 text-sm font-semibold text-gray-800">Description</th>
-                        <th className="px-4 py-3 text-sm font-semibold text-gray-800">Meta Title</th>
-                        <th className="px-4 py-3 text-sm font-semibold text-gray-800">Cautions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {variants.map((variant) => (
-                        <tr key={variant.id} className="border-t border-gray-200 hover:bg-gray-50 transition-colors">
-                          <td className="px-4 py-2">
-                            <div className="flex gap-2">
-                              <button
-                                className="inline-flex items-center px-3 py-1 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-blue-600 text-white border-transparent hover:bg-blue-700 hover:border-blue-700 hover:shadow-lg hover:scale-105 text-xs"
-                                onClick={() => openVariantForm("edit", variant)}
-                              >
-                                Edit
-                              </button>
-                              <button
-                                className="inline-flex items-center px-3 py-1 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-red-600 text-white border-transparent hover:bg-red-700 hover:border-red-700 hover:shadow-lg hover:scale-105 text-xs"
-                                onClick={() => handleVariantDelete(variant.id)}
-                              >
-                                Delete
-                              </button>
-                            </div>
-                          </td>
-                          <td className="px-4 py-2 text-gray-700 text-sm">{variant.id}</td>
-                          <td className="px-4 py-2 text-gray-700 text-sm">{variant.name}</td>
-                          <td className="px-4 py-2 text-gray-700 text-sm">{variant.slug}</td>
-                          <td className="px-4 py-2 text-gray-700 text-sm max-w-[200px] truncate">
-                            {variant.description || '—'}
-                          </td>
-                          <td className="px-4 py-2 text-gray-700 text-sm max-w-[200px] truncate">
-                            {variant.metaTitle || '—'}
-                          </td>
-                          <td className="px-4 py-2 text-gray-700 text-sm max-w-[200px] truncate">
-                            {variant.cautions || '—'}
-                          </td>
-                        </tr>
-                      ))}
-                      {variants.length === 0 && (
-                        <tr>
-                          <td colSpan={7} className="p-4 text-center text-gray-500">
-                            No variants found for this symptom.
-                          </td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Variant Form Modal */}
-      {showVariantForm && selectedSymptom && (
-        <div className="fixed inset-0 bg-pink-100 bg-opacity-90 flex items-start justify-center z-50 p-4 overflow-y-auto pt-32" style={{
-          backgroundImage: "url('/images/RoseWPWM.PNG')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-        }}>
-          <div className="absolute inset-0 bg-pink-100 opacity-90"></div>
-          <div className="relative rounded-xl shadow-lg w-full max-w-2xl max-h-[95vh] flex flex-col border-2 border-gray-300 my-8" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
-            <div className="p-6 border-b border-gray-300 bg-gray-50">
-              <div className="flex items-center justify-between">
-                <button
-                  onClick={() => setShowVariantForm(false)}
-                  className="text-gray-600 hover:text-gray-800 transition-colors"
-                >
-                  <span className="material-symbols-outlined text-xl">keyboard_backspace</span>
-                </button>
-                <h2 className="text-2xl font-bold text-gray-800 absolute left-1/2 transform -translate-x-1/2">
-                  {variantFormMode === "add" ? "Add New Variant" : "Edit Variant"}
-                </h2>
-              </div>
-            </div>
-            
-            <form id="variant-form" onSubmit={handleVariantFormSubmit} className="p-6 overflow-y-auto flex-1">
-              <div className="space-y-4">
-                <div>
-                  <label className="block mb-1 text-gray-700 font-semibold">Name *</label>
-                  <input
-                    type="text"
-                    className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    value={variantFormData.name || ""}
-                    onChange={(e) => setVariantFormData({ ...variantFormData, name: e.target.value })}
-                    required
-                  />
-                </div>
-                
-                <div>
-                  <label className="block mb-1 text-gray-700 font-semibold">Slug *</label>
-                  <input
-                    type="text"
-                    className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    value={variantFormData.slug || ""}
-                    onChange={(e) => setVariantFormData({ ...variantFormData, slug: e.target.value })}
-                    required
-                  />
-                </div>
-                
-                <div>
-                  <label className="block mb-1 text-gray-700 font-semibold">Description</label>
-                  <textarea
-                    className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    rows={4}
-                    value={variantFormData.description || ""}
-                    onChange={(e) => setVariantFormData({ ...variantFormData, description: e.target.value })}
-                  />
-                </div>
-                
-                <div>
-                  <label className="block mb-1 text-gray-700 font-semibold">Meta Title</label>
-                  <input
-                    type="text"
-                    className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    value={variantFormData.metaTitle || ""}
-                    onChange={(e) => setVariantFormData({ ...variantFormData, metaTitle: e.target.value })}
-                  />
-                </div>
-                
-                <div>
-                  <label className="block mb-1 text-gray-700 font-semibold">Meta Description</label>
-                  <textarea
-                    className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    rows={2}
-                    value={variantFormData.metaDescription || ""}
-                    onChange={(e) => setVariantFormData({ ...variantFormData, metaDescription: e.target.value })}
-                  />
-                </div>
-                
-                <div>
-                  <label className="block mb-1 text-gray-700 font-semibold">Cautions</label>
-                  <textarea
-                    className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    rows={3}
-                    value={variantFormData.cautions || ""}
-                    onChange={(e) => setVariantFormData({ ...variantFormData, cautions: e.target.value })}
-                  />
-                </div>
-              </div>
-            </form>
-            
-            <div className="p-6 border-t border-gray-300 bg-gray-50">
-              <div className="flex gap-4 flex-wrap">
-                <button
-                  type="submit"
-                  form="variant-form"
-                  className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-green-600 text-white border-transparent hover:bg-green-700 hover:border-green-700 hover:shadow-lg hover:scale-105"
-                >
-                  Save
-                </button>
-                <button
-                  type="button"
-                  className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-gray-600 text-white border-transparent hover:bg-gray-700 hover:border-gray-700 hover:shadow-lg hover:scale-105"
-                  onClick={() => setShowVariantForm(false)}
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Indication Form Modal */}
-      {showIndicationForm && (
-        <div className="fixed inset-0 flex items-start justify-center z-50 p-4 pt-40" style={{
-          backgroundImage: "url('/images/RoseWPWM.PNG')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-        }}>
-          <div className="absolute inset-0 bg-pink-100 opacity-90"></div>
-          <div className="relative rounded-xl shadow-lg w-full max-w-2xl max-h-[95vh] flex flex-col border-2 border-gray-300 overflow-hidden" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
-            <div className="p-6 border-b border-gray-300 bg-gray-50">
-              <div className="flex items-center justify-between">
-                <button
-                  onClick={() => setShowIndicationForm(false)}
-                  className="text-gray-600 hover:text-gray-800 transition-colors"
-                >
-                  <span className="material-symbols-outlined text-xl">keyboard_backspace</span>
-                </button>
-                <h2 className="text-2xl font-bold text-gray-800 absolute left-1/2 transform -translate-x-1/2">
-                  {indicationFormMode === "add" ? "Add New Indication" : "Edit Indication"}
-                </h2>
-              </div>
-            </div>
-            
-            <form id="indication-form" onSubmit={handleIndicationFormSubmit} className="p-6 flex-1">
-              <div className="space-y-4">
-                <div>
-                  <label className="block mb-1 text-gray-700 font-semibold">Name *</label>
-                  <input
-                    type="text"
-                    className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    value={indicationFormData.name || ""}
-                    onChange={(e) => setIndicationFormData({ ...indicationFormData, name: e.target.value })}
-                    required
-                  />
-                </div>
-                
-                <div>
-                  <label className="block mb-1 text-gray-700 font-semibold">Slug *</label>
-                  <input
-                    type="text"
-                    className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    value={indicationFormData.slug || ""}
-                    onChange={(e) => setIndicationFormData({ ...indicationFormData, slug: e.target.value })}
-                    required
-                  />
-                </div>
-                
-                <div>
-                  <label className="block mb-1 text-gray-700 font-semibold">Description</label>
-                  <textarea
-                    className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    rows={4}
-                    value={indicationFormData.description || ""}
-                    onChange={(e) => setIndicationFormData({ ...indicationFormData, description: e.target.value })}
-                  />
-                </div>
-                
-                <div>
-                  <label className="block mb-1 text-gray-700 font-semibold">Color</label>
-                  <select
-                    className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    value={indicationFormData.color || "blue"}
-                    onChange={(e) => setIndicationFormData({ ...indicationFormData, color: e.target.value })}
+              
+              <div className="p-6 border-t border-gray-300 bg-gray-50">
+                <div className="flex gap-4 flex-wrap">
+                  <button
+                    type="submit"
+                    form="variant-form"
+                    className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-green-600 text-white border-transparent hover:bg-green-700 hover:border-green-700 hover:shadow-lg hover:scale-105"
                   >
-                    <option value="blue">Blue</option>
-                    <option value="green">Green</option>
-                    <option value="red">Red</option>
-                    <option value="yellow">Yellow</option>
-                    <option value="purple">Purple</option>
-                    <option value="pink">Pink</option>
-                    <option value="indigo">Indigo</option>
-                    <option value="gray">Gray</option>
-                    <option value="orange">Orange</option>
-                    <option value="teal">Teal</option>
-                  </select>
+                    Save
+                  </button>
+                  <button
+                    type="button"
+                    className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-gray-600 text-white border-transparent hover:bg-gray-700 hover:border-gray-700 hover:shadow-lg hover:scale-105"
+                    onClick={() => setShowVariantForm(false)}
+                  >
+                    Cancel
+                  </button>
                 </div>
-              </div>
-            </form>
-            
-            <div className="p-6 border-t border-gray-300 bg-gray-50">
-              <div className="flex gap-4 flex-wrap">
-                <button
-                  type="submit"
-                  form="indication-form"
-                  className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-green-600 text-white border-transparent hover:bg-green-700 hover:border-green-700 hover:shadow-lg hover:scale-105"
-                >
-                  Save
-                </button>
-                <button
-                  type="button"
-                  className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-gray-600 text-white border-transparent hover:bg-gray-700 hover:border-gray-700 hover:shadow-lg hover:scale-105"
-                  onClick={() => setShowIndicationForm(false)}
-                >
-                  Cancel
-                </button>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Content Preview Modal */}
-      {showPreview && (
-        <div className="fixed inset-0 bg-pink-100 bg-opacity-90 flex items-start justify-center z-50 p-4 pt-32" style={{
-          backgroundImage: "url('/images/RoseWPWM.PNG')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-        }}>
-          <div className="absolute inset-0 bg-pink-100 opacity-90"></div>
-          <div className="relative rounded-xl shadow-lg w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col border-2 border-gray-300" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
-            <div className="p-6 border-b border-gray-300 bg-gray-50 flex justify-between items-center">
-              <button
-                onClick={() => setShowPreview(false)}
-                className="text-gray-600 hover:text-gray-800 transition-colors"
-              >
-                <span className="material-symbols-outlined text-xl">keyboard_backspace</span>
-              </button>
-              <h2 className="text-2xl font-bold text-gray-800 absolute left-1/2 transform -translate-x-1/2">Content Preview</h2>
-              <button
-                type="button"
-                className="text-gray-500 hover:text-gray-700 text-2xl"
-                onClick={() => setShowPreview(false)}
-              >
-                ×
-              </button>
+        {/* Indication Form Modal */}
+        {showIndicationForm && (
+          <div className="fixed inset-0 flex items-start justify-center z-50 p-4 pt-40" style={{
+            backgroundImage: "url('/images/RoseWPWM.PNG')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+          }}>
+            <div className="absolute inset-0 bg-pink-100 opacity-90"></div>
+            <div className="relative rounded-xl shadow-lg w-full max-w-2xl max-h-[95vh] flex flex-col border-2 border-gray-300 overflow-hidden" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
+              <div className="p-6 border-b border-gray-300 bg-gray-50">
+                <div className="flex items-center justify-between">
+                  <button
+                    onClick={() => setShowIndicationForm(false)}
+                    className="text-gray-600 hover:text-gray-800 transition-colors"
+                  >
+                    <span className="material-symbols-outlined text-xl">keyboard_backspace</span>
+                  </button>
+                  <h2 className="text-2xl font-bold text-gray-800 absolute left-1/2 transform -translate-x-1/2">
+                    {indicationFormMode === "add" ? "Add New Indication" : "Edit Indication"}
+                  </h2>
+                </div>
+              </div>
+              
+              <form id="indication-form" onSubmit={handleIndicationFormSubmit} className="p-6 flex-1">
+                <div className="space-y-4">
+                  <div>
+                    <label className="block mb-1 text-gray-700 font-semibold">Name *</label>
+                    <input
+                      type="text"
+                      className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      value={indicationFormData.name || ""}
+                      onChange={(e) => setIndicationFormData({ ...indicationFormData, name: e.target.value })}
+                      required
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block mb-1 text-gray-700 font-semibold">Slug *</label>
+                    <input
+                      type="text"
+                      className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      value={indicationFormData.slug || ""}
+                      onChange={(e) => setIndicationFormData({ ...indicationFormData, slug: e.target.value })}
+                      required
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block mb-1 text-gray-700 font-semibold">Description</label>
+                    <textarea
+                      className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      rows={4}
+                      value={indicationFormData.description || ""}
+                      onChange={(e) => setIndicationFormData({ ...indicationFormData, description: e.target.value })}
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block mb-1 text-gray-700 font-semibold">Color</label>
+                    <select
+                      className="w-full p-3 rounded-lg bg-white text-gray-700 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      value={indicationFormData.color || "blue"}
+                      onChange={(e) => setIndicationFormData({ ...indicationFormData, color: e.target.value })}
+                    >
+                      <option value="blue">Blue</option>
+                      <option value="green">Green</option>
+                      <option value="red">Red</option>
+                      <option value="yellow">Yellow</option>
+                      <option value="purple">Purple</option>
+                      <option value="pink">Pink</option>
+                      <option value="indigo">Indigo</option>
+                      <option value="gray">Gray</option>
+                      <option value="orange">Orange</option>
+                      <option value="teal">Teal</option>
+                    </select>
+                  </div>
+                </div>
+              </form>
+              
+              <div className="p-6 border-t border-gray-300 bg-gray-50">
+                <div className="flex gap-4 flex-wrap">
+                  <button
+                    type="submit"
+                    form="indication-form"
+                    className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-green-600 text-white border-transparent hover:bg-green-700 hover:border-green-700 hover:shadow-lg hover:scale-105"
+                  >
+                    Save
+                  </button>
+                  <button
+                    type="button"
+                    className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-gray-600 text-white border-transparent hover:bg-gray-700 hover:border-gray-700 hover:shadow-lg hover:scale-105"
+                    onClick={() => setShowIndicationForm(false)}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
             </div>
-            
-            <div className="p-6 overflow-y-auto flex-1">
-              <div className="bg-white text-gray-900 p-6 rounded-lg max-w-none">
-                <div 
-                  className="prose prose-lg max-w-none"
-                  dangerouslySetInnerHTML={{
-                    __html: previewContent
-                      .replace(/\n/g, '<br>')
-                      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                      .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                      .replace(/^# (.*$)/gm, '<h1 class="text-3xl font-bold mb-4">$1</h1>')
-                      .replace(/^## (.*$)/gm, '<h2 class="text-2xl font-bold mb-3">$1</h2>')
-                      .replace(/^### (.*$)/gm, '<h3 class="text-xl font-bold mb-2">$1</h3>')
-                      .replace(/^[-*] (.*$)/gm, '<li class="mb-1">$1</li>')
-                      .replace(/^\d+\. (.*$)/gm, '<li class="mb-1">$1</li>')
-                      .replace(/`(.*?)`/g, '<code class="bg-gray-200 px-1 rounded">$1</code>')
-                      .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" class="text-blue-600 hover:underline">$1</a>')
-                      .replace(/^> (.*$)/gm, '<blockquote class="border-l-4 border-gray-300 pl-4 italic">$1</blockquote>')
-                  }}
+          </div>
+        )}
+
+        {/* Content Preview Modal */}
+        {showPreview && (
+          <div className="fixed inset-0 bg-pink-100 bg-opacity-90 flex items-start justify-center z-50 p-4 pt-32" style={{
+            backgroundImage: "url('/images/RoseWPWM.PNG')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+          }}>
+            <div className="absolute inset-0 bg-pink-100 opacity-90"></div>
+            <div className="relative rounded-xl shadow-lg w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col border-2 border-gray-300" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
+              <div className="p-6 border-b border-gray-300 bg-gray-50 flex justify-between items-center">
+                <button
+                  onClick={() => setShowPreview(false)}
+                  className="text-gray-600 hover:text-gray-800 transition-colors"
+                >
+                  <span className="material-symbols-outlined text-xl">keyboard_backspace</span>
+                </button>
+                <h2 className="text-2xl font-bold text-gray-800 absolute left-1/2 transform -translate-x-1/2">Content Preview</h2>
+                <button
+                  type="button"
+                  className="text-gray-500 hover:text-gray-700 text-2xl"
+                  onClick={() => setShowPreview(false)}
+                >
+                  ×
+                </button>
+              </div>
+              
+              <div className="p-6 overflow-y-auto flex-1">
+                <div className="bg-white text-gray-900 p-6 rounded-lg max-w-none">
+                  <div 
+                    className="prose prose-lg max-w-none"
+                    dangerouslySetInnerHTML={{
+                      __html: previewContent
+                        .replace(/\n/g, '<br>')
+                        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                        .replace(/^# (.*$)/gm, '<h1 class="text-3xl font-bold mb-4">$1</h1>')
+                        .replace(/^## (.*$)/gm, '<h2 class="text-2xl font-bold mb-3">$1</h2>')
+                        .replace(/^### (.*$)/gm, '<h3 class="text-xl font-bold mb-2">$1</h3>')
+                        .replace(/^[-*] (.*$)/gm, '<li class="mb-1">$1</li>')
+                        .replace(/^\d+\. (.*$)/gm, '<li class="mb-1">$1</li>')
+                        .replace(/`(.*?)`/g, '<code class="bg-gray-200 px-1 rounded">$1</code>')
+                        .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" class="text-blue-600 hover:underline">$1</a>')
+                        .replace(/^> (.*$)/gm, '<blockquote class="border-l-4 border-gray-300 pl-4 italic">$1</blockquote>')
+                    }}
+                  />
+                </div>
+              </div>
+              
+              <div className="p-6 border-t border-gray-300 bg-gray-50">
+                <div className="flex gap-4">
+                  <button
+                    type="button"
+                    className="bg-gray-600 text-white px-6 py-2 rounded font-bold hover:bg-gray-700 transition-all duration-200"
+                    onClick={() => setShowPreview(false)}
+                  >
+                    Close Preview
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Symptom Tree Modal */}
+        {showSymptomTree && (
+          <div className="fixed inset-0 flex items-start justify-center z-50 p-4 pt-40" style={{
+            backgroundImage: "url('/images/RoseWPWM.PNG')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+          }}>
+            <div className="absolute inset-0 bg-pink-100 opacity-90"></div>
+            <div className="relative rounded-xl shadow-lg w-full max-w-6xl max-h-[95vh] flex flex-col border-2 border-gray-300 overflow-hidden" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
+              <div className="p-6 border-b border-gray-300 bg-gray-50">
+                <div className="flex items-center justify-between">
+                  <button
+                    onClick={() => setShowSymptomTree(false)}
+                    className="text-gray-600 hover:text-gray-800 transition-colors"
+                  >
+                    <span className="material-symbols-outlined text-xl">keyboard_backspace</span>
+                  </button>
+                  <h2 className="text-2xl font-bold text-gray-800 absolute left-1/2 transform -translate-x-1/2">
+                    Symptom Tree - Manage Indications
+                  </h2>
+                </div>
+              </div>
+              
+              <div className="p-6 overflow-y-auto flex-1">
+                <SymptomTree
+                  onSymptomSelect={handleSymptomSelect}
+                  onManageIndications={handleManageIndications}
                 />
               </div>
             </div>
-            
-            <div className="p-6 border-t border-gray-300 bg-gray-50">
-              <div className="flex gap-4">
-                <button
-                  type="button"
-                  className="bg-gray-600 text-white px-6 py-2 rounded font-bold hover:bg-gray-700 transition-all duration-200"
-                  onClick={() => setShowPreview(false)}
-                >
-                  Close Preview
-                </button>
-              </div>
-            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Symptom Tree Modal */}
-      {showSymptomTree && (
-        <div className="fixed inset-0 flex items-start justify-center z-50 p-4 pt-40" style={{
-          backgroundImage: "url('/images/RoseWPWM.PNG')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-        }}>
-          <div className="absolute inset-0 bg-pink-100 opacity-90"></div>
-          <div className="relative rounded-xl shadow-lg w-full max-w-6xl max-h-[95vh] flex flex-col border-2 border-gray-300 overflow-hidden" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
-            <div className="p-6 border-b border-gray-300 bg-gray-50">
-              <div className="flex items-center justify-between">
-                <button
-                  onClick={() => setShowSymptomTree(false)}
-                  className="text-gray-600 hover:text-gray-800 transition-colors"
-                >
-                  <span className="material-symbols-outlined text-xl">keyboard_backspace</span>
-                </button>
-                <h2 className="text-2xl font-bold text-gray-800 absolute left-1/2 transform -translate-x-1/2">
-                  Symptom Tree - Manage Indications
-                </h2>
+        {/* Indication Manager Modal */}
+        {showIndicationManager && treeSelectedSymptom && (
+          <div className="fixed inset-0 flex items-start justify-center z-50 p-4 pt-40" style={{
+            backgroundImage: "url('/images/RoseWPWM.PNG')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+          }}>
+            <div className="absolute inset-0 bg-pink-100 opacity-90"></div>
+            <div className="relative rounded-xl shadow-lg w-full max-w-4xl max-h-[95vh] flex flex-col border-2 border-gray-300 overflow-hidden" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
+              <div className="p-6 border-b border-gray-300 bg-gray-50">
+                <div className="flex items-center justify-between">
+                  <button
+                    onClick={() => setShowIndicationManager(false)}
+                    className="text-gray-600 hover:text-gray-800 transition-colors"
+                  >
+                    <span className="material-symbols-outlined text-xl">keyboard_backspace</span>
+                  </button>
+                  <h2 className="text-2xl font-bold text-gray-800 absolute left-1/2 transform -translate-x-1/2">
+                    Manage Indications
+                  </h2>
+                </div>
+              </div>
+              
+              <div className="p-6 overflow-y-auto flex-1">
+                <IndicationManager
+                  symptom={treeSelectedSymptom}
+                  variant={treeSelectedVariant}
+                  onClose={() => setShowIndicationManager(false)}
+                />
               </div>
             </div>
-            
-            <div className="p-6 overflow-y-auto flex-1">
-              <SymptomTree
-                onSymptomSelect={handleSymptomSelect}
-                onManageIndications={handleManageIndications}
-              />
-            </div>
           </div>
-        </div>
-      )}
-
-      {/* Indication Manager Modal */}
-      {showIndicationManager && treeSelectedSymptom && (
-        <div className="fixed inset-0 flex items-start justify-center z-50 p-4 pt-40" style={{
-          backgroundImage: "url('/images/RoseWPWM.PNG')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-        }}>
-          <div className="absolute inset-0 bg-pink-100 opacity-90"></div>
-          <div className="relative rounded-xl shadow-lg w-full max-w-4xl max-h-[95vh] flex flex-col border-2 border-gray-300 overflow-hidden" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
-            <div className="p-6 border-b border-gray-300 bg-gray-50">
-              <div className="flex items-center justify-between">
-                <button
-                  onClick={() => setShowIndicationManager(false)}
-                  className="text-gray-600 hover:text-gray-800 transition-colors"
-                >
-                  <span className="material-symbols-outlined text-xl">keyboard_backspace</span>
-                </button>
-                <h2 className="text-2xl font-bold text-gray-800 absolute left-1/2 transform -translate-x-1/2">
-                  Manage Indications
-                </h2>
-              </div>
-            </div>
-            
-            <div className="p-6 overflow-y-auto flex-1">
-              <IndicationManager
-                symptom={treeSelectedSymptom}
-                variant={treeSelectedVariant}
-                onClose={() => setShowIndicationManager(false)}
-              />
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
     </div>
   );
 }

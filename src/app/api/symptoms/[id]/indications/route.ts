@@ -60,10 +60,28 @@ export async function GET(
           data: { herbs, supplements }
         });
       } else {
-        // Return empty data for symptom-level (symptoms don't have direct indications)
+        // Return symptom-level indications from the JSON columns
+        const symptomHerbs = symptom.herbs as number[] || [];
+        const symptomSupplements = symptom.supplements as number[] || [];
+        
+        console.log(`🔍 Symptom ${id} has herbs:`, symptomHerbs, 'and supplements:', symptomSupplements);
+        
+        // Fetch the actual herb and supplement data
+        const herbs = symptomHerbs.length > 0 ? await prisma.herb.findMany({
+          where: { id: { in: symptomHerbs } },
+          select: { id: true, name: true, slug: true }
+        }) : [];
+        
+        const supplements = symptomSupplements.length > 0 ? await prisma.supplement.findMany({
+          where: { id: { in: symptomSupplements } },
+          select: { id: true, name: true, slug: true }
+        }) : [];
+        
+        console.log(`✅ Fetched herbs:`, herbs, 'and supplements:', supplements);
+        
         return NextResponse.json({
           success: true,
-          data: { herbs: [], supplements: [] }
+          data: { herbs, supplements }
         });
       }
     }
@@ -82,11 +100,15 @@ export async function GET(
     });
 
     if (variant) {
+      console.log(`🔍 Variant ${id} found:`, variant.name);
+      console.log(`   Herbs: ${variant.herbs ? variant.herbs.length : 0}`);
+      console.log(`   Supplements: ${variant.supplements ? variant.supplements.length : 0}`);
+      
       return NextResponse.json({
         success: true,
         data: {
-          herbs: variant.herbs,
-          supplements: variant.supplements
+          herbs: variant.herbs || [],
+          supplements: variant.supplements || []
         }
       });
     }
@@ -114,7 +136,10 @@ export async function POST(
     const id = parseInt(params.id);
     const { herbs, supplements, targetType } = await request.json();
     
+    console.log(`📥 POST request received:`, { id, herbs, supplements, targetType });
+    
     if (isNaN(id)) {
+      console.error(`❌ Invalid ID: ${params.id}`);
       return NextResponse.json(
         { success: false, error: 'Invalid ID' },
         { status: 400 }
@@ -122,36 +147,14 @@ export async function POST(
     }
 
     if (targetType === 'variant') {
-      // Update variant indications
-      await prisma.symptomVariant.update({
-        where: { id },
-        data: {
-          herbs: {
-            set: herbs.map((herbId: number) => ({ id: herbId }))
-          },
-          supplements: {
-            set: supplements.map((supplementId: number) => ({ id: supplementId }))
-          }
-        }
-      });
-    } else {
-      // Update symptom indications (apply to all variants)
-      const symptom = await prisma.symptom.findUnique({
-        where: { id },
-        include: { variants: true }
-      });
-
-      if (!symptom) {
-        return NextResponse.json(
-          { success: false, error: 'Symptom not found' },
-          { status: 404 }
-        );
-      }
-
-      // Update all variants with the same indications
-      for (const variant of symptom.variants) {
+      console.log(`🔄 Updating variant ${id} indications...`);
+      console.log(`   Herbs to set:`, herbs);
+      console.log(`   Supplements to set:`, supplements);
+      
+      try {
+        // Update variant indications
         await prisma.symptomVariant.update({
-          where: { id: variant.id },
+          where: { id },
           data: {
             herbs: {
               set: herbs.map((herbId: number) => ({ id: herbId }))
@@ -161,6 +164,30 @@ export async function POST(
             }
           }
         });
+        console.log(`✅ Variant ${id} updated successfully`);
+      } catch (updateError) {
+        console.error(`❌ Error updating variant ${id}:`, updateError);
+        throw updateError;
+      }
+    } else {
+      console.log(`🔄 Updating symptom ${id} indications in JSON columns...`);
+      console.log(`   Herbs to set:`, herbs);
+      console.log(`   Supplements to set:`, supplements);
+      
+      try {
+        // Update symptom-level indications in the JSON columns
+        await prisma.symptom.update({
+          where: { id },
+          data: {
+            herbs: herbs,
+            supplements: supplements
+          }
+        });
+        
+        console.log(`✅ Symptom ${id} updated successfully with herbs:`, herbs, 'and supplements:', supplements);
+      } catch (updateError) {
+        console.error(`❌ Error updating symptom ${id}:`, updateError);
+        throw updateError;
       }
     }
 
@@ -170,7 +197,7 @@ export async function POST(
     });
 
   } catch (error) {
-    console.error('Error updating indications:', error);
+    console.error('❌ Error updating indications:', error);
     return NextResponse.json(
       { success: false, error: 'Internal server error' },
       { status: 500 }

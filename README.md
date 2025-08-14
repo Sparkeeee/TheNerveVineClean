@@ -160,6 +160,13 @@ When these herbs/supplements are assigned "Poor Memory" indication:
 - **Transparent Pricing**: Clear pricing and availability information
 - **User Reviews**: Integration of authentic user feedback
 
+### Product Display Strategy
+- **No Scraped Descriptions**: Eliminates inconsistent, messy product descriptions that vary in quality and length
+- **Quality Specifications Display**: Shows our curated quality criteria (purity, testing, sourcing) instead of generic product descriptions
+- **Uniform Card Layouts**: Consistent, professional appearance across all product cards
+- **Our Expertise Showcase**: Displays our research-backed substance descriptions and quality standards
+- **Clean Presentation**: Focuses on what users actually care about - quality, consistency, and professional appearance
+
 ## 🛠️ Development Standards
 
 ### Code Quality

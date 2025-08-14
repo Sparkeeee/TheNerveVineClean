@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import InteractiveTreeDiagram from './InteractiveTreeDiagram';
+import Link from 'next/link';
 
 interface SymptomVariant {
   id: number;
@@ -28,7 +28,6 @@ export default function SymptomTree({ onSymptomSelect, onManageIndications }: Sy
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [showVineDiagram, setShowVineDiagram] = useState(false);
 
   useEffect(() => {
     fetchSymptoms();
@@ -93,16 +92,16 @@ export default function SymptomTree({ onSymptomSelect, onManageIndications }: Sy
     <div className="space-y-4">
       {/* View as Vine Button */}
       <div className="text-center mb-6">
-        <button
-          onClick={() => setShowVineDiagram(true)}
+        <Link
+          href="/symptom-explorer"
           className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-lg bg-green-600 text-white border-transparent hover:bg-green-700 hover:border-green-700 hover:shadow-xl hover:scale-105"
         >
-                     <span className="material-symbols-outlined mr-2 text-xl">account_tree</span>
-           View Interactive Tree
-         </button>
-         <p className="text-sm text-gray-600 mt-2">
-           Explore the complete symptom hierarchy as an interactive tree diagram
-         </p>
+          <span className="material-symbols-outlined mr-2 text-xl">account_tree</span>
+          View Interactive Tree
+        </Link>
+        <p className="text-sm text-gray-600 mt-2">
+          Explore the complete symptom hierarchy as an interactive tree diagram
+        </p>
       </div>
 
       {/* Search Bar */}
@@ -195,12 +194,6 @@ export default function SymptomTree({ onSymptomSelect, onManageIndications }: Sy
       <div className="text-sm text-gray-600 text-center p-4">
         Showing {filteredSymptoms.length} symptoms with {filteredSymptoms.reduce((sum, s) => sum + s.variants.length, 0)} total variants
       </div>
-
-      {/* Interactive Tree Diagram Modal */}
-      <InteractiveTreeDiagram 
-        isOpen={showVineDiagram} 
-        onClose={() => setShowVineDiagram(false)} 
-      />
     </div>
   );
 }
