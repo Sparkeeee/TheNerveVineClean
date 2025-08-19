@@ -405,7 +405,7 @@ export default function InteractiveTreeDiagram({ isAdmin = false }: InteractiveT
         
         // Check if herb is in symptom's herbs
         if (data.herbs && Array.isArray(data.herbs)) {
-          const herbFound = data.herbs.some((herb: { id: string; [key: string]: unknown }) => herb.id === parseInt(herbId));
+          const herbFound = data.herbs.some((herb: { id: string; [key: string]: unknown }) => herb.id === herbId);
           if (herbFound) {
             console.log(`✅ Found herb ${herbId} in symptom ID: ${symptomId}`);
             // Find the symptom name from treeNodes
@@ -418,7 +418,7 @@ export default function InteractiveTreeDiagram({ isAdmin = false }: InteractiveT
         
         // Check if herb is in symptom's supplements (in case it's stored there)
         if (data.supplements && Array.isArray(data.supplements)) {
-          const herbFound = data.supplements.some((supplement: { id: string; [key: string]: unknown }) => supplement.id === parseInt(herbId));
+          const herbFound = data.supplements.some((supplement: { id: string; [key: string]: unknown }) => supplement.id === herbId);
           if (herbFound) {
             console.log(`✅ Found herb ${herbId} in supplements for symptom ID: ${symptomId}`);
             const symptom = treeNodes.find(n => n.id.toString() === symptomId);
@@ -441,7 +441,7 @@ export default function InteractiveTreeDiagram({ isAdmin = false }: InteractiveT
             
             // Check if herb is in variant's herbs
             if (variantData.herbs && Array.isArray(variantData.herbs)) {
-              const herbFound = variantData.herbs.some((herb: { id: string; [key: string]: unknown }) => herb.id === parseInt(herbId));
+              const herbFound = variantData.herbs.some((herb: { id: string; [key: string]: unknown }) => herb.id === herbId);
               if (herbFound) {
                 console.log(`✅ Found herb ${herbId} in variant: ${variant.name}`);
                 indications.push(variant.name);
@@ -450,7 +450,7 @@ export default function InteractiveTreeDiagram({ isAdmin = false }: InteractiveT
             
             // Check if herb is in variant's supplements
             if (variantData.supplements && Array.isArray(variantData.supplements)) {
-              const herbFound = variantData.supplements.some((supplement: { id: string; [key: string]: unknown }) => supplement.id === parseInt(herbId));
+              const herbFound = variantData.supplements.some((supplement: { id: string; [key: string]: unknown }) => supplement.id === herbId);
               if (herbFound) {
                 console.log(`✅ Found herb ${herbId} in variant supplements: ${variant.name}`);
                 indications.push(variant.name);
@@ -483,13 +483,15 @@ export default function InteractiveTreeDiagram({ isAdmin = false }: InteractiveT
       // Search through all symptoms and variants for this supplement
       hierarchyData.forEach(symptom => {
         // Check if supplement is in symptom's supplements JSON
-        if ((symptom as { supplements?: number[] }).supplements && Array.isArray((symptom as { supplements?: number[] }).supplements) && (symptom as { supplements?: number[] }).supplements.includes(parseInt(supplementId))) {
+        const symptomSupplements = (symptom as { supplements?: number[] }).supplements;
+        if (symptomSupplements && Array.isArray(symptomSupplements) && symptomSupplements.includes(parseInt(supplementId))) {
           indications.push(symptom.title);
         }
         
         // Check if supplement is in any of the symptom's variants
         symptom.variants.forEach(variant => {
-          if ((variant as { supplements?: number[] }).supplements && Array.isArray((variant as { supplements?: number[] }).supplements) && (variant as { supplements?: number[] }).supplements.includes(parseInt(supplementId))) {
+          const variantSupplements = (variant as { supplements?: number[] }).supplements;
+          if (variantSupplements && Array.isArray(variantSupplements) && variantSupplements.includes(parseInt(supplementId))) {
             indications.push(variant.name);
           }
         });

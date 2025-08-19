@@ -110,18 +110,7 @@ export default function IndicationManager({
     targetName
   });
 
-  useEffect(() => {
-    if (isOpen && targetId) {
-      console.log(`🚀 IndicationManager opened for:`, {
-        targetId,
-        targetType,
-        targetName,
-        isVariant: !!variantId
-      });
-      fetchAvailableItems();
-      fetchCurrentIndications();
-    }
-  }, [isOpen, targetId, targetType, targetName, variantId, fetchAvailableItems, fetchCurrentIndications]);
+
 
   const fetchAvailableItems = useCallback(async () => {
     setLoading(true);
@@ -209,7 +198,18 @@ export default function IndicationManager({
     }
   }, [targetId, targetType]);
 
-
+  useEffect(() => {
+    if (isOpen && targetId) {
+      console.log(`🚀 IndicationManager opened for:`, {
+        targetId,
+        targetType,
+        targetName,
+        isVariant: !!variantId
+      });
+      fetchAvailableItems();
+      fetchCurrentIndications();
+    }
+  }, [isOpen, targetId, targetType, targetName, variantId, fetchAvailableItems, fetchCurrentIndications]);
 
   const handleSave = async () => {
     if (!targetId) return;
@@ -281,8 +281,8 @@ export default function IndicationManager({
         [field]: value,
         totalScore: field === 'traditionalScore' || field === 'researchScore' 
           ? calculateTotalScore(
-              field === 'traditionalScore' ? value : (prev[itemId]?.traditionalScore || 0),
-              field === 'researchScore' ? value : (prev[itemId]?.researchScore || 0)
+              field === 'traditionalScore' ? (typeof value === 'number' ? value : 0) : (prev[itemId]?.traditionalScore || 0),
+              field === 'researchScore' ? (typeof value === 'number' ? value : 0) : (prev[itemId]?.researchScore || 0)
             )
           : (prev[itemId]?.totalScore || 0)
       }
