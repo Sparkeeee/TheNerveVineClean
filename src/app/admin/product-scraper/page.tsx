@@ -1389,8 +1389,8 @@ export default function ProductScraperPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                     <div>
                       <p><strong>Found $18.19:</strong> {scrapedProduct.rawData.debug.foundPrice18_19 ? '✅ Yes' : '❌ No'}</p>
-                      <p><strong>Found data-test="product-price":</strong> {scrapedProduct.rawData.debug.foundDataTestProductPrice ? '✅ Yes' : '❌ No'}</p>
-                      <p><strong>Found "About this item":</strong> {scrapedProduct.rawData.debug.foundAboutThisItem ? '✅ Yes' : '❌ No'}</p>
+                      <p><strong>Found data-test=&quot;product-price&quot;:</strong> {scrapedProduct.rawData.debug.foundDataTestProductPrice ? '✅ Yes' : '❌ No'}</p>
+                      <p><strong>Found &ldquo;About this item&rdquo;:</strong> {scrapedProduct.rawData.debug.foundAboutThisItem ? '✅ Yes' : '❌ No'}</p>
                     </div>
                     <div>
                       <p><strong>Total Price Patterns:</strong> {scrapedProduct.rawData.debug.totalPricePatterns}</p>

@@ -36,17 +36,17 @@ export class QualityFilter {
       }
 
       // Validate price
-      if (!this.validatePrice(product.price)) {
+      if (product.price && !this.validatePrice(product.price)) {
         return false;
       }
 
       // Validate title quality
-      if (!this.validateTitle(product.name)) {
+      if (product.name && !this.validateTitle(product.name)) {
         return false;
       }
 
       // Validate image URL
-      if (!this.validateImageUrl(product.imageUrl)) {
+      if (product.imageUrl && !this.validateImageUrl(product.imageUrl)) {
         return false;
       }
 

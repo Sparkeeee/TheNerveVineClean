@@ -46,12 +46,12 @@ export async function GET(
         });
 
         const herbs = await prisma.herb.findMany({
-          where: { id: { in: Array.from(allHerbs) } },
+          where: { id: { in: Array.from(allHerbs) as number[] } },
           select: { id: true, name: true, slug: true }
         });
 
         const supplements = await prisma.supplement.findMany({
-          where: { id: { in: Array.from(allSupplements) } },
+          where: { id: { in: Array.from(allSupplements) as number[] } },
           select: { id: true, name: true, slug: true }
         });
 

@@ -3282,8 +3282,11 @@ export default function AdminContentPage() {
               
               <div className="p-6 overflow-y-auto flex-1">
                 <IndicationManager
-                  symptom={treeSelectedSymptom}
-                  variant={treeSelectedVariant}
+                  isOpen={showIndicationManager}
+                  symptomId={treeSelectedSymptom?.id}
+                  variantId={treeSelectedVariant?.id}
+                  symptomTitle={treeSelectedSymptom?.title}
+                  variantName={treeSelectedVariant?.name}
                   onClose={() => setShowIndicationManager(false)}
                 />
               </div>

@@ -12,8 +12,8 @@ export class CrawleeScraperEngine {
   private logger: Logger;
   private progressTracker: ProgressTracker;
   private qualityFilter: QualityFilter;
-  private session: ScrapingSession;
-  private dataset: Dataset;
+  private session!: ScrapingSession;
+  private dataset!: Dataset;
   private tempStoragePath: string;
 
   constructor() {
@@ -90,7 +90,7 @@ export class CrawleeScraperEngine {
         const supplements = await this.prisma.supplement.findMany({
           select: { name: true, slug: true }
         });
-        return supplements.map(s => s.name || s.slug).filter(Boolean);
+        return supplements.map(s => s.name || s.slug).filter((item): item is string => item !== null && item !== undefined);
       } else {
         const symptoms = await this.prisma.symptom.findMany({
           select: { title: true, slug: true }
@@ -135,15 +135,15 @@ export class CrawleeScraperEngine {
           });
 
         } catch (error) {
-          log.error(`Failed to process ${request.url}:`, error);
-          this.handleScrapingError(error, request.url, searchTerm);
+          log.error(`Failed to process ${request.url}:`, error as any);
+          this.handleScrapingError(error as any, request.url, searchTerm);
         }
       },
 
       // Handle failed requests
       failedRequestHandler: ({ request, error }) => {
         this.logger.error(`❌ Failed to process ${request.url}:`, error);
-        this.handleScrapingError(error, request.url, 'unknown');
+        this.handleScrapingError(error as any, request.url, 'unknown');
       },
 
       // Rate limiting and anti-detection

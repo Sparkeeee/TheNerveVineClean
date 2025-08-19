@@ -15,10 +15,7 @@ interface HierarchySymptom {
   }>;
 }
 
-interface IndicationData {
-  herbs: Array<{ id: string; name: string; slug: string }>;
-  supplements: Array<{ id: string; name: string; slug: string }>;
-}
+
 
 interface InteractiveTreeDiagramProps {
   isAdmin?: boolean;
@@ -53,14 +50,14 @@ export default function InteractiveTreeDiagram({ isAdmin = false }: InteractiveT
   const [pan, setPan] = useState({ x: 0, y: 30 });
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-  const [selectedNode, setSelectedNode] = useState<string | null>(null);
+  const [selectedNode] = useState<string | null>(null);
   const [clickedNode, setClickedNode] = useState<{ type: 'symptom' | 'variant'; id: string; x: number; y: number } | null>(null);
-  const [indicationData, setIndicationData] = useState<Record<string, any>>({});
+  const [indicationData, setIndicationData] = useState<Record<string, { herbs: Array<{ id: string; name: string; [key: string]: unknown }>; supplements: Array<{ id: string; name: string; [key: string]: unknown }> }>>({});
   const [loadingIndications, setLoadingIndications] = useState<Record<string, boolean>>({});
   const [herbIndications, setHerbIndications] = useState<Record<string, string[]>>({});
   const [supplementIndications, setSupplementIndications] = useState<Record<string, string[]>>({});
-  const [herbTooltip, setHerbTooltip] = useState<{ herb: any; x: number; y: number } | null>(null);
-  const [supplementTooltip, setSupplementTooltip] = useState<{ supplement: any; x: number; y: number } | null>(null);
+  const [herbTooltip, setHerbTooltip] = useState<{ herb: { id: string; name: string; [key: string]: unknown }; x: number; y: number } | null>(null);
+  const [supplementTooltip, setSupplementTooltip] = useState<{ supplement: { id: string; name: string; [key: string]: unknown }; x: number; y: number } | null>(null);
   
   // Admin-only state
   const [showIndicationManager, setShowIndicationManager] = useState(false);
@@ -81,7 +78,7 @@ export default function InteractiveTreeDiagram({ isAdmin = false }: InteractiveT
   }, [supplementTooltip]);
   
   const canvasRef = useRef<HTMLDivElement>(null);
-  const tooltipButtonRef = useRef<HTMLButtonElement>(null);
+
   
   useEffect(() => {
     fetchHierarchyData();
@@ -228,7 +225,7 @@ export default function InteractiveTreeDiagram({ isAdmin = false }: InteractiveT
     const nodeHeight = 60;
     const variantHeight = 50; // Increased from 40
     const horizontalSpacing = 25; // Reduced from 40 to bring symptoms and variants closer
-    const verticalSpacing = 80;
+  
     const variantVerticalSpacing = 50; // Back to original
     const groupSpacing = 30; // Reduced from 60 to bring symptom groups even closer together
 
@@ -311,11 +308,7 @@ export default function InteractiveTreeDiagram({ isAdmin = false }: InteractiveT
     }
   };
 
-  const toggleNodeExpansion = (nodeId: string) => {
-    // In a real implementation, you'd update the node's isExpanded state
-    // For now, we'll just toggle the selected node
-    setSelectedNode(selectedNode === nodeId ? null : nodeId);
-  };
+
 
   const handleOpenIndicationManager = () => {
     if (!clickedNode) return;
@@ -369,7 +362,7 @@ export default function InteractiveTreeDiagram({ isAdmin = false }: InteractiveT
     }
   };
 
-  const handleHerbClick = (herb: any, event: React.MouseEvent) => {
+  const handleHerbClick = (herb: { id: string; name: string; [key: string]: unknown }, event: React.MouseEvent) => {
     event.stopPropagation();
     console.log('🌿 Herb clicked:', herb.name, 'at position:', event.clientX, event.clientY);
     console.log('🌿 Full herb data:', herb);
@@ -384,7 +377,7 @@ export default function InteractiveTreeDiagram({ isAdmin = false }: InteractiveT
     });
   };
 
-  const handleSupplementClick = (supplement: any, event: React.MouseEvent) => {
+  const handleSupplementClick = (supplement: { id: string; name: string; [key: string]: unknown }, event: React.MouseEvent) => {
     event.stopPropagation();
     console.log('💊 Supplement clicked:', supplement.name, 'at position:', event.clientX, event.clientY);
     
@@ -412,7 +405,7 @@ export default function InteractiveTreeDiagram({ isAdmin = false }: InteractiveT
         
         // Check if herb is in symptom's herbs
         if (data.herbs && Array.isArray(data.herbs)) {
-          const herbFound = data.herbs.some(herb => herb.id === parseInt(herbId));
+          const herbFound = data.herbs.some((herb: { id: string; [key: string]: unknown }) => herb.id === parseInt(herbId));
           if (herbFound) {
             console.log(`✅ Found herb ${herbId} in symptom ID: ${symptomId}`);
             // Find the symptom name from treeNodes
@@ -425,7 +418,7 @@ export default function InteractiveTreeDiagram({ isAdmin = false }: InteractiveT
         
         // Check if herb is in symptom's supplements (in case it's stored there)
         if (data.supplements && Array.isArray(data.supplements)) {
-          const herbFound = data.supplements.some(supplement => supplement.id === parseInt(herbId));
+          const herbFound = data.supplements.some((supplement: { id: string; [key: string]: unknown }) => supplement.id === parseInt(herbId));
           if (herbFound) {
             console.log(`✅ Found herb ${herbId} in supplements for symptom ID: ${symptomId}`);
             const symptom = treeNodes.find(n => n.id.toString() === symptomId);
@@ -448,7 +441,7 @@ export default function InteractiveTreeDiagram({ isAdmin = false }: InteractiveT
             
             // Check if herb is in variant's herbs
             if (variantData.herbs && Array.isArray(variantData.herbs)) {
-              const herbFound = variantData.herbs.some(herb => herb.id === parseInt(herbId));
+              const herbFound = variantData.herbs.some((herb: { id: string; [key: string]: unknown }) => herb.id === parseInt(herbId));
               if (herbFound) {
                 console.log(`✅ Found herb ${herbId} in variant: ${variant.name}`);
                 indications.push(variant.name);
@@ -457,7 +450,7 @@ export default function InteractiveTreeDiagram({ isAdmin = false }: InteractiveT
             
             // Check if herb is in variant's supplements
             if (variantData.supplements && Array.isArray(variantData.supplements)) {
-              const herbFound = variantData.supplements.some(supplement => supplement.id === parseInt(herbId));
+              const herbFound = variantData.supplements.some((supplement: { id: string; [key: string]: unknown }) => supplement.id === parseInt(herbId));
               if (herbFound) {
                 console.log(`✅ Found herb ${herbId} in variant supplements: ${variant.name}`);
                 indications.push(variant.name);
@@ -490,13 +483,13 @@ export default function InteractiveTreeDiagram({ isAdmin = false }: InteractiveT
       // Search through all symptoms and variants for this supplement
       hierarchyData.forEach(symptom => {
         // Check if supplement is in symptom's supplements JSON
-        if (symptom.supplements && Array.isArray(symptom.supplements) && symptom.supplements.includes(parseInt(supplementId))) {
+        if ((symptom as { supplements?: number[] }).supplements && Array.isArray((symptom as { supplements?: number[] }).supplements) && (symptom as { supplements?: number[] }).supplements.includes(parseInt(supplementId))) {
           indications.push(symptom.title);
         }
         
         // Check if supplement is in any of the symptom's variants
         symptom.variants.forEach(variant => {
-          if (variant.supplements && Array.isArray(variant.supplements) && variant.supplements.includes(parseInt(supplementId))) {
+          if ((variant as { supplements?: number[] }).supplements && Array.isArray((variant as { supplements?: number[] }).supplements) && (variant as { supplements?: number[] }).supplements.includes(parseInt(supplementId))) {
             indications.push(variant.name);
           }
         });
@@ -576,7 +569,7 @@ export default function InteractiveTreeDiagram({ isAdmin = false }: InteractiveT
               >
                 {/* Connection Lines */}
                 <svg className="absolute inset-0 w-full h-full pointer-events-none">
-                  {treeNodes.map((node, index) => (
+                  {treeNodes.map((node) => (
                     <g key={`connections-${node.id}`}>
                       {/* Horizontal line from symptom to variants */}
                       {node.variants.length > 0 && (
@@ -759,7 +752,7 @@ export default function InteractiveTreeDiagram({ isAdmin = false }: InteractiveT
                         <div className="mb-4">
                           <h4 className="font-medium text-green-700 mb-2">Indicated Herbs:</h4>
                           <div className="space-y-2">
-                            {indicationData[clickedNode.id].herbs.map((herb, index) => (
+                            {indicationData[clickedNode.id].herbs.map((herb: { id: string; name: string; [key: string]: unknown }) => (
                               <div key={herb.id} className="flex items-center justify-between">
                                 <span 
                                   className="text-green-600 cursor-pointer hover:text-green-800 hover:underline"
@@ -778,7 +771,7 @@ export default function InteractiveTreeDiagram({ isAdmin = false }: InteractiveT
                         <div className="mb-4">
                           <h4 className="font-medium text-blue-700 mb-2">Indicated Supplements:</h4>
                           <div className="space-y-2">
-                            {indicationData[clickedNode.id].supplements.map((supplement, index) => (
+                            {indicationData[clickedNode.id].supplements.map((supplement: { id: string; name: string; [key: string]: unknown }) => (
                               <div key={supplement.id} className="flex items-center justify-between">
                                 <span 
                                   className="text-blue-600 cursor-pointer hover:text-blue-800 hover:underline"
@@ -809,7 +802,7 @@ export default function InteractiveTreeDiagram({ isAdmin = false }: InteractiveT
                           <p className="text-gray-500 text-sm mb-2">No indications set for this {clickedNode.type === 'symptom' ? 'symptom' : 'variant'}.</p>
                           <div className="text-xs text-gray-400 bg-gray-50 p-2 rounded border">
                             <p><strong>Debug Info:</strong></p>
-                            <p>Clicked Node ID: "{clickedNode.id}" (type: {typeof clickedNode.id})</p>
+                            <p>Clicked Node ID: &ldquo;{clickedNode.id}&rdquo; (type: {typeof clickedNode.id})</p>
                             <p>Loading State: loadingIndications[{clickedNode.id}] = {loadingIndications[clickedNode.id] ? 'true' : 'false'}</p>
                             <p>Available indicationData keys: {Object.keys(indicationData).join(', ')}</p>
                             <p>Data for this ID: {JSON.stringify(indicationData[clickedNode.id])}</p>
@@ -990,8 +983,8 @@ export default function InteractiveTreeDiagram({ isAdmin = false }: InteractiveT
         <IndicationManager
           isOpen={showIndicationManager}
           onClose={handleIndicationManagerClose}
-          symptomId={indicationManagerData.symptomId}
-          variantId={indicationManagerData.variantId}
+          symptomId={indicationManagerData.symptomId ? parseInt(indicationManagerData.symptomId) : undefined}
+          variantId={indicationManagerData.variantId ? parseInt(indicationManagerData.variantId) : undefined}
           symptomTitle={indicationManagerData.symptomTitle}
           variantName={indicationManagerData.variantName}
         />

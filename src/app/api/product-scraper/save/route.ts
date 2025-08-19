@@ -12,11 +12,13 @@ interface ScrapedProduct {
 }
 
 export async function POST(request: NextRequest) {
+  let body: any;
+  
   try {
-    const productData: ScrapedProduct = await request.json();
+    body = await request.json();
 
     // Validate required fields
-    if (!productData.name || !productData.url) {
+    if (!body.name || !body.url) {
       return NextResponse.json(
         { error: 'Product name and URL are required' },
         { status: 400 }
@@ -24,8 +26,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Handle missing availability field
-    if (!productData.availability) {
-      productData.availability = 'Unknown'; // Default value
+    if (!body.availability) {
+      body.availability = 'Unknown'; // Default value
     }
 
     // Decode HTML entities for cleaner product names and descriptions
@@ -46,16 +48,16 @@ export async function POST(request: NextRequest) {
 
     // Clean up product data
     const cleanProductData = {
-      ...productData,
-      name: decodeHtmlEntities(productData.name),
-      description: decodeHtmlEntities(productData.description)
+      ...body,
+      name: decodeHtmlEntities(body.name),
+      description: decodeHtmlEntities(body.description)
     };
 
     console.log('🔍 Cleaned product name:', cleanProductData.name);
     console.log('🔍 Cleaned description preview:', cleanProductData.description?.substring(0, 100));
 
     // Extract domain for merchant identification
-    const domain = new URL(productData.url).hostname;
+    const domain = new URL(body.url).hostname;
     console.log('🔍 Extracted domain:', domain);
     
     // Create or find merchant
@@ -117,7 +119,7 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('Save product error:', error);
-    console.error('Product data received:', JSON.stringify(productData, null, 2));
+    console.error('Product data received:', JSON.stringify(body, null, 2));
     return NextResponse.json(
       { error: `Failed to save product data: ${error instanceof Error ? error.message : 'Unknown error'}` },
       { status: 500 }

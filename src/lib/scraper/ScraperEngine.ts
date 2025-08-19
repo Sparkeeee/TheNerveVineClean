@@ -4,9 +4,9 @@ import { ProgressTracker } from './ProgressTracker';
 import { ErrorHandler } from './ErrorHandler';
 import { QualityFilter } from './QualityFilter';
 import { BaseScraper } from './sites/BaseScraper';
-import { AmazonScraper } from './sites/AmazonScraper';
-import { TargetScraper } from './sites/TargetScraper';
-import { HerbalScraper } from './sites/HerbalScraper';
+// import { AmazonScraper } from './sites/AmazonScraper';
+// import { TargetScraper } from './sites/TargetScraper';
+// import { HerbalScraper } from './sites/HerbalScraper';
 import { Logger } from './utils/Logger';
 import { PrismaClient } from '@prisma/client';
 
@@ -17,7 +17,7 @@ export class ScraperEngine {
   private errorHandler: ErrorHandler;
   private qualityFilter: QualityFilter;
   private logger: Logger;
-  private session: ScrapingSession;
+  private session!: ScrapingSession;
   private scrapers: Map<string, BaseScraper>;
 
   constructor() {
@@ -33,15 +33,16 @@ export class ScraperEngine {
 
   private initializeScrapers(): void {
     // Initialize site-specific scrapers
-    this.scrapers.set('amazon', new AmazonScraper());
-    this.scrapers.set('target', new TargetScraper());
-    this.scrapers.set('vitacost', new HerbalScraper());
-    this.scrapers.set('gaia-herbs', new HerbalScraper());
-    this.scrapers.set('wise-woman-herbals', new HerbalScraper());
-    this.scrapers.set('pacific-botanicals', new HerbalScraper());
-    this.scrapers.set('traditional-medicinals', new HerbalScraper());
-    this.scrapers.set('natures-answer', new HerbalScraper());
-    this.scrapers.set('herbera', new HerbalScraper());
+    // TODO: Re-enable when scraper classes are implemented
+    // this.scrapers.set('amazon', new AmazonScraper());
+    // this.scrapers.set('target', new TargetScraper());
+    // this.scrapers.set('vitacost', new HerbalScraper());
+    // this.scrapers.set('gaia-herbs', new HerbalScraper());
+    // this.scrapers.set('wise-woman-herbals', new HerbalScraper());
+    // this.scrapers.set('pacific-botanicals', new HerbalScraper());
+    // this.scrapers.set('traditional-medicinals', new HerbalScraper());
+    // this.scrapers.set('natures-answer', new HerbalScraper());
+    // this.scrapers.set('herbera', new HerbalScraper());
   }
 
   async startScrapingSession(symptomCategories: string[]): Promise<void> {
@@ -127,13 +128,9 @@ export class ScraperEngine {
             price: product.price,
             imageUrl: product.imageUrl,
             description: product.description,
-            availability: product.availability,
-            merchant: {
-              connectOrCreate: {
-                where: { name: product.site },
-                create: { name: product.site, url: product.baseUrl }
-              }
-            }
+            affiliateLink: product.url,
+            currency: 'USD',
+            merchantId: await this.getOrCreateMerchantId(product.site)
           }
         });
         
@@ -160,6 +157,24 @@ export class ScraperEngine {
         }
       }, 1000);
     });
+  }
+
+  private async getOrCreateMerchantId(siteName: string): Promise<number> {
+    let merchant = await this.prisma.merchant.findFirst({
+      where: { name: siteName }
+    });
+
+    if (!merchant) {
+      merchant = await this.prisma.merchant.create({
+        data: {
+          name: siteName,
+          region: 'US',
+          apiSource: 'scraper'
+        }
+      });
+    }
+
+    return merchant.id;
   }
 
   private generateSessionId(): string {

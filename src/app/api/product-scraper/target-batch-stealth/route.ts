@@ -9,9 +9,12 @@ const realisticBatchDelay = () => randomDelay(8000, 15000); // Longer delays for
 export async function POST(request: NextRequest) {
   console.log('🚀 TARGET BATCH STEALTH: Starting stealth batch processing');
   
+  let searchTerm: string = 'unknown';
+  
   try {
     const body = await request.json();
-    const { searchTerm, maxResults = 5 } = body;
+    const { searchTerm: term, maxResults = 5 } = body;
+    searchTerm = term;
     
     if (!searchTerm) {
       return NextResponse.json({ error: 'Search term is required' }, { status: 400 });
@@ -136,7 +139,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ 
       success: false, 
       error: errorMessage,
-      searchTerm: body?.searchTerm || 'unknown',
+      searchTerm: searchTerm || 'unknown',
       isBlocked,
       recommendation: isBlocked ? 'Try VPN IP rotation or wait before retrying' : 'Check search term and try again',
       method: 'Stealth Batch Processing',

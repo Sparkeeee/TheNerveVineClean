@@ -34,12 +34,14 @@ const realisticHeaders = () => ({
 export async function POST(request: NextRequest) {
   console.log('🚀 TARGET SEARCH STEALTH: Starting stealth search');
   
+  let searchTerm: string = 'unknown';
   let browser;
   let context;
   
   try {
     const body = await request.json();
-    const { searchTerm, maxResults = 5 } = body;
+    const { searchTerm: term, maxResults = 5 } = body;
+    searchTerm = term;
     
     if (!searchTerm) {
       return NextResponse.json({ error: 'Search term is required' }, { status: 400 });
@@ -88,8 +90,8 @@ export async function POST(request: NextRequest) {
       
       // Simulate realistic mouse movements
       const originalQuerySelector = document.querySelector;
-      document.querySelector = function(...args) {
-        const result = originalQuerySelector.apply(this, args);
+      document.querySelector = function(...args: any[]) {
+        const result = originalQuerySelector.apply(this, args as [string]);
         if (result) {
           // Simulate human-like interaction
           setTimeout(() => {
@@ -231,7 +233,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ 
       success: false, 
       error: errorMessage,
-      searchTerm: body?.searchTerm || 'unknown',
+      searchTerm: searchTerm || 'unknown',
       isBlocked,
       recommendation: isBlocked ? 'Try VPN IP rotation or wait before retrying' : 'Check search term and try again'
     }, { status: 500 });

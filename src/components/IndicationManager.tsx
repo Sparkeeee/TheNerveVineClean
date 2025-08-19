@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 interface Herb {
   id: number;
@@ -53,45 +53,7 @@ interface Supplement {
   traditionalUses?: string[];
 }
 
-interface Symptom {
-  id: number;
-  slug: string;
-  title: string;
-  description?: string;
-  metaTitle?: string;
-  metaDescription?: string;
-  articles?: unknown;
-  associatedSymptoms?: unknown;
-  cautions?: string;
-  variants?: unknown;
-  references?: unknown;
-  variantDescriptions?: unknown;
-  products?: unknown[];
-}
 
-interface SymptomVariant {
-  id: number;
-  parentSymptomId: number;
-  name: string;
-  slug: string;
-  description?: string;
-  metaTitle?: string;
-  metaDescription?: string;
-  cautions?: string;
-  references?: unknown;
-  herbs?: Herb[];
-  supplements?: Supplement[];
-}
-
-interface Indication {
-  id: number;
-  name: string;
-  slug: string;
-  description?: string;
-  color?: string;
-  herbs?: Herb[];
-  supplements?: Supplement[];
-}
 
 interface EvidenceScore {
   id?: number;
@@ -110,10 +72,7 @@ interface IndicationManagerProps {
   variantName?: string;
 }
 
-interface IndicationData {
-  herbs: Herb[];
-  supplements: Supplement[];
-}
+
 
 export default function IndicationManager({ 
   isOpen, 
@@ -162,9 +121,9 @@ export default function IndicationManager({
       fetchAvailableItems();
       fetchCurrentIndications();
     }
-  }, [isOpen, targetId]);
+  }, [isOpen, targetId, targetType, targetName, variantId, fetchAvailableItems, fetchCurrentIndications]);
 
-  const fetchAvailableItems = async () => {
+  const fetchAvailableItems = useCallback(async () => {
     setLoading(true);
     try {
       // Fetch all available herbs and supplements
@@ -209,9 +168,9 @@ export default function IndicationManager({
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const fetchCurrentIndications = async () => {
+  const fetchCurrentIndications = useCallback(async () => {
     if (!targetId) return;
     
     try {
@@ -229,13 +188,13 @@ export default function IndicationManager({
         if (result.success && result.data) {
           // Handle the API response format: { success: true, data: { herbs, supplements } }
           if (result.data.herbs && Array.isArray(result.data.herbs)) {
-            const herbIds = result.data.herbs.map((h: any) => h.id);
+            const herbIds = result.data.herbs.map((h: { id: number; [key: string]: unknown }) => h.id);
             console.log('Setting selected herbs:', herbIds);
             setSelectedHerbs(herbIds);
           }
           
           if (result.data.supplements && Array.isArray(result.data.supplements)) {
-            const supplementIds = result.data.supplements.map((s: any) => s.id);
+            const supplementIds = result.data.supplements.map((s: { id: number; [key: string]: unknown }) => s.id);
             console.log('Setting selected supplements:', supplementIds);
             setSelectedSupplements(supplementIds);
           }
@@ -248,23 +207,9 @@ export default function IndicationManager({
     } catch (error) {
       console.error('Error fetching current indications:', error);
     }
-  };
+  }, [targetId, targetType]);
 
-  const handleHerbToggle = (herbId: number) => {
-    setSelectedHerbs(prev => 
-      prev.includes(herbId) 
-        ? prev.filter(id => id !== herbId)
-        : [...prev, herbId]
-    );
-  };
 
-  const handleSupplementToggle = (supplementId: number) => {
-    setSelectedSupplements(prev => 
-      prev.includes(supplementId) 
-        ? prev.filter(id => id !== supplementId)
-        : [...prev, supplementId]
-    );
-  };
 
   const handleSave = async () => {
     if (!targetId) return;
@@ -328,7 +273,7 @@ export default function IndicationManager({
     }
   };
 
-  const updateEvidenceScore = (itemId: number, field: keyof EvidenceScore, value: any) => {
+  const updateEvidenceScore = (itemId: number, field: keyof EvidenceScore, value: string | number) => {
     setEvidenceScores(prev => ({
       ...prev,
       [itemId]: {
@@ -469,9 +414,6 @@ export default function IndicationManager({
                       className="flex-1 cursor-pointer text-gray-700 hover:text-gray-900"
                     >
                       <span className="font-medium">{herb.name}</span>
-                      {herb.commonName && herb.commonName !== herb.name && (
-                        <span className="text-gray-500 text-sm ml-2">({herb.commonName})</span>
-                      )}
                     </label>
                     
                     {/* Evidence Scoring Section */}
@@ -616,7 +558,7 @@ export default function IndicationManager({
 
           {filteredHerbs.length === 0 && filteredSupplements.length === 0 && searchTerm && (
             <div className="text-center py-8 text-gray-500 bg-white rounded-lg border border-gray-300">
-              No items found matching "{searchTerm}"
+              No items found matching &ldquo;{searchTerm}&rdquo;
             </div>
           )}
         </div>

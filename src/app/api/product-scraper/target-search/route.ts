@@ -5,22 +5,21 @@ import { writeFileSync } from 'fs';
 console.log(`🧪 TARGET SEARCH FILE LOADED - MODULE INITIALIZATION`);
 
 export async function POST(request: NextRequest) {
-  console.log(`🚀 TARGET SEARCH API CALLED!`);
-  console.log(`🧪 SIMPLE TEST LOG - IF YOU SEE THIS, THE API IS LOADING`);
+  console.log('🚀 TARGET SEARCH: Starting search');
   
+  let searchTerm: string = 'unknown';
   let browser;
   
   try {
     const body = await request.json();
-    console.log(`📝 TARGET SEARCH: Received body:`, body);
-    
-    const { searchTerm, maxResults = 5 } = body;
-    console.log(`📝 TARGET SEARCH: Parsed searchTerm: "${searchTerm}", maxResults: ${maxResults}`);
+    const { searchTerm: term, maxResults = 5 } = body;
+    searchTerm = term;
     
     if (!searchTerm) {
-      console.log(`❌ TARGET SEARCH: No searchTerm provided`);
       return NextResponse.json({ error: 'Search term is required' }, { status: 400 });
     }
+
+    console.log(`📝 TARGET SEARCH: Parsed searchTerm: "${searchTerm}", maxResults: ${maxResults}`);
 
     console.log(`🔍 TARGET SEARCH: Starting search for "${searchTerm}"`);
 
@@ -115,32 +114,35 @@ export async function POST(request: NextRequest) {
     console.log(`🔍 TARGET SEARCH: Extracting product links...`);
     
     const allLinks = await page.evaluate(() => {
-      const links = [];
+      const links: string[] = [];
       
-      // Strategy 1: Product cards with data-test attribute
-      const productCards = document.querySelectorAll('[data-test="@web/ProductCard"] a[href*="/p/"]');
-      productCards.forEach(link => {
-        if (link.href && !link.href.includes('/s/') && !link.href.includes('/search')) {
-          links.push(link.href);
+      // Extract product links from search results
+      const productLinks = document.querySelectorAll('a[data-testid="product-title"]');
+      productLinks.forEach((link) => {
+        const href = (link as HTMLAnchorElement).href;
+        if (href && !href.includes('/s/') && !href.includes('/search')) {
+          links.push(href);
         }
       });
-      
-      // Strategy 2: Any link with /p/ pattern
-      const productLinks = document.querySelectorAll('a[href*="/p/"]');
-      productLinks.forEach(link => {
-        if (link.href && !link.href.includes('/s/') && !link.href.includes('/search') && !links.includes(link.href)) {
-          links.push(link.href);
+
+      // Also check for alternative product link selectors
+      const altProductLinks = document.querySelectorAll('a[href*="/p/"]');
+      altProductLinks.forEach((link) => {
+        const href = (link as HTMLAnchorElement).href;
+        if (href && !href.includes('/s/') && !href.includes('/search') && !links.includes(href)) {
+          links.push(href);
         }
       });
-      
-      // Strategy 3: Links within product grid
-      const gridLinks = document.querySelectorAll('[data-test="product-grid"] a[href*="/p/"]');
-      gridLinks.forEach(link => {
-        if (link.href && !link.href.includes('/s/') && !link.href.includes('/search') && !links.includes(link.href)) {
-          links.push(link.href);
+
+      // Check for product grid links
+      const gridLinks = document.querySelectorAll('a[data-testid="product-grid-item"]');
+      gridLinks.forEach((link) => {
+        const href = (link as HTMLAnchorElement).href;
+        if (href && !href.includes('/s/') && !href.includes('/search') && !links.includes(href)) {
+          links.push(href);
         }
       });
-      
+
       return links;
     });
 
@@ -191,7 +193,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ 
       success: false, 
       error: error instanceof Error ? error.message : 'Search failed',
-      searchTerm: body?.searchTerm || 'unknown'
+      searchTerm: searchTerm || 'unknown'
     }, { status: 500 });
   } finally {
     if (browser) {

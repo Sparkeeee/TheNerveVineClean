@@ -100,7 +100,7 @@ export async function POST(request: NextRequest) {
       const productRelated = Array.from(allElements).filter(el => {
         const text = el.textContent?.toLowerCase() || '';
         const className = el.className;
-        const classString = typeof className === 'string' ? className : className?.toString() || '';
+        const classString = typeof className === 'string' ? className : (className as any)?.toString() || '';
         const id = el.id?.toLowerCase() || '';
         return text.includes('product') || classString.includes('product') || id.includes('product') ||
                text.includes('supplement') || classString.includes('supplement') || id.includes('supplement') ||
@@ -112,7 +112,7 @@ export async function POST(request: NextRequest) {
         productRelatedElements: productRelated.length,
         sampleElements: productRelated.slice(0, 5).map(el => ({
           tag: el.tagName,
-          className: typeof el.className === 'string' ? el.className : el.className?.toString() || '',
+          className: typeof el.className === 'string' ? el.className : (el.className as any)?.toString() || '',
           id: el.id,
           text: el.textContent?.substring(0, 100)
         }))
