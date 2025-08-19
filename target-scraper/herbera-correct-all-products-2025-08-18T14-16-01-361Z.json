@@ -1,0 +1,737 @@
+{
+  "searchInfo": {
+    "totalProducts": 91,
+    "collectionsScraped": 12,
+    "timestamp": "2025-08-18T14:16:01.361Z"
+  },
+  "products": [
+    {
+      "title": "Spearmint Capsules",
+      "url": "https://herb-era.com/products/spearmint-capsules-organic-spearmint-mentha-spicata",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $16.49\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $16.49\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:25.429Z"
+    },
+    {
+      "title": "Quinine Capsules",
+      "url": "https://herb-era.com/products/quinine-capsules-wildcrafted-quinine-cinchona-officinalis",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $20.89\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $20.89\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:25.429Z"
+    },
+    {
+      "title": "Red Sage Capsules",
+      "url": "https://herb-era.com/products/red-sage-capsules-organic-red-sage-dan-shen-salvia-miltiorrhiza",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $19.79\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $19.79\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:25.429Z"
+    },
+    {
+      "title": "Goat's Rue Capsules",
+      "url": "https://herb-era.com/products/goats-rue-capsules-organic-goats-rue-galega-officinalis",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $19.79\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $19.79\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:25.429Z"
+    },
+    {
+      "title": "Onion Capsules",
+      "url": "https://herb-era.com/products/onion_capsules_organic",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:25.429Z"
+    },
+    {
+      "title": "Lady's Mantle Capsules",
+      "url": "https://herb-era.com/products/ladys-mantle-capsules-organic-ladys-mantle-alchemilla-vulgaris",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $18.69\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $18.69\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:25.429Z"
+    },
+    {
+      "title": "Thyme Capsules",
+      "url": "https://herb-era.com/products/thyme-capsules-organic-thyme-thymus-vulgaris",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:25.429Z"
+    },
+    {
+      "title": "Eyebright Capsules",
+      "url": "https://herb-era.com/products/eyebright-capsules-organic-eyebright-euphrasia-officinalis",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $18.69\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $18.69\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:25.429Z"
+    },
+    {
+      "title": "Bugleweed Capsules",
+      "url": "https://herb-era.com/products/bugleweed-capsules-organic-bugleweed-lycopus-virginicus",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $19.79\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $19.79\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:25.429Z"
+    },
+    {
+      "title": "Maqui Berry Capsules",
+      "url": "https://herb-era.com/products/maqui-berry-capsules-organic-maqui-berry-aristotelia-chilensis",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $20.89\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $20.89\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:25.429Z"
+    },
+    {
+      "title": "Bayberry Capsules",
+      "url": "https://herb-era.com/products/bayberry-capsules-organic-bayberry-myrica-cerifera",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $20.69\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $20.69\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:25.429Z"
+    },
+    {
+      "title": "Corn Silk Capsules",
+      "url": "https://herb-era.com/products/corn-silk-capsules-organic-corn-silk-zea-mays",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $18.69\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $18.69\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:25.429Z"
+    },
+    {
+      "title": "Forsythia Capsules",
+      "url": "https://herb-era.com/products/forsythia-capsules-organic-forsythia-lian-qiao-forsythia-suspensa",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $18.69\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $18.69\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:25.429Z"
+    },
+    {
+      "title": "Galangal Capsules",
+      "url": "https://herb-era.com/products/galangal-capsules-organic-galangal-alpinia-galangal",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:25.429Z"
+    },
+    {
+      "title": "Black Walnut Capsules",
+      "url": "https://herb-era.com/products/black-walnut-capsules-organic-black-walnut-juglans-nigra",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:25.429Z"
+    },
+    {
+      "title": "Agaricus Blazei Capsules",
+      "url": "https://herb-era.com/products/agaricus-blazei-capsules-organic-agaricus-agaricus-blazei-murill",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $23.09\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $23.09\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:32.166Z"
+    },
+    {
+      "title": "Watercress Capsules",
+      "url": "https://herb-era.com/products/watercress_capsules_organic",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $16.49\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $16.49\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:32.166Z"
+    },
+    {
+      "title": "Orange Capsules",
+      "url": "https://herb-era.com/products/orange-capsules-organic-orange-citrus-sinensis",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:32.166Z"
+    },
+    {
+      "title": "Cleavers Capsules",
+      "url": "https://herb-era.com/products/cleavers-capsules-organic-cleavers-galium-aparine",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $18.69\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $18.69\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:32.166Z"
+    },
+    {
+      "title": "Wormwood Capsules",
+      "url": "https://herb-era.com/products/wormwood-capsules-organic-wormwood-artemisia-absinthium",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $18.69\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $18.69\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:32.166Z"
+    },
+    {
+      "title": "Bupleurum Capsules",
+      "url": "https://herb-era.com/products/bupleurum-capsules-organic-bupleurum-bupleurum-chinense",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $24.19\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $24.19\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:32.166Z"
+    },
+    {
+      "title": "Horseradish Capsules",
+      "url": "https://herb-era.com/products/horseradish-capsules-organic-horseradish-armoracia-rusticana",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:32.166Z"
+    },
+    {
+      "title": "Dandelion Leaf Capsules",
+      "url": "https://herb-era.com/products/dandelion-leaf-capsules-organic-dandelion-taraxacum-officinale",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $18.69\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $18.69\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:32.166Z"
+    },
+    {
+      "title": "Yu Xing Cao Capsules",
+      "url": "https://herb-era.com/products/yu-xing-cao-capsules-wildcrafted-yu-xing-cao-plu-kaow-houttuynia-cordata",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.99\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.99\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:32.166Z"
+    },
+    {
+      "title": "Hydrangea Capsules",
+      "url": "https://herb-era.com/products/hydrangea_capsules",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $18.69\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $18.69\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:32.166Z"
+    },
+    {
+      "title": "Curry Leaf Capsules",
+      "url": "https://herb-era.com/products/curry-leaf-capsules-organic-curry-leaf-murraya-koenigii",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:32.166Z"
+    },
+    {
+      "title": "Cardamom Capsules",
+      "url": "https://herb-era.com/products/cardamom-capsules-organic-cardamom-elettaria-cardamomum",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.99\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.99\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:32.166Z"
+    },
+    {
+      "title": "Anise Seed Capsules",
+      "url": "https://herb-era.com/products/anise-seed-capsules-organic-anise-pimpinella-anisum",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:32.166Z"
+    },
+    {
+      "title": "Red Raspberry Capsules",
+      "url": "https://herb-era.com/products/red-raspberry-capsules-organic-red-raspberry-rubus-idaeus",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $18.69\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        $0.00\n      \n    \n    \n      Sale price\n    \n    \n      \n        $18.69\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:32.166Z"
+    },
+    {
+      "title": "Blue Vervain Capsules",
+      "url": "https://herb-era.com/products/blue-vervain-capsules-organic-blue-vervain-verbena-hastata",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        $0.00\n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:32.166Z"
+    },
+    {
+      "title": "Lobelia Capsules",
+      "url": "https://herb-era.com/products/lobelia-capsules-organic-lobelia-lobelia-inflata",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.99\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.99\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:39.265Z"
+    },
+    {
+      "title": "Andrographis Capsules",
+      "url": "https://herb-era.com/products/andrographis-capsules-organic-andrographis-fah-talai-jone-andrographis-paniculata",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $19.79\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $19.79\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:39.265Z"
+    },
+    {
+      "title": "Cacao Capsules",
+      "url": "https://herb-era.com/products/cacao-capsules-organic-cacao-theobroma-cacao",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:39.265Z"
+    },
+    {
+      "title": "Stinging Nettle Root Capsules",
+      "url": "https://herb-era.com/products/stinging-nettle-root-capsules-organic-stinging-nettle-urtica-dioica",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $18.69\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $18.69\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:39.265Z"
+    },
+    {
+      "title": "Chaparral Capsules",
+      "url": "https://herb-era.com/products/chaparral-capsules-organic-chaparral-larrea-tridentata",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $18.69\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $18.69\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:39.265Z"
+    },
+    {
+      "title": "Astragalus Capsules",
+      "url": "https://herb-era.com/products/astragalus-capsules-organic-astragalus-astragalus-membranaceus",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $18.69\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        $0.00\n      \n    \n    \n      Sale price\n    \n    \n      \n        $18.69\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:39.265Z"
+    },
+    {
+      "title": "Angelica Capsules",
+      "url": "https://herb-era.com/products/angelica-capsules-organic-angelica-angelica-archangelica",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $20.89\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $20.89\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:39.265Z"
+    },
+    {
+      "title": "Burdock Capsules",
+      "url": "https://herb-era.com/products/burdock-capsules-organic-burdock-arctium-lappa",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:39.265Z"
+    },
+    {
+      "title": "Acacia Capsules",
+      "url": "https://herb-era.com/products/acacia-capsules-organic-acacia-senegalia-senegal",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:39.265Z"
+    },
+    {
+      "title": "Bladderwrack Capsules",
+      "url": "https://herb-era.com/products/bladderwrack-capsules-organic-bladderwrack-fucus-vesiculosus",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:39.265Z"
+    },
+    {
+      "title": "Sage Capsules",
+      "url": "https://herb-era.com/products/sage-capsules-organic-sage-salvia-officinalis",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $18.69\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $18.69\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:39.265Z"
+    },
+    {
+      "title": "Hyssop Capsules",
+      "url": "https://herb-era.com/products/hyssop-capsules-organic-hyssop-hyssopus-officinalis",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:39.265Z"
+    },
+    {
+      "title": "Hibiscus Capsules",
+      "url": "https://herb-era.com/products/hibiscus-capsules-organic-hibiscus-hibiscus-sabdariffa",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        $0.00\n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:39.265Z"
+    },
+    {
+      "title": "Ginkgo Biloba Capsules",
+      "url": "https://herb-era.com/products/ginkgo-biloba-capsules-organic-ginkgo-biloba-ginkgo-biloba",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:39.265Z"
+    },
+    {
+      "title": "Boldo Capsules",
+      "url": "https://herb-era.com/products/boldo-capsules-organic-boldo-peumus-boldus",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:39.265Z"
+    },
+    {
+      "title": "Barrenwort Capsules",
+      "url": "https://herb-era.com/products/barrenwort-capsules-organic-barrenwort-horny-goat-weed-epimedium-grandiflorum",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:46.339Z"
+    },
+    {
+      "title": "Coriander Seed Capsules",
+      "url": "https://herb-era.com/products/coriander-seed-capsules-organic-coriander-seed-coriandrum-sativum",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $16.49\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $16.49\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:46.339Z"
+    },
+    {
+      "title": "Chickweed Capsules",
+      "url": "https://herb-era.com/products/chickweed-capsules-organic-chickweed-stellaria-media",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:46.339Z"
+    },
+    {
+      "title": "Catuaba Capsules",
+      "url": "https://herb-era.com/products/catuaba-capsules-wildcrafted-catuaba-erythroxylum-catuaba",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.99\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.99\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:46.339Z"
+    },
+    {
+      "title": "Brahmi Capsules",
+      "url": "https://herb-era.com/products/brahmi-capsules-organic-brahmi-bacopa-monnieri",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:46.339Z"
+    },
+    {
+      "title": "Spinach Capsules",
+      "url": "https://herb-era.com/products/spinach-capsules-organic-spinach-spinacia-oleracea",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        $0.00\n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:46.339Z"
+    },
+    {
+      "title": "Prickly Ash Capsules",
+      "url": "https://herb-era.com/products/prickly-ash-capsules-wildcrafted-prickly-ash-zanthoxylum-clava-herculis",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $19.79\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $19.79\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:46.339Z"
+    },
+    {
+      "title": "Parsley Capsules",
+      "url": "https://herb-era.com/products/parsley-capsules-organic-parsley-petroselinum-crispum",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:46.339Z"
+    },
+    {
+      "title": "Noni Capsules",
+      "url": "https://herb-era.com/products/noni-capsules-organic-noni-morinda-citrifolia",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:46.339Z"
+    },
+    {
+      "title": "Neem Capsules",
+      "url": "https://herb-era.com/products/neem-capsules-organic-neem-azadirachta-indica",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:46.339Z"
+    },
+    {
+      "title": "Licorice Capsules",
+      "url": "https://herb-era.com/products/licorice-capsules-organic-licorice-glycyrrhiza-glabra-dried-root",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:46.339Z"
+    },
+    {
+      "title": "Eucalyptus Capsules",
+      "url": "https://herb-era.com/products/eucalyptus-capsules-organic-eucalyptus-eucalyptus-globulus",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:46.339Z"
+    },
+    {
+      "title": "Witch Hazel Leaf Capsules",
+      "url": "https://herb-era.com/products/witch-hazel-leaf-capsules-organic-witch-hazel-leaf-hamamelis-virginiana",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $19.79\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $19.79\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:46.339Z"
+    },
+    {
+      "title": "Yellow Dock Capsules",
+      "url": "https://herb-era.com/products/yellow-dock-capsules-organic-yellow-dock-rumex-crispus",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $18.69\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $18.69\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:46.339Z"
+    },
+    {
+      "title": "Meadowsweet Herb Capsules",
+      "url": "https://herb-era.com/products/meadowsweet-herb-capsules-organic-meadowsweet-filipendula-ulmaria",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $19.79\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $19.79\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:46.339Z"
+    },
+    {
+      "title": "Gotu Kola Capsules",
+      "url": "https://herb-era.com/products/gotu-kola-capsules-organic-gotu-kola-centella-asiatica",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $18.69\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $18.69\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:53.382Z"
+    },
+    {
+      "title": "Devil's Claw Capsules",
+      "url": "https://herb-era.com/products/devils-claw-capsules-organic-devils-claw-harpagophytum-procumbens",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $19.79\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $19.79\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:53.382Z"
+    },
+    {
+      "title": "Butcher's Broom Capsules",
+      "url": "https://herb-era.com/products/butchers-broom-capsules-organic-butchers-broom-ruscus-aculeatus",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:53.382Z"
+    },
+    {
+      "title": "Star Anise Capsules",
+      "url": "https://herb-era.com/products/star-anise-capsules-organic-star-anise-illicium-verum",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $20.89\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $20.89\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:53.382Z"
+    },
+    {
+      "title": "Motherwort Capsules",
+      "url": "https://herb-era.com/products/motherwort-capsules-organic-motherwort-leonurus-cardiaca",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $19.79\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $19.79\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:53.382Z"
+    },
+    {
+      "title": "Honeysuckle Capsules",
+      "url": "https://herb-era.com/products/honeysuckle-capsules",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $23.09\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        $0.00\n      \n    \n    \n      Sale price\n    \n    \n      \n        $23.09\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:53.382Z"
+    },
+    {
+      "title": "Red Root Capsules",
+      "url": "https://herb-era.com/products/red-root-capsules-wildcrafted-red-root-ceanothus-americanus",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $18.69\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $18.69\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:53.382Z"
+    },
+    {
+      "title": "Jamaican Dogwood Capsules",
+      "url": "https://herb-era.com/products/jamaican-dogwood-capsules-wildcrafted-jamaican-dogwood-piscidia-piscipula",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:53.382Z"
+    },
+    {
+      "title": "Hops Capsules",
+      "url": "https://herb-era.com/products/hops-capsules-organic-hops-humulus-lupulus",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $23.09\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $23.09\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:53.382Z"
+    },
+    {
+      "title": "Cascara Sagrada Capsules",
+      "url": "https://herb-era.com/products/cascara-sagrada-capsules-organic-cascara-sagrada-frangula-purshiana",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:53.382Z"
+    },
+    {
+      "title": "Buchu Capsules",
+      "url": "https://herb-era.com/products/buchu-capsules-organic-buchu-agathosma-betulina",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $23.09\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $23.09\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:53.382Z"
+    },
+    {
+      "title": "Birch Capsules",
+      "url": "https://herb-era.com/products/birch-capsules-organic-birch-betula-pendula",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:53.382Z"
+    },
+    {
+      "title": "Barberry Root Capsules",
+      "url": "https://herb-era.com/products/barberry-root-capsules-organic-barberry-root-berberis-vulgaris",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:53.382Z"
+    },
+    {
+      "title": "Amla Capsules",
+      "url": "https://herb-era.com/products/amla-capsules-organic-amla-emblica-officinalis",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:53.382Z"
+    },
+    {
+      "title": "Agrimony Capsules",
+      "url": "https://herb-era.com/products/agrimony-capsules-organic-agrimony-agrimonia-eupatoria",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:11:53.382Z"
+    },
+    {
+      "title": "Horsetail Capsules",
+      "url": "https://herb-era.com/products/horsetail-capsules-organic-horsetail-equisetum-arvense",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:12:00.648Z"
+    },
+    {
+      "title": "Calendula Capsules",
+      "url": "https://herb-era.com/products/calendula-capsules-organic-calendula-calendula-officinalis",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:12:00.648Z"
+    },
+    {
+      "title": "Stevia Capsules",
+      "url": "https://herb-era.com/products/stevia-capsules-organic-stevia-stevia-rebaudiana",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $18.69\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $18.69\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:12:00.648Z"
+    },
+    {
+      "title": "Sheep Sorrel Capsules",
+      "url": "https://herb-era.com/products/sheep-sorrel-capsules-organic-sheep-sorrel-rumex-acetosella",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $20.89\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $20.89\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:12:00.648Z"
+    },
+    {
+      "title": "Juniper Capsules",
+      "url": "https://herb-era.com/products/juniper-capsules-organic-juniper-juniperus-communis",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:12:00.648Z"
+    },
+    {
+      "title": "Horehound Capsules",
+      "url": "https://herb-era.com/products/horehound-capsules-organic-horehound-marrubium-vulgare",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $18.69\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $18.69\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:12:00.648Z"
+    },
+    {
+      "title": "Elecampane Capsules",
+      "url": "https://herb-era.com/products/elecampane-capsules-organic-elecampane-inula-helenium",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $18.69\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $18.69\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:12:00.648Z"
+    },
+    {
+      "title": "Camu Camu Capsules",
+      "url": "https://herb-era.com/products/camu-camu-capsules-organic-camu-camu-myrciaria-dubia",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.99\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.99\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:12:00.648Z"
+    },
+    {
+      "title": "Blessed Thistle Capsules",
+      "url": "https://herb-era.com/products/blessed-thistle-capsules-organic-blessed-thistle-cnicus-benedictus",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:12:00.648Z"
+    },
+    {
+      "title": "Quassia Capsules",
+      "url": "https://herb-era.com/products/quassia-capsules-wildcrafted-quassia-quassia-amara",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $18.69\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $18.69\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:12:00.648Z"
+    },
+    {
+      "title": "Rhodiola Capsules",
+      "url": "https://herb-era.com/products/rhodiola-capsules-organic-rhodiola-rhodiola-rosea",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $27.49\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $27.49\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:12:00.648Z"
+    },
+    {
+      "title": "Goji Capsules",
+      "url": "https://herb-era.com/products/goji-capsules-organic-goji-lucii-lycium-barbarum",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $20.89\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $20.89\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:12:00.648Z"
+    },
+    {
+      "title": "Chicory Capsules",
+      "url": "https://herb-era.com/products/chicory-capsules-organic-chicory-cichorium-intybus",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:12:00.648Z"
+    },
+    {
+      "title": "Couch Grass Capsules",
+      "url": "https://herb-era.com/products/couch-grass-capsules-organic-couch-grass-elymus-repens",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:12:00.648Z"
+    },
+    {
+      "title": "Shiitake Capsules",
+      "url": "https://herb-era.com/products/shiitake-capsules-organic-shiitake-lentinula-edodes",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $24.12\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $24.12\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:12:00.648Z"
+    },
+    {
+      "title": "Sarsaparilla Capsules",
+      "url": "https://herb-era.com/products/sarsaparilla-capsules-organic-sarsaparilla-hemidesmus-indicus",
+      "collection": "/collections/capsules",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $18.69\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $18.69\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T14:12:07.696Z"
+    }
+  ]
+}

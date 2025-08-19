@@ -1,0 +1,9 @@
+{
+	"id": "mTsLXmqk6pUgUoo",
+	"json": "{\"id\":\"mTsLXmqk6pUgUoo\",\"url\":\"https://www.naturesanswer.com/product/ashwagandha-root/\",\"loadedUrl\":\"https://www.naturesanswer.com/product/ashwagandha-root/\",\"uniqueKey\":\"https://www.naturesanswer.com/product/ashwagandha-root\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"label\":\"product\",\"__crawlee\":{\"crawlDepth\":1,\"state\":4}},\"handledAt\":\"2025-08-14T22:01:13.411Z\"}",
+	"method": "GET",
+	"orderNo": null,
+	"retryCount": 0,
+	"uniqueKey": "https://www.naturesanswer.com/product/ashwagandha-root",
+	"url": "https://www.naturesanswer.com/product/ashwagandha-root/"
+}

@@ -50,15 +50,9 @@ export async function POST(request: NextRequest) {
     const html = await response.text();
     console.log('🔍 HTML length received:', html.length);
     
-    // Debug: Search for the exact price we're looking for
-    if (html.includes('$18.19')) {
-      console.log('✅ Found $18.19 in HTML');
-      const priceIndex = html.indexOf('$18.19');
-      const context = html.substring(Math.max(0, priceIndex - 200), priceIndex + 200);
-      console.log('Context around $18.19:', context);
-    } else {
-      console.log('❌ $18.19 NOT found in HTML');
-    }
+    // Debug: Search for price patterns in HTML
+    const allPricePatterns = html.match(/\$[\d,]+\.?\d*/g) || [];
+    console.log(`Found ${allPricePatterns.length} total price patterns:`, allPricePatterns.slice(0, 10));
     
     // Debug: Search for data-test="product-price" elements
     const allProductPriceElements = html.match(/data-test="product-price"[^>]*>/gi) || [];
@@ -74,8 +68,7 @@ export async function POST(request: NextRequest) {
       console.log('❌ "About this item" NOT found in HTML');
     }
     
-    // Debug: Search for all price patterns
-    const allPricePatterns = html.match(/\$[\d,]+\.?\d*/g) || [];
+    // Debug: Search for all price patterns (duplicate removed)
     console.log(`Found ${allPricePatterns.length} total price patterns:`, allPricePatterns.slice(0, 10));
 
     // Extract product name from title
@@ -378,7 +371,6 @@ export async function POST(request: NextRequest) {
         method: 'Target Refined',
         url,
         debug: {
-          foundPrice18_19: html.includes('$18.19'),
           foundDataTestProductPrice: html.includes('data-test="product-price"'),
           foundAboutThisItem: html.includes('About this item'),
           totalPricePatterns: (html.match(/\$[\d,]+\.?\d*/g) || []).length,

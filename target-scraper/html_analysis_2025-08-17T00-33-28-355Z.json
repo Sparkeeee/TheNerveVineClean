@@ -1,0 +1,59 @@
+{
+  "timestamp": "2025-08-17T00:33:28.356Z",
+  "analysis": {
+    "title": "\"magnesium glycinate\" : Target",
+    "url": "https://www.target.com/s?searchTerm=magnesium%20glycinate",
+    "totalLinks": 96,
+    "productLinks": 3,
+    "dataAttributes": 51,
+    "urlMatches": 0,
+    "clickableElements": 0,
+    "sampleProductLinks": [
+      {
+        "href": "https://corporate.target.com/about/products-services/Target-Brands",
+        "text": "Target Brands",
+        "className": "",
+        "id": "",
+        "data-test": ""
+      },
+      {
+        "href": "https://corporate.target.com/about/products-services/suppliers#?lnk=fnav_t_spc_1_16",
+        "text": "Suppliers",
+        "className": "",
+        "id": "",
+        "data-test": ""
+      },
+      {
+        "href": "https://www.target.com/help/articles/news-safety/product-recalls",
+        "text": "Recalls",
+        "className": "",
+        "id": "",
+        "data-test": ""
+      }
+    ],
+    "sampleDataAttributes": [
+      "MEDALLIA",
+      "skipLinks",
+      "@web/ZipCodeButton/StyledZipCodeButton",
+      "@web/ZipCodeButton/ZipCodeNumber",
+      "@web/StoreName/Button",
+      "@web/StoreName/StoreName",
+      "@web/GlobalHeader/UtilityHeader/TargetCircle",
+      "@web/GlobalHeader/UtilityHeader/TargetCircleCard",
+      "@web/GlobalHeader/UtilityHeader/TargetCircle360",
+      "@web/GlobalHeader/UtilityHeader/Registry",
+      "@web/GlobalHeader/UtilityHeader/WeeklyAd",
+      "@web/GlobalHeader/UtilityHeader/FindStores",
+      "@web/HeaderPrimaryNav",
+      "@web/Header/MainMenuMobileLink",
+      "@web/Header/MainMenuLink",
+      "@web/PICKUP_AND_DELIVERY_PRIMARY_HEADER_LINK",
+      "@web/Search/SearchInput",
+      "@web/Search/Microphone",
+      "@web/Search/ResetButton",
+      "@web/Search/SearchButton"
+    ],
+    "sampleUrlMatches": [],
+    "sampleClickableElements": []
+  }
+}

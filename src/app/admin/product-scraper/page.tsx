@@ -18,6 +18,18 @@ export default function ProductScraperPage() {
   const [scrapedProduct, setScrapedProduct] = useState<ScrapedProduct | null>(null);
   const [error, setError] = useState('');
   const [debugInfo, setDebugInfo] = useState<any>(null);
+  
+  // Search state
+  const [searchTerm, setSearchTerm] = useState('');
+  const [maxResults, setMaxResults] = useState(5);
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchResults, setSearchResults] = useState<any>(null);
+  
+  // Amazon Search state
+  const [amazonSearchTerm, setAmazonSearchTerm] = useState('');
+  const [amazonMaxResults, setAmazonMaxResults] = useState(10);
+  const [isAmazonSearching, setIsAmazonSearching] = useState(false);
+  const [amazonSearchResults, setAmazonSearchResults] = useState<any>(null);
 
   const handleScrape = async () => {
     if (!url.trim()) {
@@ -76,6 +88,155 @@ export default function ProductScraperPage() {
     }
   };
 
+  // Stealth search handler
+  const handleStealthSearch = async () => {
+    if (!searchTerm.trim()) {
+      setError('Please enter a search term');
+      return;
+    }
+
+    setIsSearching(true);
+    setError('');
+    setSearchResults(null);
+
+    try {
+      const response = await fetch('/api/product-scraper/target-search-stealth', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ searchTerm, maxResults }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Search failed');
+      }
+
+      const data = await response.json();
+      setSearchResults(data);
+      console.log('🔍 Stealth search results:', data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Search failed');
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  // Stealth batch processing handler
+  const handleStealthBatch = async () => {
+    if (!searchTerm.trim()) {
+      setError('Please enter a search term');
+      return;
+    }
+
+    setIsSearching(true);
+    setError('');
+    setSearchResults(null);
+
+    try {
+      const response = await fetch('/api/product-scraper/target-batch-stealth', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ searchTerm, maxResults }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Batch processing failed');
+      }
+
+      const data = await response.json();
+      setSearchResults(data);
+      console.log('🚀 Stealth batch results:', data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Batch processing failed');
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  // Category Browser state
+  const [categoryUrl, setCategoryUrl] = useState('');
+  const [maxCategoryProducts, setMaxCategoryProducts] = useState(15);
+  const [isBrowsing, setIsBrowsing] = useState(false);
+  const [categoryResults, setCategoryResults] = useState<any>(null);
+
+  // Amazon Search handler
+  const handleAmazonSearch = async () => {
+    if (!amazonSearchTerm.trim()) {
+      setError('Please enter a search term');
+      return;
+    }
+
+    setIsAmazonSearching(true);
+    setError('');
+    setAmazonSearchResults(null);
+
+    try {
+      const response = await fetch('/api/product-scraper/amazon-search', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          searchTerm: amazonSearchTerm, 
+          maxResults: amazonMaxResults 
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Amazon search failed');
+      }
+
+      const data = await response.json();
+      setAmazonSearchResults(data);
+      console.log('🛒 Amazon Search results:', data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Amazon search failed');
+    } finally {
+      setIsAmazonSearching(false);
+    }
+  };
+
+  // Category Browser handler
+  const handleCategoryBrowse = async () => {
+    if (!categoryUrl.trim()) {
+      setError('Please enter a category URL');
+      return;
+    }
+
+    setIsBrowsing(true);
+    setError('');
+    setCategoryResults(null);
+
+    try {
+      const response = await fetch('/api/product-scraper/target-category-browser', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ categoryUrl, maxProducts: maxCategoryProducts }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Category browsing failed');
+      }
+
+      const data = await response.json();
+      setCategoryResults(data);
+      console.log('🎯 Category Browser results:', data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Category browsing failed');
+    } finally {
+      setIsBrowsing(false);
+    }
+  };
+
   return (
     <div className="min-h-screen relative">
       <div className="fixed inset-0 -z-10" style={{
@@ -89,7 +250,7 @@ export default function ProductScraperPage() {
 
       <div className="relative max-w-6xl mx-auto px-6 pt-8 pb-8">
         {/* Hero Section */}
-        <div className="rounded-xl p-8 shadow-sm border-2 border-gray-300 mb-8" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
+        <div className="rounded-xl p-8 shadow-sm border-2 border-gray-300 mb-8 bg-gradient-to-br from-amber-50 to-orange-50">
           <div className="flex items-center justify-between mb-6">
             <Link href="/admin" 
                   className="text-gray-600 hover:text-gray-800 transition-colors">
@@ -97,6 +258,18 @@ export default function ProductScraperPage() {
             </Link>
             <h1 className="text-4xl font-bold text-gray-800 flex-1 text-center">Product Data Scraper</h1>
             <div className="w-10"></div>
+          </div>
+          
+          {/* Nine Worlds Scraper Link */}
+          <div className="text-center mb-6">
+            <Link href="/admin/data-hub" 
+                  className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-lg bg-gradient-to-r from-blue-600 to-purple-600 text-white border-blue-500 hover:from-blue-700 hover:to-purple-700 hover:shadow-xl hover:scale-105">
+              🌍 Launch Nine Worlds Scraper
+              <span className="ml-2 text-sm opacity-90">→</span>
+            </Link>
+            <p className="text-gray-600 mt-2 text-sm">
+              Automated scraping across all 9 working sites using database search terms
+            </p>
           </div>
           <p className="text-lg text-gray-700 text-center max-w-3xl mx-auto">
             Extract product information from e-commerce URLs to build your affiliate product database.
@@ -495,6 +668,481 @@ export default function ProductScraperPage() {
             </div>
           </div>
         </div>
+
+        {/* Search Section - Stealth Mode */}
+        <div className="rounded-xl p-6 shadow-sm border-2 border-gray-300 mb-6" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
+          <h2 className="text-xl font-semibold mb-2 text-gray-900">🔍 Search & Batch Processing - Stealth Mode</h2>
+          <p className="text-gray-700 mb-4">
+            Search for products by term and process them with anti-detection measures. Use this for bulk product discovery.
+          </p>
+          
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="searchTerm" className="block text-sm font-medium text-gray-900 mb-1">
+                  Search Term
+                </label>
+                <input
+                  id="searchTerm"
+                  type="text"
+                  placeholder="e.g., st johns wort, ashwagandha, valerian root"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
+                />
+              </div>
+              <div>
+                <label htmlFor="maxResults" className="block text-sm font-medium text-gray-900 mb-1">
+                  Max Results
+                </label>
+                <select
+                  id="maxResults"
+                  value={maxResults}
+                  onChange={(e) => setMaxResults(parseInt(e.target.value))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
+                >
+                  <option value={3}>3 products</option>
+                  <option value={5}>5 products</option>
+                  <option value={10}>10 products</option>
+                  <option value={15}>15 products</option>
+                </select>
+              </div>
+            </div>
+            
+            <div className="flex flex-wrap gap-2 justify-start">
+              <button 
+                onClick={handleStealthSearch}
+                disabled={isSearching || !searchTerm.trim()}
+                className="px-6 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all duration-200"
+                title="Stealth search with anti-detection measures"
+              >
+                {isSearching ? 'Searching...' : '🔍 Stealth Search'}
+              </button>
+              
+              <button 
+                onClick={handleStealthBatch}
+                disabled={isSearching || !searchTerm.trim()}
+                className="px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all duration-200"
+                title="Complete stealth batch processing - search + scrape all products"
+              >
+                {isSearching ? 'Processing...' : '🚀 Stealth Batch'}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Category Browser Section - Target Diversity */}
+        <div className="rounded-xl p-6 shadow-sm border-2 border-gray-300 mb-6" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
+          <h2 className="text-xl font-semibold mb-2 text-gray-900">🎯 Target Category Browser - Product Diversity</h2>
+          <p className="text-gray-700 mb-4">
+            Browse Target categories to find diverse product types (tinctures, capsules, powders) instead of just gummies. 
+            This solves the product diversity issue by exploring category pages directly.
+          </p>
+          
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="categoryUrl" className="block text-sm font-medium text-gray-900 mb-1">
+                  Category URL
+                </label>
+                <input
+                  id="categoryUrl"
+                  type="url"
+                  placeholder="https://www.target.com/c/herbal-supplements/-/N-5q0f9"
+                  value={categoryUrl}
+                  onChange={(e) => setCategoryUrl(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
+                />
+                <p className="text-xs text-gray-600 mt-1">
+                  Use Target category URLs like: Herbal Supplements, Vitamins & Supplements, etc.
+                </p>
+              </div>
+              <div>
+                <label htmlFor="maxCategoryProducts" className="block text-sm font-medium text-gray-900 mb-1">
+                  Max Products
+                </label>
+                <select
+                  id="maxCategoryProducts"
+                  value={maxCategoryProducts}
+                  onChange={(e) => setMaxCategoryProducts(parseInt(e.target.value))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
+                >
+                  <option value={10}>10 products</option>
+                  <option value={15}>15 products</option>
+                  <option value={20}>20 products</option>
+                  <option value={25}>25 products</option>
+                </select>
+                <p className="text-xs text-gray-600 mt-1">
+                  Higher numbers = more diverse product types
+                </p>
+              </div>
+            </div>
+            
+            <div className="flex flex-wrap gap-2 justify-start">
+              <button 
+                onClick={handleCategoryBrowse}
+                disabled={isBrowsing || !categoryUrl.trim()}
+                className="px-6 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all duration-200"
+                title="Browse Target categories to find diverse product types"
+              >
+                {isBrowsing ? 'Browsing...' : '🎯 Browse Category'}
+              </button>
+              
+              <button
+                onClick={() => {
+                  setCategoryUrl('https://www.target.com/c/herbal-supplements/-/N-5q0f9');
+                  setMaxCategoryProducts(15);
+                }}
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-all duration-200"
+                title="Quick setup for Herbal Supplements category"
+              >
+                🍃 Herbal Supplements
+              </button>
+              
+              <button
+                onClick={() => {
+                  setCategoryUrl('https://www.target.com/c/vitamins-supplements/-/N-5q0f8');
+                  setMaxCategoryProducts(15);
+                }}
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-all duration-200"
+                title="Quick setup for Vitamins & Supplements category"
+              >
+                💊 Vitamins & Supplements
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Amazon Search Section */}
+        <div className="rounded-xl p-6 shadow-sm border-2 border-orange-300 mb-6 bg-gradient-to-br from-orange-50 to-orange-100">
+          <h2 className="text-xl font-semibold mb-2 text-black">🛒 Amazon Search - Diverse Product Discovery</h2>
+          <p className="mb-4 text-black">
+            Search Amazon for diverse ashwagandha products (tinctures, capsules, powders, gummies) using our working Amazon scraper.
+          </p>
+          
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="amazonSearchTerm" className="block text-sm font-medium mb-1 text-black">
+                  Amazon Search Term
+                </label>
+                <input
+                  id="amazonSearchTerm"
+                  type="text"
+                  placeholder="e.g., ashwagandha supplements, ashwagandha tincture"
+                  value={amazonSearchTerm}
+                  onChange={(e) => setAmazonSearchTerm(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 text-gray-900 bg-white"
+                />
+              </div>
+              <div>
+                <label htmlFor="amazonMaxResults" className="block text-sm font-medium mb-1 text-black">
+                  Max Results
+                </label>
+                <select
+                  id="amazonMaxResults"
+                  value={amazonMaxResults}
+                  onChange={(e) => setAmazonMaxResults(parseInt(e.target.value))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 text-gray-900 bg-white"
+                >
+                  <option value={5}>5 products</option>
+                  <option value={10}>10 products</option>
+                  <option value={15}>15 products</option>
+                  <option value={20}>20 products</option>
+                </select>
+              </div>
+            </div>
+            
+            <div className="flex flex-wrap gap-2 justify-start">
+              <button 
+                onClick={handleAmazonSearch}
+                disabled={isAmazonSearching || !amazonSearchTerm.trim()}
+                className="px-6 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all duration-200"
+                title="Search Amazon for diverse ashwagandha products"
+              >
+                {isAmazonSearching ? 'Searching...' : '🔍 Amazon Search'}
+              </button>
+              
+              <button
+                onClick={() => {
+                  setAmazonSearchTerm('ashwagandha supplements');
+                  setAmazonMaxResults(15);
+                }}
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-all duration-200"
+                title="Quick setup for ashwagandha supplements search"
+              >
+                🍃 Ashwagandha Supplements
+              </button>
+              
+              <button
+                onClick={() => {
+                  setAmazonSearchTerm('ashwagandha tincture');
+                  setAmazonMaxResults(10);
+                }}
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-all duration-200"
+                title="Quick setup for ashwagandha tinctures search"
+              >
+                💧 Ashwagandha Tinctures
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Amazon Search Results Display */}
+        {amazonSearchResults && (
+          <div className="rounded-xl p-6 shadow-sm border-2 border-orange-200 mb-6 bg-gradient-to-br from-yellow-50 to-yellow-100">
+            <h3 className="text-lg font-semibold mb-4 text-black">🛒 Amazon Search Results</h3>
+            
+            <div className="mb-4 p-3 bg-orange-50 border border-orange-200 rounded">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-black">
+                <div><strong>Search Term:</strong> {amazonSearchResults.searchTerm}</div>
+                <div><strong>Total Found:</strong> {amazonSearchResults.totalFound}</div>
+                <div><strong>Results:</strong> {amazonSearchResults.results?.length || 0}</div>
+                <div><strong>Status:</strong> {amazonSearchResults.success ? '✅ Success' : '❌ Failed'}</div>
+              </div>
+            </div>
+
+            {amazonSearchResults.results && amazonSearchResults.results.length > 0 && (
+              <div className="space-y-4">
+                <h4 className="font-semibold mb-3 text-black">📦 Found Products</h4>
+                {amazonSearchResults.results.map((result: any, index: number) => (
+                  <div key={index} className="p-4 bg-white border border-orange-200 rounded-lg">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <div className="font-medium text-black">{result.title || `Product ${index + 1}`}</div>
+                        <div className="text-sm mt-1 text-black">
+                          <div><strong>URL:</strong> <a href={result.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">{result.url}</a></div>
+                          <div><strong>Price:</strong> {result.price || 'Not found'}</div>
+                          <div><strong>Image:</strong> {result.imageUrl ? '✅ Available' : '❌ Not found'}</div>
+                        </div>
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        <button 
+                          onClick={() => {
+                            setUrl(result.url);
+                            setAmazonSearchResults(null);
+                          }}
+                          className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-all duration-200"
+                          title="Use this URL for individual product scraping"
+                        >
+                          🎯 Scrape This Product
+                        </button>
+                        <button 
+                          onClick={() => {
+                            setUrl(result.url);
+                            setAmazonSearchResults(null);
+                            // Auto-trigger Amazon Ultra Simple scraper
+                            setTimeout(() => {
+                              const amazonButton = document.querySelector('button[title*="Ultra simple"]') as HTMLButtonElement;
+                              if (amazonButton) amazonButton.click();
+                            }, 100);
+                          }}
+                          className="px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700 transition-all duration-200"
+                          title="Auto-scrape with Amazon Ultra Simple"
+                        >
+                          🚀 Auto-Scrape
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <div className="mt-4 flex gap-2">
+              <button 
+                onClick={() => setAmazonSearchResults(null)}
+                className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-all duration-200"
+              >
+                Clear Results
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Search Results Display */}
+        {searchResults && (
+          <div className="rounded-xl p-6 shadow-sm border-2 border-green-200 mb-6" style={{background: 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 50%, #bbf7d0 100%)'}}>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">🔍 Search Results</h3>
+            
+            <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                <div><strong>Search Term:</strong> {searchResults.searchTerm}</div>
+                <div><strong>Method:</strong> {searchResults.method}</div>
+                <div><strong>Total Found:</strong> {searchResults.totalFound}</div>
+                <div><strong>Successfully Processed:</strong> {searchResults.successfullyProcessed || searchResults.totalFound}</div>
+              </div>
+            </div>
+
+
+
+            {searchResults.products && searchResults.products.length > 0 && (
+              <div className="space-y-4">
+                <h4 className="font-semibold text-gray-800">📦 Processed Products</h4>
+                {searchResults.products.map((product: any, index: number) => (
+                  <div key={index} className="p-4 bg-white border border-gray-200 rounded-lg">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <div className="font-medium text-gray-900">{product.name || `Product ${index + 1}`}</div>
+                        <div className="text-sm text-gray-600 mt-1">
+                          <div><strong>Price:</strong> {product.price || 'Not found'}</div>
+                          <div><strong>Processing Order:</strong> {product.processingOrder || 'N/A'}</div>
+                          <div><strong>Scraped At:</strong> {new Date(product.scrapedAt).toLocaleString()}</div>
+                        </div>
+                      </div>
+                      <div className="text-sm text-gray-600">
+                        <div><strong>URL:</strong> <a href={product.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline break-all">{product.url}</a></div>
+                        {product.image && (
+                          <div className="mt-2">
+                            <strong>Image:</strong> <a href={product.image} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline break-all">{product.image}</a>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {searchResults.results && searchResults.results.length > 0 && (
+              <div className="space-y-4">
+                <h4 className="font-semibold text-gray-800">🔗 Product URLs Found</h4>
+                {searchResults.results.map((result: any, index: number) => (
+                  <div key={index} className="p-3 bg-white border border-gray-200 rounded">
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1">
+                        <div className="font-medium text-gray-900">{result.title}</div>
+                        <a href={result.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline text-sm break-all">{result.url}</a>
+                      </div>
+                      <button
+                        onClick={async () => {
+                          setUrl(result.url);
+                          setScrapedProduct(null);
+                          setError('');
+                        }}
+                        className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors"
+                      >
+                        Scrape This
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {searchResults.errorDetails && searchResults.errorDetails.length > 0 && (
+              <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded">
+                <h4 className="font-semibold text-red-800 mb-2">❌ Errors ({searchResults.errorDetails.length})</h4>
+                {searchResults.errorDetails.map((error: any, index: number) => (
+                  <div key={index} className="text-sm text-red-700 mb-1">
+                    <strong>URL:</strong> {error.url} - <strong>Error:</strong> {error.error}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <div className="mt-4 flex gap-2">
+              <button
+                onClick={() => setSearchResults(null)}
+                className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
+              >
+                Clear Results
+              </button>
+            </div>
+          </div>
+        )}
+
+
+
+
+        {/* Category Results Display - SECOND DUPLICATE - REMOVE THIS */}
+        {categoryResults && (
+          <div className="rounded-xl p-6 shadow-sm border-2 border-emerald-200 mb-6" style={{background: 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 50%, #bbf7d0 100%)'}}>
+            <h3 className="text-2xl font-bold text-black mb-4">🎯 Category Browser Results</h3>
+            
+            {/* Diversity Analysis */}
+            <div style={{marginBottom: '16px', padding: '16px', backgroundColor: 'white', border: '2px solid #10b981', borderRadius: '8px', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)'}}>
+              <h4 style={{fontSize: '20px', fontWeight: 'bold', color: 'black', marginBottom: '12px'}}>📊 Product Diversity Analysis</h4>
+              <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', fontSize: '14px'}}>
+                <div style={{color: 'black'}}><strong>Total Products:</strong> {categoryResults.totalProducts}</div>
+                <div style={{color: 'black'}}><strong>Diversity Score:</strong> {categoryResults.diversityScore}/6</div>
+                <div style={{color: 'black'}}><strong>Recommendation:</strong> {categoryResults.diversityAnalysis?.recommendation}</div>
+                <div style={{color: 'black'}}><strong>Category URL:</strong> <a href={categoryResults.categoryUrl} target="_blank" rel="noopener noreferrer" style={{color: '#1d4ed8', textDecoration: 'underline'}}>View Category</a></div>
+              </div>
+              
+              {/* Product Type Breakdown */}
+              <div style={{marginTop: '16px', padding: '16px', backgroundColor: '#f9fafb', border: '2px solid #d1d5db', borderRadius: '8px'}}>
+                <h5 style={{fontSize: '18px', fontWeight: 'bold', color: 'black', marginBottom: '12px'}}>Product Types Found:</h5>
+                <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '12px', fontSize: '14px'}}>
+                  <div style={{padding: '12px', borderRadius: '8px', border: '2px solid', color: 'black', backgroundColor: categoryResults.diversityAnalysis?.hasGummies ? '#dcfce7' : '#f3f4f6', borderColor: categoryResults.diversityAnalysis?.hasGummies ? '#22c55e' : '#9ca3af'}}>
+                    <strong>Gummies:</strong> {categoryResults.productTypes?.Gummies || 0}
+                  </div>
+                  <div style={{padding: '12px', borderRadius: '8px', border: '2px solid', color: 'black', backgroundColor: categoryResults.diversityAnalysis?.hasCapsules ? '#dbeafe' : '#f3f4f6', borderColor: categoryResults.diversityAnalysis?.hasCapsules ? '#3b82f6' : '#9ca3af'}}>
+                    <strong>Capsules:</strong> {categoryResults.productTypes?.Capsules || 0}
+                  </div>
+                  <div style={{padding: '12px', borderRadius: '8px', border: '2px solid', color: 'black', backgroundColor: categoryResults.diversityAnalysis?.hasTinctures ? '#f3e8ff' : '#f3f4f6', borderColor: categoryResults.diversityAnalysis?.hasTinctures ? '#a855f7' : '#9ca3af'}}>
+                    <strong>Tinctures:</strong> {categoryResults.productTypes?.Tinctures || 0}
+                  </div>
+                  <div style={{padding: '12px', borderRadius: '8px', border: '2px solid', color: 'black', backgroundColor: categoryResults.diversityAnalysis?.hasPowders ? '#d1fae5' : '#f3f4f6', borderColor: categoryResults.diversityAnalysis?.hasPowders ? '#10b981' : '#9ca3af'}}>
+                    <strong>Powders:</strong> {categoryResults.productTypes?.Powders || 0}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Products List */}
+            {categoryResults.products && categoryResults.products.length > 0 && (
+              <div className="space-y-4">
+                <h4 className="text-xl font-bold text-black">📦 Products Found</h4>
+                {categoryResults.products.map((product: any, index: number) => (
+                  <div key={index} className="p-4 bg-white border-2 border-gray-300 rounded-lg shadow-sm">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="md:col-span-2">
+                        <div style={{color: 'black', fontSize: '18px', fontWeight: 'bold'}} className="mb-2">{product.name}</div>
+                        <div style={{color: 'black', fontSize: '14px'}} className="space-y-2">
+                          <div><strong>Price:</strong> <span style={{color: '#15803d', fontWeight: '600'}}>{product.price}</span></div>
+                          <div><strong>Type:</strong> <span style={{padding: '8px 12px', borderRadius: '8px', fontSize: '14px', fontWeight: 'bold', border: '2px solid', color: 'black', backgroundColor: product.productType === 'Gummies' ? '#fef3c7' : product.productType === 'Capsules' ? '#dbeafe' : product.productType === 'Tinctures' ? '#f3e8ff' : product.productType === 'Powders' ? '#d1fae5' : '#f3f4f6', borderColor: product.productType === 'Gummies' ? '#eab308' : product.productType === 'Capsules' ? '#3b82f6' : product.productType === 'Tinctures' ? '#a855f7' : product.productType === 'Powders' ? '#10b981' : '#9ca3af'}}>{product.productType}</span></div>
+                          {product.description && <div><strong>Description:</strong> <span style={{color: '#1f2937'}}>{product.description.substring(0, 100)}...</span></div>}
+                        </div>
+                      </div>
+                      <div style={{color: 'black', fontSize: '14px'}}>
+                        <div className="mb-3">
+                          <strong>URL:</strong> <a href={product.url} target="_blank" rel="noopener noreferrer" style={{color: '#1d4ed8', textDecoration: 'underline'}} className="break-all font-medium">{product.url}</a>
+                        </div>
+                        {product.image && (
+                          <div className="mb-3">
+                            <strong>Image:</strong> <a href={product.image} target="_blank" rel="noopener noreferrer" style={{color: '#1d4ed8', textDecoration: 'underline'}} className="break-all font-medium">{product.image}</a>
+                          </div>
+                        )}
+                        <div className="mt-3">
+                          <button
+                            onClick={() => {
+                              setUrl(product.url);
+                              setScrapedProduct(null);
+                              setError('');
+                            }}
+                            className="px-4 py-2 bg-blue-600 text-white text-sm font-bold rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
+                          >
+                            Scrape This Product
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <div className="mt-4 flex gap-2">
+              <button
+                onClick={() => setCategoryResults(null)}
+                className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
+              >
+                Clear Results
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Error Display */}
         {error && (

@@ -1,0 +1,41 @@
+{
+  "searchInfo": {
+    "keywords": [
+      "ashwagandha",
+      "kava",
+      "skullcap"
+    ],
+    "totalMatches": 2,
+    "timestamp": "2025-08-18T07:48:49.605Z"
+  },
+  "matches": [
+    {
+      "title": "Ashwagandha Tincture",
+      "url": "https://herb-era.com/products/ashwagandha_herbal_tincture",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:47:56.880Z",
+      "matches": [
+        {
+          "keyword": "ashwagandha",
+          "variation": "ashwagandha"
+        }
+      ]
+    },
+    {
+      "title": "Ashwagandha Gallon",
+      "url": "https://herb-era.com/products/ashwagandha-gallon",
+      "collection": "/collections/all",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $385.00\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $385.00\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:40.803Z",
+      "matches": [
+        {
+          "keyword": "ashwagandha",
+          "variation": "ashwagandha"
+        }
+      ]
+    }
+  ]
+}

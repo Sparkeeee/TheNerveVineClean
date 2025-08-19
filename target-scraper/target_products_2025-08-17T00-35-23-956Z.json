@@ -1,0 +1,91 @@
+{
+  "searchTerm": "magnesium glycinate",
+  "urls": [],
+  "totalPages": 0,
+  "timestamp": "2025-08-17T00:35:23.956Z",
+  "config": {
+    "target": {
+      "baseUrl": "https://www.target.com/s",
+      "searchParam": "searchTerm",
+      "maxPages": 5,
+      "resultsPerPage": 24,
+      "earlyStopThreshold": 10
+    },
+    "timing": {
+      "minDelay": 2000,
+      "maxDelay": 8000,
+      "scrollDelay": {
+        "min": 1000,
+        "max": 3000
+      },
+      "retryDelay": {
+        "min": 5000,
+        "max": 15000
+      },
+      "pageTimeout": 30000,
+      "networkTimeout": 10000
+    },
+    "browser": {
+      "headless": "new",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "args": [
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        "--disable-dev-shm-usage",
+        "--disable-accelerated-2d-canvas",
+        "--no-first-run",
+        "--no-zygote",
+        "--disable-gpu"
+      ]
+    },
+    "proxies": [],
+    "userAgents": [
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
+      "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    ],
+    "retries": {
+      "maxAttempts": 3,
+      "backoffMultiplier": 2
+    },
+    "debug": {
+      "enabled": true,
+      "logLevel": "info",
+      "saveScreenshots": false,
+      "screenshotPath": "./screenshots"
+    },
+    "output": {
+      "format": "json",
+      "filename": "target_products",
+      "includeDuplicates": false,
+      "includeMetadata": true
+    },
+    "selectors": {
+      "productWrappers": [
+        "[data-test=\"@web/site-top-of-funnel/ProductCardWrapper\"]",
+        "[data-test=\"@web/ProductCard/ProductCardVariantDefault\"]",
+        "[data-test=\"product-title\"]",
+        ".styles_cardWrapper__Lo85r"
+      ],
+      "productLinks": [
+        "[data-test=\"product-title\"] a",
+        "[data-test=\"@web/ProductCard/ProductCardImageHoverableLink\"] a",
+        "a[href*=\"/p/\"]",
+        "[data-test=\"@web/site-top-of-funnel/ProductCardWrapper\"] a[href*=\"/p/\"]"
+      ],
+      "nextPageButton": [
+        "[data-test=\"next\"]",
+        ".btn-pagination-next",
+        "button[aria-label=\"next page\"]",
+        "a[aria-label=\"Next\"]",
+        "[class*=\"next\"]",
+        "[class*=\"Next\"]"
+      ]
+    }
+  }
+}

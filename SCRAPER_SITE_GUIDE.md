@@ -31,7 +31,7 @@ This guide documents which scraper methods work for different e-commerce sites a
 ## 🎯 Current Status
 - ✅ **Amazon** - "Ultra Simple" method working
 - ✅ **Vitacost** - "Refined" method working (price, image, description)
-- ✅ **Target** - "Refined" method working (price, image, name)
+- ✅ **Target** - "Refined" method working + **NEW: Stealth Search & Batch Processing** ✅
 - ✅ **Traditional Medicinals** - "Mobile Scrape" method working (price, image, name)
 - ✅ **HerbEra** - "Extract Product Data" method working (price, image, name)
 - ❌ **iHerb** - Blocked (HTTP 403)
@@ -39,6 +39,11 @@ This guide documents which scraper methods work for different e-commerce sites a
 - ❌ **GNC** - Redirect Error (HTTP 307)
 - ❌ **Vitamin Shoppe** - Blocked (HTTP 403)
 - 🔄 **Smaller Herbal Sites** - Testing in progress
+
+**🎉 BREAKTHROUGH: Target Stealth Automation Complete**
+- **Search Discovery** ✅ - Stealth search bypasses IP blocking
+- **Batch Processing** ✅ - Full automation with anti-detection
+- **Production Ready** ✅ - Ready for affiliate marketing automation
 
 ---
 
@@ -151,11 +156,17 @@ This guide documents which scraper methods work for different e-commerce sites a
 - May need to find correct product URLs
 
 ### Target (US)
-**✅ FULLY WORKING - TARGET REFINED SCRAPER**
-- **Best Method:** "Target Refined" (new sophisticated scraper)
+**✅ FULLY WORKING - TARGET REFINED SCRAPER + STEALTH SEARCH**
+- **Best Method:** "Target Refined" (individual products) + "Target Search Stealth" (search pages)
 - **Why it works:** Advanced price detection logic that outsmarts Target's anti-scraping camouflage
 - **Success Rate:** High (reliable price, image, name extraction)
 - **Notes:** Major US retailer, excellent for affiliate marketing, sophisticated price detection
+
+**NEW: Stealth Search Capabilities:**
+- **Target Search Stealth** ✅ - Anti-detection search with random delays, user agent rotation
+- **Target Batch Stealth** ✅ - Complete automation from search to individual product scraping
+- **Anti-Detection Features:** Random delays (2-15 seconds), user agent rotation, realistic headers
+- **IP Blocking Countermeasures:** VPN rotation recommended, realistic request patterns
 
 **Scraper Features:**
 - **Smart Price Detection**: Finds real product prices among fake camouflage prices
@@ -511,6 +522,18 @@ This guide documents which scraper methods work for different e-commerce sites a
 - **Success rate:** High - beats Target's sophisticated protection
 - **Features:** Smart price detection, unique price logic, .99 pricing rule
 
+### "Target Search Stealth"
+- **Best for:** Target.com search pages (avoiding IP blocking)
+- **How it works:** Anti-detection measures with random delays and user agent rotation
+- **Success rate:** High - bypasses search page protection
+- **Features:** Random delays (2-7 seconds), user agent rotation, realistic headers, mouse simulation
+
+### "Target Batch Stealth"
+- **Best for:** Complete Target automation from search to product scraping
+- **How it works:** Combines stealth search with individual product scraping using realistic delays
+- **Success rate:** High - full automation with anti-detection
+- **Features:** Search → URL discovery → individual scraping with 8-15 second delays between products
+
 ### "Vitacost Refined"
 - **Best for:** Vitacost.com products
 - **How it works:** Site-specific extraction with comprehensive image filtering
@@ -544,6 +567,28 @@ This guide documents which scraper methods work for different e-commerce sites a
 - **Success rate:** Diagnostic tool
 
 ---
+
+## 🥷 Anti-Detection Strategies
+
+### **IP Blocking Countermeasures:**
+1. **VPN Rotation** - Switch IP addresses when blocked
+2. **Realistic Delays** - Random 2-15 second delays between requests
+3. **User Agent Rotation** - Multiple browser signatures
+4. **Request Pattern Variation** - Non-uniform timing and behavior
+5. **Session Management** - Maintain realistic browsing patterns
+
+### **Stealth Implementation:**
+- **Random Delays:** 2-7 seconds for search, 8-15 seconds for batch processing
+- **User Agent Pool:** 5 different browser signatures (Chrome, Firefox, Safari)
+- **Realistic Headers:** Proper referrer, accept-language, and security headers
+- **Mouse Simulation:** Human-like interaction patterns
+- **Multiple Fallbacks:** Multiple selector strategies for content detection
+
+### **When to Use Stealth Mode:**
+- **Search Pages** - Always use stealth for discovery
+- **Batch Processing** - Use stealth for multiple products
+- **IP Blocked** - Switch to stealth mode
+- **Rate Limited** - Implement longer delays
 
 ## 📊 Testing Protocol
 

@@ -1,0 +1,9 @@
+{
+	"id": "au4TZrBNe8WvxuK",
+	"json": "{\"id\":\"au4TZrBNe8WvxuK\",\"url\":\"https://www.naturesanswer.com/product/mens-100-multivitamin-60-capsules/#content\",\"loadedUrl\":\"https://www.naturesanswer.com/product/mens-100-multivitamin-60-capsules/#content\",\"uniqueKey\":\"https://www.naturesanswer.com/product/mens-100-multivitamin-60-capsules\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"label\":\"product\",\"__crawlee\":{\"crawlDepth\":2,\"state\":4}},\"handledAt\":\"2025-08-14T22:01:19.598Z\"}",
+	"method": "GET",
+	"orderNo": null,
+	"retryCount": 0,
+	"uniqueKey": "https://www.naturesanswer.com/product/mens-100-multivitamin-60-capsules",
+	"url": "https://www.naturesanswer.com/product/mens-100-multivitamin-60-capsules/#content"
+}

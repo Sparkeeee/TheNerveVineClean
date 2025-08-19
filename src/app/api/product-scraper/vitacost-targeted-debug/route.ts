@@ -114,8 +114,8 @@ export async function POST(request: NextRequest) {
     });
 
     // Look for product-specific sections
-    const productSections = html.match(/<[^>]*class="[^"]*product[^"]*"[^>]*>([^<]*)</[^>]*>/gi) || [];
-    const mainSections = html.match(/<[^>]*class="[^"]*main[^"]*"[^>]*>([^<]*)</[^>]*>/gi) || [];
+    const productSections = html.match(/<[^>]*class="[^"]*product[^"]*"[^>]*>.*?<\/[^>]*>/gi) || [];
+    const mainSections = html.match(/<[^>]*class="[^"]*main[^"]*"[^>]*>.*?<\/[^>]*>/gi) || [];
 
     // Find the main content area (often contains product info)
     const mainContentMatch = html.match(/<main[^>]*>([\s\S]*?)<\/main>/i);

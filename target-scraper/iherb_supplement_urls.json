@@ -1,0 +1,9 @@
+{
+  "totalUrls": 0,
+  "timestamp": "2025-08-17T09:05:57.141Z",
+  "crawlerSettings": {
+    "maxRequests": 200,
+    "requestDelay": 5000
+  },
+  "urls": []
+}

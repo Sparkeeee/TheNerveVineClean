@@ -1,0 +1,42 @@
+{
+  "startUrls": ["https://www.gaiaherbs.com/sitemap.xml"],
+  "crawler": {
+    "maxRequestsPerCrawl": 50,
+    "maxConcurrency": 2,
+    "retryLimit": 2,
+    "minDelayMs": 1500,
+    "maxDelayMs": 4000,
+    "userAgents": [
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.1 Safari/605.1.15"
+    ],
+    "proxies": []
+  },
+  "selectors": {
+    "title": "h1.product-title, .product-name",
+    "price": ".product-price, [data-product-price]",
+    "description": ".product-description, #description"
+  },
+  "pagination": {
+    "nextButton": ".pagination-next, .next",
+    "maxPages": 3
+  },
+  "filtering": {
+    "targetHerbs": [
+      "st johns wort", 
+      "st. johns wort", 
+      "st john's wort", 
+      "st. john's wort", 
+      "st johns wort", 
+      "st. johns wort",
+      "st-johns-wort",
+      "st-john-s-wort",
+      "stjohnswort",
+      "stjohnswort",
+      "hypericum",
+      "johns wort",
+      "john's wort"
+    ],
+    "enabled": true
+  }
+}

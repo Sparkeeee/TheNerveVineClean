@@ -1,0 +1,9 @@
+{
+	"id": "28b0ndLRLcfB3Wg",
+	"json": "{\"id\":\"28b0ndLRLcfB3Wg\",\"url\":\"https://www.amazon.com/s?k=Lemon%20Balm+supplement\",\"loadedUrl\":\"https://www.amazon.com/s?k=Lemon%20Balm+supplement\",\"uniqueKey\":\"https://www.amazon.com/s?k=Lemon+Balm+supplement\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"__crawlee\":{\"state\":4}},\"handledAt\":\"2025-08-14T22:00:29.649Z\"}",
+	"method": "GET",
+	"orderNo": null,
+	"retryCount": 0,
+	"uniqueKey": "https://www.amazon.com/s?k=Lemon+Balm+supplement",
+	"url": "https://www.amazon.com/s?k=Lemon%20Balm+supplement"
+}

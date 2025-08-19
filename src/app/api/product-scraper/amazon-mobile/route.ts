@@ -80,6 +80,45 @@ async function extractProductData(html: string, url: string): Promise<ScrapedPro
 
   // Extract price - try multiple patterns for Amazon mobile
   let price = 'Price not found';
+  
+  // WISE WOMAN HERBALS SPECIFIC: Check if this is Wise Woman Herbals first
+  const isWiseWomanHerbals = url.includes('wisewomanherbals.com');
+  
+  if (isWiseWomanHerbals) {
+    console.log('Wise Woman Herbals detected, using site-specific price extraction...');
+    
+    // Wise Woman Herbals-specific price selectors (from HTML analysis)
+    const wiseWomanPricePatterns = [
+      // Primary: Sale price if different from regular
+      /<span[^>]*class="[^"]*f-price-item--sale[^"]*"[^>]*>([^<]+)<\/span>/i,
+      // Fallback: Regular price
+      /<span[^>]*class="[^"]*f-price-item--regular[^"]*"[^>]*>([^<]+)<\/span>/i,
+      // Alternative: Price container
+      /<div[^>]*class="[^"]*f-price__regular[^"]*"[^>]*>.*?<span[^>]*class="[^"]*f-price-item[^"]*"[^>]*>([^<]+)<\/span>/is,
+      // Generic: Any f-price-item class
+      /<span[^>]*class="[^"]*f-price-item[^"]*"[^>]*>([^<]+)<\/span>/i
+    ];
+    
+    for (const pattern of wiseWomanPricePatterns) {
+      const match = html.match(pattern);
+      if (match) {
+        const extractedPrice = match[1] || match[0];
+        // Clean up the price - keep dollar sign and numbers
+        const cleanedPrice = extractedPrice.replace(/[^\d.,$]/g, '').trim();
+        if (cleanedPrice && cleanedPrice !== '$') {
+          price = cleanedPrice;
+          console.log('Wise Woman Herbals: Found price using pattern:', pattern.source, 'Price:', price);
+          break;
+        }
+      }
+    }
+    
+    if (price === 'Price not found') {
+      console.log('Wise Woman Herbals: No price found with site-specific patterns, falling back to generic patterns');
+    }
+  }
+  
+  // Generic price patterns for all other sites (unchanged)
   const pricePatterns = [
     // Amazon mobile specific patterns
     /\$[\d,]+\.?\d*/,
@@ -101,14 +140,17 @@ async function extractProductData(html: string, url: string): Promise<ScrapedPro
     /<div[^>]*class="[^"]*a-price[^"]*"[^>]*>([^<]+)<\/div>/i
   ];
   
-  for (const pattern of pricePatterns) {
-    const match = html.match(pattern);
-    if (match) {
-      price = match[1] || match[0];
-      // Clean up the price
-      price = price.replace(/[^\d.,$]/g, '').trim();
-      if (price && price !== '$') {
-        break;
+  // Only run generic patterns if Wise Woman Herbals patterns didn't find a price
+  if (price === 'Price not found') {
+    for (const pattern of pricePatterns) {
+      const match = html.match(pattern);
+      if (match) {
+        price = match[1] || match[0];
+        // Clean up the price
+        price = price.replace(/[^\d.,$]/g, '').trim();
+        if (price && price !== '$') {
+          break;
+        }
       }
     }
   }
@@ -281,7 +323,10 @@ async function extractProductData(html: string, url: string): Promise<ScrapedPro
       title: title,
       hasPrice: price !== 'Price not found' && price !== '$',
       hasImage: image !== '' && !image.includes('sprite'),
-      hasDescription: description !== 'Description not found'
+      hasDescription: description !== 'Description not found',
+      // Wise Woman Herbals specific debug info
+      isWiseWomanHerbals: isWiseWomanHerbals,
+      priceExtractionMethod: isWiseWomanHerbals ? 'Wise Woman Herbals-specific patterns' : 'Generic patterns'
     }
   };
 }

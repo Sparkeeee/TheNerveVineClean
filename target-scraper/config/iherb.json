@@ -1,0 +1,49 @@
+{
+  "iherb": {
+    "baseUrl": "https://www.iherb.com/search?kw=",
+    "selectors": {
+      "productLinks": "a[href*='/p/']",
+      "fallbackProductLinks": ".product-cell-container a[href*='/p/']",
+      "backupProductLinks": ".product-cell a[href*='/p/']",
+      "nextPage": "a.pagination-link.pagination-next, .pagination-next, a[aria-label='Next'], .pagination__next",
+      "productGrid": ".product-cell-container, .product-cell, [data-testid='product-card']",
+      "productTitle": ".product-title, .product-name, h1, h2, h3",
+      "productPrice": ".price, .product-price, [data-price], .retail-price",
+      "productImage": "img[src*='product'], img[src*='images'], .product-image img",
+      "productDescription": ".product-description, .description, meta[name='description']"
+    },
+    "scraper": {
+      "maxPages": 3,
+      "minDelay": 3000,
+      "maxDelay": 6000,
+      "maxRetries": 3,
+      "scrollSteps": 2,
+      "scrollDelayMin": 1000,
+      "scrollDelayMax": 2000,
+      "timeout": 60000,
+      "waitUntil": "domcontentloaded",
+      "pageStabilizationDelay": 3000
+    },
+    "filters": {
+      "excludePatterns": ["search", "cart", "account", "login", "register"],
+      "maxResults": 50,
+      "minProductUrlLength": 20,
+      "requiredUrlPatterns": ["/p/", "iherb.com"]
+    },
+    "antiDetection": {
+      "slowMo": 200,
+      "randomDelays": true,
+      "humanScroll": true,
+      "sessionRotation": true,
+      "userAgentRotation": false
+    },
+    "output": {
+      "format": "json",
+      "includeMetadata": true,
+      "includeTimestamp": true,
+      "includeSource": true
+    }
+  }
+}
+
+

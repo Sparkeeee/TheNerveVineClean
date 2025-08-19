@@ -1,0 +1,9 @@
+{
+	"id": "H3ASqYVQE4Ajifl",
+	"json": "{\"id\":\"H3ASqYVQE4Ajifl\",\"url\":\"https://www.pacificbotanicals.com/search?q=Lemon%20Balm\",\"loadedUrl\":\"https://pacificbotanicals.com/search?q=Lemon+Balm\",\"uniqueKey\":\"https://www.pacificbotanicals.com/search?q=Lemon+Balm\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"__crawlee\":{\"state\":4}},\"handledAt\":\"2025-08-14T22:00:44.443Z\"}",
+	"method": "GET",
+	"orderNo": null,
+	"retryCount": 0,
+	"uniqueKey": "https://www.pacificbotanicals.com/search?q=Lemon+Balm",
+	"url": "https://www.pacificbotanicals.com/search?q=Lemon%20Balm"
+}

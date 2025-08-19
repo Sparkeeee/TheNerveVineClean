@@ -1,0 +1,9 @@
+{
+	"id": "lgLwiLtAFEgguFc",
+	"json": "{\"id\":\"lgLwiLtAFEgguFc\",\"url\":\"https://www.vitacost.com/search?w=Lemon%20Balm\",\"loadedUrl\":\"https://www.vitacost.com/search?w=Lemon%20Balm\",\"uniqueKey\":\"https://www.vitacost.com/search?w=Lemon+Balm\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"__crawlee\":{\"state\":4}},\"handledAt\":\"2025-08-14T22:00:31.976Z\"}",
+	"method": "GET",
+	"orderNo": null,
+	"retryCount": 0,
+	"uniqueKey": "https://www.vitacost.com/search?w=Lemon+Balm",
+	"url": "https://www.vitacost.com/search?w=Lemon%20Balm"
+}

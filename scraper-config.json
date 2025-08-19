@@ -1,0 +1,68 @@
+{
+  "scraper": {
+    "searchType": "herbs",
+    "maxProductsPerTerm": 10,
+    "maxRequestsPerCrawl": 20,
+    "delayBetweenRequests": 3000,
+    "headless": true,
+    "sites": {
+      "amazon": {
+        "enabled": true,
+        "method": "search",
+        "priority": 1
+      },
+      "target": {
+        "enabled": true,
+        "method": "search",
+        "priority": 2
+      },
+      "vitacost": {
+        "enabled": true,
+        "method": "search",
+        "priority": 3
+      },
+      "gaia-herbs": {
+        "enabled": true,
+        "method": "search",
+        "priority": 4
+      },
+      "wise-woman-herbals": {
+        "enabled": true,
+        "method": "search",
+        "priority": 5
+      },
+      "pacific-botanicals": {
+        "enabled": true,
+        "method": "search",
+        "priority": 6
+      },
+      "traditional-medicinals": {
+        "enabled": true,
+        "method": "search",
+        "priority": 7
+      },
+      "natures-answer": {
+        "enabled": true,
+        "method": "search",
+        "priority": 8
+      },
+      "herbera": {
+        "enabled": true,
+        "method": "search",
+        "priority": 9
+      }
+    },
+    "quality": {
+      "minPrice": 5,
+      "maxPrice": 100,
+      "requireImage": true,
+      "requirePrice": true,
+      "maxDescriptionLength": 500
+    },
+    "storage": {
+      "type": "temporary",
+      "path": "temp-scraped-products.json",
+      "backup": true
+    }
+  }
+}
