@@ -18,10 +18,11 @@
     "rollback:symptoms": "tsx src/scripts/rollbackSymptoms.ts",
     "migrate:symptom-data": "tsx src/scripts/migrateSymptomData.ts",
     "migrate:variant-content": "node src/scripts/migrateVariantContent.js",
-    "audit:description-lengths": "node src/scripts/auditDescriptionLengths.js"
+    "audit:description-lengths": "node src/scripts/auditDescriptionLengths.js",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
-    "@prisma/client": "^5.7.1",
+    "@prisma/client": "^6.12.0",
     "@types/node": "^20.10.5",
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
