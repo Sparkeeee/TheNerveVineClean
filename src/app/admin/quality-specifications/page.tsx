@@ -359,26 +359,26 @@ export default function QualitySpecificationsPage() {
   };
 
   const handleEdit = (spec: any) => {
-    console.log('🔧 Viewing spec for editing:', spec);
+    console.log('🔧 Editing spec:', spec);
     
     // Set the viewing spec ID so we know which spec to update
     setViewingSpecId(spec.id);
     
-    // Populate form with existing data - check relations first, then fallback to direct fields
-    if (spec.herb?.id) {
-      setSelectedHerbId(spec.herb.id);
-      setSelectedSupplementId('');
-    } else if (spec.supplement?.id) {
-      setSelectedSupplementId(spec.supplement.id);
-      setSelectedHerbId('');
-    } else if (spec.herbSlug) {
+    // Populate form with existing data
+    if (spec.herbSlug) {
+      // Find the herb by slug to get its ID
       const herb = herbs.find(h => h.slug === spec.herbSlug);
-      setSelectedHerbId(herb?.id || '');
-      setSelectedSupplementId('');
+      if (herb) {
+        setSelectedHerbId(herb.id);
+        setSelectedSupplementId('');
+      }
     } else if (spec.supplementSlug) {
+      // Find the supplement by slug to get its ID
       const supplement = supplements.find(s => s.slug === spec.supplementSlug);
-      setSelectedSupplementId(supplement?.id || '');
-      setSelectedHerbId('');
+      if (supplement) {
+        setSelectedSupplementId(supplement.id);
+        setSelectedHerbId('');
+      }
     }
     
     setSelectedFormulationTypeId(spec.formulationTypeId || '');
@@ -387,7 +387,7 @@ export default function QualitySpecificationsPage() {
     setCustomSpecs(spec.customSpecs || '');
     setNotes(spec.notes || '');
     
-    console.log('🔧 Form populated for viewing - user can now edit and save manually');
+    console.log('🔧 Form populated for editing - viewingSpecId set to:', spec.id);
   };
 
   const handleDelete = async (specId: number) => {
@@ -473,7 +473,12 @@ export default function QualitySpecificationsPage() {
   };
 
   const handleSaveChanges = async () => {
-    if (!viewingSpecId) return;
+    if (!viewingSpecId) {
+      console.error('❌ No viewingSpecId set for update');
+      return;
+    }
+
+    console.log('💾 Starting update for spec ID:', viewingSpecId);
 
     try {
       const specData = {
@@ -486,6 +491,8 @@ export default function QualitySpecificationsPage() {
         notes: notes || null
       };
 
+      console.log('💾 Update data:', specData);
+
       const response = await fetch(`/api/quality-specs/${viewingSpecId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -493,14 +500,16 @@ export default function QualitySpecificationsPage() {
       });
 
       if (response.ok) {
+        console.log('✅ Update successful');
         fetchSpecifications();
         resetForm();
         alert('Quality specification updated successfully!');
       } else {
+        console.error('❌ Update failed:', response.status);
         alert('Error updating quality specification');
       }
     } catch (error) {
-      console.error('Error updating spec:', error);
+      console.error('❌ Error updating spec:', error);
       alert('Error updating quality specification');
     }
   };
@@ -748,14 +757,31 @@ export default function QualitySpecificationsPage() {
                 </button>
               )}
               {/* Save Changes button for when form is populated with existing data */}
-              {viewingSpecId && (selectedHerbId || selectedSupplementId) && selectedFormulationTypeId && (
+              {viewingSpecId && (
                 <button
                   type="button"
-                  onClick={handleSaveChanges}
+                  onClick={() => {
+                    console.log('💾 Save Changes clicked!');
+                    console.log('💾 viewingSpecId:', viewingSpecId);
+                    console.log('💾 selectedHerbId:', selectedHerbId);
+                    console.log('💾 selectedSupplementId:', selectedSupplementId);
+                    console.log('💾 selectedFormulationTypeId:', selectedFormulationTypeId);
+                    handleSaveChanges();
+                  }}
                   className="bg-green-600 text-white px-6 py-3 rounded-md hover:bg-green-700 transition-all duration-200 font-medium"
                 >
                   Save Changes
                 </button>
+              )}
+              
+              {/* Debug info for button visibility */}
+              {viewingSpecId && (
+                <div className="text-xs text-gray-500 mt-2">
+                  Debug: viewingSpecId={viewingSpecId}, 
+                  selectedHerbId={selectedHerbId}, 
+                  selectedSupplementId={selectedSupplementId}, 
+                  selectedFormulationTypeId={selectedFormulationTypeId}
+                </div>
               )}
             </div>
           </form>
