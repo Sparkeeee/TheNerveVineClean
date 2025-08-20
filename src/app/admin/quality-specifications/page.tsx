@@ -53,35 +53,96 @@ interface QualitySpecification {
   brandPreferences?: string[];
   brandAvoid?: string[];
   notes?: string;
+  // New fields for formulation-based system
+  herbId?: number;
+  supplementId?: number;
+  formulationTypeId?: number;
+  standardised?: boolean;
+  customSpecs?: string;
+  updatedAt?: Date;
+  // Relations
+  formulationType?: {
+    id: number;
+    name: string;
+    category: string;
+  };
+  herb?: {
+    id: number;
+    name: string;
+    slug: string;
+  };
+  supplement?: {
+    id: number;
+    name: string;
+    slug: string;
+  };
 }
 
 export default function QualitySpecificationsPage() {
   const [herbs, setHerbs] = useState<Herb[]>([]);
   const [supplements, setSupplements] = useState<Supplement[]>([]);
-  const [selectedHerb, setSelectedHerb] = useState<string>('');
-  const [selectedSupplement, setSelectedSupplement] = useState<string>('');
   const [specifications, setSpecifications] = useState<QualitySpecification[]>([]);
-  const [editingSpec, setEditingSpec] = useState<QualitySpecification | null>(null);
-  const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Form state
-  const [formData, setFormData] = useState<QualitySpecification>({
-    productType: '',
-    formulationName: '',
-    approach: 'traditional',
-    requiredTerms: [],
-    preferredTerms: [],
-    avoidTerms: [],
-    priceRange: { min: 0, max: 100, currency: 'USD' },
-    ratingThreshold: 4.0,
-    reviewCountThreshold: 50
-  });
+  // Form state for new formulation-based system
+  const [selectedHerbId, setSelectedHerbId] = useState<number | ''>('');
+  const [selectedSupplementId, setSelectedSupplementId] = useState<number | ''>('');
+  const [selectedFormulationTypeId, setSelectedFormulationTypeId] = useState<number | ''>('');
+  const [approach, setApproach] = useState('traditional');
+  const [standardised, setStandardised] = useState(false);
+  const [customSpecs, setCustomSpecs] = useState('');
+  const [notes, setNotes] = useState('');
+  const [selectedTemplate, setSelectedTemplate] = useState<any>(null);
+  const [herbUsedFormulations, setHerbUsedFormulations] = useState<any[]>([]);
+  const [formulationTypes, setFormulationTypes] = useState<any[]>([]);
+  const [customQualitySpec, setCustomQualitySpec] = useState<any>(null);
+  
+  // CRUD state
+  const [isEditing, setIsEditing] = useState(false);
+  const [editingSpecId, setEditingSpecId] = useState<number | null>(null);
+  const [viewingSpecId, setViewingSpecId] = useState<number | null>(null);
 
   useEffect(() => {
     fetchHerbsAndSupplements();
     fetchSpecifications();
+    fetchFormulationTypes();
   }, []);
+
+  // Debug: Log when specifications change
+  useEffect(() => {
+    console.log('🔄 Specifications state changed:', specifications);
+    console.log('🔄 Specifications length:', specifications?.length);
+  }, [specifications]);
+
+  useEffect(() => {
+    if (selectedHerbId || selectedSupplementId) {
+      fetchHerbUsedFormulations();
+    }
+  }, [selectedHerbId, selectedSupplementId]);
+
+  // Debug: Log when herbUsedFormulations changes
+  useEffect(() => {
+    // State is working correctly, no need for debug logs
+  }, [herbUsedFormulations]);
+
+  useEffect(() => {
+    if (selectedFormulationTypeId && formulationTypes.length > 0) {
+      const type = formulationTypes.find(t => t.id === parseInt(selectedFormulationTypeId.toString()));
+      if (type) {
+        const template = JSON.parse(type.template);
+        setSelectedTemplate(template);
+      }
+    }
+  }, [selectedFormulationTypeId, formulationTypes]);
+
+  // Fetch custom quality specs when formulation type is selected
+  useEffect(() => {
+    if (selectedFormulationTypeId && (selectedHerbId || selectedSupplementId)) {
+      fetchCustomQualitySpec();
+    } else {
+      setCustomQualitySpec(null);
+    }
+  }, [selectedFormulationTypeId, selectedHerbId, selectedSupplementId]);
 
   const fetchHerbsAndSupplements = async () => {
     setIsLoading(true);
@@ -92,7 +153,6 @@ export default function QualitySpecificationsPage() {
         throw new Error(`Herbs API responded with status: ${herbsResponse.status}`);
       }
       const herbsData = await herbsResponse.json();
-      console.log('Herbs API response:', herbsData); // Debug log
       
       // Handle the response structure: { success: true, data: { herbs: [...], pagination: {...} } }
       const herbsArray = herbsData.data?.herbs || herbsData.herbs || herbsData || [];
@@ -109,7 +169,6 @@ export default function QualitySpecificationsPage() {
         throw new Error(`Supplements API responded with status: ${supplementsResponse.status}`);
       }
       const supplementsData = await supplementsResponse.json();
-      console.log('Supplements API response:', supplementsData); // Debug log
       
       // Handle the response structure: { success: true, data: { supplements: [...], pagination: {...} } }
       const supplementsArray = supplementsData.data?.supplements || supplementsData.supplements || supplementsData || [];
@@ -130,156 +189,320 @@ export default function QualitySpecificationsPage() {
 
   const fetchSpecifications = async () => {
     try {
-      const response = await fetch('/api/quality-specifications');
+      console.log('🔍 Fetching specifications...');
+      const response = await fetch('/api/quality-specs');
+      console.log('📡 Response status:', response.status);
+      console.log('📡 Response ok:', response.ok);
+      
+      if (!response.ok) {
+        console.error('❌ Response not ok:', response.status, response.statusText);
+        return;
+      }
+      
       const data = await response.json();
+      console.log('📊 Specifications data:', data);
+      console.log('📊 Number of specs:', data.length);
+      console.log('📊 Data type:', typeof data);
+      console.log('📊 Is array:', Array.isArray(data));
+      
+      if (data.length > 0) {
+        console.log('📋 First spec:', data[0]);
+        console.log('🔑 First spec ID:', data[0].id);
+        console.log('🔑 First spec herb:', data[0].herb);
+        console.log('🔑 First spec supplement:', data[0].supplement);
+        console.log('🔑 First spec formulationType:', data[0].formulationType);
+      }
+      
       setSpecifications(data);
     } catch (error) {
-      console.error('Error fetching specifications:', error);
+      console.error('❌ Error fetching specifications:', error);
     }
   };
 
-  const handleHerbChange = (herbSlug: string) => {
-    setSelectedHerb(herbSlug);
-    setSelectedSupplement('');
-    const herb = herbs.find(h => h.slug === herbSlug);
-    if (herb) {
-      setFormData(prev => ({
-        ...prev,
-        herbSlug: herbSlug,
-        herbName: herb.name,
-        supplementSlug: undefined,
-        supplementName: undefined
-      }));
+  const fetchFormulationTypes = async () => {
+    try {
+      const response = await fetch('/api/formulation-types');
+      if (response.ok) {
+        const data = await response.json();
+        setFormulationTypes(Array.isArray(data) ? data : []);
+      }
+    } catch (error) {
+      console.error('Error fetching formulation types:', error);
     }
   };
 
-  const handleSupplementChange = (supplementSlug: string) => {
-    setSelectedSupplement(supplementSlug);
-    setSelectedHerb('');
-    const supplement = supplements.find(s => s.slug === supplementSlug);
-    if (supplement) {
-      setFormData(prev => ({
-        ...prev,
-        supplementSlug: supplementSlug,
-        supplementName: supplement.name,
-        herbSlug: undefined,
-        herbName: undefined
-      }));
+  const fetchHerbUsedFormulations = async () => {
+    try {
+      const targetId = selectedHerbId || selectedSupplementId;
+      const targetType = selectedHerbId ? 'herb' : 'supplement';
+      
+      console.log('🔍 Fetching herb used formulations for:', targetType, targetId);
+      
+      // Get the slug for the selected herb/supplement
+      let targetSlug = '';
+      if (selectedHerbId) {
+        const herb = herbs.find(h => h.id === selectedHerbId);
+        targetSlug = herb?.slug || '';
+      } else if (selectedSupplementId) {
+        const supplement = supplements.find(s => s.id === selectedSupplementId);
+        targetSlug = supplement?.slug || '';
+      }
+      
+      console.log('🔍 Target slug:', targetSlug);
+      
+      // Query by slug instead of ID since existing specs use slug-based storage
+      const response = await fetch(`/api/quality-specs?${targetType}Slug=${targetSlug}`);
+      console.log('📡 Herb formulations response status:', response.status);
+      
+      if (response.ok) {
+        const data = await response.json();
+        console.log('📊 Herb formulations data:', data);
+        setHerbUsedFormulations(data);
+      } else {
+        console.error('❌ Herb formulations response not ok:', response.status);
+      }
+    } catch (error) {
+      console.error('❌ Error fetching herb formulations:', error);
     }
   };
 
-  const handleInputChange = (field: string, value: unknown) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value
-    }));
+  const fetchCustomQualitySpec = async () => {
+    if (!selectedFormulationTypeId || (!selectedHerbId && !selectedSupplementId)) {
+      return;
+    }
+    
+    try {
+      const params = new URLSearchParams();
+      if (selectedHerbId) {
+        const herbSlug = herbs.find(h => h.id === selectedHerbId)?.slug || '';
+        params.append('herbSlug', herbSlug);
+      }
+      if (selectedSupplementId) {
+        const supplementSlug = supplements.find(s => s.id === selectedSupplementId)?.slug || '';
+        params.append('supplementSlug', supplementSlug);
+      }
+      params.append('formulationTypeId', selectedFormulationTypeId.toString());
+      
+      const url = `/api/quality-specs?${params}`;
+      const response = await fetch(url);
+      
+      if (response.ok) {
+        const data = await response.json();
+        if (data.length > 0) {
+          setCustomQualitySpec(data[0]);
+        } else {
+          setCustomQualitySpec(null);
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching custom quality spec:', error);
+    }
   };
 
-  const handleArrayInputChange = (field: string, value: string) => {
-    const items = value.split(',').map(item => item.trim()).filter(item => item);
-    setFormData(prev => ({
-      ...prev,
-      [field]: items
-    }));
+  const handleHerbChange = (herbId: number) => {
+    setSelectedHerbId(herbId);
+    setSelectedSupplementId('');
+    setSelectedFormulationTypeId(''); // Clear formulation type when switching
+  };
+
+  const handleSupplementChange = (supplementId: number) => {
+    setSelectedSupplementId(supplementId);
+    setSelectedHerbId('');
+    setSelectedFormulationTypeId(''); // Clear formulation type when switching
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     try {
-      const url = isEditing 
-        ? `/api/quality-specifications/${editingSpec?.id}`
-        : '/api/quality-specifications';
-      
-      const method = isEditing ? 'PUT' : 'POST';
-      
-      const response = await fetch(url, {
-        method,
+      const specData = {
+        herbId: selectedHerbId || null,
+        supplementId: selectedSupplementId || null,
+        formulationTypeId: parseInt(selectedFormulationTypeId.toString()),
+        standardised,
+        customSpecs: customSpecs || null,
+        approach,
+        notes: notes || null
+      };
+
+      const response = await fetch('/api/quality-specs', {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(specData)
       });
 
       if (response.ok) {
         fetchSpecifications();
         resetForm();
-        alert(isEditing ? 'Quality specification updated successfully!' : 'Quality specification created successfully!');
+        alert('Quality specification saved successfully!');
       } else {
-        const errorData = await response.json();
-        alert(`Error: ${errorData.error || 'Failed to save specification'}`);
+        alert('Error saving quality specification');
       }
     } catch (error) {
-      console.error('Error:', error);
-      alert('Error saving specification. Please try again.');
-    }
-  };
-
-  const handleEdit = (spec: QualitySpecification) => {
-    setEditingSpec(spec);
-    // Ensure all fields have proper default values to prevent null errors
-    setFormData({
-      productType: spec.productType || '',
-      formulationName: spec.formulationName || '',
-      approach: spec.approach || 'traditional',
-      requiredTerms: spec.requiredTerms || [],
-      preferredTerms: spec.preferredTerms || [],
-      avoidTerms: spec.avoidTerms || [],
-      standardization: spec.standardization || undefined,
-      alcoholSpecs: spec.alcoholSpecs || undefined,
-      dosageSpecs: spec.dosageSpecs || undefined,
-      priceRange: spec.priceRange || { min: 0, max: 100, currency: 'USD' },
-      ratingThreshold: spec.ratingThreshold || 4.0,
-      reviewCountThreshold: spec.reviewCountThreshold || 50,
-      brandPreferences: spec.brandPreferences || undefined,
-      brandAvoid: spec.brandAvoid || undefined,
-      herbSlug: spec.herbSlug || '',
-      herbName: spec.herbName || '',
-      supplementSlug: spec.supplementSlug || '',
-      supplementName: spec.supplementName || ''
-    });
-    setIsEditing(true);
-    
-    // Set the selected herb/supplement dropdowns
-    if (spec.herbSlug) {
-      setSelectedHerb(spec.herbSlug);
-      setSelectedSupplement('');
-    } else if (spec.supplementSlug) {
-      setSelectedSupplement(spec.supplementSlug);
-      setSelectedHerb('');
-    }
-  };
-
-  const handleDelete = async (id: number) => {
-    if (confirm('Are you sure you want to delete this specification?')) {
-      try {
-        const response = await fetch(`/api/quality-specifications/${id}`, {
-          method: 'DELETE'
-        });
-        
-        if (response.ok) {
-          fetchSpecifications();
-        }
-      } catch (error) {
-        console.error('Error deleting specification:', error);
-      }
+      console.error('Error submitting form:', error);
+      alert('Error submitting form');
     }
   };
 
   const resetForm = () => {
-    setFormData({
-      productType: '',
-      formulationName: '',
-      approach: 'traditional',
-      requiredTerms: [],
-      preferredTerms: [],
-      avoidTerms: [],
-      priceRange: { min: 0, max: 100, currency: 'USD' },
-      ratingThreshold: 4.0,
-      reviewCountThreshold: 50
-    });
-    setEditingSpec(null);
+    setSelectedHerbId('');
+    setSelectedSupplementId('');
+    setSelectedFormulationTypeId('');
+    setApproach('traditional');
+    setStandardised(false);
+    setCustomSpecs('');
+    setNotes('');
+    setSelectedTemplate(null);
     setIsEditing(false);
-    setSelectedHerb('');
-    setSelectedSupplement('');
+    setEditingSpecId(null);
+    setViewingSpecId(null);
+  };
+
+  const handleEdit = (spec: any) => {
+    console.log('🔧 Viewing spec for editing:', spec);
+    
+    // Set the viewing spec ID so we know which spec to update
+    setViewingSpecId(spec.id);
+    
+    // Populate form with existing data - check relations first, then fallback to direct fields
+    if (spec.herb?.id) {
+      setSelectedHerbId(spec.herb.id);
+      setSelectedSupplementId('');
+    } else if (spec.supplement?.id) {
+      setSelectedSupplementId(spec.supplement.id);
+      setSelectedHerbId('');
+    } else if (spec.herbSlug) {
+      const herb = herbs.find(h => h.slug === spec.herbSlug);
+      setSelectedHerbId(herb?.id || '');
+      setSelectedSupplementId('');
+    } else if (spec.supplementSlug) {
+      const supplement = supplements.find(s => s.slug === spec.supplementSlug);
+      setSelectedSupplementId(supplement?.id || '');
+      setSelectedHerbId('');
+    }
+    
+    setSelectedFormulationTypeId(spec.formulationTypeId || '');
+    setApproach(spec.approach || 'traditional');
+    setStandardised(spec.standardised || false);
+    setCustomSpecs(spec.customSpecs || '');
+    setNotes(spec.notes || '');
+    
+    console.log('🔧 Form populated for viewing - user can now edit and save manually');
+  };
+
+  const handleDelete = async (specId: number) => {
+    if (!confirm('Are you sure you want to delete this quality specification?')) {
+      return;
+    }
+    
+    try {
+      const response = await fetch(`/api/quality-specs/${specId}`, {
+        method: 'DELETE'
+      });
+      
+      if (response.ok) {
+        fetchSpecifications();
+        alert('Quality specification deleted successfully!');
+      } else {
+        alert('Error deleting quality specification');
+      }
+    } catch (error) {
+      console.error('Error deleting spec:', error);
+      alert('Error deleting quality specification');
+    }
+  };
+
+  const handleUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!editingSpecId) return;
+    
+    try {
+      const specData = {
+        herbId: selectedHerbId || null,
+        supplementId: selectedSupplementId || null,
+        formulationTypeId: parseInt(selectedFormulationTypeId.toString()),
+        standardised,
+        customSpecs: customSpecs || null,
+        approach,
+        notes: notes || null
+      };
+
+      const response = await fetch(`/api/quality-specs/${editingSpecId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(specData)
+      });
+
+      if (response.ok) {
+        fetchSpecifications();
+        resetForm();
+        alert('Quality specification updated successfully!');
+      } else {
+        alert('Error updating quality specification');
+      }
+    } catch (error) {
+      console.error('Error updating spec:', error);
+      alert('Error updating quality specification');
+    }
+  };
+
+  const showStandardisedToggle = selectedFormulationTypeId && 
+    ['Capsules/Tablets', 'Standardized Extracts'].includes(
+      formulationTypes.find(t => t.id === parseInt(selectedFormulationTypeId.toString()))?.name || ''
+    );
+
+  // Filter formulation types based on selection
+  const getFilteredFormulationTypes = () => {
+    if (selectedSupplementId) {
+      // Supplements: only show basic supplement templates (capsules/tablets and powder)
+      return formulationTypes.filter(type => 
+        type.name === 'Supplement Capsules/Tablets' || 
+        type.name === 'Supplement Powder'
+      );
+    } else if (selectedHerbId) {
+      // Herbs: only show traditional herb templates (exclude Standardized Extracts and supplement ones)
+      return formulationTypes.filter(type => 
+        !type.name.startsWith('Supplement') && 
+        type.name !== 'Standardized Extracts'
+      );
+    } else {
+      // Nothing selected: show all types
+      return formulationTypes;
+    }
+  };
+
+  const handleSaveChanges = async () => {
+    if (!viewingSpecId) return;
+
+    try {
+      const specData = {
+        herbId: selectedHerbId || null,
+        supplementId: selectedSupplementId || null,
+        formulationTypeId: parseInt(selectedFormulationTypeId.toString()),
+        standardised,
+        customSpecs: customSpecs || null,
+        approach,
+        notes: notes || null
+      };
+
+      const response = await fetch(`/api/quality-specs/${viewingSpecId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(specData)
+      });
+
+      if (response.ok) {
+        fetchSpecifications();
+        resetForm();
+        alert('Quality specification updated successfully!');
+      } else {
+        alert('Error updating quality specification');
+      }
+    } catch (error) {
+      console.error('Error updating spec:', error);
+      alert('Error updating quality specification');
+    }
   };
 
   return (
@@ -315,7 +538,59 @@ export default function QualitySpecificationsPage() {
             {isEditing ? 'Edit Quality Specification' : 'Add New Quality Specification'}
           </h2>
           
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={(e) => e.preventDefault()} className="space-y-6">
+            {/* This Herb's Used Formulations */}
+            {(selectedHerbId || selectedSupplementId) && (
+              <div className="p-4 bg-blue-50 rounded-lg border">
+                <h3 className="text-lg font-semibold text-black mb-3">
+                  This {selectedHerbId ? 'Herb' : 'Supplement'}'s Existing Specifications
+                </h3>
+                
+                {herbUsedFormulations.length > 0 ? (
+                  <div className="space-y-2">
+                    {herbUsedFormulations.map((spec) => {
+                      const type = formulationTypes.find(t => t.id === spec.formulationTypeId);
+                      return (
+                        <div key={spec.id} className="p-3 bg-white rounded border">
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="font-medium text-black">{type?.name || 'Unknown Type'}</span>
+                            <div className="flex gap-2">
+                              <button
+                                onClick={() => handleEdit(spec)}
+                                className="text-blue-600 hover:text-blue-900 transition-all duration-200 px-3 py-1 rounded border border-blue-300 hover:bg-blue-50 text-sm font-medium"
+                              >
+                                Edit
+                              </button>
+                              <button
+                                onClick={() => spec.id && handleDelete(spec.id)}
+                                className="text-red-600 hover:text-red-900 transition-all duration-200 px-3 py-1 rounded border border-red-300 hover:bg-red-50 text-sm font-medium"
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          </div>
+                          
+                          {/* Spec Details */}
+                          <div className="space-y-1 text-sm text-black">
+                            <div><strong>Approach:</strong> {spec.approach || 'N/A'}</div>
+                            <div><strong>Standardised:</strong> {spec.standardised ? 'Yes' : 'No'}</div>
+                            {spec.customSpecs && (
+                              <div><strong>Strength & Specs:</strong> {spec.customSpecs}</div>
+                            )}
+                            {spec.notes && (
+                              <div><strong>Notes:</strong> {spec.notes}</div>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <p className="text-black">No existing specifications found for this {selectedHerbId ? 'herb' : 'supplement'}.</p>
+                )}
+              </div>
+            )}
+
             {/* Herb/Supplement Selection */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -323,13 +598,13 @@ export default function QualitySpecificationsPage() {
                   Select Herb
                 </label>
                 <select
-                  value={selectedHerb}
-                  onChange={(e) => handleHerbChange(e.target.value)}
+                  value={selectedHerbId}
+                  onChange={(e) => handleHerbChange(parseInt(e.target.value))}
                   className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white"
                 >
-                  <option value="" className="text-gray-900 bg-white">Choose a herb...</option>
+                  <option value="">Choose a herb...</option>
                   {!isLoading && Array.isArray(herbs) && herbs.length > 0 ? herbs.map(herb => (
-                    <option key={herb.id} value={herb.slug} className="text-gray-900 bg-white">
+                    <option key={herb.id} value={herb.id} className="text-gray-900 bg-white">
                       {herb.name} {herb.latinName && `(${herb.latinName})`}
                     </option>
                   )) : (
@@ -345,13 +620,13 @@ export default function QualitySpecificationsPage() {
                   Select Supplement
                 </label>
                 <select
-                  value={selectedSupplement}
-                  onChange={(e) => handleSupplementChange(e.target.value)}
+                  value={selectedSupplementId}
+                  onChange={(e) => handleSupplementChange(parseInt(e.target.value))}
                   className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white"
                 >
                   <option value="" className="text-gray-900 bg-white">Choose a supplement...</option>
                   {!isLoading && Array.isArray(supplements) && supplements.length > 0 ? supplements.map(supplement => (
-                    <option key={supplement.id} value={supplement.slug} className="text-gray-900 bg-white">
+                    <option key={supplement.id} value={supplement.id} className="text-gray-900 bg-white">
                       {supplement.name}
                     </option>
                   )) : (
@@ -363,301 +638,71 @@ export default function QualitySpecificationsPage() {
               </div>
             </div>
 
-            {/* Product Type and Formulation */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Product Type
-                </label>
-                <select
-                  value={formData.productType}
-                  onChange={(e) => handleInputChange('productType', e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white"
-                  required
-                >
-                  <option value="" className="text-gray-900 bg-white">Select type...</option>
-                  <option value="tincture" className="text-gray-900 bg-white">Tincture</option>
-                  <option value="capsule" className="text-gray-900 bg-white">Capsule</option>
-                  <option value="tablet" className="text-gray-900 bg-white">Tablet</option>
-                  <option value="powder" className="text-gray-900 bg-white">Powder</option>
-                  <option value="tea" className="text-gray-900 bg-white">Tea</option>
-                  <option value="extract" className="text-gray-900 bg-white">Extract</option>
-                </select>
-              </div>
+            {/* Formulation Type Selection */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Formulation Type
+              </label>
+              <select
+                value={selectedFormulationTypeId}
+                onChange={(e) => setSelectedFormulationTypeId(e.target.value === '' ? '' : parseInt(e.target.value))}
+                className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white"
+              >
+                <option value="">Choose a formulation type...</option>
+                {getFilteredFormulationTypes().map(type => (
+                  <option key={type.id} value={type.id} className="text-gray-900 bg-white">
+                    {type.name}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Formulation Name
-                </label>
-                <input
-                  type="text"
-                  value={formData.formulationName}
-                  onChange={(e) => handleInputChange('formulationName', e.target.value)}
-                  placeholder="e.g., Strong Traditional Tincture"
-                  className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white placeholder-gray-500"
-                  required
-                />
-              </div>
-
+            {/* Approach Selection - Only show for herbs */}
+            {selectedHerbId && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Approach
                 </label>
                 <select
-                  value={formData.approach}
-                  onChange={(e) => handleInputChange('approach', e.target.value)}
+                  value={approach}
+                  onChange={(e) => setApproach(e.target.value)}
                   className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white"
                 >
-                  <option value="traditional" className="text-gray-900 bg-white">Traditional</option>
-                  <option value="modern" className="text-gray-900 bg-white">Modern</option>
-                  <option value="both" className="text-gray-900 bg-white">Both</option>
+                  <option value="traditional">Traditional</option>
+                  <option value="modern">Modern</option>
                 </select>
               </div>
-            </div>
+            )}
 
-            {/* Terms */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* Standardised Toggle */}
+            {showStandardisedToggle && (
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Required Terms (comma-separated)
-                </label>
-                <input
-                  type="text"
-                  value={formData.requiredTerms.join(', ')}
-                  onChange={(e) => handleArrayInputChange('requiredTerms', e.target.value)}
-                  placeholder="e.g., organic, standardized, extract"
-                  className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white placeholder-gray-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Preferred Terms (comma-separated)
-                </label>
-                <input
-                  type="text"
-                  value={formData.preferredTerms.join(', ')}
-                  onChange={(e) => handleArrayInputChange('preferredTerms', e.target.value)}
-                  placeholder="e.g., wildcrafted, certified, third-party tested"
-                  className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white placeholder-gray-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Avoid Terms (comma-separated)
-                </label>
-                <input
-                  type="text"
-                  value={formData.avoidTerms.join(', ')}
-                  onChange={(e) => handleArrayInputChange('avoidTerms', e.target.value)}
-                  placeholder="e.g., proprietary blend, artificial, synthetic"
-                  className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white placeholder-gray-500"
-                />
-              </div>
-            </div>
-
-            {/* Standardization */}
-            {formData.productType === 'capsule' || formData.productType === 'tablet' || formData.productType === 'extract' ? (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Standardized Compound
-                  </label>
+                <label className="flex items-center">
                   <input
-                    type="text"
-                    value={formData.standardization?.compound || ''}
-                    onChange={(e) => handleInputChange('standardization', {
-                      ...formData.standardization,
-                      compound: e.target.value || undefined
-                    })}
-                    placeholder="e.g., hypericin, withanolides"
-                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white placeholder-gray-500"
+                    type="checkbox"
+                    checked={standardised}
+                    onChange={(e) => setStandardised(e.target.checked)}
+                    className="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                   />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Minimum Percentage
-                  </label>
-                  <input
-                    type="number"
-                    step="0.1"
-                    value={formData.standardization?.percentage?.toString() || ''}
-                    onChange={(e) => handleInputChange('standardization', {
-                      ...formData.standardization,
-                      percentage: e.target.value ? parseFloat(e.target.value) : undefined
-                    })}
-                    placeholder="e.g., 2.5"
-                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white placeholder-gray-500"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Unit
-                  </label>
-                  <select
-                    value={formData.standardization?.unit || '%'}
-                    onChange={(e) => handleInputChange('standardization', {
-                      ...formData.standardization,
-                      unit: e.target.value
-                    })}
-                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white"
-                  >
-                    <option value="%" className="text-gray-900 bg-white">%</option>
-                    <option value="mg" className="text-gray-900 bg-white">mg</option>
-                    <option value="mcg" className="text-gray-900 bg-white">mcg</option>
-                  </select>
-                </div>
-              </div>
-            ) : null}
-
-            {/* Alcohol Specifications for Tinctures */}
-            {formData.productType === 'tincture' ? (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Alcohol Ratio
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.alcoholSpecs?.ratio || ''}
-                    onChange={(e) => handleInputChange('alcoholSpecs', {
-                      ...formData.alcoholSpecs,
-                      ratio: e.target.value || undefined
-                    })}
-                    placeholder="e.g., 1:2, 1:1"
-                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white placeholder-gray-500"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Organic Alcohol
-                  </label>
-                  <select
-                    value={formData.alcoholSpecs?.organic ? 'true' : 'false'}
-                    onChange={(e) => handleInputChange('alcoholSpecs', {
-                      ...formData.alcoholSpecs,
-                      organic: e.target.value === 'true'
-                    })}
-                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white"
-                  >
-                    <option value="true" className="text-gray-900 bg-white">Required</option>
-                    <option value="false" className="text-gray-900 bg-white">Optional</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Alcohol Types (comma-separated)
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.alcoholSpecs?.type?.join(', ') || ''}
-                    onChange={(e) => handleInputChange('alcoholSpecs', {
-                      ...formData.alcoholSpecs,
-                      type: e.target.value ? e.target.value.split(',').map(t => t.trim()).filter(t => t) : undefined
-                    })}
-                    placeholder="e.g., grain alcohol, vodka, brandy"
-                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white placeholder-gray-500"
-                  />
-                </div>
-              </div>
-            ) : null}
-
-            {/* Price and Rating */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Min Price (USD)
+                  <span className="ml-2 text-sm font-medium text-gray-700">
+                    Standardised Extract
+                  </span>
                 </label>
-                <input
-                  type="number"
-                  value={formData.priceRange.min || ''}
-                  onChange={(e) => handleInputChange('priceRange', {
-                    ...formData.priceRange,
-                    min: e.target.value ? parseFloat(e.target.value) : 0
-                  })}
-                  placeholder="e.g., 15"
-                  className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white placeholder-gray-500"
-                />
               </div>
+            )}
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Max Price (USD)
-                </label>
-                <input
-                  type="number"
-                  value={formData.priceRange.max || ''}
-                  onChange={(e) => handleInputChange('priceRange', {
-                    ...formData.priceRange,
-                    max: e.target.value ? parseFloat(e.target.value) : 100
-                  })}
-                  placeholder="e.g., 50"
-                  className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white placeholder-gray-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Min Rating
-                </label>
-                <input
-                  type="number"
-                  step="0.1"
-                  min="0"
-                  max="5"
-                  value={formData.ratingThreshold || ''}
-                  onChange={(e) => handleInputChange('ratingThreshold', e.target.value ? parseFloat(e.target.value) : 4.0)}
-                  placeholder="e.g., 4.0"
-                  className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white placeholder-gray-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Min Reviews
-                </label>
-                <input
-                  type="number"
-                  value={formData.reviewCountThreshold || ''}
-                  onChange={(e) => handleInputChange('reviewCountThreshold', e.target.value ? parseInt(e.target.value) : 50)}
-                  placeholder="e.g., 100"
-                  className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white placeholder-gray-500"
-                />
-              </div>
-            </div>
-
-            {/* Brand Preferences */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Preferred Brands (comma-separated)
-                </label>
-                <input
-                  type="text"
-                  value={formData.brandPreferences?.join(', ') || ''}
-                  onChange={(e) => handleArrayInputChange('brandPreferences', e.target.value)}
-                  placeholder="e.g., Nature's Way, NOW Foods, Gaia Herbs"
-                  className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white placeholder-gray-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Brands to Avoid (comma-separated)
-                </label>
-                <input
-                  type="text"
-                  value={formData.brandAvoid?.join(', ') || ''}
-                  onChange={(e) => handleArrayInputChange('brandAvoid', e.target.value)}
-                  placeholder="e.g., Generic Brand, Cheap Supplements"
-                  className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white placeholder-gray-500"
-                />
-              </div>
+            {/* Custom Specifications */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Strength & Specifications
+              </label>
+              <input
+                type="text"
+                value={customSpecs}
+                onChange={(e) => setCustomSpecs(e.target.value)}
+                placeholder="e.g., minimum 500mg, DGL (use low, high values based on bioavailability)"
+                className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white"
+              />
             </div>
 
             {/* Notes */}
@@ -666,141 +711,134 @@ export default function QualitySpecificationsPage() {
                 Notes
               </label>
               <textarea
-                value={formData.notes || ''}
-                onChange={(e) => handleInputChange('notes', e.target.value)}
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
                 rows={3}
-                placeholder="Additional notes about this quality specification..."
-                className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white placeholder-gray-500"
+                placeholder="Additional quality notes..."
+                className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white"
               />
             </div>
 
             {/* Submit Buttons */}
             <div className="flex gap-4">
+              {/* Add Specification button - only show when NOT viewing existing spec */}
+              {!viewingSpecId && (
+                <button
+                  type="button"
+                  onClick={handleSubmit}
+                  className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition-all duration-200 font-medium"
+                >
+                  Add Specification
+                </button>
+              )}
               <button
-                type="submit"
-                className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition-all duration-200 font-medium"
+                type="button"
+                onClick={resetForm}
+                className="bg-gray-300 text-gray-700 px-6 py-3 rounded-md hover:bg-gray-400 transition-all duration-200 font-medium"
               >
-                {isEditing ? 'Update Specification' : 'Add Specification'}
+                Clear Form
               </button>
-              
-              {isEditing ? (
+              {isEditing && (
                 <button
                   type="button"
                   onClick={resetForm}
-                  className="bg-gray-500 text-white px-6 py-3 rounded-md hover:bg-gray-600 transition-all duration-200 font-medium"
+                  className="bg-yellow-500 text-white px-6 py-3 rounded-md hover:bg-yellow-600 transition-all duration-200 font-medium"
                 >
                   Cancel Edit
                 </button>
-              ) : (
+              )}
+              {/* Save Changes button for when form is populated with existing data */}
+              {viewingSpecId && (selectedHerbId || selectedSupplementId) && selectedFormulationTypeId && (
                 <button
                   type="button"
-                  onClick={resetForm}
-                  className="bg-gray-300 text-gray-700 px-6 py-3 rounded-md hover:bg-gray-400 transition-all duration-200 font-medium"
+                  onClick={handleSaveChanges}
+                  className="bg-green-600 text-white px-6 py-3 rounded-md hover:bg-green-700 transition-all duration-200 font-medium"
                 >
-                  Clear Form
+                  Save Changes
                 </button>
               )}
             </div>
           </form>
         </div>
 
-        {/* Specifications List */}
-        <div className="rounded-xl p-6 shadow-sm border-2 border-gray-300" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
-          <h2 className="text-xl font-semibold mb-4 text-gray-900">Quality Specifications</h2>
+        {/* Existing Specifications Table */}
+        <div className="rounded-xl p-6 shadow-sm border-2 border-gray-300 mb-8" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
+          <h2 className="text-2xl font-extrabold mb-6 text-gray-800 tracking-tight drop-shadow">
+            Existing Quality Specifications ({specifications.length})
+          </h2>
           
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">
                     Product
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
-                    Type
+                  <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">
+                    Formulation Type
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
-                    Formulation
+                  <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">
+                    Standardised
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">
                     Approach
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
-                    Price Range
+                  <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">
+                    Notes
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {Array.isArray(specifications) && specifications.map((spec) => (
+                {Array.isArray(specifications) && specifications.map((spec) => {
+                  return (
                   <tr key={spec.id}>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-semibold text-gray-900">
-                        {spec.herbName || spec.supplementName}
+                      <div className="text-sm font-semibold text-black">
+                        {spec.herbName || spec.supplementName || 'N/A'}
                       </div>
-                      <div className="text-sm text-gray-800">
-                        {spec.herbSlug || spec.supplementSlug}
+                      <div className="text-sm text-black">
+                        {spec.herbSlug || spec.supplementSlug || 'N/A'}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
-                        {spec.productType}
+                      <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-black">
+                        {spec.formulationType?.name || spec.formulationName || 'N/A'}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                      {spec.formulationName}
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-black">
+                      {spec.standardised ? 'Yes' : 'No'}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                        spec.approach === 'traditional' ? 'bg-green-100 text-green-800' :
-                        spec.approach === 'modern' ? 'bg-purple-100 text-purple-800' :
-                        'bg-yellow-100 text-yellow-800'
-                      }`}>
-                        {spec.approach}
-                      </span>
+                    <td className="px-6 py-4 whitespace-nowrap text-black">
+                      {spec.approach || 'N/A'}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                      ${spec.priceRange.min} - ${spec.priceRange.max}
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-black max-w-xs">
+                      <div className="truncate" title={spec.notes || 'No notes'}>
+                        {spec.notes || 'No notes'}
+                      </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <button
-                        onClick={() => handleEdit(spec)}
-                        className="text-blue-600 hover:text-blue-900 mr-2 transition-all duration-200"
-                        title="Edit specification"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => {
-                          alert(`Quality Specification Details:\n\n` +
-                            `Product: ${spec.herbName || spec.supplementName}\n` +
-                            `Type: ${spec.productType}\n` +
-                            `Formulation: ${spec.formulationName}\n` +
-                            `Approach: ${spec.approach}\n` +
-                            `Required Terms: ${spec.requiredTerms.join(', ')}\n` +
-                            `Preferred Terms: ${spec.preferredTerms.join(', ')}\n` +
-                            `Avoid Terms: ${spec.avoidTerms.join(', ')}\n` +
-                            `Price Range: $${spec.priceRange.min} - $${spec.priceRange.max}\n` +
-                            `Rating Threshold: ${spec.ratingThreshold}+\n` +
-                            `Review Count: ${spec.reviewCountThreshold}+`
-                          );
-                        }}
-                        className="text-green-600 hover:text-green-900 mr-2 transition-all duration-200"
-                        title="View details"
-                      >
-                        View
-                      </button>
-                      <button
-                        onClick={() => handleDelete(spec.id!)}
-                        className="text-red-600 hover:text-red-900 transition-all duration-200"
-                        title="Delete specification"
-                      >
-                        Delete
-                      </button>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => handleEdit(spec)}
+                          className="text-blue-600 hover:text-blue-900 transition-all duration-200 px-2 py-1 rounded border border-blue-300 hover:bg-blue-50 text-black font-medium"
+                          title="Edit specification"
+                        >
+                          Edit (ID: {spec.id})
+                        </button>
+                        <button
+                          onClick={() => spec.id && handleDelete(spec.id)}
+                          className="text-red-600 hover:text-red-900 transition-all duration-200 px-2 py-1 rounded border border-red-300 hover:bg-red-50 text-black font-medium"
+                          title="Delete specification"
+                        >
+                          Delete (ID: {spec.id})
+                        </button>
+                      </div>
                     </td>
                   </tr>
-                ))}
+                )})}
               </tbody>
             </table>
           </div>

@@ -38,6 +38,13 @@ export interface QualitySpecification {
   brandPreferences?: string[];
   brandAvoid?: string[];
   notes?: string;
+  // New fields for formulation-based system
+  herbId?: number;
+  supplementId?: number;
+  formulationTypeId?: number;
+  standardised?: boolean;
+  customSpecs?: string;
+  updatedAt?: Date;
 }
 
 export interface ProductQualityScore {

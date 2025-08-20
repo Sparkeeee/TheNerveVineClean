@@ -29,6 +29,7 @@ model Herb {
   indicationTags       Indication[]          @relation("HerbIndications")
   products             Product[]             @relation("HerbProducts")
   symptomVariants      SymptomVariant[]      @relation("VariantHerbs")
+  qualitySpecs         QualitySpecification[]
 }
 
 model Symptom {
@@ -86,6 +87,7 @@ model Supplement {
   indicationTags       Indication[]     @relation("SupplementIndications")
   products             Product[]        @relation("SupplementProducts")
   symptomVariants      SymptomVariant[] @relation("VariantSupplements")
+  qualitySpecs         QualitySpecification[]
 }
 
 model BlogPage {
@@ -95,6 +97,18 @@ model BlogPage {
   uploadDate DateTime @default(now())
   adminNote  String?
   content    String?
+}
+
+model FormulationType {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique // "Tincture", "Capsules/Tablets", "Glycerite", "Dried Herb/Powder", "Liquid Extract"
+  category    String   // "Liquid", "Solid", "Powder"
+  template    String   // Generic quality criteria template
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  qualitySpecs QualitySpecification[]
 }
 
 model QualitySpecification {
@@ -118,6 +132,23 @@ model QualitySpecification {
   notes                String?
   supplementName       String?
   supplementSlug       String?
+  
+  // New fields for formulation-based system
+  herbId               Int?
+  supplementId         Int?
+  formulationTypeId    Int?
+  standardised         Boolean @default(false)
+  customSpecs          String?
+  updatedAt            DateTime @default(now())
+  
+  // Relations
+  formulationType      FormulationType? @relation(fields: [formulationTypeId], references: [id])
+  herb                 Herb?            @relation(fields: [herbId], references: [id])
+  supplement           Supplement?      @relation(fields: [supplementId], references: [id])
+  
+  @@index([herbId])
+  @@index([supplementId])
+  @@index([formulationTypeId])
 }
 
 model Merchant {
