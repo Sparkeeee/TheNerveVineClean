@@ -47,6 +47,15 @@ const nextConfig = {
     optimizePackageImports: ['@prisma/client'], // Moved here for Next.js 14
   },
   
+  // Prisma bundling fix for Vercel
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      config.externals = config.externals || [];
+      config.externals.push('@prisma/client');
+    }
+    return config;
+  },
+  
   // Fixed headers - remove aggressive API caching
   async headers() {
     return [
