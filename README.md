@@ -17,6 +17,66 @@ TheNerveVine is a comprehensive herbal wellness platform that combines evidence-
 - **Ethical Affiliate Marketing**: Partnerships only with companies that meet our quality and ethical standards
 - **Sustainable Model**: Focus on long-term user trust and repeat engagement over short-term gains
 
+## 🌟 Value Proposition & Methodology
+
+### **You're Not "Just Another Supplement Marketplace"**
+
+TheNerveVine is a **medically trained herbalist-curated platform** that filters products against expert standards, so visitors only see "pre-approved" high-quality options. The trade-off is they checkout at the source merchant (affiliate model).
+
+### **Our 5-Step Curation Process**
+
+1. **🧑‍⚕️ Expert Selection**: Qualified Medical Herbalist selects the best types of Herbal and Nutritional Supplements
+2. **🛡️ Quality Standards**: Herbalist sets Product Quality Standards in our in-house Web Hunter Application
+3. **🤖 Automated Discovery**: Web Hunt Robots frequently scour the web for products meeting specified standards
+4. **✅ Final Curation**: Final selections are made by our Herbalist from among the discovered products
+5. **🌟 Featured Products**: The amazing and lucky products are then featured on this website!
+
+**Business Model**: We make a small percentage from the merchant at no further cost to you!
+
+### **Two Core UX Challenges & Solutions**
+
+#### **Challenge 1: Making the Value of Curation Unmistakable**
+
+**Solution - Homepage Hero Section:**
+- **Headline**: "Expert-Screened Herbal Remedies for Stress & Nervous System Health"
+- **Sub-headline**: "Every product you see here meets professional quality standards, selected by a medical herbalist — no guesswork, no hidden fillers."
+- **CTA Buttons**: 
+  - 🔍 Browse Curated Remedies
+  - 📖 See Our Quality Standards
+
+**Solution - Value Proposition (3 Pillars):**
+- 🧑‍⚕️ **Expert Screening** — Every item vetted by a medical herbalist
+- 🛡️ **Quality Standards** — Minimum potency & purity guaranteed  
+- 🔗 **Direct Checkout** — Buy directly from trusted merchants
+
+#### **Challenge 2: Preparing People for Checkout Redirection**
+
+**Solution - Framing the Affiliate Checkout:**
+Visitors hate surprise redirects, but they'll accept them if explained as a benefit:
+
+**Small banner or tooltip near product pages:**
+> "When you're ready to buy, you'll be taken directly to our trusted partner's store for secure checkout."
+
+**Frame it as a feature:**
+- ✅ Secure, direct checkout with the source merchant
+- ✅ Freshest possible supply chain
+- ✅ We never add mark-ups
+
+**Reassurance at Checkout:**
+Before they leave your site, add a light "handover screen":
+> "You're now heading to [Merchant Name] to complete your order securely. We only work with verified merchants who meet our quality guidelines."
+
+### **Net Result:**
+- People instantly get that the site = expert-filtered shopping shortcut
+- They see checkout redirection not as a flaw, but as part of the trust system  
+- Expectations are "trained" right from homepage → product page → checkout
+
+### **Our Process Explainer Section**
+A simple step-by-step graphic (like a 1-2-3 timeline):
+1. 🔎 We scour merchant catalogs and databases
+2. 🧪 Products are screened against strict herbalist-set standards  
+3. 🛍️ Only qualifying remedies make it here — and you buy direct from source
+
 ## 🏗️ Technical Architecture
 
 ### Frontend
@@ -159,6 +219,13 @@ When these herbs/supplements are assigned "Poor Memory" indication:
 - **Quality Assurance**: All products meet established quality criteria
 - **Transparent Pricing**: Clear pricing and availability information
 - **User Reviews**: Integration of authentic user feedback
+
+### Product Display Strategy
+- **No Scraped Descriptions**: Eliminates inconsistent, messy product descriptions that vary in quality and length
+- **Quality Specifications Display**: Shows our curated quality criteria (purity, testing, sourcing) instead of generic product descriptions
+- **Uniform Card Layouts**: Consistent, professional appearance across all product cards
+- **Our Expertise Showcase**: Displays our research-backed substance descriptions and quality standards
+- **Clean Presentation**: Focuses on what users actually care about - quality, consistency, and professional appearance
 
 ## 🛠️ Development Standards
 

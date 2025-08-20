@@ -1,0 +1,9 @@
+{
+	"id": "IQV1WlqmuDIcrqZ",
+	"json": "{\"id\":\"IQV1WlqmuDIcrqZ\",\"url\":\"https://www.target.com/s?searchTerm=Lemon%20Balm+supplement\",\"loadedUrl\":\"https://www.target.com/s?searchTerm=Lemon%20Balm+supplement\",\"uniqueKey\":\"https://www.target.com/s?searchTerm=Lemon+Balm+supplement\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"__crawlee\":{\"state\":4}},\"handledAt\":\"2025-08-14T22:00:36.493Z\"}",
+	"method": "GET",
+	"orderNo": null,
+	"retryCount": 0,
+	"uniqueKey": "https://www.target.com/s?searchTerm=Lemon+Balm+supplement",
+	"url": "https://www.target.com/s?searchTerm=Lemon%20Balm+supplement"
+}

@@ -1,0 +1,46 @@
+{
+  "target": {
+    "baseUrl": "https://www.target.com/s",
+    "searchParam": "searchTerm",
+    "maxPages": 3,
+    "resultsPerPage": 24,
+    "earlyStopThreshold": 15
+  },
+  "timing": {
+    "minDelay": 2000,
+    "maxDelay": 5000,
+    "scrollDelay": {
+      "min": 1000,
+      "max": 2000
+    },
+    "retryDelay": {
+      "min": 5000,
+      "max": 10000
+    },
+    "pageTimeout": 30000,
+    "networkTimeout": 10000
+  },
+  "browser": {
+    "headless": "new",
+    "viewport": {
+      "width": 1366,
+      "height": 768
+    }
+  },
+  "retries": {
+    "maxAttempts": 2,
+    "backoffMultiplier": 1.5
+  },
+  "debug": {
+    "enabled": true,
+    "logLevel": "warn",
+    "saveScreenshots": false,
+    "screenshotPath": "./screenshots"
+  },
+  "output": {
+    "format": "json",
+    "filename": "fast_scrape",
+    "includeDuplicates": false,
+    "includeMetadata": false
+  }
+}

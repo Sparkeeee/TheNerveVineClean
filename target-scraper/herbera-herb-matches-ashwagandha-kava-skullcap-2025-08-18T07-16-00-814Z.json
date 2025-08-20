@@ -1,0 +1,27 @@
+{
+  "searchInfo": {
+    "keywords": [
+      "ashwagandha",
+      "kava",
+      "skullcap"
+    ],
+    "totalMatches": 1,
+    "timestamp": "2025-08-18T07:16:00.815Z"
+  },
+  "matches": [
+    {
+      "title": "Ashwagandha Tincture",
+      "url": "https://herb-era.com/products/ashwagandha_herbal_tincture",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:15:36.366Z",
+      "matches": [
+        {
+          "keyword": "ashwagandha",
+          "variation": "ashwagandha"
+        }
+      ]
+    }
+  ]
+}

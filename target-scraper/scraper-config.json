@@ -1,0 +1,67 @@
+{
+  "baseUrl": "https://www.starwest-botanicals.com",
+  "userAgent": "StarwestScraper/1.0 (Educational Research; contact@example.com)",
+  "respectRobots": true,
+  "delays": {
+    "minPageDelay": 2000,
+    "maxPageDelay": 5000,
+    "minScrollDelay": 500,
+    "maxScrollDelay": 1500,
+    "retryDelay": 3000
+  },
+  "limits": {
+    "maxPagesPerCollection": 10,
+    "maxRetries": 3,
+    "requestTimeout": 45000,
+    "maxConcurrency": 1
+  },
+  "collections": {
+    "tinctures": "/category/tinctures-liquid-extracts",
+    "capsules": "/category/capsules",
+    "loose-herbs": "/category/loose-herbs",
+    "powders": "/category/powdered-herbs",
+    "essential-oils": "/category/essential-oils",
+    "tea-blends": "/category/tea-blends"
+  },
+  "searchKeywords": [
+    "ashwagandha",
+    "kava",
+    "skullcap",
+    "valerian",
+    "passionflower"
+  ],
+  "userAgents": [
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:120.0) Gecko/20100101 Firefox/120.0"
+  ],
+  "proxies": [],
+  "productSelectors": {
+    "productLinks": [
+      "a[href*='/product/']",
+      ".product-item a",
+      ".product-link",
+      ".grid-item a[href*='/product/']"
+    ],
+    "titles": [
+      ".product-title",
+      ".product-name",
+      "h3",
+      "h2",
+      ".title"
+    ],
+    "prices": [
+      ".price",
+      ".product-price",
+      ".regular-price",
+      "[class*='price']"
+    ],
+    "pagination": [
+      "a[rel='next']",
+      ".pagination .next",
+      ".next-page",
+      "a[aria-label*='Next']"
+    ]
+  }
+}

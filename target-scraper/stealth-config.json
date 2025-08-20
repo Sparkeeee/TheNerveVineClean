@@ -1,0 +1,63 @@
+{
+  "target": {
+    "baseUrl": "https://www.target.com/s",
+    "searchParam": "searchTerm",
+    "maxPages": 8,
+    "resultsPerPage": 24,
+    "earlyStopThreshold": 8
+  },
+  "timing": {
+    "minDelay": 8000,
+    "maxDelay": 20000,
+    "scrollDelay": {
+      "min": 3000,
+      "max": 8000
+    },
+    "retryDelay": {
+      "min": 20000,
+      "max": 45000
+    },
+    "pageTimeout": 90000,
+    "networkTimeout": 30000
+  },
+  "browser": {
+    "headless": "new",
+    "viewport": {
+      "width": 1920,
+      "height": 1080
+    },
+    "args": [
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--disable-dev-shm-usage",
+      "--disable-accelerated-2d-canvas",
+      "--no-first-run",
+      "--no-zygote",
+      "--disable-gpu",
+      "--disable-web-security",
+      "--disable-features=VizDisplayCompositor",
+      "--disable-background-timer-throttling",
+      "--disable-backgrounding-occluded-windows",
+      "--disable-renderer-backgrounding",
+      "--disable-blink-features=AutomationControlled",
+      "--exclude-switches=enable-automation",
+      "--disable-extensions"
+    ]
+  },
+  "retries": {
+    "maxAttempts": 4,
+    "backoffMultiplier": 3
+  },
+  "debug": {
+    "enabled": true,
+    "logLevel": "debug",
+    "saveScreenshots": true,
+    "screenshotPath": "./stealth_screenshots"
+  },
+  "output": {
+    "format": "json",
+    "filename": "stealth_scrape",
+    "includeDuplicates": false,
+    "includeMetadata": true
+  }
+}

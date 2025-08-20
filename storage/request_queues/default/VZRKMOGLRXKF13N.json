@@ -1,0 +1,9 @@
+{
+	"id": "VZRKMOGLRXKF13N",
+	"json": "{\"id\":\"VZRKMOGLRXKF13N\",\"url\":\"https://naturesanswer.com/search?q=Lemon%20Balm\",\"loadedUrl\":\"https://www.naturesanswer.com/search?q=Lemon%20Balm\",\"uniqueKey\":\"https://naturesanswer.com/search?q=Lemon+Balm\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"__crawlee\":{\"state\":4}},\"handledAt\":\"2025-08-14T22:00:59.267Z\"}",
+	"method": "GET",
+	"orderNo": null,
+	"retryCount": 0,
+	"uniqueKey": "https://naturesanswer.com/search?q=Lemon+Balm",
+	"url": "https://naturesanswer.com/search?q=Lemon%20Balm"
+}

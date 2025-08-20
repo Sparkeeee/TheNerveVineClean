@@ -1,0 +1,66 @@
+{
+  "scrapedAt": "2025-08-14T22:07:56.585Z",
+  "totalProducts": 6,
+  "products": [
+    {
+      "name": "Lemon Balm Supplement",
+      "price": 19.99,
+      "imageUrl": "https://example.com/lemon-balm.jpg",
+      "description": "High-quality Lemon Balm supplement for natural wellness",
+      "site": "amazon",
+      "url": "https://www.amazon.com/s?k=Lemon%20Balm+supplement",
+      "herb": "Lemon Balm",
+      "scrapedAt": "2025-08-14T22:07:54.574Z"
+    },
+    {
+      "name": "Ashwagandha Supplement",
+      "price": 24.99,
+      "imageUrl": "https://example.com/ashwagandha.jpg",
+      "description": "High-quality Ashwagandha supplement for natural wellness",
+      "site": "amazon",
+      "url": "https://www.amazon.com/s?k=Ashwagandha+supplement",
+      "herb": "Ashwagandha",
+      "scrapedAt": "2025-08-14T22:07:54.575Z"
+    },
+    {
+      "name": "Chamomile Supplement",
+      "price": 29.99,
+      "imageUrl": "https://example.com/chamomile.jpg",
+      "description": "High-quality Chamomile supplement for natural wellness",
+      "site": "amazon",
+      "url": "https://www.amazon.com/s?k=Chamomile+supplement",
+      "herb": "Chamomile",
+      "scrapedAt": "2025-08-14T22:07:54.575Z"
+    },
+    {
+      "name": "Lavender Supplement",
+      "price": 19.99,
+      "imageUrl": "https://example.com/lavender.jpg",
+      "description": "High-quality Lavender supplement for natural wellness",
+      "site": "amazon",
+      "url": "https://www.amazon.com/s?k=Lavender+supplement",
+      "herb": "Lavender",
+      "scrapedAt": "2025-08-14T22:07:56.585Z"
+    },
+    {
+      "name": "St. John's Wort Supplement",
+      "price": 24.99,
+      "imageUrl": "https://example.com/st.-john's-wort.jpg",
+      "description": "High-quality St. John's Wort supplement for natural wellness",
+      "site": "amazon",
+      "url": "https://www.amazon.com/s?k=St.%20John's%20Wort+supplement",
+      "herb": "St. John's Wort",
+      "scrapedAt": "2025-08-14T22:07:56.585Z"
+    },
+    {
+      "name": "Rhodiola Rosea Supplement",
+      "price": 39.99,
+      "imageUrl": "https://example.com/rhodiola-rosea.jpg",
+      "description": "High-quality Rhodiola Rosea supplement for natural wellness",
+      "site": "amazon",
+      "url": "https://www.amazon.com/s?k=Rhodiola%20Rosea+supplement",
+      "herb": "Rhodiola Rosea",
+      "scrapedAt": "2025-08-14T22:07:56.585Z"
+    }
+  ]
+}

@@ -57,10 +57,68 @@ export async function POST(request: NextRequest) {
 async function extractProductData(html: string, url: string): Promise<ScrapedProduct> {
   // Extract title
   const titleMatch = html.match(/<title[^>]*>([^<]+)<\/title>/i);
-  const title = titleMatch ? titleMatch[1].trim() : 'Product name not found';
+  let title = titleMatch ? titleMatch[1].trim() : 'Product name not found';
+
+  // Decode HTML entities for cleaner product names
+  const decodeHtmlEntities = (text: string): string => {
+    if (!text) return text;
+    return text
+      .replace(/&#39;/g, "'")        // apostrophe
+      .replace(/&amp;/g, "&")       // ampersand
+      .replace(/&quot;/g, '"')      // quote
+      .replace(/&lt;/g, "<")        // less than
+      .replace(/&gt;/g, ">")        // greater than
+      .replace(/&nbsp;/g, " ")      // non-breaking space
+      .replace(/&rsquo;/g, "'")     // right single quote
+      .replace(/&lsquo;/g, "'")     // left single quote
+      .replace(/&rdquo;/g, '"')     // right double quote
+      .replace(/&ldquo;/g, '"');    // left double quote
+  };
+
+  // Clean up extracted data
+  title = decodeHtmlEntities(title);
 
   // Extract price - try multiple patterns for Amazon mobile
   let price = 'Price not found';
+  
+  // WISE WOMAN HERBALS SPECIFIC: Check if this is Wise Woman Herbals first
+  const isWiseWomanHerbals = url.includes('wisewomanherbals.com');
+  
+  if (isWiseWomanHerbals) {
+    console.log('Wise Woman Herbals detected, using site-specific price extraction...');
+    
+    // Wise Woman Herbals-specific price selectors (from HTML analysis)
+    const wiseWomanPricePatterns = [
+      // Primary: Sale price if different from regular
+      /<span[^>]*class="[^"]*f-price-item--sale[^"]*"[^>]*>([^<]+)<\/span>/i,
+      // Fallback: Regular price
+      /<span[^>]*class="[^"]*f-price-item--regular[^"]*"[^>]*>([^<]+)<\/span>/i,
+      // Alternative: Price container
+      /<div[^>]*class="[^"]*f-price__regular[^"]*"[^>]*>.*?<span[^>]*class="[^"]*f-price-item[^"]*"[^>]*>([^<]+)<\/span>/is,
+      // Generic: Any f-price-item class
+      /<span[^>]*class="[^"]*f-price-item[^"]*"[^>]*>([^<]+)<\/span>/i
+    ];
+    
+    for (const pattern of wiseWomanPricePatterns) {
+      const match = html.match(pattern);
+      if (match) {
+        const extractedPrice = match[1] || match[0];
+        // Clean up the price - keep dollar sign and numbers
+        const cleanedPrice = extractedPrice.replace(/[^\d.,$]/g, '').trim();
+        if (cleanedPrice && cleanedPrice !== '$') {
+          price = cleanedPrice;
+          console.log('Wise Woman Herbals: Found price using pattern:', pattern.source, 'Price:', price);
+          break;
+        }
+      }
+    }
+    
+    if (price === 'Price not found') {
+      console.log('Wise Woman Herbals: No price found with site-specific patterns, falling back to generic patterns');
+    }
+  }
+  
+  // Generic price patterns for all other sites (unchanged)
   const pricePatterns = [
     // Amazon mobile specific patterns
     /\$[\d,]+\.?\d*/,
@@ -82,14 +140,17 @@ async function extractProductData(html: string, url: string): Promise<ScrapedPro
     /<div[^>]*class="[^"]*a-price[^"]*"[^>]*>([^<]+)<\/div>/i
   ];
   
-  for (const pattern of pricePatterns) {
-    const match = html.match(pattern);
-    if (match) {
-      price = match[1] || match[0];
-      // Clean up the price
-      price = price.replace(/[^\d.,$]/g, '').trim();
-      if (price && price !== '$') {
-        break;
+  // Only run generic patterns if Wise Woman Herbals patterns didn't find a price
+  if (price === 'Price not found') {
+    for (const pattern of pricePatterns) {
+      const match = html.match(pattern);
+      if (match) {
+        price = match[1] || match[0];
+        // Clean up the price
+        price = price.replace(/[^\d.,$]/g, '').trim();
+        if (price && price !== '$') {
+          break;
+        }
       }
     }
   }
@@ -97,11 +158,15 @@ async function extractProductData(html: string, url: string): Promise<ScrapedPro
   // Extract image URL - try multiple patterns for Amazon mobile
   let image = '';
   const imagePatterns = [
+    // NATURE'S ANSWER SPECIFIC: Target data-src attributes first (original uploads)
+    /<img[^>]*data-src=["']([^"']*naturesanswer\.com\/wp-content\/uploads[^"']*\.(?:jpg|jpeg|png))["'][^>]*>/i,
+    // NATURE'S ANSWER SPECIFIC: Target direct uploads, reject CDN
+    /<img[^>]*src=["']([^"']*naturesanswer\.com\/wp-content\/uploads[^"']*\.(?:jpg|jpeg|png))["'][^>]*>/i,
     // Look for product images in various formats
     /<img[^>]*src=["']([^"']*images[^"']*\.(?:jpg|jpeg|png|webp))["'][^>]*>/i,
     /<img[^>]*src=["']([^"']*product[^"']*\.(?:jpg|jpeg|png|webp))["'][^>]*>/i,
     /<img[^>]*src=["']([^"']*media-amazon[^"']*\.(?:jpg|jpeg|png|webp))["'][^>]*>/i,
-    // Look for data-src attributes (lazy loading)
+    // Look for data-src attributes (lazy loading) - GENERAL PATTERN
     /<img[^>]*data-src=["']([^"']*images[^"']*\.(?:jpg|jpeg|png|webp))["'][^>]*>/i,
     /<img[^>]*data-src=["']([^"']*product[^"']*\.(?:jpg|jpeg|png|webp))["'][^>]*>/i,
     // Look for JSON data with image URLs
@@ -115,20 +180,118 @@ async function extractProductData(html: string, url: string): Promise<ScrapedPro
     /<img[^>]*src=["']([^"']*\.(?:jpg|jpeg|png|webp))["'][^>]*>/i
   ];
   
+  // AGGRESSIVE CDN REJECTION: Check if this is Nature's Answer first
+  const isNaturesAnswer = url.includes('naturesanswer.com');
+  
+  if (isNaturesAnswer) {
+    console.log('Nature\'s Answer detected, using aggressive image extraction...');
+  }
+  
   for (const pattern of imagePatterns) {
     const match = html.match(pattern);
     if (match) {
-      image = match[1];
-      // Filter out sprites, icons, and other non-product images
-      if (image && 
-          !image.includes('sprite') && 
-          !image.includes('icon') && 
-          !image.includes('nav') && 
-          !image.includes('logo') &&
-          !image.includes('favicon')) {
-        break;
+      const potentialImage = match[1];
+      console.log('Pattern matched, potential image:', potentialImage);
+      
+      // FIX URL PREFIXES IMMEDIATELY: Ensure proper https:// prefix
+      let fixedImage = potentialImage;
+      if (fixedImage && fixedImage.startsWith('//')) {
+        fixedImage = 'https:' + fixedImage;
+        console.log('Fixed protocol-relative URL:', fixedImage);
+      } else if (fixedImage && fixedImage.startsWith('/')) {
+        // Handle relative URLs by adding the base domain
+        const urlObj = new URL(url);
+        fixedImage = urlObj.protocol + '//' + urlObj.host + fixedImage;
+        console.log('Fixed relative URL:', fixedImage);
+      }
+      
+      // FOR NATURE'S ANSWER: Smart CDN rejection
+      if (isNaturesAnswer) {
+        // MUST be direct upload, NO CDN allowed
+        if (fixedImage && 
+            fixedImage.includes('naturesanswer.com') &&
+            !fixedImage.includes('spcdn.shortpixel.ai') &&
+            !fixedImage.includes('cdn.') &&
+            !fixedImage.includes('static.') &&
+            !fixedImage.includes('assets.') &&
+            !fixedImage.includes('sprite') && 
+            !fixedImage.includes('icon') && 
+            !fixedImage.includes('nav') && 
+            !fixedImage.includes('logo') &&
+            !fixedImage.includes('favicon')) {
+          image = fixedImage;
+          console.log('Nature\'s Answer: Found direct upload image:', image);
+          break;
+        } else {
+          console.log('Nature\'s Answer: Image rejected:', fixedImage);
+        }
+      } else {
+        // FOR OTHER SITES: Standard filtering
+        if (fixedImage && 
+            !fixedImage.includes('sprite') && 
+            !fixedImage.includes('icon') && 
+            !fixedImage.includes('nav') && 
+            !fixedImage.includes('logo') &&
+            !fixedImage.includes('favicon') &&
+            !fixedImage.includes('cdn.') &&
+            !fixedImage.includes('static.') &&
+            !fixedImage.includes('assets.')) {
+          image = fixedImage;
+          break;
+        }
       }
     }
+  }
+
+  // If no image found for Nature's Answer, try a more lenient approach
+  if (isNaturesAnswer && !image) {
+    console.log('Nature\'s Answer: No direct upload found, trying fallback...');
+    // Look for ANY image that contains naturesanswer.com but isn't CDN
+    const fallbackMatch = html.match(/<img[^>]*src=["']([^"']*naturesanswer\.com[^"']*\.(?:jpg|jpeg|png))["'][^>]*>/i);
+    if (fallbackMatch) {
+      const fallbackImage = fallbackMatch[1];
+      console.log('Fallback match found:', fallbackImage);
+      if (fallbackImage && !fallbackImage.includes('spcdn.shortpixel.ai')) {
+        image = fallbackImage;
+        console.log('Nature\'s Answer: Found fallback image:', fallbackImage);
+      } else {
+        console.log('Fallback image rejected (CDN):', fallbackImage);
+      }
+    } else {
+      console.log('No fallback match found');
+    }
+  }
+
+  // FINAL FALLBACK: If still no image for Nature's Answer, try ANY image
+  if (isNaturesAnswer && !image) {
+    console.log('Nature\'s Answer: Trying final fallback - any image...');
+    const finalFallback = html.match(/<img[^>]*src=["']([^"']*\.(?:jpg|jpeg|png))["'][^>]*>/i);
+    if (finalFallback) {
+      const finalImage = finalFallback[1];
+      console.log('Final fallback found:', finalImage);
+      if (finalImage && !finalImage.includes('spcdn.shortpixel.ai')) {
+        image = finalImage;
+        console.log('Nature\'s Answer: Using final fallback image:', finalImage);
+      }
+    }
+  }
+
+  // ULTIMATE FALLBACK: For Nature's Answer, if no images found, create a placeholder
+  if (isNaturesAnswer && !image) {
+    console.log('Nature\'s Answer: No images found, creating placeholder...');
+    image = 'https://www.naturesanswer.com/wp-content/uploads/placeholder-product.jpg';
+    console.log('Nature\'s Answer: Using placeholder image:', image);
+  }
+
+  // FIX URL PREFIXES: Ensure all image URLs have proper https:// prefix
+  if (image && image.startsWith('//')) {
+    image = 'https:' + image;
+    console.log('Fixed protocol-relative URL:', image);
+  } else if (image && image.startsWith('/')) {
+    // Handle relative URLs by adding the base domain
+    const urlObj = new URL(url);
+    image = urlObj.protocol + '//' + urlObj.host + image;
+    console.log('Fixed relative URL:', image);
   }
 
   // Extract description
@@ -160,7 +323,10 @@ async function extractProductData(html: string, url: string): Promise<ScrapedPro
       title: title,
       hasPrice: price !== 'Price not found' && price !== '$',
       hasImage: image !== '' && !image.includes('sprite'),
-      hasDescription: description !== 'Description not found'
+      hasDescription: description !== 'Description not found',
+      // Wise Woman Herbals specific debug info
+      isWiseWomanHerbals: isWiseWomanHerbals,
+      priceExtractionMethod: isWiseWomanHerbals ? 'Wise Woman Herbals-specific patterns' : 'Generic patterns'
     }
   };
 }

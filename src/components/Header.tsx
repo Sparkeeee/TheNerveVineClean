@@ -65,7 +65,7 @@ export default function Header() {
               <Link href="/" className="flex items-center space-x-2">
                 <span className="relative nv-logo h-10 sm:h-12 md:h-16 lg:h-20 w-auto">
                   <Image 
-                    src="/images/nervevine smalllogo1.svg" 
+                    src="/images/nervevine-smalllogo1.svg" 
                     alt="The NerveVine Logo" 
                     width={90} 
                     height={90}
@@ -200,7 +200,7 @@ export default function Header() {
               <Link href="/" className="flex items-center space-x-2">
                 <span className="relative nv-logo h-10 sm:h-12 md:h-16 lg:h-20 w-auto">
                   <Image 
-                    src="/images/nervevine smalllogo1.svg" 
+                    src="/images/nervevine-smalllogo1.svg" 
                     alt="The NerveVine Logo" 
                     width={90} 
                     height={90}

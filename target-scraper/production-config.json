@@ -1,0 +1,102 @@
+{
+  "target": {
+    "baseUrl": "https://www.target.com/s",
+    "searchParam": "searchTerm",
+    "maxPages": 10,
+    "resultsPerPage": 24,
+    "earlyStopThreshold": 5
+  },
+  "timing": {
+    "minDelay": 5000,
+    "maxDelay": 15000,
+    "scrollDelay": {
+      "min": 2000,
+      "max": 5000
+    },
+    "retryDelay": {
+      "min": 15000,
+      "max": 30000
+    },
+    "pageTimeout": 60000,
+    "networkTimeout": 20000
+  },
+  "browser": {
+    "headless": "new",
+    "viewport": {
+      "width": 1920,
+      "height": 1080
+    },
+    "args": [
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--disable-dev-shm-usage",
+      "--disable-accelerated-2d-canvas",
+      "--no-first-run",
+      "--no-zygote",
+      "--disable-gpu",
+      "--disable-web-security",
+      "--disable-features=VizDisplayCompositor",
+      "--disable-background-timer-throttling",
+      "--disable-backgrounding-occluded-windows",
+      "--disable-renderer-backgrounding"
+    ]
+  },
+  "proxies": [
+    {
+      "host": "proxy1.example.com",
+      "port": 8080,
+      "username": "production_user1",
+      "password": "secure_password1"
+    },
+    {
+      "host": "proxy2.example.com",
+      "port": 8080,
+      "username": "production_user2",
+      "password": "secure_password2"
+    }
+  ],
+  "userAgents": [
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36 Edg/119.0.0.0",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Safari/605.1.15",
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/120.0"
+  ],
+  "retries": {
+    "maxAttempts": 5,
+    "backoffMultiplier": 2.5
+  },
+  "debug": {
+    "enabled": true,
+    "logLevel": "info",
+    "saveScreenshots": true,
+    "screenshotPath": "./production_screenshots"
+  },
+  "output": {
+    "format": "json",
+    "filename": "production_target_scrape",
+    "includeDuplicates": false,
+    "includeMetadata": true
+  },
+  "selectors": {
+    "productWrappers": [
+      "[data-test=\"@web/site-top-of-funnel/ProductCardWrapper\"]",
+      "[data-test=\"product-title\"]",
+      ".ProductCard",
+      "[data-testid=\"product-card\"]"
+    ],
+    "productLinks": [
+      "a[href*=\"/p/\"]",
+      "[data-test=\"product-title\"] a",
+      ".ProductCard a",
+      "[data-testid=\"product-card\"] a"
+    ],
+    "nextPageButton": [
+      "[data-test=\"next\"]",
+      ".btn-pagination-next",
+      "button[aria-label=\"next page\"]",
+      "a[aria-label=\"Next\"]"
+    ]
+  }
+}

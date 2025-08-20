@@ -1,0 +1,29 @@
+{
+  "name": "iherb-url-crawler",
+  "version": "1.0.0",
+  "description": "Crawlee-based scraper to collect supplement product URLs from iHerb",
+  "main": "iherb-crawler.js",
+  "scripts": {
+    "start": "node iherb-crawler.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "crawlee": "^3.5.0",
+    "puppeteer": "^21.0.0",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "puppeteer-extra-plugin-recaptcha": "^3.6.8"
+  },
+  "keywords": [
+    "web-scraping",
+    "crawlee",
+    "puppeteer",
+    "iherb",
+    "supplements",
+    "herbal-medicine"
+  ],
+  "author": "",
+  "license": "ISC"
+}
+
+

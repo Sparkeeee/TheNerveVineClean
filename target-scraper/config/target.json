@@ -1,0 +1,26 @@
+{
+  "target": {
+    "baseUrl": "https://www.target.com/s?searchTerm=",
+    "selectors": {
+      "productLinks": "a[href*='/p/']",
+      "nextPage": "a[aria-label='next page']",
+      "fallbackProductLinks": "a[data-test='product-title']",
+      "backupProductLinks": "div[data-testid='product-card'] a[href]"
+    },
+    "scraper": {
+      "maxPages": 5,
+      "minDelay": 2000,
+      "maxDelay": 5000,
+      "maxRetries": 3,
+      "scrollSteps": 3,
+      "scrollDelayMin": 500,
+      "scrollDelayMax": 1500,
+      "timeout": 60000,
+      "waitUntil": "domcontentloaded"
+    },
+    "filters": {
+      "excludePatterns": ["review", "question", "help"],
+      "maxResults": 100
+    }
+  }
+}

@@ -1,0 +1,24 @@
+HerbEra Product Search Report
+Generated: 2025-08-18T14:27:39.605Z
+Keywords: ashwagandha, kava, skullcap
+Total Products Found: 106
+Matching Products: 3
+
+1. Skullcap Gallon
+   Herbs: skullcap
+   Price: $385 - $1540
+   URL: https://herb-era.com/products/skullcap_herbal_tincture_gallon
+   Tags: Alcohol-FREE, All Products, Gallon, Organic, Scutellaria lateriflora, Skullcap
+
+2. Ashwagandha Gallon
+   Herbs: ashwagandha
+   Price: $385 - $1540
+   URL: https://herb-era.com/products/ashwagandha-gallon
+   Tags: Alcohol-FREE, All Products, Gallon, Tincture
+
+3. Ashwagandha Tincture
+   Herbs: ashwagandha
+   Price: $21.97 - $1540
+   URL: https://herb-era.com/products/ashwagandha_herbal_tincture
+   Tags: Alcohol-FREE, Anxiety&Stress Management, Ashwagandha, Dried Root, Energy, Herbal Extract, Indian ginseng, Mood Balance, Organic, Relaxation and Stress, Shui Qie, Super-Concentrated, Tincture, Urinary, Withania Somnifera
+

@@ -1,0 +1,9 @@
+{
+	"id": "9uVXIZivEKvHrdN",
+	"json": "{\"id\":\"9uVXIZivEKvHrdN\",\"url\":\"https://herb-era.com/search?q=Lemon%20Balm\",\"loadedUrl\":\"https://herb-era.com/search?q=Lemon%20Balm\",\"uniqueKey\":\"https://herb-era.com/search?q=Lemon+Balm\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"__crawlee\":{\"state\":4}},\"handledAt\":\"2025-08-14T22:00:48.378Z\"}",
+	"method": "GET",
+	"orderNo": null,
+	"retryCount": 0,
+	"uniqueKey": "https://herb-era.com/search?q=Lemon+Balm",
+	"url": "https://herb-era.com/search?q=Lemon%20Balm"
+}

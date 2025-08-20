@@ -1,70 +1,63 @@
 import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/lib/database';
-import { createApiResponse, createErrorResponse, createNotFoundResponse } from '@/lib/api-utils';
+import { PrismaClient } from '@prisma/client';
+import { createApiResponse, createErrorResponse } from '@/lib/api-utils';
+
+const prisma = new PrismaClient();
 
 export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
-  const id = searchParams.get('id');
-  const limit = parseInt(searchParams.get('limit') || '20');
-  const offset = parseInt(searchParams.get('offset') || '0');
-  
   try {
-    await prisma.$connect();
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get('id');
     
     if (id) {
+      // Get specific indication
       const indication = await prisma.indication.findUnique({
-        where: { id: Number(id) },
-        include: {
-          herbs: true,
-          supplements: true
-        }
+        where: { id: parseInt(id) }
       });
-      if (!indication) return createNotFoundResponse('Indication');
+
+      if (!indication) {
+        return NextResponse.json(
+          { success: false, error: 'Indication not found' },
+          { status: 404 }
+        );
+      }
+
       return createApiResponse(indication);
     } else {
+      // Get all indications
       const indications = await prisma.indication.findMany({
-        include: {
-          herbs: true,
-          supplements: true
-        },
-        take: limit,
-        skip: offset,
         orderBy: { name: 'asc' }
       });
-      
-      const total = await prisma.indication.count();
-      
-      return createApiResponse({
-        indications,
-        pagination: {
-          page: Math.floor(offset / limit) + 1,
-          limit,
-          total,
-          pages: Math.ceil(total / limit),
-          hasMore: offset + limit < total
-        }
-      });
+
+      return createApiResponse(indications);
     }
   } catch (error) {
-    console.error('Indications API error:', error);
-    return createErrorResponse(`Failed to fetch indications: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    console.error('Error fetching indications:', error);
+    return createErrorResponse('Failed to fetch indications');
   }
 }
 
 export async function POST(req: NextRequest) {
   try {
-    const data = await req.json();
+    const { name, slug, description, color } = await req.json();
+
+    if (!name || !slug) {
+      return createErrorResponse('Name and slug are required', 400);
+    }
+
     const indication = await prisma.indication.create({
       data: {
-        name: data.name,
-        slug: data.slug,
-        description: data.description,
-        color: data.color || 'blue'
-      },
+        name,
+        slug,
+        description,
+        color: color || 'blue'
+      }
     });
-    return NextResponse.json(indication, { status: 201 });
+
+    return createApiResponse(indication);
   } catch (error) {
-    return NextResponse.json({ error: (error instanceof Error ? error.message : String(error)) }, { status: 400 });
+    console.error('Error creating indication:', error);
+    return createErrorResponse('Failed to create indication');
   }
 }
 

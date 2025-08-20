@@ -7,6 +7,13 @@
 - **Batch Operations:** Group file operations and changes to minimize interruptions and approval requests.
 - **Automation:** Use scripts and automation for routine tasks to reduce manual steps and prevent confirmation fatigue.
 
+## AI Behavior Restrictions
+- **Manual Mode Only:** AI must wait for explicit instructions before making changes
+- **No Auto-Suggestions:** AI cannot propose improvements or refactoring
+- **Implementation Only:** AI focuses on execution, not design decisions
+- **Preserve Working Code:** AI cannot modify functional code without explicit permission
+- **No Destructive Helping:** AI cannot "improve" working solutions without being asked
+
 ## Honesty & Transparency
 - **ALWAYS admit mistakes immediately** - No defensive behavior or ego protection
 - **NEVER try to make basic functionality seem impressive** - Focus on results, not appearances

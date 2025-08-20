@@ -138,11 +138,63 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const data = await req.json();
-    const symptom = await prisma.symptom.create({ data });
+    console.log('POST symptoms received data:', JSON.stringify(data, null, 2));
+    
+    // Validate required fields
+    if (!data.title) {
+      return createErrorResponse('Title is required', 400);
+    }
+    
+    if (!data.slug) {
+      return createErrorResponse('Slug is required', 400);
+    }
+    
+    // Clean the data to only include valid fields
+    const allowedFields = [
+      'title', 'slug', 'description', 'metaTitle', 'metaDescription', 
+      'cautions', 'references', 'articles', 'associatedSymptoms', 
+      'comprehensiveArticle', 'commonSymptoms'
+    ];
+    
+    const cleanedData: Record<string, unknown> = {};
+    for (const field of allowedFields) {
+      if (field in data) {
+        cleanedData[field] = data[field];
+      }
+    }
+    
+    console.log('POST symptoms cleaned data:', JSON.stringify(cleanedData, null, 2));
+    
+    const symptom = await prisma.symptom.create({ 
+      data: {
+        title: cleanedData.title as string,
+        slug: cleanedData.slug as string,
+        description: cleanedData.description as string | undefined,
+        metaTitle: cleanedData.metaTitle as string | undefined,
+        metaDescription: cleanedData.metaDescription as string | undefined,
+        cautions: cleanedData.cautions as string | undefined,
+        references: cleanedData.references as string | undefined,
+        articles: cleanedData.articles as string | undefined,
+        associatedSymptoms: cleanedData.associatedSymptoms as string | undefined,
+        comprehensiveArticle: cleanedData.comprehensiveArticle as string | undefined,
+        commonSymptoms: Array.isArray(cleanedData.commonSymptoms) ? cleanedData.commonSymptoms as string[] : undefined
+      }
+    });
     return createApiResponse(symptom, 201);
   } catch (error) {
     console.error('POST symptoms error:', error);
-    return createErrorResponse('Failed to create symptom', 400);
+    console.error('Error details:', {
+      name: error instanceof Error ? error.name : 'Unknown',
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : 'No stack trace'
+    });
+    
+    // Check if it's a Prisma error
+    if ((error as { code?: string }).code) {
+      console.error('Prisma error code:', (error as { code?: string }).code);
+    }
+    
+    return createErrorResponse(`Failed to create symptom: ${error instanceof Error ? error.message : 'Unknown error'}`, 400);
   }
 }
 

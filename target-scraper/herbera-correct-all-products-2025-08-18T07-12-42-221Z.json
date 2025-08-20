@@ -1,0 +1,129 @@
+{
+  "searchInfo": {
+    "totalProducts": 15,
+    "collectionsScraped": 6,
+    "timestamp": "2025-08-18T07:12:42.221Z"
+  },
+  "products": [
+    {
+      "title": "Acacia Capsules",
+      "url": "https://herb-era.com/products/acacia-capsules-organic-acacia-senegalia-senegal",
+      "collection": "/collections/all",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:12:38.881Z"
+    },
+    {
+      "title": "Acacia Tincture",
+      "url": "https://herb-era.com/products/acacia-alcohol-free-herbal-extract-tincture-super-concentrated-organic-acacia-senegalia-senegal",
+      "collection": "/collections/all",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:12:38.881Z"
+    },
+    {
+      "title": "Adrenix Tincture",
+      "url": "https://herb-era.com/products/adrenix-tincture-super-concentrated-organic",
+      "collection": "/collections/all",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $22.99\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $22.99\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:12:38.881Z"
+    },
+    {
+      "title": "Agaricus Blazei Capsules",
+      "url": "https://herb-era.com/products/agaricus-blazei-capsules-organic-agaricus-agaricus-blazei-murill",
+      "collection": "/collections/all",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $23.09\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $23.09\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:12:38.881Z"
+    },
+    {
+      "title": "Agaricus Blazei Gallon",
+      "url": "https://herb-era.com/products/agaricus-blazei-alcohol-free-herbal-extract-tincture-gallon",
+      "collection": "/collections/all",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $385.00\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        $0.00\n      \n    \n    \n      Sale price\n    \n    \n      \n        $385.00\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:12:38.881Z"
+    },
+    {
+      "title": "Agaricus Blazei Tincture",
+      "url": "https://herb-era.com/products/agaricus-blazei-alcohol-free-herbal-extract-tincture-super-concentrated-organic-agaricus-blazei-agaricus-blazei-murill",
+      "collection": "/collections/all",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        $0.00\n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:12:38.881Z"
+    },
+    {
+      "title": "Agrimony Capsules",
+      "url": "https://herb-era.com/products/agrimony-capsules-organic-agrimony-agrimonia-eupatoria",
+      "collection": "/collections/all",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:12:38.881Z"
+    },
+    {
+      "title": "Agrimony Gallon",
+      "url": "https://herb-era.com/products/agrimony-alcohol-free-herbal-extract-tincture-gallon",
+      "collection": "/collections/all",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $385.00\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        $0.00\n      \n    \n    \n      Sale price\n    \n    \n      \n        $385.00\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:12:38.881Z"
+    },
+    {
+      "title": "Agrimony Tincture",
+      "url": "https://herb-era.com/products/agrimony-alcohol-free-herbal-extract-tincture-super-concentrated-organic-agrimony-agrimonia-eupatoria",
+      "collection": "/collections/all",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        $0.00\n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:12:38.881Z"
+    },
+    {
+      "title": "Alfalfa Gallon",
+      "url": "https://herb-era.com/products/alfalfa-alcohol-free-herbal-extract-tincture-gallon",
+      "collection": "/collections/all",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $385.00\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        $0.00\n      \n    \n    \n      Sale price\n    \n    \n      \n        $385.00\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:12:38.881Z"
+    },
+    {
+      "title": "Alfalfa Tincture",
+      "url": "https://herb-era.com/products/alfalfa-alcohol-free-herbal-extract-tincture-super-concentrated-organic-alfalfa-medicago-sativa-copy",
+      "collection": "/collections/all",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        $0.00\n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:12:38.881Z"
+    },
+    {
+      "title": "American Ginseng Gallon",
+      "url": "https://herb-era.com/products/american-ginseng-alcohol-free-herbal-extract-tincture-gallon",
+      "collection": "/collections/all",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $385.00\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $385.00\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:12:38.881Z"
+    },
+    {
+      "title": "American Ginseng Tincture",
+      "url": "https://herb-era.com/products/american-ginseng-alcohol-free-herbal-extract-tincture-super-concentrated-organic-american-ginseng-panax-quinquefolius",
+      "collection": "/collections/all",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:12:38.881Z"
+    },
+    {
+      "title": "Amla Capsules",
+      "url": "https://herb-era.com/products/amla-capsules-organic-amla-emblica-officinalis",
+      "collection": "/collections/all",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:12:38.881Z"
+    },
+    {
+      "title": "Amla Gallon",
+      "url": "https://herb-era.com/products/amla-alcohol-free-herbal-extract-tincture-gallon",
+      "collection": "/collections/all",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $385.00\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $385.00\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:12:38.881Z"
+    }
+  ]
+}

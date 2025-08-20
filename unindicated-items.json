@@ -1,0 +1,444 @@
+{
+  "herbsTotal": 53,
+  "supplementsTotal": 61,
+  "unindicatedHerbs": [
+    {
+      "name": "Agnus Castus",
+      "slug": "agnus-castus"
+    },
+    {
+      "name": "American Ginseng",
+      "slug": "american-ginseng"
+    },
+    {
+      "name": "Ashwagandha",
+      "slug": "ashwagandha"
+    },
+    {
+      "name": "Astragalus",
+      "slug": "astragalus-root"
+    },
+    {
+      "name": "Bilberry",
+      "slug": "bilberry"
+    },
+    {
+      "name": "Bladderwrack",
+      "slug": "bladderwrack"
+    },
+    {
+      "name": "Butterbur",
+      "slug": "butterbur"
+    },
+    {
+      "name": "Chamomile",
+      "slug": "chamomile"
+    },
+    {
+      "name": "Chilli Pepper",
+      "slug": "capsaicin"
+    },
+    {
+      "name": "Cramp Bark",
+      "slug": null
+    },
+    {
+      "name": "Damiana",
+      "slug": "damiana"
+    },
+    {
+      "name": "Dandelion",
+      "slug": "dandelion"
+    },
+    {
+      "name": "Dong Quai",
+      "slug": "dong-quai"
+    },
+    {
+      "name": "Fennel",
+      "slug": "fennel"
+    },
+    {
+      "name": "Feverfew",
+      "slug": "feverfew"
+    },
+    {
+      "name": "Frankincense",
+      "slug": null
+    },
+    {
+      "name": "Garlic",
+      "slug": "garlic"
+    },
+    {
+      "name": "Ginger ",
+      "slug": null
+    },
+    {
+      "name": "Ginseng",
+      "slug": "ginseng"
+    },
+    {
+      "name": "Guarana",
+      "slug": "guarana"
+    },
+    {
+      "name": "Hawthorn",
+      "slug": "hawthorn"
+    },
+    {
+      "name": "Holy Basil",
+      "slug": "holy-basil"
+    },
+    {
+      "name": "Hops",
+      "slug": "hops"
+    },
+    {
+      "name": "Kava Kava",
+      "slug": "kava-kava"
+    },
+    {
+      "name": "Khella",
+      "slug": null
+    },
+    {
+      "name": "Lavender",
+      "slug": "lavender"
+    },
+    {
+      "name": "Lemon Balm",
+      "slug": "lemon-balm"
+    },
+    {
+      "name": "Licorice",
+      "slug": "licorice"
+    },
+    {
+      "name": "Lime Flowers ",
+      "slug": null
+    },
+    {
+      "name": "Maca",
+      "slug": "maca"
+    },
+    {
+      "name": "Marshmallow",
+      "slug": "marshmallow"
+    },
+    {
+      "name": "Milk Thistle",
+      "slug": "milk-thistle"
+    },
+    {
+      "name": "Motherwort",
+      "slug": "motherwort"
+    },
+    {
+      "name": "Oatstraw",
+      "slug": "oatstraw"
+    },
+    {
+      "name": "Oregano",
+      "slug": "oregano"
+    },
+    {
+      "name": "Passionflower",
+      "slug": "passionflower"
+    },
+    {
+      "name": "Peppermint",
+      "slug": "peppermint"
+    },
+    {
+      "name": "Reishi",
+      "slug": "reishi"
+    },
+    {
+      "name": "Rhodiola Rosea",
+      "slug": "rhodiola-rosea"
+    },
+    {
+      "name": "Sage",
+      "slug": "sage"
+    },
+    {
+      "name": "Schisandra",
+      "slug": "schisandra-berry"
+    },
+    {
+      "name": "Siberian Ginseng",
+      "slug": "siberian-ginseng"
+    },
+    {
+      "name": "Skullcap",
+      "slug": "skullcap"
+    },
+    {
+      "name": "Slippery Elm",
+      "slug": "slippery-elm"
+    },
+    {
+      "name": "St. John's Wort",
+      "slug": "st-johns-wort"
+    },
+    {
+      "name": "Turmeric",
+      "slug": null
+    },
+    {
+      "name": "Valerian",
+      "slug": "valerian"
+    },
+    {
+      "name": "Willow Bark",
+      "slug": "willow-bark"
+    }
+  ],
+  "unindicatedSupplements": [
+    {
+      "name": "5-HTP",
+      "slug": "5-htp"
+    },
+    {
+      "name": "Acetyl-L-Carnitine",
+      "slug": "acetyl-l-carnitine"
+    },
+    {
+      "name": "Alpha-Lipoic Acid",
+      "slug": "alpha-lipoic-acid"
+    },
+    {
+      "name": "B-Complex Vitamins",
+      "slug": "b-complex"
+    },
+    {
+      "name": "Biotin",
+      "slug": "biotin"
+    },
+    {
+      "name": "Boron",
+      "slug": "boron"
+    },
+    {
+      "name": "Bromelain",
+      "slug": "bromelain"
+    },
+    {
+      "name": "Calcium",
+      "slug": "calcium"
+    },
+    {
+      "name": "Carnitine",
+      "slug": "carnitine"
+    },
+    {
+      "name": "Choline",
+      "slug": "choline"
+    },
+    {
+      "name": "Chondroitin",
+      "slug": "chondroitin"
+    },
+    {
+      "name": "Chromium",
+      "slug": "chromium"
+    },
+    {
+      "name": "CoQ10",
+      "slug": "coq10"
+    },
+    {
+      "name": "Copper",
+      "slug": "copper"
+    },
+    {
+      "name": "Creatine",
+      "slug": "creatine"
+    },
+    {
+      "name": "DMAE",
+      "slug": "dmae"
+    },
+    {
+      "name": "Digestive Enzymes",
+      "slug": "digestive-enzymes"
+    },
+    {
+      "name": "GABA",
+      "slug": "gaba"
+    },
+    {
+      "name": "Glucosamine",
+      "slug": "glucosamine"
+    },
+    {
+      "name": "Inositol",
+      "slug": "inositol"
+    },
+    {
+      "name": "Iodine",
+      "slug": "iodine"
+    },
+    {
+      "name": "Iron",
+      "slug": "iron"
+    },
+    {
+      "name": "L-Arginine",
+      "slug": "l-arginine"
+    },
+    {
+      "name": "L-Glutamine",
+      "slug": "l-glutamine"
+    },
+    {
+      "name": "L-Lysine",
+      "slug": "l-lysine"
+    },
+    {
+      "name": "L-Methionine",
+      "slug": "l-methionine"
+    },
+    {
+      "name": "L-Theanine",
+      "slug": "l-theanine"
+    },
+    {
+      "name": "L-Tryptophan",
+      "slug": "l-tryptophan"
+    },
+    {
+      "name": "L-Tyrosine",
+      "slug": "l-tyrosine"
+    },
+    {
+      "name": "MSM",
+      "slug": "msm"
+    },
+    {
+      "name": "Magnesium",
+      "slug": "magnesium"
+    },
+    {
+      "name": "Magnesium Glycinate",
+      "slug": "magnesium-glycinate"
+    },
+    {
+      "name": "Manganese",
+      "slug": "manganese"
+    },
+    {
+      "name": "Melatonin",
+      "slug": "melatonin"
+    },
+    {
+      "name": "Methylcobalamin",
+      "slug": "methylcobalamin"
+    },
+    {
+      "name": "Methylfolate",
+      "slug": "methylfolate"
+    },
+    {
+      "name": "Molybdenum",
+      "slug": "molybdenum"
+    },
+    {
+      "name": "N-Acetyl Cysteine",
+      "slug": "n-acetyl-cysteine"
+    },
+    {
+      "name": "Nattokinase",
+      "slug": "nattokinase"
+    },
+    {
+      "name": "Niacin",
+      "slug": "niacin"
+    },
+    {
+      "name": "Omega-3 Fatty Acids",
+      "slug": "omega-3"
+    },
+    {
+      "name": "P5P (Pyridoxal-5-Phosphate)",
+      "slug": "p5p"
+    },
+    {
+      "name": "PABA (Para-Aminobenzoic Acid)",
+      "slug": "paba"
+    },
+    {
+      "name": "Pantothenic Acid",
+      "slug": "pantothenic-acid"
+    },
+    {
+      "name": "Papain",
+      "slug": "papain"
+    },
+    {
+      "name": "Phosphatidylserine",
+      "slug": "phosphatidylserine"
+    },
+    {
+      "name": "Plant Sterols",
+      "slug": "plant-sterols"
+    },
+    {
+      "name": "Potassium",
+      "slug": "potassium"
+    },
+    {
+      "name": "Probiotics",
+      "slug": "probiotics"
+    },
+    {
+      "name": "Quercetin",
+      "slug": "quercetin"
+    },
+    {
+      "name": "Riboflavin",
+      "slug": "riboflavin"
+    },
+    {
+      "name": "SAM-e",
+      "slug": "sam-e"
+    },
+    {
+      "name": "Selenium",
+      "slug": "selenium"
+    },
+    {
+      "name": "Serrapeptase",
+      "slug": "serrapeptase"
+    },
+    {
+      "name": "Taurine",
+      "slug": "taurine"
+    },
+    {
+      "name": "Thiamine",
+      "slug": "thiamine"
+    },
+    {
+      "name": "Vitamin A",
+      "slug": "vitamin-a"
+    },
+    {
+      "name": "Vitamin C",
+      "slug": "vitamin-c"
+    },
+    {
+      "name": "Vitamin D",
+      "slug": "vitamin-d"
+    },
+    {
+      "name": "Vitamin E",
+      "slug": "vitamin-e"
+    },
+    {
+      "name": "Zinc",
+      "slug": "zinc"
+    }
+  ]
+}

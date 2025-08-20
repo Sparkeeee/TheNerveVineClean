@@ -1,0 +1,37 @@
+{
+  "testDate": "2025-08-14T22:06:55.897Z",
+  "herbs": [
+    {
+      "name": "Lemon Balm",
+      "slug": "lemon-balm"
+    },
+    {
+      "name": "Ashwagandha",
+      "slug": "ashwagandha"
+    },
+    {
+      "name": "Chamomile",
+      "slug": "chamomile"
+    }
+  ],
+  "urls": [
+    {
+      "herb": "Lemon Balm",
+      "amazon": "https://www.amazon.com/s?k=Lemon%20Balm+supplement",
+      "vitacost": "https://www.vitacost.com/search?w=Lemon%20Balm",
+      "gaiaHerbs": "https://www.gaiaherbs.com/search?q=Lemon%20Balm"
+    },
+    {
+      "herb": "Ashwagandha",
+      "amazon": "https://www.amazon.com/s?k=Ashwagandha+supplement",
+      "vitacost": "https://www.vitacost.com/search?w=Ashwagandha",
+      "gaiaHerbs": "https://www.gaiaherbs.com/search?q=Ashwagandha"
+    },
+    {
+      "herb": "Chamomile",
+      "amazon": "https://www.amazon.com/s?k=Chamomile+supplement",
+      "vitacost": "https://www.vitacost.com/search?w=Chamomile",
+      "gaiaHerbs": "https://www.gaiaherbs.com/search?q=Chamomile"
+    }
+  ]
+}

@@ -1,26 +1,17 @@
 {
-  "cursor.ai.enableTerminalCommands": true,
-  "cursor.ai.autoApproveSafeCommands": true,
-  "cursor.ai.allowFileOperations": true,
-  "cursor.ai.enableGitOperations": true,
-  "cursor.ai.autoCommitThreshold": 5,
-  "cursor.ai.enablePackageManagement": true,
-  "cursor.ai.safeCommands": [
-    "npm install",
-    "npm run dev",
-    "git add",
-    "git commit",
-    "git push",
-    "git pull",
-    "git status",
-    "git branch",
-    "git checkout"
-  ],
-  "cursor.ai.blockedCommands": [
-    "rm -rf",
-    "del /s",
-    "format c:",
-    "shutdown",
-    "restart"
-  ]
+  "ai_behavior": {
+    "mode": "manual_only",
+    "no_auto_suggestions": true,
+    "no_refactoring": true,
+    "implementation_only": true
+  },
+  "restrictions": {
+    "no_architectural_changes": true,
+    "no_code_improvements": true,
+    "no_optimization_suggestions": true,
+    "wait_for_instructions": true
+  },
+  "system_prompt": "You are a technical implementer only. Do not suggest improvements, refactoring, or architectural changes unless explicitly requested. Focus on executing exactly what the user specifies. If asked for advice, redirect to implementation details only.",
+  "auto_mode": false,
+  "suggestion_mode": "disabled"
 }

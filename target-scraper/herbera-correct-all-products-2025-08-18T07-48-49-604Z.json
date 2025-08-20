@@ -1,0 +1,597 @@
+{
+  "searchInfo": {
+    "totalProducts": 72,
+    "collectionsScraped": 6,
+    "timestamp": "2025-08-18T07:48:49.604Z"
+  },
+  "products": [
+    {
+      "title": "Acacia Tincture",
+      "url": "https://herb-era.com/products/acacia-alcohol-free-herbal-extract-tincture-super-concentrated-organic-acacia-senegalia-senegal",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:47:56.879Z"
+    },
+    {
+      "title": "Agaricus Blazei Tincture",
+      "url": "https://herb-era.com/products/agaricus-blazei-alcohol-free-herbal-extract-tincture-super-concentrated-organic-agaricus-blazei-agaricus-blazei-murill",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        $0.00\n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:47:56.880Z"
+    },
+    {
+      "title": "Agrimony Tincture",
+      "url": "https://herb-era.com/products/agrimony-alcohol-free-herbal-extract-tincture-super-concentrated-organic-agrimony-agrimonia-eupatoria",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        $0.00\n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:47:56.880Z"
+    },
+    {
+      "title": "Alfalfa Tincture",
+      "url": "https://herb-era.com/products/alfalfa-alcohol-free-herbal-extract-tincture-super-concentrated-organic-alfalfa-medicago-sativa-copy",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        $0.00\n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:47:56.880Z"
+    },
+    {
+      "title": "American Ginseng Tincture",
+      "url": "https://herb-era.com/products/american-ginseng-alcohol-free-herbal-extract-tincture-super-concentrated-organic-american-ginseng-panax-quinquefolius",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:47:56.880Z"
+    },
+    {
+      "title": "Amla Tincture",
+      "url": "https://herb-era.com/products/amla-alcohol-free-herbal-extract-tincture-super-concentrated-organic-amla-emblica-officinalis",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:47:56.880Z"
+    },
+    {
+      "title": "Anamu Tincture",
+      "url": "https://herb-era.com/products/anamu-alcohol-free-herbal-extract-tincture-super-concentrated-wildcrafted-jamaican-guinea-hen-weed-petiveria-alliacea",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        $0.00\n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:47:56.880Z"
+    },
+    {
+      "title": "Andrographis Tincture",
+      "url": "https://herb-era.com/products/andrographis-alcohol-free-herbal-extract-tincture-super-concentrated-organic-andrographis-chuan-xin-lian-andrographis-paniculata",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:47:56.880Z"
+    },
+    {
+      "title": "Anemarrhena Tincture",
+      "url": "https://herb-era.com/products/anemarrhena-alcohol-free-herbal-extract-tincture-super-concentrated-anemarrhena-zhi-mu-anemarrhena-asphodeloides",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        $0.00\n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:47:56.880Z"
+    },
+    {
+      "title": "Angelica Tincture",
+      "url": "https://herb-era.com/products/angelica-herbal-extract-tincture-super-concentrated-organic-angelica-angelica-archangelica",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:47:56.880Z"
+    },
+    {
+      "title": "Anise Tincture",
+      "url": "https://herb-era.com/products/anise-alcohol-free-herbal-extract-tincture-super-concentrated-organic-anise-pimpinella-anisum",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        $0.00\n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:47:56.880Z"
+    },
+    {
+      "title": "Artichoke Tincture",
+      "url": "https://herb-era.com/products/artichoke-herbal-extract-tincture-super-concentrated-organic-artichoke-cynara-scolymus",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:47:56.880Z"
+    },
+    {
+      "title": "Ashwagandha Tincture",
+      "url": "https://herb-era.com/products/ashwagandha_herbal_tincture",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:47:56.880Z",
+      "matches": [
+        {
+          "keyword": "ashwagandha",
+          "variation": "ashwagandha"
+        }
+      ]
+    },
+    {
+      "title": "Asian Ginseng Tincture",
+      "url": "https://herb-era.com/products/asian-ginseng-alcohol-free-herbal-extract-tincture-super-concentrated-wildcrafted-korean-red-ginseng-asian-ginseng-panax-ginseng",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:47:56.880Z"
+    },
+    {
+      "title": "Astragalus Tincture",
+      "url": "https://herb-era.com/products/astragalus-herbal-extract-tincture-super-concentrated-organic-astragalus-astragalus-membranaceus",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:47:56.880Z"
+    },
+    {
+      "title": "Atractylodes Tincture",
+      "url": "https://herb-era.com/products/atractylodes-alcohol-free-herbal-extract-tincture-super-concentrated-organic-atractylodes-cang-zhu-atractylis-lancea",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:03.604Z"
+    },
+    {
+      "title": "Bacopa Tincture",
+      "url": "https://herb-era.com/products/bacopa-alcohol-free-herbal-extract-tincture-super-concentrated-organic-bacopa-bacopa-monnieri",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        $0.00\n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:03.604Z"
+    },
+    {
+      "title": "Barberry Root Tincture",
+      "url": "https://herb-era.com/products/barberry-root-alcohol-free-herbal-extract-tincture-super-concentrated-organic-barberry-berberis-vulgaris",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:03.604Z"
+    },
+    {
+      "title": "Barrenwort Tincture",
+      "url": "https://herb-era.com/products/barrenwort-herbal-extract-tincture-super-concentrated-organic-barrenwort-epimedium-grandiflorum",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:03.604Z"
+    },
+    {
+      "title": "Bayberry Tincture",
+      "url": "https://herb-era.com/products/bayberry-herbal-extract-tincture-super-concentrated-organic-bayberry-myrica-cerifera",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $20.43\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        $21.97\n      \n    \n    \n      Sale price\n    \n    \n      \n        $20.43\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:03.604Z"
+    },
+    {
+      "title": "Bee Pollen Tincture",
+      "url": "https://herb-era.com/products/bee-pollen-herbal-extract-tincture-super-concentrated-organic-bee-pollen-bee-pollen",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:03.604Z"
+    },
+    {
+      "title": "Beetroot Tincture",
+      "url": "https://herb-era.com/products/beetroot-herbal-extract-tincture-super-concentrated-organic",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:03.604Z"
+    },
+    {
+      "title": "Bilberry Fruit Tincture",
+      "url": "https://herb-era.com/products/bilberry-fruit-herbal-extract-tincture-super-concentrated-organic-bilberry-vaccinium-myrtillus",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:03.604Z"
+    },
+    {
+      "title": "Bilberry Leaf Tincture",
+      "url": "https://herb-era.com/products/bilberry-leaf-herbal-extract-tincture-super-concentrated-organic-bilberry-vaccinium-myrtillus",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:03.604Z"
+    },
+    {
+      "title": "Birch Tincture",
+      "url": "https://herb-era.com/products/birch-herbal-extract-tincture-super-concentrated-organic-birch-betula-pendula",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:03.604Z"
+    },
+    {
+      "title": "Bitter Melon Tincture",
+      "url": "https://herb-era.com/products/bitter-melon-herbal-extract-tincture-super-concentrated-organic-african-cucumber-momordica-charantia",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:03.604Z"
+    },
+    {
+      "title": "Black Cohosh Tincture",
+      "url": "https://herb-era.com/products/black_cohosh_herbal_tincture",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:03.604Z"
+    },
+    {
+      "title": "Black Haw Tincture",
+      "url": "https://herb-era.com/products/black-haw-herbal-extract-tincture-super-concentrated-black-haw-viburnum-prunifolium",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:03.604Z"
+    },
+    {
+      "title": "Black Peppercorn Tincture",
+      "url": "https://herb-era.com/products/black-peppercorn-herbal-extract-tincture-super-concentrated-organic-black-peppercorn-piper-nigrum",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:03.604Z"
+    },
+    {
+      "title": "Black Walnut Tincture",
+      "url": "https://herb-era.com/products/black-walnut-herbal-extract-tincture-super-concentrated-organic-black-walnut-juglans-nigra",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:03.604Z"
+    },
+    {
+      "title": "Bladderwrack Tincture",
+      "url": "https://herb-era.com/products/bladderwrack-herbal-extract-tincture-super-concentrated-organic-fucus-vesiculosus",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:11.155Z"
+    },
+    {
+      "title": "Blessed Thistle Tincture",
+      "url": "https://herb-era.com/products/blessed-thistle-herbal-extract-tincture-super-concentrated-organic",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        $0.00\n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:11.155Z"
+    },
+    {
+      "title": "Bloodroot Tincture",
+      "url": "https://herb-era.com/products/bloodroot_herbal_tincture",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:11.155Z"
+    },
+    {
+      "title": "Blue Cohosh Tincture",
+      "url": "https://herb-era.com/products/blue-cohosh-herbal-extract-tincture-super-concentrated-organic-blue-cohosh-caulophyllum-thalictroides",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:11.155Z"
+    },
+    {
+      "title": "Blue Vervain Tincture",
+      "url": "https://herb-era.com/products/blue-vervain-herbal-extract-tincture-super-concentrated-organic-blue-vervain-verbena-hastata",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:11.155Z"
+    },
+    {
+      "title": "Boldo Tincture",
+      "url": "https://herb-era.com/products/boldo-herbal-extract-tincture-super-concentrated-organic-organic-boldo-peumus-boldus",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        $0.00\n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:11.155Z"
+    },
+    {
+      "title": "Boneset Tincture",
+      "url": "https://herb-era.com/products/boneset-herbal-extract-tincture-super-concentrated-organic-boneset-eupatorium-perfoliatum",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $20.43\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        $21.97\n      \n    \n    \n      Sale price\n    \n    \n      \n        $20.43\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:11.155Z"
+    },
+    {
+      "title": "Brahmi Tincture",
+      "url": "https://herb-era.com/products/brahmi-herbal-extract-tincture-super-concentrated-organic-brahmi-bacopa-monnieri",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:11.155Z"
+    },
+    {
+      "title": "Brazilian Peppertree Tincture",
+      "url": "https://herb-era.com/products/brazilian-red-pepper-tree-herbal-extract-tincture-super-concentrated-organic-pink-peppercorn-schinus-terebinthifolius",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        $0.00\n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:11.155Z"
+    },
+    {
+      "title": "Broccoli Tincture",
+      "url": "https://herb-era.com/products/broccoli-herbal-extract-tincture-super-concentrated-organic-broccoli-bao-zi-gan-lan-brassica-oleracea",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:11.155Z"
+    },
+    {
+      "title": "Bromelain Tincture",
+      "url": "https://herb-era.com/products/bromelain-herbal-extract-tincture-super-concentrated-wildcrafted-bromelain-pineapple-ananas-comosus",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        $0.00\n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:11.155Z"
+    },
+    {
+      "title": "Buchu Tincture",
+      "url": "https://herb-era.com/products/buchu-herbal-extract-tincture-super-concentrated-organic-buchu-agathosma-betulina",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:11.155Z"
+    },
+    {
+      "title": "Bugleweed Tincture",
+      "url": "https://herb-era.com/products/bugleweed-herbal-extract-tincture-super-concentrated-organic-bugleweed-lycopus-virginicus",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:11.155Z"
+    },
+    {
+      "title": "Bupleurum Tincture",
+      "url": "https://herb-era.com/products/bupleurum-herbal-extract-tincture-super-concentrated-organic-bupleurum-bupleurum-chinense",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        $0.00\n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:11.155Z"
+    },
+    {
+      "title": "Burdock Tincture",
+      "url": "https://herb-era.com/products/burdock-herbal-extract-tincture-super-concentrated-organic-burdock-arctium-lappa",
+      "collection": "/collections/herbal-extracts",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.97\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.97\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:11.155Z"
+    },
+    {
+      "title": "Acacia Capsules",
+      "url": "https://herb-era.com/products/acacia-capsules-organic-acacia-senegalia-senegal",
+      "collection": "/collections/all",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:29.784Z"
+    },
+    {
+      "title": "Adrenix Tincture",
+      "url": "https://herb-era.com/products/adrenix-tincture-super-concentrated-organic",
+      "collection": "/collections/all",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $22.99\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $22.99\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:29.784Z"
+    },
+    {
+      "title": "Agaricus Blazei Capsules",
+      "url": "https://herb-era.com/products/agaricus-blazei-capsules-organic-agaricus-agaricus-blazei-murill",
+      "collection": "/collections/all",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $23.09\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $23.09\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:29.784Z"
+    },
+    {
+      "title": "Agaricus Blazei Gallon",
+      "url": "https://herb-era.com/products/agaricus-blazei-alcohol-free-herbal-extract-tincture-gallon",
+      "collection": "/collections/all",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $385.00\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        $0.00\n      \n    \n    \n      Sale price\n    \n    \n      \n        $385.00\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:29.784Z"
+    },
+    {
+      "title": "Agrimony Capsules",
+      "url": "https://herb-era.com/products/agrimony-capsules-organic-agrimony-agrimonia-eupatoria",
+      "collection": "/collections/all",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:29.784Z"
+    },
+    {
+      "title": "Agrimony Gallon",
+      "url": "https://herb-era.com/products/agrimony-alcohol-free-herbal-extract-tincture-gallon",
+      "collection": "/collections/all",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $385.00\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        $0.00\n      \n    \n    \n      Sale price\n    \n    \n      \n        $385.00\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:29.784Z"
+    },
+    {
+      "title": "Alfalfa Gallon",
+      "url": "https://herb-era.com/products/alfalfa-alcohol-free-herbal-extract-tincture-gallon",
+      "collection": "/collections/all",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $385.00\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        $0.00\n      \n    \n    \n      Sale price\n    \n    \n      \n        $385.00\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:29.784Z"
+    },
+    {
+      "title": "American Ginseng Gallon",
+      "url": "https://herb-era.com/products/american-ginseng-alcohol-free-herbal-extract-tincture-gallon",
+      "collection": "/collections/all",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $385.00\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $385.00\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:29.785Z"
+    },
+    {
+      "title": "Amla Capsules",
+      "url": "https://herb-era.com/products/amla-capsules-organic-amla-emblica-officinalis",
+      "collection": "/collections/all",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:29.785Z"
+    },
+    {
+      "title": "Amla Gallon",
+      "url": "https://herb-era.com/products/amla-alcohol-free-herbal-extract-tincture-gallon",
+      "collection": "/collections/all",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $385.00\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $385.00\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:29.785Z"
+    },
+    {
+      "title": "Anamu Gallon",
+      "url": "https://herb-era.com/products/anamu-alcohol-free-herbal-extract-tincture-gallon",
+      "collection": "/collections/all",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $385.00\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        $0.00\n      \n    \n    \n      Sale price\n    \n    \n      \n        $385.00\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:35.117Z"
+    },
+    {
+      "title": "Andrographis Capsules",
+      "url": "https://herb-era.com/products/andrographis-capsules-organic-andrographis-fah-talai-jone-andrographis-paniculata",
+      "collection": "/collections/all",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $19.79\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $19.79\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:35.117Z"
+    },
+    {
+      "title": "Andrographis Gallon",
+      "url": "https://herb-era.com/products/andrographis-alcohol-free-herbal-extract-tincture-gallon",
+      "collection": "/collections/all",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $385.00\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $385.00\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:35.117Z"
+    },
+    {
+      "title": "Angelica Capsules",
+      "url": "https://herb-era.com/products/angelica-capsules-organic-angelica-angelica-archangelica",
+      "collection": "/collections/all",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $20.89\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $20.89\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:35.117Z"
+    },
+    {
+      "title": "Angelica Gallon",
+      "url": "https://herb-era.com/products/angelica-herbal-extract-tincture-gallon",
+      "collection": "/collections/all",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $385.00\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $385.00\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:35.117Z"
+    },
+    {
+      "title": "Anise Seed Capsules",
+      "url": "https://herb-era.com/products/anise-seed-capsules-organic-anise-pimpinella-anisum",
+      "collection": "/collections/all",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:35.117Z"
+    },
+    {
+      "title": "Anti Stress Mix Tincture",
+      "url": "https://herb-era.com/products/anti-stress-mix-tincture-super-concentrated-organic",
+      "collection": "/collections/all",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $21.38\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        $22.99\n      \n    \n    \n      Sale price\n    \n    \n      \n        $21.38\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:35.117Z"
+    },
+    {
+      "title": "Appetite Stimulating Mix Tincture",
+      "url": "https://herb-era.com/products/appetite-stimulating-mix-tincture-super-concentrated-organic",
+      "collection": "/collections/all",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $22.99\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $22.99\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:35.117Z"
+    },
+    {
+      "title": "Artichoke Gallon",
+      "url": "https://herb-era.com/products/artichoke-herbal-extract-tincture-gallon",
+      "collection": "/collections/all",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $385.00\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $385.00\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:35.117Z"
+    },
+    {
+      "title": "Ashwagandha Gallon",
+      "url": "https://herb-era.com/products/ashwagandha-gallon",
+      "collection": "/collections/all",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $385.00\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $385.00\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:40.803Z",
+      "matches": [
+        {
+          "keyword": "ashwagandha",
+          "variation": "ashwagandha"
+        }
+      ]
+    },
+    {
+      "title": "Astragalus Capsules",
+      "url": "https://herb-era.com/products/astragalus-capsules-organic-astragalus-astragalus-membranaceus",
+      "collection": "/collections/all",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $18.69\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        $0.00\n      \n    \n    \n      Sale price\n    \n    \n      \n        $18.69\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:40.803Z"
+    },
+    {
+      "title": "Astragalus Gallon",
+      "url": "https://herb-era.com/products/astragalus-herbal-extract-tincture-gallon",
+      "collection": "/collections/all",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $385.00\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $385.00\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:40.803Z"
+    },
+    {
+      "title": "Avidity Formula Tincture",
+      "url": "https://herb-era.com/products/avidity-formula-tincture-super-concentrated-organic",
+      "collection": "/collections/all",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $22.99\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $22.99\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:40.803Z"
+    },
+    {
+      "title": "Bacopa Gallon",
+      "url": "https://herb-era.com/products/bacopa-alcohol-free-herbal-extract-tincture-gallon",
+      "collection": "/collections/all",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $385.00\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        $0.00\n      \n    \n    \n      Sale price\n    \n    \n      \n        $385.00\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:40.803Z"
+    },
+    {
+      "title": "Barberry Root Capsules",
+      "url": "https://herb-era.com/products/barberry-root-capsules-organic-barberry-root-berberis-vulgaris",
+      "collection": "/collections/all",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:40.803Z"
+    },
+    {
+      "title": "Barberry Root Gallon",
+      "url": "https://herb-era.com/products/barberry-root-alcohol-free-herbal-extract-tincture-gallon",
+      "collection": "/collections/all",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $385.00\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $385.00\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:40.803Z"
+    },
+    {
+      "title": "Barrenwort Capsules",
+      "url": "https://herb-era.com/products/barrenwort-capsules-organic-barrenwort-horny-goat-weed-epimedium-grandiflorum",
+      "collection": "/collections/all",
+      "image": "",
+      "price": "Regular price\n    \n    \n      \n        $17.59\n      \n    \n  \n  \n    \n      Regular price\n    \n    \n      \n        \n      \n    \n    \n      Sale price\n    \n    \n      \n        $17.59\n      \n      Sale\n    \n  \n  \n    \n      Unit price\n    \n    /per \n  \n  \n    \n      Availability\n    \n    \n      \n        Sold out",
+      "scrapedAt": "2025-08-18T07:48:40.803Z"
+    }
+  ]
+}

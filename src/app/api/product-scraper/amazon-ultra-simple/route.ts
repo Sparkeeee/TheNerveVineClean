@@ -116,68 +116,301 @@ export async function POST(request: NextRequest) {
       title = title.replace(/Amazon\.com[:\s]*/, '').trim();
     }
 
-    // Extract price with comprehensive patterns
+    // Extract price with refined patterns that filter out volume/weight info
     let price = 'Price not found';
-    const pricePatterns = [
-      // JSON patterns
+    
+    // Helper function to validate price (exclude volume/weight measurements)
+    const isValidPrice = (priceText: string): boolean => {
+      const lowerText = priceText.toLowerCase();
+      // Exclude common volume/weight measurements
+      const volumePatterns = [
+        /fl\s*oz/i, /fluid\s*ounce/i, /ml/i, /milliliter/i, /liter/i, /l\b/i,
+        /gram/i, /g\b/i, /ounce/i, /oz\b/i, /pound/i, /lb\b/i, /kg/i, /kilogram/i,
+        /cup/i, /tablespoon/i, /tbsp/i, /teaspoon/i, /tsp/i, /serving/i, /capsule/i,
+        /tablet/i, /pill/i, /softgel/i, /gummy/i, /drop/i, /spray/i
+      ];
+      
+      // Check if text contains volume/weight measurements
+      for (const pattern of volumePatterns) {
+        if (pattern.test(lowerText)) {
+          return false;
+        }
+      }
+      
+      // Must look like a price (starts with $ and has numbers)
+      return /^\$[\d,]+\.?\d*$/.test(priceText.trim());
+    };
+
+    // Priority 1: Amazon-specific price classes (most reliable)
+    const amazonPriceSelectors = [
+      /<span[^>]*class="[^"]*a-price-whole[^"]*"[^>]*>([^<]+)<\/span>/gi,
+      /<span[^>]*class="[^"]*a-price-fraction[^"]*"[^>]*>([^<]+)<\/span>/gi,
+      /<span[^>]*class="[^"]*a-price[^"]*"[^>]*>([^<]+)<\/span>/gi,
+      /<div[^>]*class="[^"]*a-price[^"]*"[^>]*>([^<]+)<\/div>/gi,
+      /<span[^>]*class="[^"]*price[^"]*"[^>]*>([^<]+)<\/span>/gi,
+      /<div[^>]*class="[^"]*price[^"]*"[^>]*>([^<]+)<\/div>/gi
+    ];
+
+    // Priority 2: JSON data patterns
+    const jsonPricePatterns = [
       /"price":\s*"([^"]+)"/g,
       /"priceAmount":\s*"([^"]+)"/g,
       /"currentPrice":\s*"([^"]+)"/g,
       /"priceCurrency":\s*"USD"[^}]*"price":\s*"([^"]+)"/g,
-      
-      // Data attribute patterns
-      /data-price="([^"]+)"/g,
-      /data-asin-price="([^"]+)"/g,
-      
-      // HTML patterns
-      /<span[^>]*class="[^"]*price[^"]*"[^>]*>([^<]+)<\/span>/gi,
-      /<span[^>]*class="[^"]*a-price[^"]*"[^>]*>([^<]+)<\/span>/gi,
-      /<div[^>]*class="[^"]*price[^"]*"[^>]*>([^<]+)<\/div>/gi,
-      /<div[^>]*class="[^"]*a-price[^"]*"[^>]*>([^<]+)<\/div>/gi,
-      
-      // General price patterns
-      /\$[\d,]+\.?\d*/g,
-      /Price:\s*\$[\d,]+\.?\d*/g,
-      /[\d,]+\.?\d*\s*USD/g
+      /"price":\s*(\d+\.?\d*)/g,
+      /"priceAmount":\s*(\d+\.?\d*)/g
     ];
 
-    for (const pattern of pricePatterns) {
-      const matches = html.match(pattern);
+    // Priority 3: Data attributes
+    const dataPricePatterns = [
+      /data-price="([^"]+)"/g,
+      /data-asin-price="([^"]+)"/g
+    ];
+
+    // Try Amazon-specific selectors first (most reliable)
+    for (const selector of amazonPriceSelectors) {
+      const matches = html.match(selector);
       if (matches && matches.length > 0) {
         for (const match of matches) {
-          const cleanPrice = match.replace(/[^\d.,$]/g, '').trim();
-          if (cleanPrice && cleanPrice !== '$' && cleanPrice.length > 1) {
-            price = cleanPrice;
-            break;
+          // Extract the content between tags
+          const contentMatch = match.match(/>([^<]+)</);
+          if (contentMatch) {
+            const content = contentMatch[1].trim();
+            // Look for price patterns in the content
+            const priceMatches = content.match(/\$[\d,]+\.?\d*/g);
+            if (priceMatches) {
+              for (const priceMatch of priceMatches) {
+                if (isValidPrice(priceMatch)) {
+                  price = priceMatch;
+                  console.log(`Found valid price via Amazon selector: ${price}`);
+                  break;
+                }
+              }
+            }
           }
+          if (price !== 'Price not found') break;
         }
         if (price !== 'Price not found') break;
       }
     }
 
-    // Extract image
+    // If no price found via selectors, try JSON patterns
+    if (price === 'Price not found') {
+      for (const pattern of jsonPricePatterns) {
+        const matches = html.match(pattern);
+        if (matches && matches.length > 0) {
+          for (const match of matches) {
+            let extractedPrice = match;
+            // If it's a JSON pattern with quotes, extract the value
+            if (match.includes('"')) {
+              const valueMatch = match.match(/"([^"]+)"/);
+              if (valueMatch) {
+                extractedPrice = valueMatch[1];
+              }
+            }
+            
+            // Format as price if it's just a number
+            if (/^\d+\.?\d*$/.test(extractedPrice)) {
+              extractedPrice = `$${extractedPrice}`;
+            }
+            
+            if (isValidPrice(extractedPrice)) {
+              price = extractedPrice;
+              console.log(`Found valid price via JSON: ${price}`);
+              break;
+            }
+          }
+          if (price !== 'Price not found') break;
+        }
+      }
+    }
+
+    // If still no price, try data attributes
+    if (price === 'Price not found') {
+      for (const pattern of dataPricePatterns) {
+        const matches = html.match(pattern);
+        if (matches && matches.length > 0) {
+          for (const match of matches) {
+            const valueMatch = match.match(/"([^"]+)"/);
+            if (valueMatch) {
+              const extractedPrice = valueMatch[1];
+              if (isValidPrice(extractedPrice)) {
+                price = extractedPrice;
+                console.log(`Found valid price via data attribute: ${price}`);
+                break;
+              }
+            }
+          }
+          if (price !== 'Price not found') break;
+        }
+      }
+    }
+
+    // Final fallback: look for any $XX.XX pattern that passes validation
+    if (price === 'Price not found') {
+      const allPriceMatches = html.match(/\$[\d,]+\.?\d*/g);
+      if (allPriceMatches) {
+        for (const match of allPriceMatches) {
+          if (isValidPrice(match)) {
+            price = match;
+            console.log(`Found valid price via fallback: ${price}`);
+            break;
+          }
+        }
+      }
+    }
+
+    // Extract image with better filtering for actual product images
     let image = '';
-    const imagePatterns = [
-      // JSON patterns
-      /"image":\s*"([^"]*\.(?:jpg|jpeg|png|webp))"/g,
-      /"imageUrl":\s*"([^"]*\.(?:jpg|jpeg|png|webp))"/g,
+    
+    // Helper function to validate image URL (exclude sprites, icons, nav elements)
+    const isValidProductImage = (imageUrl: string): boolean => {
+      const lowerUrl = imageUrl.toLowerCase();
       
-      // HTML patterns
-      /<img[^>]*src=["']([^"']*images[^"']*\.(?:jpg|jpeg|png|webp))["'][^>]*>/i,
-      /<img[^>]*src=["']([^"']*product[^"']*\.(?:jpg|jpeg|png|webp))["'][^>]*>/i,
-      /<img[^>]*src=["']([^"']*media-amazon[^"']*\.(?:jpg|jpeg|png|webp))["'][^>]*>/i,
-      /<img[^>]*data-src=["']([^"']*images[^"']*\.(?:jpg|jpeg|png|webp))["'][^>]*>/i,
+      // Exclude common non-product image patterns
+      const excludePatterns = [
+        /sprite/i, /icon/i, /nav/i, /logo/i, /button/i, /banner/i, /header/i, /footer/i,
+        /arrow/i, /star/i, /check/i, /close/i, /menu/i, /search/i, /cart/i, /user/i,
+        /social/i, /share/i, /play/i, /pause/i, /volume/i, /fullscreen/i, /loading/i,
+        /placeholder/i, /default/i, /no-image/i, /error/i, /404/i, /blank/i, /empty/i
+      ];
       
-      // Meta patterns
-      /<meta[^>]*property=["']og:image["'][^>]*content=["']([^"']+)["']/i
+      // Check if URL contains excluded patterns
+      for (const pattern of excludePatterns) {
+        if (pattern.test(lowerUrl)) {
+          return false;
+        }
+      }
+      
+      // Must be a valid image URL with proper extension
+      return /\.(jpg|jpeg|png|webp|gif)$/i.test(imageUrl) && 
+             imageUrl.includes('media-amazon.com') &&
+             !imageUrl.includes('sprite') &&
+             imageUrl.length > 50; // Reasonable length for product image URLs
+    };
+
+    // Priority 1: Amazon product image data attributes (most reliable)
+    const productImageSelectors = [
+      /data-old-hires="([^"]*\.(?:jpg|jpeg|png|webp))"/gi,
+      /data-a-dynamic-image="([^"]*\.(?:jpg|jpeg|png|webp))"/gi,
+      /data-a-image-name="([^"]*\.(?:jpg|jpeg|png|webp))"/gi
     ];
 
-    for (const pattern of imagePatterns) {
-      const match = html.match(pattern);
-      if (match) {
-        image = match[1];
-        if (image && !image.includes('sprite') && !image.includes('icon') && !image.includes('nav') && !image.includes('logo')) {
-          break;
+    // Priority 2: JSON patterns for product images
+    const jsonImagePatterns = [
+      /"largeImage":\s*"([^"]*\.(?:jpg|jpeg|png|webp))"/g,
+      /"mainImage":\s*"([^"]*\.(?:jpg|jpeg|png|webp))"/g,
+      /"image":\s*"([^"]*\.(?:jpg|jpeg|png|webp))"/g,
+      /"imageUrl":\s*"([^"]*\.(?:jpg|jpeg|png|webp))"/g,
+      /"primaryImage":\s*"([^"]*\.(?:jpg|jpeg|png|webp))"/g
+    ];
+
+    // Priority 3: HTML img tags with product-specific classes
+    const htmlImagePatterns = [
+      /<img[^>]*class="[^"]*a-dynamic-image[^"]*"[^>]*src=["']([^"']*\.(?:jpg|jpeg|png|webp))["'][^>]*>/gi,
+      /<img[^>]*class="[^"]*product-image[^"]*"[^>]*src=["']([^"']*\.(?:jpg|jpeg|png|webp))["'][^>]*>/gi,
+      /<img[^>]*id="[^"]*landingImage[^"]*"[^>]*src=["']([^"']*\.(?:jpg|jpeg|png|webp))["'][^>]*>/gi,
+      /<img[^>]*data-old-hires="[^"]*"[^>]*src=["']([^"']*\.(?:jpg|jpeg|png|webp))["'][^>]*>/gi
+    ];
+
+    // Priority 4: Meta tags for product images
+    const metaImagePatterns = [
+      /<meta[^>]*property=["']og:image["'][^>]*content=["']([^"']*\.(?:jpg|jpeg|png|webp))["']/gi,
+      /<meta[^>]*name=["']twitter:image["'][^>]*content=["']([^"']*\.(?:jpg|jpeg|png|webp))["']/gi
+    ];
+
+    // Try product image selectors first (most reliable)
+    for (const selector of productImageSelectors) {
+      const matches = html.match(selector);
+      if (matches && matches.length > 0) {
+        for (const match of matches) {
+          const valueMatch = match.match(/"([^"]+)"/);
+          if (valueMatch) {
+            const imageUrl = valueMatch[1];
+            if (isValidProductImage(imageUrl)) {
+              image = imageUrl;
+              console.log(`Found valid product image via selector: ${image}`);
+              break;
+            }
+          }
+        }
+        if (image !== '') break;
+      }
+    }
+
+    // If no image found via selectors, try JSON patterns
+    if (image === '') {
+      for (const pattern of jsonImagePatterns) {
+        const matches = html.match(pattern);
+        if (matches && matches.length > 0) {
+          for (const match of matches) {
+            const valueMatch = match.match(/"([^"]+)"/);
+            if (valueMatch) {
+              const imageUrl = valueMatch[1];
+              if (isValidProductImage(imageUrl)) {
+                image = imageUrl;
+                console.log(`Found valid product image via JSON: ${image}`);
+                break;
+              }
+            }
+          }
+          if (image !== '') break;
+        }
+      }
+    }
+
+    // If still no image, try HTML patterns
+    if (image === '') {
+      for (const pattern of htmlImagePatterns) {
+        const matches = html.match(pattern);
+        if (matches && matches.length > 0) {
+          for (const match of matches) {
+            const srcMatch = match.match(/src=["']([^"']+)["']/);
+            if (srcMatch) {
+              const imageUrl = srcMatch[1];
+              if (isValidProductImage(imageUrl)) {
+                image = imageUrl;
+                console.log(`Found valid product image via HTML: ${image}`);
+                break;
+              }
+            }
+          }
+          if (image !== '') break;
+        }
+      }
+    }
+
+    // If still no image, try meta patterns
+    if (image === '') {
+      for (const pattern of metaImagePatterns) {
+        const matches = html.match(pattern);
+        if (matches && matches.length > 0) {
+          for (const match of matches) {
+            const contentMatch = match.match(/content=["']([^"']+)["']/);
+            if (contentMatch) {
+              const imageUrl = contentMatch[1];
+              if (isValidProductImage(imageUrl)) {
+                image = imageUrl;
+                console.log(`Found valid product image via meta: ${image}`);
+                break;
+              }
+            }
+          }
+          if (image !== '') break;
+        }
+      }
+    }
+
+    // Final fallback: look for any media-amazon image that passes validation
+    if (image === '') {
+      const allImageMatches = html.match(/https:\/\/[^"']*media-amazon[^"']*\.(?:jpg|jpeg|png|webp)/gi);
+      if (allImageMatches) {
+        for (const match of allImageMatches) {
+          if (isValidProductImage(match)) {
+            image = match;
+            console.log(`Found valid product image via fallback: ${image}`);
+            break;
+          }
         }
       }
     }

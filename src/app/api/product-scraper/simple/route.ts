@@ -42,7 +42,26 @@ export async function POST(request: NextRequest) {
 
     // Enhanced extraction with multiple patterns for better coverage
     const titleMatch = html.match(/<title[^>]*>([^<]+)<\/title>/i);
-    const name = titleMatch ? titleMatch[1].trim() : 'Product name not found';
+    let name = titleMatch ? titleMatch[1].trim() : 'Product name not found';
+
+    // Decode HTML entities for cleaner product names and descriptions
+    const decodeHtmlEntities = (text: string): string => {
+      if (!text) return text;
+      return text
+        .replace(/&#39;/g, "'")        // apostrophe
+        .replace(/&amp;/g, "&")       // ampersand
+        .replace(/&quot;/g, '"')      // quote
+        .replace(/&lt;/g, "<")        // less than
+        .replace(/&gt;/g, ">")        // greater than
+        .replace(/&nbsp;/g, " ")      // non-breaking space
+        .replace(/&rsquo;/g, "'")     // right single quote
+        .replace(/&lsquo;/g, "'")     // left single quote
+        .replace(/&rdquo;/g, '"')     // right double quote
+        .replace(/&ldquo;/g, '"');    // left double quote
+    };
+
+    // Clean up extracted data
+    name = decodeHtmlEntities(name);
 
     // Enhanced price extraction with multiple patterns
     let price = 'Price not found';
@@ -110,22 +129,36 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // FIX URL PREFIXES: Ensure all image URLs have proper https:// prefix
+    if (image && image.startsWith('//')) {
+      image = 'https:' + image;
+      console.log('Fixed protocol-relative URL:', image);
+    } else if (image && image.startsWith('/')) {
+      // Handle relative URLs by adding the base domain
+      const urlObj = new URL(url);
+      image = urlObj.protocol + '//' + urlObj.host + image;
+      console.log('Fixed relative URL:', image);
+    }
+
     const descriptionMatch = html.match(/<meta[^>]*name=["']description["'][^>]*content=["']([^"']*)["']/i);
     const description = descriptionMatch ? descriptionMatch[1] : 'Description not found';
+
+    // Decode HTML entities for cleaner product names and descriptions
+    const decodedDescription = decodeHtmlEntities(description);
 
     // Log extraction results for debugging
     console.log('Enhanced extraction results:', {
       name,
       price,
       image: image ? `${image.substring(0, 50)}...` : 'No image found',
-      description: description.substring(0, 100) + '...'
+      description: decodedDescription.substring(0, 100) + '...'
     });
 
     const scrapedData: Partial<ScrapedProduct> = {
       name,
       price,
       image,
-      description,
+      description: decodedDescription,
       availability: 'Availability unknown'
     };
 

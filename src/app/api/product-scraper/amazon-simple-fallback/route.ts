@@ -73,7 +73,26 @@ export async function POST(request: NextRequest) {
 
     // Extract data using regex patterns
     const titleMatch = html.match(/<title[^>]*>([^<]+)<\/title>/i);
-    const title = titleMatch ? titleMatch[1].trim() : 'Product name not found';
+    let title = titleMatch ? titleMatch[1].trim() : 'Product name not found';
+
+    // Decode HTML entities for cleaner product names and descriptions
+    const decodeHtmlEntities = (text: string): string => {
+      if (!text) return text;
+      return text
+        .replace(/&#39;/g, "'")        // apostrophe
+        .replace(/&amp;/g, "&")       // ampersand
+        .replace(/&quot;/g, '"')      // quote
+        .replace(/&lt;/g, "<")        // less than
+        .replace(/&gt;/g, ">")        // greater than
+        .replace(/&nbsp;/g, " ")      // non-breaking space
+        .replace(/&rsquo;/g, "'")     // right single quote
+        .replace(/&lsquo;/g, "'")     // left single quote
+        .replace(/&rdquo;/g, '"')     // right double quote
+        .replace(/&ldquo;/g, '"');    // left double quote
+    };
+
+    // Clean up extracted data
+    title = decodeHtmlEntities(title);
 
     // Try multiple price patterns
     let price = 'Price not found';
@@ -135,6 +154,9 @@ export async function POST(request: NextRequest) {
     if (descMatch) {
       description = descMatch[1];
     }
+
+    // Decode HTML entities for cleaner product names and descriptions
+    description = decodeHtmlEntities(description);
 
     // Extract availability
     let availability = 'Availability unknown';
