@@ -20,6 +20,7 @@ export async function getSymptomBySlug(slug: string): Promise<SymptomType | null
       // Use variant.name as the key for the object
       console.log(`[DEBUG] Processing variant: ${variant.name}`);
       acc[variant.name] = {
+        slug: variant.slug, // Add the slug property here
         paragraphs: variant.description ? [variant.description] : [],
         cautions: variant.cautions || undefined,
         description: variant.description || undefined,

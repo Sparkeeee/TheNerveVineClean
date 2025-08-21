@@ -59,6 +59,7 @@ export interface DBSupplement {
 // Frontend Variant type (transformed for UI)
 export interface Variant {
   name?: string;
+  slug: string; // Add the required slug property
   paragraphs?: string[];
   bestHerb?: Product;
   bestStandardized?: Product;

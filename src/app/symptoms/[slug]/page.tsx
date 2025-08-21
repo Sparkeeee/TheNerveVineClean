@@ -84,7 +84,6 @@ export default function SymptomPage({ params }: { params: { slug: string } }) {
       selectedVariant={selectedVariant}
       onVariantSelect={setSelectedVariant}
       markdownArticle={markdownArticle}
-      products={symptom.products || []}
     />
   );
 } 
