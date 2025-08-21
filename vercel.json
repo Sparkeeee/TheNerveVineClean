@@ -7,16 +7,6 @@
       "maxDuration": 30
     }
   },
-  "build": {
-    "env": {
-      "NEXT_TELEMETRY_DISABLED": "1"
-    }
-  },
-  "functions": {
-    "src/app/api/**/*.ts": {
-      "maxDuration": 30
-    }
-  },
   "headers": [
     {
       "source": "/(.*)",
@@ -48,8 +38,6 @@
       "NEXT_TELEMETRY_DISABLED": "1"
     }
   },
-  "env": {
-    "PRISMA_ENGINE_TYPE": "binary"
-  },
+
   "public": true
 } 
