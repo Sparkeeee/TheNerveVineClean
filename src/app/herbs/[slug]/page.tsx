@@ -4,170 +4,36 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import ContentProtection from '@/components/ContentProtection';
-import InteractiveCitations from '@/components/InteractiveCitations';
 import SaveToListButton from '@/components/SaveToListButton';
 
 // Convert Markdown to HTML for better formatting
 function convertMarkdownToHtml(content: string): string {
-  // Check if content is already HTML
-  const isHtml = /<[^>]*>/.test(content);
-  
-  if (isHtml) {
-    // If it's already HTML, just clean it up and apply consistent styling
-    return content
-      // Remove any existing style attributes that might conflict
-      .replace(/style="[^"]*"/g, '')
-      // Remove any existing class attributes that might conflict
-      .replace(/class="[^"]*"/g, '')
-      // Ensure paragraphs have consistent styling
-      .replace(/<p>/g, '<p class="mb-4 text-gray-800 leading-relaxed text-justify">')
-      .replace(/<h1>/g, '<h1 class="text-3xl font-bold text-gray-900 mt-8 mb-6">')
-      .replace(/<h2>/g, '<h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">')
-      .replace(/<h3>/g, '<h3 class="text-xl font-bold text-gray-900 mt-6 mb-3">')
-      .replace(/<strong>/g, '<strong class="font-bold text-gray-900">')
-      .replace(/<em>/g, '<em class="italic text-gray-900">')
-      .replace(/<ul>/g, '<ul class="list-disc ml-6 mb-4 pl-8">')
-      .replace(/<li>/g, '<li class="ml-4 mb-1 text-gray-800 text-justify">');
-  } else {
-    // If it's markdown, convert it to HTML
-    return content
-      // Headers
-      .replace(/^### (.*$)/gim, '<h3 class="text-xl font-bold text-gray-900 mt-6 mb-3">$1</h3>')
-      .replace(/^## (.*$)/gim, '<h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">$1</h2>')
-      .replace(/^# (.*$)/gim, '<h1 class="text-3xl font-bold text-gray-900 mt-8 mb-6">$1</h1>')
-      // Bold
-      .replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-gray-900">$1</strong>')
-      // Italic
-      .replace(/\*(.*?)\*/g, '<em class="italic text-gray-900">$1</em>')
-      // Lists
-      .replace(/^- (.*$)/gim, '<li class="ml-4 mb-1 text-gray-800 text-justify">$1</li>')
-      .replace(/^(\d+)\. (.*$)/gim, '<li class="ml-4 mb-1 text-gray-800 text-justify">$1. $2</li>')
-      // Wrap lists in ul/ol
-      .replace(/(<li.*<\/li>)/g, '<ul class="list-disc ml-6 mb-4 pl-8">$1</ul>')
-      // Paragraphs
-      .replace(/\n\n/g, '</p><p class="mb-4 text-gray-800 leading-relaxed text-justify">')
-      // Wrap in paragraph tags
-      .replace(/^(?!<[h|u|o|d]|<p>)(.*)$/gm, '<p class="mb-4 text-gray-800 leading-relaxed text-justify">$1</p>')
-      // Clean up empty paragraphs
-      .replace(/<p class="mb-4 text-gray-800 leading-relaxed"><\/p>/g, '')
-      .replace(/<p class="mb-4 text-gray-800 leading-relaxed"><\/p>/g, '');
-  }
-}
-
-// Science Modal Component
-function ScienceModal({ 
-  isOpen, 
-  onClose, 
-  markdownArticle, 
-  references, 
-  herbName 
-}: { 
-  isOpen: boolean; 
-  onClose: () => void; 
-  markdownArticle: string | null; 
-  references: any[]; 
-  herbName: string;
-}) {
-  if (!isOpen) return null;
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* Blurry Backdrop */}
-      <div className="absolute inset-0 backdrop-blur-md"></div>
-      
-      {/* Modal Content */}
-      <div className="relative bg-white rounded-lg shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto border border-gray-200">
-        {/* Modal Header */}
-        <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center z-10">
-          <button
-            onClick={onClose}
-            className="inline-flex items-center px-3 py-2 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-white text-gray-700 border-gray-300 hover:bg-amber-50 hover:border-gray-400 hover:text-gray-600 hover:shadow-gray-300 hover:shadow-lg hover:scale-105 text-sm"
-          >
-            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            Back to Overview
-          </button>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 text-2xl font-bold"
-          >
-            ×
-          </button>
-        </div>
-
-        {/* Modal Content with Protection */}
-        <ContentProtection 
-          pageType="modal"
-          shareUrl={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://thenervevine.com'}/herbs/${herbName.toLowerCase().replace(/\s+/g, '-')}`}
-          shareTitle={`Scientific Research: ${herbName}`}
-        >
-          <div className="p-6">
-            {/* Comprehensive Article with full FPV features */}
-            {markdownArticle && (
-              <div className="mb-8">
-                <InteractiveCitations content={markdownArticle} />
-              </div>
-            )}
-
-            {/* References */}
-            {references && references.length > 0 && (
-              <div className="border-t border-gray-200 pt-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-4">References</h3>
-                <div className="space-y-3">
-                  {references.map((reference: any, index: number) => (
-                    <div key={index} className="text-sm text-gray-900 leading-relaxed p-4 bg-gray-100 rounded border border-gray-200 font-medium">
-                      {reference.value}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        </ContentProtection>
-      </div>
-    </div>
-  );
+  if (!content) return '';
+  // Basic markdown to HTML conversion
+  return content
+    .replace(/^### (.*$)/gim, '<h3 class="text-xl font-bold text-gray-900 mt-6 mb-3">$1</h3>')
+    .replace(/^## (.*$)/gim, '<h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">$1</h2>')
+    .replace(/^# (.*$)/gim, '<h1 class="text-3xl font-bold text-gray-900 mt-8 mb-6">$1</h1>')
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\n/g, '<br />');
 }
 
 export default function HerbPage({ params }: { params: { slug: string } }) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [herb, setHerb] = React.useState<any>(null);
-  const [markdownArticle, setMarkdownArticle] = React.useState<string | null>(null);
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
     async function loadData() {
       const { slug } = params;
-      
-      // Fetch herb data via API
       try {
         const herbResponse = await fetch(`/api/herbs/${slug}`);
         if (herbResponse.ok) {
           const responseJson = await herbResponse.json();
-          const herbData = responseJson.data; // Extract the actual data object
-          setHerb(herbData);
-          
-          // Use comprehensiveArticle from database if available
-          if (herbData && herbData.comprehensiveArticle) {
-            setMarkdownArticle(herbData.comprehensiveArticle);
-          } else {
-            // Fallback to file-based system
-            try {
-              const articleResponse = await fetch(`/api/articles/${slug}`);
-              if (articleResponse.ok) {
-                const article = await articleResponse.text();
-                setMarkdownArticle(article);
-              }
-            } catch (_error) {
-              console.log('No markdown article found for this herb');
-            }
-          }
+          setHerb(responseJson.data);
         }
       } catch (_error) {
         console.error('Error fetching herb data:', _error);
       }
-      
       setLoading(false);
     }
 
@@ -288,7 +154,13 @@ export default function HerbPage({ params }: { params: { slug: string } }) {
                 
                 {/* Brief Intro */}
                 <div className="text-lg text-gray-800 max-w-2xl lg:max-w-none prose prose-lg text-justify">
-                  {herb.description ? (
+                  {herb.comprehensiveArticle ? (
+                    <div 
+                      dangerouslySetInnerHTML={{ 
+                        __html: convertMarkdownToHtml(herb.comprehensiveArticle) 
+                      }} 
+                    />
+                  ) : herb.description ? (
                     <div 
                       dangerouslySetInnerHTML={{ 
                         __html: convertMarkdownToHtml(herb.description) 
@@ -388,15 +260,6 @@ export default function HerbPage({ params }: { params: { slug: string } }) {
                   Dive Deeper Here
                 </h2>
                 <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
-                  <button
-                    onClick={() => setIsModalOpen(true)}
-                    className="inline-flex items-center px-6 py-3 rounded-full font-semibold border-2 transition-all duration-200 shadow-sm bg-white text-gray-700 border-gray-300 hover:bg-amber-50 hover:border-gray-400 hover:text-gray-600 hover:shadow-gray-300 hover:shadow-lg hover:scale-105"
-                  >
-                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                    </svg>
-                    Open Research Here
-                  </button>
                   <Link
                     href={`/herbs/${herb.slug}/research`}
                     target="_blank"
@@ -571,14 +434,7 @@ export default function HerbPage({ params }: { params: { slug: string } }) {
           </div>
         </div>
 
-        {/* Science Modal */}
-        <ScienceModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          markdownArticle={markdownArticle}
-          references={herb.references || []}
-          herbName={herb.name || 'this herb'}
-        />
+        {/* Science Modal is removed */}
       </div>
     </ContentProtection>
   );
