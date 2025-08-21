@@ -44,7 +44,7 @@ const nextConfig = {
   // Experimental features for performance - TEMPORARILY DISABLED CSS optimization to fix logo
   experimental: {
     // optimizeCss: true, // Disabled temporarily to fix logo issue
-    optimizePackageImports: ['@prisma/client'], // Moved here for Next.js 14
+    serverComponentsExternalPackages: ['@prisma/client'],
   },
 
   // Webpack configuration removed - was causing Prisma client issues in production
