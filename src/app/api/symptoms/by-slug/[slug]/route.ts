@@ -11,19 +11,33 @@ export async function GET(
     
     const symptom = await prisma.symptom.findUnique({
       where: { slug },
-      include: {
+      select: {
+        id: true,
+        slug: true,
+        title: true,
+        description: true,
+        articles: true,
+        associatedSymptoms: true,
+        cautions: true,
+        references: true,
+        metaDescription: true,
+        metaTitle: true,
+        comprehensiveArticle: true,
+        commonSymptoms: true,
+        herbs: true,
+        supplements: true,
         variants: {
           include: {
             herbs: true,
             supplements: true,
-          }
+          },
         },
         products: {
           include: {
-            merchant: true
-          }
-        }
-      }
+            merchant: true,
+          },
+        },
+      },
     });
 
     if (!symptom) {

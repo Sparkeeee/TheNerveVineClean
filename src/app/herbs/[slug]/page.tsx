@@ -235,8 +235,8 @@ export default function HerbPage({ params }: { params: { slug: string } }) {
   return (
     <ContentProtection 
       pageType="herb-detail"
-      shareUrl={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://thenervevine.com'}/herbs/${herb.slug}`}
-      shareTitle={`${herb.name} - The NerveVine`}
+      shareUrl={herb.slug ? `${process.env.NEXT_PUBLIC_SITE_URL || 'https://thenervevine.com'}/herbs/${herb.slug}` : ''}
+      shareTitle={herb.name ? `${herb.name} - The NerveVine` : 'The NerveVine'}
     >
       <div className="min-h-screen bg-white relative" style={{
         backgroundImage: "url('/images/WMherbsBG.PNG')",
@@ -252,7 +252,7 @@ export default function HerbPage({ params }: { params: { slug: string } }) {
             <div className="mb-8">
               <Image
                 src={herb.heroImageUrl}
-                alt={herb.name}
+                alt={herb.name || 'Herb image'}
                 width={1200}
                 height={400}
                 className="w-full h-64 md:h-80 object-cover rounded-lg shadow-lg"
@@ -267,7 +267,7 @@ export default function HerbPage({ params }: { params: { slug: string } }) {
               {/* Header */}
               <div className="bg-white rounded-lg shadow-lg p-6 mb-8 border-2 border-gray-300" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
                 <h1 className="text-4xl font-bold text-gray-800 mb-4 text-center lg:text-left">
-                  {herb.name} - Traditional Uses & Modern Research
+                  {herb.name ? `${herb.name} - Traditional Uses & Modern Research` : 'Herb Details'}
                 </h1>
                 {herb.latinName && (
                   <p className="text-lg text-gray-700 italic mb-4 text-center lg:text-left">
@@ -334,25 +334,6 @@ export default function HerbPage({ params }: { params: { slug: string } }) {
                     </div>
                   </div>
                 )}
-              </div>
-
-              {/* Description */}
-              <div className="bg-white rounded-lg shadow-lg p-6 mb-8 border-2 border-gray-300" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
-                <h2 className="text-2xl font-bold text-gray-800 mb-4">Description</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="text-gray-800">
-                    <strong className="text-gray-900">Parts Used:</strong> {herb.partsUsed || 'Root and leaves'}
-                  </div>
-                  <div className="text-gray-800">
-                    <strong className="text-gray-900">Active Compounds:</strong> {herb.activeCompounds || 'Various bioactive compounds'}
-                  </div>
-                  <div className="text-gray-800">
-                    <strong className="text-gray-900">Taste:</strong> {herb.taste || 'Varies by preparation'}
-                  </div>
-                  <div className="text-gray-800">
-                    <strong className="text-gray-900">Energetics:</strong> {herb.energetics || 'Adaptogenic'}
-                  </div>
-                </div>
               </div>
 
               {/* Traditional Usage & Formulations */}
@@ -595,7 +576,7 @@ export default function HerbPage({ params }: { params: { slug: string } }) {
           onClose={() => setIsModalOpen(false)}
           markdownArticle={markdownArticle}
           references={herb.references || []}
-          herbName={herb.name}
+          herbName={herb.name || 'this herb'}
         />
       </div>
     </ContentProtection>

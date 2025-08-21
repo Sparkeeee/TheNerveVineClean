@@ -11,19 +11,35 @@ export async function GET(
     
     const herb = await prisma.herb.findUnique({
       where: { slug },
-      include: {
+      select: {
+        id: true,
+        name: true,
+        commonName: true,
+        latinName: true,
+        slug: true,
+        description: true,
+        metaTitle: true,
+        metaDescription: true,
+        heroImageUrl: true,
+        cardImageUrl: true,
+        galleryImages: true,
+        cautions: true,
+        productFormulations: true,
+        references: true,
+        traditionalUses: true,
+        comprehensiveArticle: true,
         indicationTags: true,
         products: {
           include: {
             merchant: true,
-          }
+          },
         },
         HerbIndicationScore: {
           include: {
             Indication: true,
-          }
-        }
-      }
+          },
+        },
+      },
     });
 
     if (!herb) {

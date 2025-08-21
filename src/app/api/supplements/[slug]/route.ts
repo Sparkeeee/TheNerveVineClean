@@ -11,14 +11,28 @@ export async function GET(
     
     const supplement = await prisma.supplement.findUnique({
       where: { slug },
-      include: {
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        description: true,
+        metaTitle: true,
+        metaDescription: true,
+        heroImageUrl: true,
+        cardImageUrl: true,
+        galleryImages: true,
+        cautions: true,
+        productFormulations: true,
+        references: true,
+        tags: true,
+        comprehensiveArticle: true,
         indicationTags: true,
         products: {
           include: {
             merchant: true,
-          }
-        }
-      }
+          },
+        },
+      },
     });
 
     if (!supplement) {

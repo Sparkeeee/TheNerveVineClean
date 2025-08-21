@@ -21,35 +21,7 @@ export default function SymptomPage({ params }: { params: { slug: string } }) {
         if (symptomResponse.ok) {
           const symptomData = await symptomResponse.json();
           
-          // Transform database data to match VariantSymptomPage expectations
-          const transformedSymptom: SymptomType = {
-            name: symptomData.title,
-            title: symptomData.title,
-            description: symptomData.description || '',
-            paragraphs: [],
-            symptoms: [],
-            causes: [],
-            naturalSolutions: [],
-            relatedSymptoms: [],
-            disclaimer: undefined,
-            emergencyNote: undefined,
-            cautions: symptomData.cautions,
-            commonSymptoms: symptomData.commonSymptoms, // ✅ COPY MAIN COMMON SYMPTOMS!
-            references: symptomData.references,
-            variants: symptomData.variants ? 
-              symptomData.variants.reduce((acc: Record<string, unknown>, variant: { name: string; description?: string; commonSymptoms?: string[]; herbs?: unknown[]; supplements?: unknown[] }) => {
-                acc[variant.name] = {
-                  description: variant.description,
-                  commonSymptoms: variant.commonSymptoms, // ✅ COPY VARIANT COMMON SYMPTOMS!
-                  herbs: variant.herbs || [],
-                  supplements: variant.supplements || []
-                };
-                return acc;
-              }, {}) : {},
-            products: symptomData.products || []
-          };
-          
-          setSymptom(transformedSymptom);
+          setSymptom(symptomData);
           
           // Use comprehensiveArticle from database if available
           if (symptomData.comprehensiveArticle) {

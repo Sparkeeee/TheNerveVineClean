@@ -181,8 +181,8 @@ export default function SupplementPage({ params }: { params: { slug: string } })
   return (
     <ContentProtection 
       pageType="supplement-detail"
-      shareUrl={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://thenervevine.com'}/supplements/${supplement.slug}`}
-      shareTitle={`${supplement.name} - The NerveVine`}
+      shareUrl={supplement.slug ? `${process.env.NEXT_PUBLIC_SITE_URL || 'https://thenervevine.com'}/supplements/${supplement.slug}` : ''}
+      shareTitle={supplement.name ? `${supplement.name} - The NerveVine` : 'The NerveVine'}
     >
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white">
         <div className="max-w-6xl mx-auto px-4 py-8">
@@ -191,7 +191,7 @@ export default function SupplementPage({ params }: { params: { slug: string } })
             <div className="mb-8 max-w-full overflow-hidden">
               <Image
                 src={supplement.heroImageUrl}
-                alt={supplement.name}
+                alt={supplement.name || 'Supplement image'}
                 width={800}
                 height={400}
                 className="w-full h-64 object-contain rounded-lg shadow-lg"
@@ -205,7 +205,7 @@ export default function SupplementPage({ params }: { params: { slug: string } })
               {/* Header */}
                              <div className="bg-white rounded-lg shadow-lg p-6 mb-8 border-2 border-gray-300 border-b-2 border-b-gray-300" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
                 <h1 className="text-4xl font-bold text-gray-800 mb-4 text-center">
-                  {supplement.name}
+                  {supplement.name || 'Supplement Details'}
                 </h1>
                 {/* Formatted description with proper paragraph spacing */}
                 <div className="text-lg text-gray-600 max-w-2xl mx-auto prose prose-lg text-justify">
@@ -371,7 +371,7 @@ export default function SupplementPage({ params }: { params: { slug: string } })
           onClose={() => setIsModalOpen(false)}
           markdownArticle={markdownArticle}
           references={supplement.references || []}
-          supplementName={supplement.name}
+          supplementName={supplement.name || 'this supplement'}
         />
       </div>
     </ContentProtection>
