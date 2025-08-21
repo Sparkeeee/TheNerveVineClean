@@ -220,16 +220,16 @@ export default function HerbPage({ params }: { params: { slug: string } }) {
   // Separate products into Traditional and Modern formulations
   const traditionalProducts = products.filter((product: { type?: string; formulation?: string; name?: string }) => 
     product.type === 'traditional' || product.formulation === 'traditional' || 
-    product.name?.toLowerCase().includes('tincture') || 
-    product.name?.toLowerCase().includes('tea') ||
-    product.name?.toLowerCase().includes('powder')
+    (product.name && product.name.toLowerCase().includes('tincture')) || 
+    (product.name && product.name.toLowerCase().includes('tea')) ||
+    (product.name && product.name.toLowerCase().includes('powder'))
   );
   
   const modernProducts = products.filter((product: { type?: string; formulation?: string; name?: string }) => 
     product.type === 'modern' || product.formulation === 'modern' ||
-    product.name?.toLowerCase().includes('extract') ||
-    product.name?.toLowerCase().includes('capsule') ||
-    product.name?.toLowerCase().includes('tablet')
+    (product.name && product.name.toLowerCase().includes('extract')) ||
+    (product.name && product.name.toLowerCase().includes('capsule')) ||
+    (product.name && product.name.toLowerCase().includes('tablet'))
   );
 
   return (
