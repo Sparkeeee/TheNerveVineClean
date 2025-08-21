@@ -46,8 +46,15 @@ const nextConfig = {
     // optimizeCss: true, // Disabled temporarily to fix logo issue
     optimizePackageImports: ['@prisma/client'], // Moved here for Next.js 14
   },
-  
-  // Prisma bundling fix for Vercel - removed webpack externals as it was too aggressive
+
+  // Prisma bundling fix for Vercel
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      config.externals = config.externals || [];
+      config.externals.push('@prisma/client');
+    }
+    return config;
+  },
   
   // Fixed headers - remove aggressive API caching
   async headers() {
