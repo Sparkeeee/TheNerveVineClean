@@ -5,7 +5,7 @@ import Link from 'next/link';
 import VariantSymptomPage from './VariantSymptomPage';
 import { Symptom as SymptomType } from '@/types/symptom';
 
-export default function SymptomPage({ params }: { params: Promise<{ slug: string }> }) {
+export default function SymptomPage({ params }: { params: { slug: string } }) {
   const [symptom, setSymptom] = React.useState<any>(null);
   const [markdownArticle, setMarkdownArticle] = React.useState<string | null>(null);
   const [loading, setLoading] = React.useState(true);
@@ -13,7 +13,7 @@ export default function SymptomPage({ params }: { params: Promise<{ slug: string
 
   React.useEffect(() => {
     async function loadData() {
-      const { slug } = await params;
+      const { slug } = params;
       
       // Fetch symptom data via API
       try {
@@ -75,7 +75,7 @@ export default function SymptomPage({ params }: { params: Promise<{ slug: string
     }
 
     loadData();
-  }, [params]);
+  }, [params.slug]);
 
   if (loading) {
     return (

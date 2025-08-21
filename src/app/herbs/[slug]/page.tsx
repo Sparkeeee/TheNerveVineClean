@@ -130,7 +130,7 @@ function ScienceModal({
   );
 }
 
-export default function HerbPage({ params }: { params: Promise<{ slug: string }> }) {
+export default function HerbPage({ params }: { params: { slug: string } }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [herb, setHerb] = React.useState<any>(null);
   const [markdownArticle, setMarkdownArticle] = React.useState<string | null>(null);
@@ -138,7 +138,7 @@ export default function HerbPage({ params }: { params: Promise<{ slug: string }>
 
   React.useEffect(() => {
     async function loadData() {
-      const { slug } = await params;
+      const { slug } = params;
       
       // Fetch herb data via API
       try {
@@ -171,7 +171,7 @@ export default function HerbPage({ params }: { params: Promise<{ slug: string }>
     }
 
     loadData();
-  }, [params]);
+  }, [params.slug]);
 
   if (loading) {
     return (

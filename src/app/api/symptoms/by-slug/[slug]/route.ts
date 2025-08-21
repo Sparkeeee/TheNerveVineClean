@@ -4,10 +4,10 @@ import { createApiResponse, createErrorResponse, createNotFoundResponse } from '
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: Promise<{ slug: string }> }
+  { params }: { params: { slug: string } }
 ) {
   try {
-    const { slug } = await params;
+    const { slug } = params;
     
     const symptom = await prisma.symptom.findUnique({
       where: { slug },

@@ -105,7 +105,7 @@ function ScienceModal({
   );
 }
 
-export default function SupplementPage({ params }: { params: Promise<{ slug: string }> }) {
+export default function SupplementPage({ params }: { params: { slug: string } }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [supplement, setSupplement] = React.useState<any>(null);
   const [markdownArticle, setMarkdownArticle] = React.useState<string | null>(null);
@@ -113,7 +113,7 @@ export default function SupplementPage({ params }: { params: Promise<{ slug: str
 
   React.useEffect(() => {
     async function loadData() {
-      const { slug } = await params;
+      const { slug } = params;
       
       // Fetch supplement data via API
       try {
@@ -146,7 +146,7 @@ export default function SupplementPage({ params }: { params: Promise<{ slug: str
     }
 
     loadData();
-  }, [params]);
+  }, [params.slug]);
 
   if (loading) {
     return (
