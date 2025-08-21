@@ -80,7 +80,9 @@ export default function VariantSymptomPage({
 
         {/* Main Content */}
         <div className="bg-white rounded-2xl shadow-xl p-8 lg:p-12">
-          <h2 className="text-3xl font-bold text-gray-800 mb-6">{activeContent.title || activeContent.name}</h2>
+          <h2 className="text-3xl font-bold text-gray-800 mb-6">
+            {'title' in activeContent ? activeContent.title : activeContent.name}
+          </h2>
           
           <div className="prose prose-lg max-w-none text-gray-700"
             dangerouslySetInnerHTML={{ __html: convertMarkdownToHtml(activeContent.description || '') }}
