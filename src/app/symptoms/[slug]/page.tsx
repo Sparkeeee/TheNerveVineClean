@@ -19,12 +19,13 @@ export default function SymptomPage({ params }: { params: { slug: string } }) {
       try {
         const symptomResponse = await fetch(`/api/symptoms/by-slug/${slug}`);
         if (symptomResponse.ok) {
-          const symptomData = await symptomResponse.json();
+          const responseJson = await symptomResponse.json();
+          const symptomData = responseJson.data; // Extract the actual data object
           
           setSymptom(symptomData);
           
           // Use comprehensiveArticle from database if available
-          if (symptomData.comprehensiveArticle) {
+          if (symptomData && symptomData.comprehensiveArticle) {
             setMarkdownArticle(symptomData.comprehensiveArticle);
           } else {
             // Fallback to file-based system

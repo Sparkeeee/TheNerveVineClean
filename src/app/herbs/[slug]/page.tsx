@@ -144,11 +144,12 @@ export default function HerbPage({ params }: { params: { slug: string } }) {
       try {
         const herbResponse = await fetch(`/api/herbs/${slug}`);
         if (herbResponse.ok) {
-          const herbData = await herbResponse.json();
+          const responseJson = await herbResponse.json();
+          const herbData = responseJson.data; // Extract the actual data object
           setHerb(herbData);
           
           // Use comprehensiveArticle from database if available
-          if (herbData.comprehensiveArticle) {
+          if (herbData && herbData.comprehensiveArticle) {
             setMarkdownArticle(herbData.comprehensiveArticle);
           } else {
             // Fallback to file-based system

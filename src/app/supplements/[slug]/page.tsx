@@ -119,11 +119,12 @@ export default function SupplementPage({ params }: { params: { slug: string } })
       try {
         const supplementResponse = await fetch(`/api/supplements/${slug}`);
         if (supplementResponse.ok) {
-          const supplementData = await supplementResponse.json();
+          const responseJson = await supplementResponse.json();
+          const supplementData = responseJson.data; // Extract the actual data object
           setSupplement(supplementData);
           
           // Use comprehensiveArticle from database if available
-          if (supplementData.comprehensiveArticle) {
+          if (supplementData && supplementData.comprehensiveArticle) {
             setMarkdownArticle(supplementData.comprehensiveArticle);
           } else {
             // Fallback to file-based system
