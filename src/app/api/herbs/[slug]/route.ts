@@ -1,56 +1,57 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import prisma from '@/lib/database';
+import { createApiResponse, createErrorResponse, createNotFoundResponse } from '@/lib/api-utils';
 
 export async function GET(
-  request: NextRequest,
+  req: NextRequest,
   { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
     const { slug } = await params;
     
-    const herb = await prisma.herb.findFirst({
+    const herb = await prisma.herb.findUnique({
       where: { slug },
-      select: { 
-        id: true, 
-        name: true, 
-        slug: true, 
-        description: true, 
-        latinName: true,
-        comprehensiveArticle: true,
-        heroImageUrl: true, 
-        galleryImages: true, 
-        cautions: true,
-        references: true,
-        products: {
+      include: {
+        indicationTags: {
           select: {
             id: true,
             name: true,
-            description: true,
-            imageUrl: true,
-            price: true,
-            affiliateLink: true,
-            qualityScore: true,
-            affiliateRate: true
+            slug: true,
+            description: true
+          }
+        },
+        products: {
+          include: {
+            merchant: {
+              select: {
+                id: true,
+                name: true,
+                logoUrl: true,
+                websiteUrl: true
+              }
+            }
+          }
+        },
+        HerbIndicationScore: {
+          include: {
+            Indication: {
+              select: {
+                name: true,
+                slug: true
+              }
+            }
           }
         }
       }
     });
 
     if (!herb) {
-      return NextResponse.json(
-        { error: 'Herb not found' },
-        { status: 404 }
-      );
+      return createNotFoundResponse('Herb not found');
     }
 
-    return NextResponse.json(herb);
+    return createApiResponse(herb);
   } catch (error) {
     console.error('Error fetching herb:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch herb' },
-      { status: 500 }
-    );
+    return createErrorResponse('Failed to fetch herb');
   }
-} 
+}
