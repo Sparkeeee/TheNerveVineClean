@@ -1,5 +1,12 @@
-# Ignore build output and generated files
+crawlee/
+target-scraper/
+storage/
+scripts/
+src/lib/scraper/
+src/scripts/
+maxun/
+add-all-variants.js
+-final.js
 .next/
 dist/
-*.js
-**/*.js 
+node_modules/ 

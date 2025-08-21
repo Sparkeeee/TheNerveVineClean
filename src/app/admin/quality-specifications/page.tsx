@@ -552,7 +552,7 @@ export default function QualitySpecificationsPage() {
             {(selectedHerbId || selectedSupplementId) && (
               <div className="p-4 bg-blue-50 rounded-lg border">
                 <h3 className="text-lg font-semibold text-black mb-3">
-                  This {selectedHerbId ? 'Herb' : 'Supplement'}'s Existing Specifications
+                  This {selectedHerbId ? 'Herb' : 'Supplement'}&apos;s Existing Specifications
                 </h3>
                 
                 {herbUsedFormulations.length > 0 ? (

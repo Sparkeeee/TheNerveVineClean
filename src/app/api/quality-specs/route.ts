@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
 
     console.log('API Debug - Search params:', { herbId, supplementId, herbSlug, supplementSlug, formulationTypeId });
 
-    let whereClause: any = {};
+    const whereClause: any = {};
     
     if (herbId) {
       whereClause.herbId = parseInt(herbId);
