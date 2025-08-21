@@ -12,24 +12,10 @@ export async function GET(
     const supplement = await prisma.supplement.findUnique({
       where: { slug },
       include: {
-        indicationTags: {
-          select: {
-            id: true,
-            name: true,
-            slug: true,
-            description: true
-          }
-        },
+        indicationTags: true,
         products: {
           include: {
-            merchant: {
-              select: {
-                id: true,
-                name: true,
-                logoUrl: true,
-                websiteUrl: true
-              }
-            }
+            merchant: true,
           }
         }
       }

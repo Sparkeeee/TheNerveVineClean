@@ -14,22 +14,8 @@ export async function GET(
       include: {
         variants: {
           include: {
-            herbs: {
-              select: {
-                id: true,
-                name: true,
-                slug: true,
-                description: true
-              }
-            },
-            supplements: {
-              select: {
-                id: true,
-                name: true,
-                slug: true,
-                description: true
-              }
-            }
+            herbs: true,
+            supplements: true,
           }
         },
         products: {
