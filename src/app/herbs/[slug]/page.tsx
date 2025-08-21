@@ -267,7 +267,7 @@ export default function HerbPage({ params }: { params: { slug: string } }) {
               {/* Header */}
               <div className="bg-white rounded-lg shadow-lg p-6 mb-8 border-2 border-gray-300" style={{background: 'linear-gradient(135deg, #fffef7 0%, #fefcf3 50%, #faf8f3 100%)'}}>
                 <h1 className="text-4xl font-bold text-gray-800 mb-4 text-center lg:text-left">
-                  {herb.name ? `${herb.name} - Traditional Uses & Modern Research` : 'Herb Details'}
+                  {herb.name}
                 </h1>
                 {herb.latinName && (
                   <p className="text-lg text-gray-700 italic mb-4 text-center lg:text-left">
@@ -294,7 +294,7 @@ export default function HerbPage({ params }: { params: { slug: string } }) {
                       }} 
                     />
                   ) : (
-                    <p>This herb supports overall wellness.</p>
+                    <p>No description available.</p>
                   )}
                 </div>
               </div>

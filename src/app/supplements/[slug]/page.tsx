@@ -210,13 +210,13 @@ export default function SupplementPage({ params }: { params: { slug: string } })
                 {/* Formatted description with proper paragraph spacing */}
                 <div className="text-lg text-gray-600 max-w-2xl mx-auto prose prose-lg text-justify">
                   {supplement.description ? (
-                    supplement.description.split('\n\n').map((paragraph: string, index: number) => (
-                      <p key={index} className="mb-4 last:mb-0 text-justify">
-                        {paragraph}
-                      </p>
-                    ))
+                    <div 
+                      dangerouslySetInnerHTML={{ 
+                        __html: convertMarkdownToHtml(supplement.description) 
+                      }} 
+                    />
                   ) : (
-                    <p className="text-justify">This supplement supports overall wellness.</p>
+                    <p>No description available.</p>
                   )}
                 </div>
               </div>
